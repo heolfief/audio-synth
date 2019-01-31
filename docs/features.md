@@ -7,11 +7,7 @@
 
 
 - **3x VCO :**
-  - waveform :
-    - sinus
-    - carré
-    - triangle
-    - rampe
+  - waveform : sinus, carré, triangle, rampe
   - detune de +- 12notes par VCO
 
 
@@ -28,7 +24,8 @@ Chaine d'effets fixe. Effets indépendaments activables
   - delay
   - passe bas
   - passe haut
-  - LFO (oscillateur basse frequence comme modulant)
-    - modulation d'amplitude
-    - passe bas
-    - flanger
+  - LFO (oscillateur basse frequence comme modulant): modulation d'amplitude, passe bas, flanger
+
+
+- **Presets :**
+  - Possibilité de sauvegarder les réglages actuels et de les charger
