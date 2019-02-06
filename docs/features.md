@@ -12,7 +12,7 @@
 - **3x VCO :**
   - waveform : sinus, carré, triangle, rampe
   - detune de +- 12notes par VCO
-  - paramètrisation durée de l'impulsion amplitude et fréquence
+  - Amplitude
 
 
 - **Enveloppe sonore (ADSR)**
