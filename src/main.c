@@ -2,6 +2,8 @@
 #include <math.h>
 #include <stdio.h>
 
+#include "oscillator/osc.h"
+
 #define SAMPLE_RATE 48000
 #define AUDIO_BUFF_SIZE 1024
 #define VOLUME 32767
