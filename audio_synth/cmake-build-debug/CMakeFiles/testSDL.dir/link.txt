@@ -1,1 +1,0 @@
-/usr/bin/gcc -g   CMakeFiles/testSDL.dir/main.c.o  -o testSDL -lSDL2 -lm 
