@@ -47,10 +47,11 @@ typedef struct{
  * \param buffer The audio buffer to write audio samples to
  * \param buffer_length The size of the audio buffer (number of audio samples in the buffer)
  * \param sample_rate The sample rate of the system
+ * \param phase The phase value at the beginning of the buffer
  *
  * \return 0 if everything went OK, -1 otherwise
  */
-Uint8 osc_fill_buffer(const Oscillator *osc, Sint16 *buffer, Uint16 buffer_length, Uint64 sample_rate);
+Uint8 osc_fill_buffer(const Oscillator *osc, Sint16 *buffer, Uint16 buffer_length, Uint64 sample_rate, Uint64 phase);
 
 
 #endif //AUDIO_SYNTH_OSC_H
