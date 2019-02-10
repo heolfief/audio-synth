@@ -34,15 +34,19 @@ Uint8 osc_fill_buffer(const Oscillator *osc, Sint16 *buffer, Uint16 buffer_lengt
     {
         case SIN:
 
-            for (Uint16 i = 0; i < buffer_length; ++i)
+            for (Uint16 sample = 0; sample < buffer_length; ++sample)
             {
                 // Fill the buffer with a sine wave based on it's frequency, amplitude and phase
-                buffer[i] = (Sint16)(osc->amp * (sin((i + phase) * detuned_freq * 2 * M_PI / sample_rate)));
+                buffer[sample] = (Sint16)(osc->amp * (sin((sample + phase) * detuned_freq * 2 * M_PI / sample_rate)));
             }
             break;
 
         case SQR:
-
+            for (Uint16 sample = 0; sample < buffer_length; ++sample)
+            {
+                // Fill the buffer with a square wave based on it's frequency, amplitude, phase, and duty cycle
+                buffer[sample] = (((sample + phase) * 2 * detuned_freq/sample_rate) % 2) ? osc->amp : (Sint16)-osc->amp;
+            }
             break;
 
         case TRI:
