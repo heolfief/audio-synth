@@ -15,6 +15,18 @@ static const double chromatic_ratio = 1.059463094359295264562;
 
 Uint8 osc_fill_buffer(const Oscillator *osc, Sint16 *buffer, Uint16 buffer_length, Uint64 sample_rate, Uint64 phase)
 {
+    if(osc == NULL)
+    {
+        perror("osc parameter is NULL\n");
+        return -1;
+    }
+
+    if(osc->amp > INT16_MAX)
+    {
+        perror("osc amplitude passed maximum, risk of audio buffer overflow\n");
+        return -1;
+    }
+
     // Calculate actual frequency based on detune value
     Uint16 detuned_freq = osc->freq * (Uint16)pow(chromatic_ratio, osc->detune);
 
