@@ -51,7 +51,7 @@ typedef struct{
  *
  * \return 0 if everything went OK, -1 otherwise
  */
-Uint8 osc_fill_buffer(const Oscillator *osc, Sint16 *buffer, Uint16 buffer_length, Uint64 sample_rate, Uint64 phase);
+int osc_fill_buffer(const Oscillator *osc, Sint16 *buffer, Uint16 buffer_length, Uint64 sample_rate, Uint64 phase);
 
 
 #endif //AUDIO_SYNTH_OSC_H

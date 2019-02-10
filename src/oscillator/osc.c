@@ -13,7 +13,7 @@
 
 static const double chromatic_ratio = 1.059463094359295264562;
 
-Uint8 osc_fill_buffer(const Oscillator *osc, Sint16 *buffer, Uint16 buffer_length, Uint64 sample_rate, Uint64 phase)
+int osc_fill_buffer(const Oscillator *osc, Sint16 *buffer, Uint16 buffer_length, Uint64 sample_rate, Uint64 phase)
 {
     if(osc == NULL)
     {
@@ -28,7 +28,7 @@ Uint8 osc_fill_buffer(const Oscillator *osc, Sint16 *buffer, Uint16 buffer_lengt
     }
 
     // Calculate actual frequency based on detune value
-    Uint16 detuned_freq = osc->freq * (Uint16)pow(chromatic_ratio, osc->detune);
+    Uint16 detuned_freq = (Uint16)(osc->freq * (double)pow(chromatic_ratio, osc->detune));
 
     switch (osc->wave)
     {
