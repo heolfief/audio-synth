@@ -14,19 +14,16 @@ Oscillator osc1;
 Oscillator osc2;
 Oscillator osc3;
 
+Sint16 *osc1_buff = NULL;
+Sint16 *osc2_buff = NULL;
+Sint16 *osc3_buff = NULL;
+
 void func_callback(void *unused, Uint8 *stream, int len)
 {
     memset(stream, 0, len);                 // Empty buffer
     Sint16 *s_stream = (Sint16*) stream;    // Cast buffer data to signed 16 bits
     Uint16 s_len = (Uint16)len/2;           // data are 16bits=2*8bits, so (len/2) 16 bits data in the buffer
 
-    Sint16 *osc1_buff = NULL;
-    Sint16 *osc2_buff = NULL;
-    Sint16 *osc3_buff = NULL;
-
-    osc1_buff = calloc(s_len, sizeof(osc1_buff));
-    osc2_buff = calloc(s_len, sizeof(osc2_buff));
-    osc3_buff = calloc(s_len, sizeof(osc3_buff));
 
     osc_fill_buffer(&osc1, osc1_buff, s_len, SAMPLE_RATE, phase);
     osc_fill_buffer(&osc2, osc2_buff, s_len, SAMPLE_RATE, phase);
@@ -64,27 +61,38 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    osc1.amp = 20000;
-    osc1.wave = SIN;
+
+    osc1_buff = calloc(AUDIO_BUFF_SIZE, sizeof(osc1_buff));
+    osc2_buff = calloc(AUDIO_BUFF_SIZE, sizeof(osc2_buff));
+    osc3_buff = calloc(AUDIO_BUFF_SIZE, sizeof(osc3_buff));
+
+
+    osc1.amp = 10000;
+    osc1.wave = SQR;
     osc1.detune = 0;
-    osc1.freq = 440;
+    osc1.freq = 41;
     osc1.duty = 50;
 
-    osc2.amp = 5000;
-    osc2.wave = SQR;
+    osc2.amp = 30000;
+    osc2.wave = SIN;
     osc2.detune = 0;
-    osc2.freq = 440;
+    osc2.freq = 41;
     osc2.duty = 50;
 
-    osc3.amp = 32767;
-    osc3.wave = SIN;
-    osc3.detune = -12;
-    osc3.freq = 440;
+    osc3.amp = 10000;
+    osc3.wave = SQR;
+    osc3.detune = +12;
+    osc3.freq = 41;
     osc3.duty = 50;
 
     SDL_PauseAudio(0);                      // Play audio (pause = off)
     SDL_Delay(5000);                        // 5s sound
 
     SDL_Quit();
+
+    free(osc1_buff);
+    free(osc2_buff);
+    free(osc3_buff);
+
     return 0;
 }
