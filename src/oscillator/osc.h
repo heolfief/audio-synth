@@ -9,6 +9,8 @@
 #ifndef AUDIO_SYNTH_OSC_H
 #define AUDIO_SYNTH_OSC_H
 
+#include <SDL2/SDL_stdinc.h>
+
 /**
  * \enum Waveform
  * \brief various waveform types
