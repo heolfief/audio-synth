@@ -30,10 +30,7 @@ int osc_fill_buffer(const Oscillator *osc, Sint16 *buffer, Uint16 buffer_length,
     // Calculate actual frequency based on detune value
     Uint16 detuned_freq = (Uint16)(osc->freq * pow(chromatic_ratio, osc->detune));
 
-    // Calculate signal offset (average value)
-    double offset = (osc->duty / 100.0) * INT16_MAX + (1.0 - (osc->duty / 100.0)) * INT16_MIN;
-
-    double running_phase = 0.0;
+    double offset = 0;
 
     switch (osc->wave)
     {
@@ -47,6 +44,11 @@ int osc_fill_buffer(const Oscillator *osc, Sint16 *buffer, Uint16 buffer_length,
             break;
 
         case SQR:
+
+
+            // Calculate signal offset (average value)
+            offset = (osc->duty / 100.0) * osc->amp + (1.0 - (osc->duty / 100.0)) * -osc->amp;
+
             for (Uint16 sample = 0; sample < buffer_length; ++sample)
             {
                 // Fill the buffer with a square wave based on it's frequency, amplitude, phase, and duty cycle
@@ -69,11 +71,20 @@ int osc_fill_buffer(const Oscillator *osc, Sint16 *buffer, Uint16 buffer_length,
 
         case TRI:
 
+            for (Uint16 sample = 0; sample < buffer_length; ++sample)
+            {
+                // Fill the buffer with a triangle wave based on it's frequency, amplitude and phase
+                double nb_samples_in_period = (double)sample_rate / detuned_freq;
+                buffer[sample] = (fmod((sample + phase), nb_samples_in_period) < (0.5 * nb_samples_in_period))
+                        ? (Sint16) osc->amp * (Sint16)nb_samples_in_period
+                        : (Sint16) - osc->amp * (Sint16)nb_samples_in_period;
+            }
             break;
 
         case SAW:
 
             break;
+
         default:
             return -1; // if waveform is unknown
     }
