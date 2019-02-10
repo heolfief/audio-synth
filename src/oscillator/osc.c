@@ -79,3 +79,21 @@ int osc_fill_buffer(const Oscillator *osc, Sint16 *buffer, Uint16 buffer_length,
     }
     return 0;
 }
+
+Osc_Buffer* alloc_osc_buffer(Uint16 buff_nb_samples)
+{
+    Osc_Buffer *osc_buff = (Osc_Buffer *) calloc(buff_nb_samples, sizeof(Osc_Buffer));
+    if(osc_buff == NULL)
+    {
+        perror("memory allocation error\n");
+        return NULL;
+    }
+
+    return osc_buff;
+}
+
+int free_osc_buffer(Sint16 *osc_buff)
+{
+    free(osc_buff);
+    return 0;
+}

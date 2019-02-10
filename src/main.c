@@ -14,15 +14,15 @@ Oscillator osc1;
 Oscillator osc2;
 Oscillator osc3;
 
-Sint16 *osc1_buff = NULL;
-Sint16 *osc2_buff = NULL;
-Sint16 *osc3_buff = NULL;
+Osc_Buffer *osc1_buff = NULL;
+Osc_Buffer *osc2_buff = NULL;
+Osc_Buffer *osc3_buff = NULL;
 
 void func_callback(void *unused, Uint8 *stream, int len)
 {
     memset(stream, 0, len);                 // Empty buffer
     Sint16 *s_stream = (Sint16*) stream;    // Cast buffer data to signed 16 bits
-    Uint16 s_len = (Uint16)len/2;           // data are 16bits=2*8bits, so (len/2) 16 bits data in the buffer
+    Uint16 s_len = (Uint16)len/(Uint16)2;           // data are 16bits=2*8bits, so (len/2) 16 bits data in the buffer
 
 
     osc_fill_buffer(&osc1, osc1_buff, s_len, SAMPLE_RATE, phase);
@@ -62,10 +62,9 @@ int main(int argc, char *argv[])
     }
 
 
-    osc1_buff = calloc(AUDIO_BUFF_SIZE, sizeof(osc1_buff));
-    osc2_buff = calloc(AUDIO_BUFF_SIZE, sizeof(osc2_buff));
-    osc3_buff = calloc(AUDIO_BUFF_SIZE, sizeof(osc3_buff));
-
+    osc1_buff = alloc_osc_buffer(AUDIO_BUFF_SIZE);
+    osc2_buff = alloc_osc_buffer(AUDIO_BUFF_SIZE);
+    osc3_buff = alloc_osc_buffer(AUDIO_BUFF_SIZE);
 
     osc1.amp = 10000;
     osc1.wave = SQR;
@@ -90,9 +89,9 @@ int main(int argc, char *argv[])
 
     SDL_Quit();
 
-    free(osc1_buff);
-    free(osc2_buff);
-    free(osc3_buff);
+    free_osc_buffer(osc1_buff);
+    free_osc_buffer(osc2_buff);
+    free_osc_buffer(osc3_buff);
 
     return 0;
 }

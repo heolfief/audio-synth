@@ -11,6 +11,8 @@
 
 #include <SDL2/SDL_stdinc.h>
 
+typedef Sint16 Osc_Buffer;
+
 /**
  * \enum Waveform
  * \brief various waveform types
@@ -52,6 +54,26 @@ typedef struct{
  * \return 0 if everything went OK, -1 otherwise
  */
 int osc_fill_buffer(const Oscillator *osc, Sint16 *buffer, Uint16 buffer_length, Uint64 sample_rate, Uint64 phase);
+
+/**
+ * \fn int alloc_osc_buffer(Sint16 *osc_buff, Uint16 buff_size)
+ * \brief Function to allocate memory for an oscillator audio buffer
+ *
+ * \param buff_nb_samples The number of samples in the audio buffer
+ *
+ * \return the allocated address
+ */
+Osc_Buffer* alloc_osc_buffer(Uint16 buff_nb_samples);
+
+/**
+ * \fn int free_osc_buffer(Sint16 *osc_buff)
+ * \brief Function to free memory of an oscillator audio buffer
+ *
+ * \param osc_buff The oscillator audio buffer
+ *
+ * \return 0
+ */
+int free_osc_buffer(Sint16 *osc_buff);
 
 
 #endif //AUDIO_SYNTH_OSC_H
