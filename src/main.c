@@ -72,16 +72,16 @@ int main(int argc, char *argv[])
     osc1.freq = 440;
     osc1.duty = 50;
 
-    osc2.amp = 0;
+    osc2.amp = 32000;
     osc2.wave = SIN;
-    osc2.detune = 0;
-    osc2.freq = 41;
+    osc2.detune = -24;
+    osc2.freq = 440;
     osc2.duty = 50;
 
-    osc3.amp = 0;
+    osc3.amp = 5000;
     osc3.wave = SQR;
-    osc3.detune = +12;
-    osc3.freq = 41;
+    osc3.detune = -12;
+    osc3.freq = 440;
     osc3.duty = 50;
 
     SDL_PauseAudio(0);                      // Play audio (pause = off)

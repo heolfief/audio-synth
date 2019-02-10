@@ -31,6 +31,7 @@ int osc_fill_buffer(const Oscillator *osc, Sint16 *buffer, Uint16 buffer_length,
     Uint16 detuned_freq = (Uint16)(osc->freq * pow(chromatic_ratio, osc->detune));
 
     double offset = 0;
+    double nb_samples_in_period=0;
 
     switch (osc->wave)
     {
@@ -49,10 +50,11 @@ int osc_fill_buffer(const Oscillator *osc, Sint16 *buffer, Uint16 buffer_length,
             // Calculate signal offset (average value)
             offset = (osc->duty / 100.0) * osc->amp + (1.0 - (osc->duty / 100.0)) * -osc->amp;
 
+            nb_samples_in_period = (double)sample_rate / detuned_freq;
+
             for (Uint16 sample = 0; sample < buffer_length; ++sample)
             {
                 // Fill the buffer with a square wave based on it's frequency, amplitude, phase, and duty cycle
-                double nb_samples_in_period = (double)sample_rate / detuned_freq;
                 buffer[sample] = (fmod((sample + phase), nb_samples_in_period) < ((osc->duty / 100.0) * nb_samples_in_period)) ? osc->amp : (Sint16)-osc->amp;
 
                 // Remove offset to center signal on 0, stay on signed 16 bits representation
@@ -71,13 +73,16 @@ int osc_fill_buffer(const Oscillator *osc, Sint16 *buffer, Uint16 buffer_length,
 
         case TRI:
 
+            nb_samples_in_period = (double)sample_rate / detuned_freq;
+
             for (Uint16 sample = 0; sample < buffer_length; ++sample)
             {
                 // Fill the buffer with a triangle wave based on it's frequency, amplitude and phase
-                double nb_samples_in_period = (double)sample_rate / detuned_freq;
-                buffer[sample] = (fmod((sample + phase), nb_samples_in_period) < (0.5 * nb_samples_in_period))
-                        ? (Sint16) 2 * osc->amp / ((Sint16)nb_samples_in_period / 2 ) * sample
-                        : (Sint16) - 2 * osc->amp / ((Sint16)nb_samples_in_period / 2 ) * sample;
+                double mod = fmod((sample + phase), nb_samples_in_period);
+                double mul =
+                buffer[sample] = (fmod((sample + phase), nb_samples_in_period) < (nb_samples_in_period / 2))
+                        ? (Sint16) 2 * (Uint16)mod * osc->amp / (Sint16)nb_samples_in_period - osc->amp / (Uint16)2
+                        : (Sint16) - 2 * (Uint16)mod * osc->amp / (Sint16)nb_samples_in_period + (Uint16)(osc->amp * 1.5);
             }
             break;
 
