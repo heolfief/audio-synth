@@ -76,8 +76,8 @@ int osc_fill_buffer(const Oscillator *osc, Sint16 *buffer, Uint16 buffer_length,
                 // Fill the buffer with a triangle wave based on it's frequency, amplitude and phase
                 double nb_samples_in_period = (double)sample_rate / detuned_freq;
                 buffer[sample] = (fmod((sample + phase), nb_samples_in_period) < (0.5 * nb_samples_in_period))
-                        ? (Sint16) osc->amp * (Sint16)nb_samples_in_period
-                        : (Sint16) - osc->amp * (Sint16)nb_samples_in_period;
+                        ? (Sint16) 2 * osc->amp / ((Sint16)nb_samples_in_period / 2 ) * sample
+                        : (Sint16) - 2 * osc->amp / ((Sint16)nb_samples_in_period / 2 ) * sample;
             }
             break;
 

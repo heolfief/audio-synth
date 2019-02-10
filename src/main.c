@@ -66,11 +66,11 @@ int main(int argc, char *argv[])
     osc2_buff = alloc_osc_buffer(AUDIO_BUFF_SIZE);
     osc3_buff = alloc_osc_buffer(AUDIO_BUFF_SIZE);
 
-    osc1.amp = 30000;
+    osc1.amp = 32000;
     osc1.wave = TRI;
     osc1.detune = 0;
     osc1.freq = 440;
-    osc1.duty = 60;
+    osc1.duty = 50;
 
     osc2.amp = 0;
     osc2.wave = SIN;
