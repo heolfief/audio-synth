@@ -28,7 +28,12 @@ int osc_fill_buffer(const Oscillator *osc, Sint16 *buffer, Uint16 buffer_length,
     }
 
     // Calculate actual frequency based on detune value
-    Uint16 detuned_freq = (Uint16)(osc->freq * (double)pow(chromatic_ratio, osc->detune));
+    Uint16 detuned_freq = (Uint16)(osc->freq * pow(chromatic_ratio, osc->detune));
+
+    // Calculate signal offset (average value)
+    double offset = (osc->duty / 100.0) * INT16_MAX + (1.0 - (osc->duty / 100.0)) * INT16_MIN;
+
+    double running_phase = 0.0;
 
     switch (osc->wave)
     {
@@ -45,7 +50,20 @@ int osc_fill_buffer(const Oscillator *osc, Sint16 *buffer, Uint16 buffer_length,
             for (Uint16 sample = 0; sample < buffer_length; ++sample)
             {
                 // Fill the buffer with a square wave based on it's frequency, amplitude, phase, and duty cycle
-                buffer[sample] = (((sample + phase) * 2 * detuned_freq/sample_rate) % 2) ? osc->amp : (Sint16)-osc->amp;
+                double nb_samples_in_period = (double)sample_rate / detuned_freq;
+                buffer[sample] = (fmod((sample + phase), nb_samples_in_period) < ((osc->duty / 100.0) * nb_samples_in_period)) ? osc->amp : (Sint16)-osc->amp;
+
+                // Remove offset to center signal on 0, stay on signed 16 bits representation
+                if((buffer[sample] - (Uint16)offset) > INT16_MAX)
+                {
+                    buffer[sample] = INT16_MAX;
+                }
+                else if((buffer[sample] - (Uint16)offset) < INT16_MIN)
+                {
+                    buffer[sample] = INT16_MIN;
+                }
+                else buffer[sample] -= (Uint16)offset;
+
             }
             break;
 

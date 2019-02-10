@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
     if(SDL_Init(SDL_INIT_EVERYTHING)<0)
     {
         printf("Error initializing SDL\n");
-        return 1;
+        return -1;
     }
 
     SDL_AudioSpec as;
@@ -58,7 +58,7 @@ int main(int argc, char *argv[])
     if (SDL_OpenAudio(&as, NULL)<0)
     {
         printf("Unable to open audio..");
-        return 1;
+        return -1;
     }
 
 
@@ -71,9 +71,9 @@ int main(int argc, char *argv[])
     osc1.wave = SQR;
     osc1.detune = 0;
     osc1.freq = 41;
-    osc1.duty = 50;
+    osc1.duty = 60;
 
-    osc2.amp = 30000;
+    osc2.amp = 5000;
     osc2.wave = SIN;
     osc2.detune = 0;
     osc2.freq = 41;
