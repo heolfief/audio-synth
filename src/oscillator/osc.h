@@ -27,10 +27,20 @@ typedef enum{
 } Waveform;
 
 /**
+ * \enum OscONOFF
+ * \brief defines ON and OFF values for an oscillator
+ *
+ */
+typedef enum{
+    OFF,                 /*!< Oscillator is OFF */
+    ON,                  /*!< Oscillator is ON */
+} OscONOFF;
+
+/**
  * \struct Oscillator
  * \brief define an oscillator
  *
- * An oscillator is defined with : wave, frequency, amplitude, detune and dutycycle
+ * An oscillator is defined with : wave, frequency, amplitude, detune, dutycycle and on/off value
  */
 typedef struct{
     Waveform wave;       /*!<the waveform type */
@@ -38,6 +48,7 @@ typedef struct{
     Uint16   amp;        /*!<the amplitude */
     Sint8    detune;     /*!<the detune in number of notes */
     Sint8    duty;       /*!<the dutycyle in percents (if available for the selected waveform) */
+    OscONOFF onoff;      /*!<the on/off value */
 }Oscillator;
 
 
