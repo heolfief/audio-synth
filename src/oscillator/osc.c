@@ -58,16 +58,15 @@ int osc_fill_buffer(const Oscillator *osc, Sint16 *buffer, Uint16 buffer_length,
                 buffer[sample] = (fmod((sample + phase), nb_samples_in_period) < ((osc->duty / 100.0) * nb_samples_in_period)) ? osc->amp : (Sint16)-osc->amp;
 
                 // Remove offset to center signal on 0, stay on signed 16 bits representation
-                if((buffer[sample] - (Uint16)offset) > INT16_MAX)
+                /*if(((Uint32)buffer[sample] - (Uint32)offset) > INT16_MAX)
                 {
                     buffer[sample] = INT16_MAX;
                 }
-                else if((buffer[sample] - (Uint16)offset) < INT16_MIN)
+                else if(((Uint32)buffer[sample] - (Uint32)offset) < INT16_MIN)
                 {
                     buffer[sample] = INT16_MIN;
                 }
-                else buffer[sample] -= (Uint16)offset;
-
+                else buffer[sample] -= (Uint16)offset;*/
             }
             break;
 
