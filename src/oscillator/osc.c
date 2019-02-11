@@ -78,7 +78,7 @@ int osc_fill_buffer(const Oscillator *osc, Sint16 *buffer, Uint16 buffer_length,
             {
                 // Fill the buffer with a triangle wave based on it's frequency, amplitude and phase
                 double mod = fmod((sample + phase), nb_samples_in_period);
-                double mul =
+
                 buffer[sample] = (fmod((sample + phase), nb_samples_in_period) < (nb_samples_in_period / 2))
                         ? (Sint16) 2 * (Uint16)mod * osc->amp / (Sint16)nb_samples_in_period - osc->amp / (Uint16)2
                         : (Sint16) - 2 * (Uint16)mod * osc->amp / (Sint16)nb_samples_in_period + (Uint16)(osc->amp * 1.5);
@@ -87,6 +87,15 @@ int osc_fill_buffer(const Oscillator *osc, Sint16 *buffer, Uint16 buffer_length,
 
         case SAW:
 
+            nb_samples_in_period = (double)sample_rate / detuned_freq;
+
+            for (Uint16 sample = 0; sample < buffer_length; ++sample)
+            {
+                // Fill the buffer with a sawtooth wave based on it's frequency, amplitude and phase
+                double mod = fmod((sample + phase), nb_samples_in_period);
+
+                buffer[sample] = (Sint16) (Uint16)mod * osc->amp / (Sint16)nb_samples_in_period - osc->amp / (Uint16)2;
+            }
             break;
 
         default:
