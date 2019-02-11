@@ -33,6 +33,8 @@ int osc_fill_buffer(const Oscillator *osc, Sint16 *buffer, Uint16 buffer_length,
     double offset = 0;
     double nb_samples_in_period=0;
 
+    if(osc->onoff == OFF) return 0;
+
     switch (osc->wave)
     {
         case SIN:
