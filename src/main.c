@@ -67,7 +67,7 @@ int main(int argc, char *argv[])
     if(SDL_Init(SDL_INIT_EVERYTHING)<0)
     {
         printf("Error initializing SDL\n");
-        return -1;
+        exit(EXIT_FAILURE);
     }
 
     SDL_AudioSpec as;
@@ -83,7 +83,7 @@ int main(int argc, char *argv[])
     if (SDL_OpenAudio(&as, NULL)<0)
     {
         printf("Unable to open audio..");
-        return -1;
+        exit(EXIT_FAILURE);
     }
 
 
