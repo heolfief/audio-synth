@@ -20,10 +20,6 @@ Oscillator osc1;
 Oscillator osc2;
 Oscillator osc3;
 
-// Global oscillator buffers
-Osc_Buffer *osc1_buff = NULL;
-Osc_Buffer *osc2_buff = NULL;
-Osc_Buffer *osc3_buff = NULL;
 
 /**
  *  \fn void func_callback(void *unused, Uint8 *stream, int len)
@@ -49,14 +45,14 @@ void func_callback(void *unused, Uint8 *stream, int len)
     Uint16 s_len = (Uint16)len/(Uint16)2;   // data are 16bits=2*8bits, so (len/2) 16 bits data in the buffer
 
 
-    osc_fill_buffer(&osc1, osc1_buff, s_len, SAMPLE_RATE, phase);
-    osc_fill_buffer(&osc2, osc2_buff, s_len, SAMPLE_RATE, phase);
-    osc_fill_buffer(&osc3, osc3_buff, s_len, SAMPLE_RATE, phase);
+    osc_fill_buffer(&osc1, osc1.buffer, s_len, SAMPLE_RATE, phase);
+    osc_fill_buffer(&osc2, osc2.buffer, s_len, SAMPLE_RATE, phase);
+    osc_fill_buffer(&osc3, osc3.buffer, s_len, SAMPLE_RATE, phase);
 
     for(Uint16 i = 0; i < s_len; ++i)
     {
         // Add all oscillators
-        s_stream[i] = (Sint16)(osc1_buff[i]/OSC_NBR + osc2_buff[i]/OSC_NBR + osc3_buff[i]/OSC_NBR);
+        s_stream[i] = (Sint16)(osc1.buffer[i]/OSC_NBR + osc2.buffer[i]/OSC_NBR + osc3.buffer[i]/OSC_NBR);
     }
 
     phase = (phase + len/2)%SAMPLE_RATE;    // Update phase based on play position
@@ -87,9 +83,6 @@ int main(int argc, char *argv[])
     }
 
 
-    osc1_buff = alloc_osc_buffer(AUDIO_BUFF_SIZE);
-    osc2_buff = alloc_osc_buffer(AUDIO_BUFF_SIZE);
-    osc3_buff = alloc_osc_buffer(AUDIO_BUFF_SIZE);
 
     osc1.amp = 32000;
     osc1.wave = TRI;
@@ -97,6 +90,7 @@ int main(int argc, char *argv[])
     osc1.freq = 440;
     osc1.duty = 50;
     osc1.onoff = ON;
+    osc1.buffer = alloc_osc_buffer(AUDIO_BUFF_SIZE);
 
     osc2.amp = 32000;
     osc2.wave = SIN;
@@ -104,6 +98,7 @@ int main(int argc, char *argv[])
     osc2.freq = 440;
     osc2.duty = 50;
     osc2.onoff = ON;
+    osc2.buffer = alloc_osc_buffer(AUDIO_BUFF_SIZE);
 
     osc3.amp = 5000;
     osc3.wave = SQR;
@@ -111,15 +106,16 @@ int main(int argc, char *argv[])
     osc3.freq = 440;
     osc3.duty = 50;
     osc3.onoff = ON;
+    osc3.buffer = alloc_osc_buffer(AUDIO_BUFF_SIZE);
 
     SDL_PauseAudio(0);                      // Play audio (pause = off)
     SDL_Delay(5000);                        // 5s sound
 
     SDL_Quit();
 
-    free_osc_buffer(osc1_buff);
-    free_osc_buffer(osc2_buff);
-    free_osc_buffer(osc3_buff);
+    free_osc_buffer(osc1.buffer);
+    free_osc_buffer(osc2.buffer);
+    free_osc_buffer(osc3.buffer);
 
     return 0;
 }
