@@ -27,14 +27,14 @@ typedef enum{
 } Waveform;
 
 /**
- * \enum OscONOFF
- * \brief defines ON and OFF values for an oscillator
+ * \enum ONOFF
+ * \brief defines ON and OFF values
  *
  */
 typedef enum{
-    OFF,                 /*!< Oscillator is OFF */
-    ON,                  /*!< Oscillator is ON */
-} OscONOFF;
+    OFF,                 /*!< object is OFF */
+    ON,                  /*!< object is ON */
+} ONOFF;
 
 /**
  * \struct Oscillator
@@ -49,7 +49,7 @@ typedef struct{
     Uint16      amp;        /*!<the amplitude */
     Sint8       detune;     /*!<the detune in number of notes */
     Sint8       duty;       /*!<the dutycyle in percents (if available for the selected waveform) */
-    OscONOFF    onoff;      /*!<the on/off value */
+    ONOFF       onoff;      /*!<the on/off value */
     Osc_Buffer  buffer;     /*!<the audio data buffer of the oscillator */
 }Oscillator;
 
