@@ -48,4 +48,25 @@ typedef struct{
 
 
 
+/**
+ * \fn Note_Buffer alloc_note_buffer(Uint16 buff_nb_samples)
+ * \brief Function to allocate memory for a note audio buffer
+ *
+ * \param buff_nb_samples The number of samples in the audio buffer
+ *
+ * \return the allocated Note_buffer
+ */
+Note_Buffer alloc_note_buffer(Uint16 buff_nb_samples);
+
+/**
+ * \fn int free_note_buffer(Note_Buffer note_buff)
+ * \brief Function to free memory of a note audio buffer
+ *
+ * \param note_buff The note audio buffer
+ *
+ * \return 0
+ */
+int free_note_buffer(Note_Buffer note_buff);
+
+
 #endif //AUDIO_SYNTH_NOTE_H

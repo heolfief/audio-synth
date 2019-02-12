@@ -87,7 +87,9 @@ int main(int argc, char *argv[])
         exit(EXIT_FAILURE);
     }
 
-    test_note.buffer = (Note_Buffer) calloc(AUDIO_BUFF_SIZE, sizeof(Note_Buffer));          // ONLY A TEST, WILL BE REPLACED BY A FAIL SAFE FUNCTION LIKE alloc_osc_buffer
+
+
+    test_note.buffer = alloc_note_buffer(AUDIO_BUFF_SIZE);
 
     test_note.osc1.amp = 32000;
     test_note.osc1.wave = TRI;
@@ -113,6 +115,8 @@ int main(int argc, char *argv[])
     test_note.osc3.onoff = ON;
     test_note.osc3.buffer = alloc_osc_buffer(AUDIO_BUFF_SIZE);
 
+
+
     SDL_PauseAudio(0);                      // Play audio (pause = off)
     SDL_Delay(5000);                        // 5s sound
 
@@ -121,6 +125,8 @@ int main(int argc, char *argv[])
     free_osc_buffer(test_note.osc1.buffer);
     free_osc_buffer(test_note.osc2.buffer);
     free_osc_buffer(test_note.osc3.buffer);
+
+    free_note_buffer(test_note.buffer);
 
     return 0;
 }
