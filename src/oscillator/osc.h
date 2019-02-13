@@ -17,13 +17,12 @@ typedef Sint16 *Osc_Buffer;
  * \enum Waveform
  * \brief various waveform types
  *
- * This enum defines the various waveform types : sine, square, triangle and sawtooth
+ * This enum defines the various waveform types : sine, square and triangle
  */
 typedef enum{
     SIN,                 /*!< Sinusoidal waveform */
     SQR,                 /*!< Square waveform */
     TRI,                 /*!< Triangle waveform */
-    SAW                  /*!< Sawtooth waveform */
 } Waveform;
 
 /**
