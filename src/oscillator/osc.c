@@ -76,27 +76,17 @@ int osc_fill_buffer(const Oscillator *osc, Osc_Buffer buffer, Uint16 buffer_leng
 
             nb_samples_in_period = (double)sample_rate / detuned_freq;
 
+            Sint16 highmean = (Sint16)((Sint16)(osc->amp * nb_samples_in_period * (osc->duty / 100.0))/2);
+            Sint16 lowmean =  (Sint16)((Sint16)( - osc->amp * nb_samples_in_period * (1.0 - osc->duty / 100.0))/2);
+
             for (Uint16 sample = 0; sample < buffer_length; ++sample)
             {
                 // Fill the buffer with a triangle wave based on it's frequency, amplitude and phase
                 double mod = fmod((sample + phase), nb_samples_in_period);
 
-                buffer[sample] = (fmod((sample + phase), nb_samples_in_period) < (nb_samples_in_period / 2))
-                        ? (Sint16) 2 * (Uint16)mod * osc->amp / (Sint16)nb_samples_in_period - osc->amp / (Uint16)2
-                        : (Sint16) - 2 * (Uint16)mod * osc->amp / (Sint16)nb_samples_in_period + (Uint16)(osc->amp * 1.5);
-            }
-            break;
-
-        case SAW:
-
-            nb_samples_in_period = (double)sample_rate / detuned_freq;
-
-            for (Uint16 sample = 0; sample < buffer_length; ++sample)
-            {
-                // Fill the buffer with a sawtooth wave based on it's frequency, amplitude and phase
-                double mod = fmod((sample + phase), nb_samples_in_period);
-
-                buffer[sample] = (Sint16) (Uint16)mod * osc->amp / (Sint16)nb_samples_in_period - osc->amp / (Uint16)2;
+                buffer[sample] = (mod < (((double)osc->duty / 100.0) * nb_samples_in_period))
+                        ? (Sint16)((100.0 / osc->duty) * mod * osc->amp / (Sint16)nb_samples_in_period) - (Sint16)(osc->amp / 2.0)
+                        : (Sint16)(- (mod - nb_samples_in_period * osc->duty / 100.0) * osc->amp / (nb_samples_in_period * (1 - osc->duty / 100.0))) + (Sint16)(osc->amp / 2.0);
             }
             break;
 

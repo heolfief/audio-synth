@@ -17,13 +17,12 @@ typedef Sint16 *Osc_Buffer;
  * \enum Waveform
  * \brief various waveform types
  *
- * This enum defines the various waveform types : sine, square, triangle and sawtooth
+ * This enum defines the various waveform types : sine, square and triangle
  */
 typedef enum{
     SIN,                 /*!< Sinusoidal waveform */
     SQR,                 /*!< Square waveform */
     TRI,                 /*!< Triangle waveform */
-    SAW                  /*!< Sawtooth waveform */
 } Waveform;
 
 /**
@@ -34,7 +33,7 @@ typedef enum{
 typedef enum{
     OFF,                 /*!< object is OFF */
     ON,                  /*!< object is ON */
-} ONOFF;
+} OnOff;
 
 /**
  * \struct Oscillator
@@ -49,7 +48,7 @@ typedef struct{
     Uint16      amp;        /*!<the amplitude */
     Sint8       detune;     /*!<the detune in number of notes */
     Sint8       duty;       /*!<the dutycyle in percents (if available for the selected waveform) */
-    ONOFF       onoff;      /*!<the on/off value */
+    OnOff       onoff;      /*!<the on/off value */
     Osc_Buffer  buffer;     /*!<the audio data buffer of the oscillator */
 }Oscillator;
 

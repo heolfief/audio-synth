@@ -32,15 +32,16 @@ typedef struct{
  * \struct Note
  * \brief define a note
  *
- * A note is defined with : Oscillator 1, Oscillator 2, Oscillator 3, amplitude, on/off state, envelope and lifetime value
+ * A note is defined with : Oscillator 1, Oscillator 2, Oscillator 3, pitch, amplitude, on/off state, envelope and lifetime value
  * It is associated with it's own buffer to store the audio samples resulting of the mixed oscillators
  */
 typedef struct{
     Oscillator    osc1;       /*!<the first oscillator */
     Oscillator    osc2;       /*!<the second oscillator */
     Oscillator    osc3;       /*!<the third oscillator */
+    Uint16        pitch;      /*!<the pitch / note*/
     Uint16        amp;        /*!<the amplitude of the note*/
-    ONOFF         onoff;      /*!<the on/off value */
+    OnOff         onoff;      /*!<the on/off value */
     Envelope      env;        /*!<the ADSR envelope */
     Uint64        lifetime;   /*!<the number of samples passed since the note is ON (used to calculate envelope) */
     Note_Buffer   buffer;     /*!<the audio data buffer of the note, resulting of the mix of the oscillators buffers */
