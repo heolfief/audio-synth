@@ -11,6 +11,7 @@
 
 #include "oscillator/osc.h"
 #include "note/note.h"
+#include "gui/gui.h"
 
 #define SAMPLE_RATE 48000
 #define AUDIO_BUFF_SIZE 1024
