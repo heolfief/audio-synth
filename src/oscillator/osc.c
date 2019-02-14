@@ -76,9 +76,6 @@ int osc_fill_buffer(const Oscillator *osc, Osc_Buffer buffer, Uint16 buffer_leng
 
             nb_samples_in_period = (double)sample_rate / detuned_freq;
 
-            Sint16 highmean = (Sint16)((Sint16)(osc->amp * nb_samples_in_period * (osc->duty / 100.0))/2);
-            Sint16 lowmean =  (Sint16)((Sint16)( - osc->amp * nb_samples_in_period * (1.0 - osc->duty / 100.0))/2);
-
             for (Uint16 sample = 0; sample < buffer_length; ++sample)
             {
                 // Fill the buffer with a triangle wave based on it's frequency, amplitude and phase

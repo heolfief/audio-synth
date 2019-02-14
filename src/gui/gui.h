@@ -42,8 +42,8 @@ typedef struct{
     char*       img;         /*!<the image of the potentiometer */
     Uint8       percent;     /*!<the percentage set by the user of the potentiometer */
     void*       param;       /*!<the parameter set by the potentiometer */
-    Sint64      paramMAX;    /*!<the max value of the parameter set by the potentiometer */
-    Sint64      paramMIN;    /*!<the min value of the parameter set by the potentiometer */
+    Sint64      paramMAX;    /*!<the max value of the parameter set by the potentiometer, when percent is 100% */
+    Sint64      paramMIN;    /*!<the min value of the parameter set by the potentiometer, when percent is 0% */
 }Potentiometer;
 
 
