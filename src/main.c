@@ -1,7 +1,7 @@
 #include <SDL2/SDL.h>
 #include <math.h>
 #include <stdio.h>
-#include "fichier.h"
+#include "fichier/fichier.h"
 
 
 
@@ -12,7 +12,7 @@ int main(int argc, char *argv[])
 
   FILE * test;
 
-  test= ouvrirFichier("Mario_SMF1.mid","r",RETOUR);
+  test= ouvrirFichier("../fichier_midi/test midi une note.mid","r",RETOUR);
     unsigned char * mot = lireBlockFichier(test,60);
 
 
