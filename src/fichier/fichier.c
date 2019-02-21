@@ -8,6 +8,7 @@
 
 
 
+
 FILE * ouvrirFichier (char * nom, char * mode, TypeRetour t){
     FILE * fichier;
     if ((fichier = fopen(nom,"r")) == (FILE *) NULL){

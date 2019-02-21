@@ -2,7 +2,7 @@
 #include <math.h>
 #include <stdio.h>
 #include "fichier/fichier.h"
-
+#include "midi/midi.h"
 
 
 int main(int argc, char *argv[])
