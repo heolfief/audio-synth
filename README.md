@@ -3,8 +3,17 @@
 Synthétiseur audio en C (bibliothèque SDL2). Projet 3ème année EII INSA Rennes.
 
 
+## Auto build & Run
+Executer le script :
 
-## Building :
+```bash
+$ ./run.sh
+```
+
+Le projet devrait compiler et s'executer.
+
+
+## Manual building :
 
 
 ```bash
