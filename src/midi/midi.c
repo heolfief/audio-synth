@@ -12,9 +12,12 @@
 
 void fillHeaderRead (Header * H, FILE * f){
     unsigned char *  buffer = lireBlockFichier(f,16);
-
     for (int i =0; i<4;i++){
         H->MTHD[i]= buffer[i];
+    }
+    if (H->MTHD[0]!= 0x4d && H->MTHD[1]!= 0x54 && H->MTHD[2]!=0x68 && H->MTHD[3]!=0x64){
+        printf("unrecognized file");
+        return;
     }
 
     for (int i= 4; i<8; i++){
@@ -32,6 +35,6 @@ void fillHeaderRead (Header * H, FILE * f){
         H->NOIRE[i-12]=buffer[i];
        ;
     }
-    free(buffer);
 
+    free(buffer);
 }
