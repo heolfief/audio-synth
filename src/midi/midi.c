@@ -11,7 +11,7 @@
 
 
 void fillHeaderRead (Header * H, FILE * f){
-    unsigned char *  buffer = lireBlockFichier(f,16);
+    unsigned char *  buffer = lireBlockFichier(f,14);
     for (int i =0; i<4;i++){
         H->MTHD[i]= buffer[i];
     }
@@ -19,22 +19,13 @@ void fillHeaderRead (Header * H, FILE * f){
         printf("unrecognized file");
         return;
     }
-
     for (int i= 4; i<8; i++){
         H->SPEC_ADDR[i-4]=buffer[i];
    }
-    for (int i=8; i<10; i++){
-        H->SMF[i-8]=buffer[i];
+        H->SMF=buffer[8]*256+buffer[9];
 
-    }
-    for (int i= 10; i<12; i++){
-        H->MTRK[i-10]=buffer[i];
+        H->MTRK=buffer[10]*256+buffer[11];
 
-    }
-    for (int i= 12; i<14; i++){
-        H->NOIRE[i-12]=buffer[i];
-       ;
-    }
-
+        H->NOIRE=buffer[12]*256 + buffer[13];
     free(buffer);
 }

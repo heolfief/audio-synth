@@ -13,11 +13,11 @@ int main(int argc, char *argv[])
 
   FILE * test;
 
-  test= ouvrirFichier("../fichier_midi/test midi une note.mid","r",RETOUR);
+  test= ouvrirFichier("../fichier_midi/test midi 2 note.mid","r",RETOUR);
 
     Header h;
     fillHeaderRead(&h,test);
-
+printf ("%d",h.NOIRE);
    fermerFichier(test);
 
   }
