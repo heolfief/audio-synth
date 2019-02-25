@@ -15,8 +15,12 @@ typedef struct {
 } Header;
 
 
-void fillHeaderRead (Header*H, FILE* f);
 
+
+
+
+void fillHeaderRead (Header*H, FILE* f);
+void setAtData (FILE *f);
 
 
 

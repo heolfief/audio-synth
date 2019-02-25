@@ -9,7 +9,7 @@
 
 
 
-FILE * ouvrirFichier (char * nom, char * mode, TypeRetour t){
+FILE * openFile (char * nom, char * mode, TypeRetour t){
     FILE * fichier;
     if ((fichier = fopen(nom,"r")) == (FILE *) NULL){
         printf("open file error");
@@ -18,13 +18,13 @@ FILE * ouvrirFichier (char * nom, char * mode, TypeRetour t){
     return fichier;
 }
 
-void fermerFichier(FILE * fichier){
+void closeFile(FILE * fichier){
     fclose (fichier);
 
 }
 
 
-unsigned char * lireBlockFichier (FILE * fichier, int nombre){
+unsigned char * BlockFileReader (FILE * fichier, int nombre){
     unsigned char * buffer;
     if ((buffer = (unsigned char *) malloc(sizeof(unsigned char)*nombre)) == NULL){
         printf("memory allocation error");

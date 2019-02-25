@@ -11,7 +11,7 @@
 
 
 void fillHeaderRead (Header * H, FILE * f){
-    unsigned char *  buffer = lireBlockFichier(f,14);
+    unsigned char *  buffer = BlockFileReader(f,14);
     for (int i =0; i<4;i++){
         H->MTHD[i]= buffer[i];
     }
@@ -28,4 +28,15 @@ void fillHeaderRead (Header * H, FILE * f){
 
         H->NOIRE=buffer[12]*256 + buffer[13];
     free(buffer);
+}
+
+void setAtData(FILE *f){
+    unsigned char * buffer = NULL;
+    while(feof(f)){
+     buffer=BlockFileReader(f,3);
+
+
+
+
+    }
 }
