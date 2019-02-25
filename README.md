@@ -23,17 +23,23 @@ $ cmake ../..
 $ make && make install
 $ cd ../..
 
-# Run the tests:
-$ bin/audio_synth_tests
-
 # Run the binary:
 $ bin/audio_synth
+
+# Run the tests:
+$ bin/audio_synth_tests
 ```
 
 ## Tests
-Tapez la commande suivante pour executer les tests :
+Executer le script :
 
 ```bash
-$ ctest
+$ ./test.sh
 ```
-Utilisez l'option `-V` pour passer en mode verbose et voir le détail des tests.
+
+Le projet devrait compiler et executer les programme de test.
+
+Utilisez l'option `-V` pour passer en mode verbose et voir le détail des tests :
+```bash
+$ ./test.sh -V
+```

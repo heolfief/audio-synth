@@ -18,4 +18,6 @@ add_test(audio_synth_test_valgrind valgrind
 target_link_libraries(audio_synth_test ${CMOCKA_LIBRARY})
 target_link_libraries(audio_synth_test m)
 
-install(TARGETS audio_synth_test DESTINATION bin)
+install(TARGETS audio_synth_test
+	RUNTIME DESTINATION bin	
+	DESTINATION ${INSTALL_BIN_DIR})
