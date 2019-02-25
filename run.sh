@@ -1,11 +1,16 @@
 #!/bin/bash
-echo "Building"
+
+BLUE='\033[1;36m'
+NC='\033[0m' # No Color
+
+echo -e "${BLUE}Building :${NC}"
 rm -rf build/run && mkdir build/run
 cd build/run
 cmake ../..
-make && make install
+make
 cd ../..
-echo "Done"
+echo -e "${BLUE}\nDone${NC}"
 
-echo "Executing program"
+echo -e "${BLUE}\nExecuting program :${NC}"
 bin/audio_synth
+echo -e "${BLUE}\nDone${NC}"

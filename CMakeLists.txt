@@ -1,7 +1,11 @@
 cmake_minimum_required(VERSION 3.2)
-project(audio_synth)
+project(audio_synth C)
+
+include(CTest)
 
 set(CMAKE_C_STANDARD 99)
+
+enable_testing()
 
 set(CMAKE_INSTALL_PREFIX ${PROJECT_SOURCE_DIR})
 
@@ -14,5 +18,5 @@ set(INSTALL_LIB_DIR ${PROJECT_SOURCE_DIR}/lib)
 set(INSTALL_BIN_DIR ${PROJECT_SOURCE_DIR}/bin)
 
 add_subdirectory(src)
-#add_subdirectory(test)
+add_subdirectory(test)
 

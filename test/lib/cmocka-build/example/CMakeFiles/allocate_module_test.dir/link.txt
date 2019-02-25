@@ -1,0 +1,1 @@
+/usr/bin/cc    CMakeFiles/allocate_module_test.dir/allocate_module.c.o CMakeFiles/allocate_module_test.dir/allocate_module_test.c.o  -o allocate_module_test -Wl,-rpath,/home/heol/Documents/audio-synth/test/lib/cmocka-build/src ../src/libcmocka.so.0.5.1 /usr/lib/x86_64-linux-gnu/librt.so 
