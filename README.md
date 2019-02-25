@@ -29,3 +29,11 @@ $ bin/audio_synth_tests
 # Run the binary:
 $ bin/audio_synth
 ```
+
+## Tests
+Tapez la commande suivante pour executer les tests :
+
+```bash
+$ ctest
+```
+Utilisez l'option `-V` pour passer en mode verbose et voir le détail des tests.

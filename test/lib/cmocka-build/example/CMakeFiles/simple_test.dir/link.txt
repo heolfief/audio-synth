@@ -1,0 +1,1 @@
+/usr/bin/cc    CMakeFiles/simple_test.dir/simple_test.c.o  -o simple_test -Wl,-rpath,/home/heol/Documents/audio-synth/test/lib/cmocka-build/src ../src/libcmocka.so.0.5.1 /usr/lib/x86_64-linux-gnu/librt.so 

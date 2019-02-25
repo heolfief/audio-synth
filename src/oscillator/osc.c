@@ -33,7 +33,15 @@ int osc_fill_buffer(const Oscillator *osc, Osc_Buffer buffer, Uint16 buffer_leng
     double offset = 0;
     double nb_samples_in_period=0;
 
-    if(osc->onoff == OFF) return 0;
+    if(osc->onoff == OFF)
+    {
+        for (Uint16 sample = 0; sample < buffer_length; ++sample)
+        {
+            // Fill the buffer with nothing (no sound)
+            buffer[sample] = 0;
+        }
+        return 0;
+    }
 
     switch (osc->wave)
     {

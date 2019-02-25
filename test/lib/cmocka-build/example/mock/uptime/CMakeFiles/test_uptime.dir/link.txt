@@ -1,0 +1,1 @@
+/usr/bin/cc    -Wl,--wrap=uptime CMakeFiles/test_uptime.dir/test_uptime.c.o  -o test_uptime -Wl,-rpath,/home/heol/Documents/audio-synth/test/lib/cmocka-build/src ../../../src/libcmocka.so.0.5.1 /usr/lib/x86_64-linux-gnu/librt.so 

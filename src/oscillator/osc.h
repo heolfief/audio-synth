@@ -54,7 +54,7 @@ typedef struct{
 
 
 /**
- * \fn Uint8 osc_fill_buffer(const Oscillator *osc, Sint16 *buffer, Uint16 buffer_length, Uint64 sample_rate)
+ * \fn int osc_fill_buffer(const Oscillator *osc, Osc_Buffer buffer, Uint16 buffer_length, Uint64 sample_rate, Uint64 phase)
  * \brief Function to fill audio buffer with oscillator wave
  *
  * \param osc The oscillator structure
