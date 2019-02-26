@@ -17,7 +17,8 @@ int main(int argc, char *argv[])
 
     Header h;
     fillHeaderRead(&h,test);
-printf ("%d",h.NOIRE);
+printf ("%d \n",h.NOIRE);
+//setAtData(test);
    closeFile(test);
 
   }

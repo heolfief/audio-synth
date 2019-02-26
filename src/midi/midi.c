@@ -29,14 +29,23 @@ void fillHeaderRead (Header * H, FILE * f){
         H->NOIRE=buffer[12]*256 + buffer[13];
     free(buffer);
 }
-
+/*
 void setAtData(FILE *f){
     unsigned char * buffer = NULL;
-    while(feof(f)){
-     buffer=BlockFileReader(f,3);
+    long int offset;
+    buffer=BlockFileReader(f,9);
+    buffer=BlockFileReader(f,1);
+    printf ("%x",buffer[0]);
+    while(buffer[0]== 0xFF ){
+        buffer=BlockFileReader(f,2);
+        offset = buffer[1];
+        printf ("%ld",offset);
 
-
-
-
+        fseek(f,,SEEK_CUR);
+        buffer=BlockFileReader(f,1);
     }
-}
+
+    buffer=BlockFileReader(f,1);
+    printf ("%x",buffer[0]);
+
+}*/

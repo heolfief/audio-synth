@@ -8,9 +8,13 @@
 
 typedef enum {ARRET,RETOUR}TypeRetour;
 
+
 FILE * openFile (char * nom, char * mode, TypeRetour t);
-void closeFile(FILE * fichier);
-unsigned char * BlockFileReader (FILE * fichier, int nombre);
+int closeFile(FILE * fichier);
+unsigned char * BlockFileReader (FILE * fichier, u_int32_t  nombre);
+int removeFile(FILE *f);
+
+
 
 
 
