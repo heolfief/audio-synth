@@ -70,11 +70,13 @@ u_int16_t  * readDataRangeSorted ( u_int32_t size) {
 
 void recordDataRange (FILE *f){
     FILE * FILERecord  = openFile("tmp.txt","w+",RETOUR);
+    u_int16_t * buffer = NULL;
     while(feof((f))){
-        fprintf(FILERecord,"%x", BlockFileReader(f,1));
+        buffer =(u_int16_t *) BlockFileReader(f,1);
+        fprintf(FILERecord,"%d", buffer[0]);
         passedMetaData(f);
     }
-
+    free(buffer);
 }
 
 
@@ -90,10 +92,8 @@ __uint16_t  * readDataRange (FILE * f){
     u_int16_t * DataRange =NULL;
     u_int32_t size;
     setAsBeginDataRange(f);
-
-
-
-
+    passedMetaData(f);
+    recordDataRange(f);
     DataRange =readDataRangeSorted(size);
     return DataRange;
 
