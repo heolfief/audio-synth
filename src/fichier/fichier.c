@@ -34,7 +34,6 @@ unsigned char * BlockFileReader (FILE * fichier, u_int32_t nombre){
     fread(buffer,sizeof(unsigned char),nombre,fichier);
     return buffer;
 
-
 }
 
 int removeFile(FILE *f){

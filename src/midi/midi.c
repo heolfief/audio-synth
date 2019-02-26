@@ -34,25 +34,46 @@ void fillHeaderRead (Header * H, FILE * f){
 
 void setAsBeginDataRange(FILE *f){
     unsigned char * buffer = BlockFileReader(f,1);
+    passedMetaData(f);
     while(buffer[0]== 0x4d || buffer[0] == 0x54 || buffer[0]== 0x72 || buffer[0]== 0x6b){
         BlockFileReader(f,1);
     }
-
-
+    free(buffer);
 
 }
 
-u_int16_t readDataRange (FILE *f){
+void passedMetaData(FILE *f){
+    unsigned char * test= BlockFileReader(f,1);
+    unsigned char * buffer = NULL;
+    __uint16_t nbData;
 
+    while (test[0]== 0xFF){
+        buffer= BlockFileReader(f,2);
+        nbData = buffer[1];
+        fseek(f,nbData,SEEK_CUR);
+        test= BlockFileReader(f,1);
+    }
+
+    fseek(f,-1,SEEK_CUR);
+
+    free(test);
+    free(buffer);
+}
+
+
+
+
+/*
+__uint16_t  *readDataRange (FILE * f){
     unsigned char * buffer = BlockFileReader(f,1);
     setAsBeginDataRange(f);
-
+    return 1;
 
 
 
 
 }
-
+*/
 
 
 /*

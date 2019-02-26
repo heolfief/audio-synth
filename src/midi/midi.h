@@ -20,8 +20,9 @@ typedef struct {
 
 
 void fillHeaderRead (Header*H, FILE* f);
-__uint16_t  * readDataRange (FILE *f);
-
+__uint16_t  *readDataRange (FILE *f);
+void setAsBeginDataRange (FILE *f);
+void passedMetaData(FILE *f);
 
 
 #endif
