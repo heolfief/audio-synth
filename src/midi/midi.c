@@ -42,28 +42,39 @@ void setAsBeginDataRange(FILE *f){
 
 }
 
-void passedMetaData(FILE *f){
-    unsigned char * test= BlockFileReader(f,1);
-    unsigned char * buffer = NULL;
+void passedMetaData(FILE *f) {
+    unsigned char *test = BlockFileReader(f, 1);
+    unsigned char *buffer = NULL;
     __uint16_t nbData;
-
-    while (test[0]== 0xFF){
-        buffer= BlockFileReader(f,2);
+    if (test[0]== 0xFF)
+    {
+    while (test[0] == 0xFF) {
+        buffer = BlockFileReader(f, 2);
         nbData = buffer[1];
-        fseek(f,nbData,SEEK_CUR);
-        test= BlockFileReader(f,1);
+        fseek(f, nbData, SEEK_CUR);
+        test = BlockFileReader(f, 1);
     }
+    fseek(f, -1, SEEK_CUR);
 
-    fseek(f,-1,SEEK_CUR);
+}
     free(test);
     free(buffer);
 }
 
 u_int16_t  * readDataRangeSorted ( u_int32_t size) {
     u_int16_t  * DataRange = NULL;
-    FILE *fichier =openFile(tmp, "r+", RETOUR);
+    FILE *fichier =openFile(TMP, "r+", RETOUR);
     DataRange = (u_int16_t*) BlockFileReader(fichier,size);
     return DataRange;
+}
+
+void recordDataRange (FILE *f){
+    FILE * FILERecord  = openFile("tmp.txt","w+",RETOUR);
+    while(feof((f))){
+        fprintf(FILERecord,"%x", BlockFileReader(f,1));
+        passedMetaData(f);
+    }
+
 }
 
 
@@ -71,7 +82,10 @@ u_int16_t  * readDataRangeSorted ( u_int32_t size) {
 
 
 
-__uint16_t  *readDataRange (FILE * f){
+
+
+
+__uint16_t  * readDataRange (FILE * f){
     unsigned char * buffer = BlockFileReader(f,1);
     u_int16_t * DataRange =NULL;
     u_int32_t size;

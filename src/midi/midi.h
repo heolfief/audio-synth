@@ -4,7 +4,7 @@
 #include <stdio.h>
 #ifndef MIDI_H
 #define MIDI_H
-#define tmp "tmp.txt"
+#define TMP "tmp.txt"
 
 typedef struct {
     unsigned char MTHD[4]; // 4 bytes for header flag
@@ -25,6 +25,7 @@ __uint16_t  *readDataRange (FILE *f);
 __uint16_t  * readDataRangeSorted( u_int32_t size);
 void setAsBeginDataRange (FILE *f);
 void passedMetaData(FILE *f);
+void recordDataRange(FILE *f);
 
 
 #endif
