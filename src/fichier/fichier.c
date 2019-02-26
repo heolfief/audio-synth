@@ -40,8 +40,6 @@ unsigned char * BlockFileReader (FILE * fichier, u_int32_t nombre){
 int removeFile(FILE *f){
     return (removeFile(f));
 
-
-
 }
 
 

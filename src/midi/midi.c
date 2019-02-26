@@ -29,6 +29,32 @@ void fillHeaderRead (Header * H, FILE * f){
         H->NOIRE=buffer[12]*256 + buffer[13];
     free(buffer);
 }
+
+
+
+void setAsBeginDataRange(FILE *f){
+    unsigned char * buffer = BlockFileReader(f,1);
+    while(buffer[0]== 0x4d || buffer[0] == 0x54 || buffer[0]== 0x72 || buffer[0]== 0x6b){
+        BlockFileReader(f,1);
+    }
+
+
+
+}
+
+u_int16_t readDataRange (FILE *f){
+
+    unsigned char * buffer = BlockFileReader(f,1);
+    setAsBeginDataRange(f);
+
+
+
+
+
+}
+
+
+
 /*
 void setAtData(FILE *f){
     unsigned char * buffer = NULL;

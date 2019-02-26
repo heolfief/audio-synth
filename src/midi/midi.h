@@ -20,7 +20,7 @@ typedef struct {
 
 
 void fillHeaderRead (Header*H, FILE* f);
-void setAtData (FILE *f);
+__uint16_t  * readDataRange (FILE *f);
 
 
 
