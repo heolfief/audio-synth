@@ -55,25 +55,39 @@ void passedMetaData(FILE *f){
     }
 
     fseek(f,-1,SEEK_CUR);
-
     free(test);
     free(buffer);
 }
 
+u_int16_t  * readDataRangeSorted ( u_int32_t size) {
+    u_int16_t  * DataRange = NULL;
+    FILE *fichier =openFile(tmp, "r+", RETOUR);
+    DataRange = (u_int16_t*) BlockFileReader(fichier,size);
+    return DataRange;
+}
 
 
 
-/*
+
+
+
 __uint16_t  *readDataRange (FILE * f){
     unsigned char * buffer = BlockFileReader(f,1);
+    u_int16_t * DataRange =NULL;
+    u_int32_t size;
     setAsBeginDataRange(f);
-    return 1;
+
+
+
+
+    DataRange =readDataRangeSorted(size);
+    return DataRange;
 
 
 
 
 }
-*/
+
 
 
 /*
