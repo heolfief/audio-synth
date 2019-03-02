@@ -48,6 +48,13 @@ Utilisez l'option `-V` pour passer en mode verbose et voir le détail des tests 
 ```bash
 $ ./test.sh -V
 ```
+## Générer documentation HTML
+Tapez la commande "doxygen" depuis le dossier doc.
+```bash
+$ cd doc
+$ doxygen
+```
+La documentation est accessible depuis doc/HTML/index.html
 
 ## Utiliser IDE : CLion
 Ouvrez la racine du projet comme projet CLion, puis recharger Cmake en cliquant sur : "file/Reload Cmake Project".
