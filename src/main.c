@@ -17,9 +17,9 @@
 #define AUDIO_BUFF_SIZE 1024
 #define OSC_NBR 3
 
+// Global note variable
+Note *test_note;
 
-// Global test note
-Note test_note;
 
 /**
  *  \fn void func_callback(void *unused, Uint8 *stream, int len)
@@ -45,19 +45,19 @@ void func_callback(void *unused, Uint8 *stream, int len)
     Uint16 s_len = (Uint16)len/(Uint16)2;   // data are 16bits=2*8bits, so (len/2) 16 bits data in the buffer
 
 
-    osc_fill_buffer(&test_note.osc1, test_note.osc1.buffer, s_len, SAMPLE_RATE, phase);
-    osc_fill_buffer(&test_note.osc2, test_note.osc2.buffer, s_len, SAMPLE_RATE, phase);
-    osc_fill_buffer(&test_note.osc3, test_note.osc3.buffer, s_len, SAMPLE_RATE, phase);
+    osc_fill_buffer(test_note->osc1, test_note->osc1->buffer, s_len, SAMPLE_RATE, phase);
+    osc_fill_buffer(test_note->osc2, test_note->osc2->buffer, s_len, SAMPLE_RATE, phase);
+    osc_fill_buffer(test_note->osc3, test_note->osc3->buffer, s_len, SAMPLE_RATE, phase);
 
     for(Uint16 sample = 0; sample < s_len; ++sample)
     {
         // Add all oscillators into the note buffer [ONLY A TEST, A FUTURE FUNCTION WILL DO THIS]
-        test_note.buffer[sample] = (Sint16)(test_note.osc1.buffer[sample]/OSC_NBR + test_note.osc2.buffer[sample]/OSC_NBR + test_note.osc3.buffer[sample]/OSC_NBR);
+        test_note->buffer[sample] = (Sint16)(test_note->osc1->buffer[sample]/OSC_NBR + test_note->osc2->buffer[sample]/OSC_NBR + test_note->osc3->buffer[sample]/OSC_NBR);
     }
 
     for(Uint16 sample = 0; sample < s_len; ++sample)
     {
-        s_stream[sample] = test_note.buffer[sample];
+        s_stream[sample] = test_note->buffer[sample];
     }
 
 
@@ -68,7 +68,7 @@ int main(int argc, char *argv[])
 {
     if(SDL_Init(SDL_INIT_EVERYTHING)<0)
     {
-        printf("Error initializing SDL\n");
+        fprintf(stderr, "Error initializing SDL\n");
         exit(EXIT_FAILURE);
     }
 
@@ -84,50 +84,43 @@ int main(int argc, char *argv[])
 
     if (SDL_OpenAudio(&as, NULL)<0)
     {
-        printf("Unable to open audio..");
+        fprintf(stderr, "Unable to open audio..");
         exit(EXIT_FAILURE);
     }
 
+    test_note = alloc_note(AUDIO_BUFF_SIZE);
 
+    test_note->osc1->amp = 32000;
+    test_note->osc1->wave = TRI;
+    test_note->osc1->detune = 0;
+    test_note->osc1->freq = 440;
+    test_note->osc1->duty = 50;
+    test_note->osc1->onoff = ON;
 
-    test_note.buffer = alloc_note_buffer(AUDIO_BUFF_SIZE);
+    test_note->osc2->amp = 32000;
+    test_note->osc2->wave = SIN;
+    test_note->osc2->detune = -24;
+    test_note->osc2->freq = 440;
+    test_note->osc2->duty = 50;
+    test_note->osc2->onoff = ON;
 
-    test_note.osc1.amp = 32000;
-    test_note.osc1.wave = TRI;
-    test_note.osc1.detune = 0;
-    test_note.osc1.freq = 440;
-    test_note.osc1.duty = 50;
-    test_note.osc1.onoff = ON;
-    test_note.osc1.buffer = alloc_osc_buffer(AUDIO_BUFF_SIZE);
-
-    test_note.osc2.amp = 32000;
-    test_note.osc2.wave = SIN;
-    test_note.osc2.detune = -24;
-    test_note.osc2.freq = 440;
-    test_note.osc2.duty = 50;
-    test_note.osc2.onoff = ON;
-    test_note.osc2.buffer = alloc_osc_buffer(AUDIO_BUFF_SIZE);
-
-    test_note.osc3.amp = 5000;
-    test_note.osc3.wave = SQR;
-    test_note.osc3.detune = -12;
-    test_note.osc3.freq = 440;
-    test_note.osc3.duty = 50;
-    test_note.osc3.onoff = ON;
-    test_note.osc3.buffer = alloc_osc_buffer(AUDIO_BUFF_SIZE);
+    test_note->osc3->amp = 5000;
+    test_note->osc3->wave = SQR;
+    test_note->osc3->detune = -12;
+    test_note->osc3->freq = 440;
+    test_note->osc3->duty = 50;
+    test_note->osc3->onoff = ON;
 
 
 
     SDL_PauseAudio(0);                      // Play audio (pause = off)
     SDL_Delay(5000);                        // 5s sound
 
+
+    SDL_CloseAudio();
     SDL_Quit();
 
-    free_osc_buffer(test_note.osc1.buffer);
-    free_osc_buffer(test_note.osc2.buffer);
-    free_osc_buffer(test_note.osc3.buffer);
-
-    free_note_buffer(test_note.buffer);
+    free_note(test_note);
 
     return 0;
 }

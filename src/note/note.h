@@ -36,9 +36,9 @@ typedef struct{
  * It is associated with it's own buffer to store the audio samples resulting of the mixed oscillators
  */
 typedef struct{
-    Oscillator    osc1;       /*!<the first oscillator */
-    Oscillator    osc2;       /*!<the second oscillator */
-    Oscillator    osc3;       /*!<the third oscillator */
+    Oscillator*   osc1;       /*!<the first oscillator */
+    Oscillator*   osc2;       /*!<the second oscillator */
+    Oscillator*   osc3;       /*!<the third oscillator */
     Uint16        pitch;      /*!<the pitch / note*/
     Uint16        amp;        /*!<the amplitude of the note*/
     OnOff         onoff;      /*!<the on/off value */
@@ -47,7 +47,25 @@ typedef struct{
     Note_Buffer   buffer;     /*!<the audio data buffer of the note, resulting of the mix of the oscillators buffers */
 }Note;
 
+/**
+ * \fn Note *alloc_note(Uint16 buff_nb_samples)
+ * \brief Function to allocate memory for a note
+ *
+ * \param buff_nb_samples The number of samples in the audio buffer of the given note
+ *
+ * \return the allocated Note
+ */
+Note *alloc_note(Uint16 buff_nb_samples);
 
+/**
+ * \fn int free_osc(Note *note_to_free)
+ * \brief Function to free memory of a note
+ *
+ * \param note_to_free The note to free
+ *
+ * \return 0
+ */
+int free_note(Note *note_to_free);
 
 /**
  * \fn Note_Buffer alloc_note_buffer(Uint16 buff_nb_samples)

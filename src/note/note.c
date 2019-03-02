@@ -10,6 +10,39 @@
 #include "note.h"
 #include "../oscillator/osc.h"
 
+Note *alloc_note(Uint16 buff_nb_samples)
+{
+    Note *note_allocated = (Note*)malloc(sizeof(Note));
+    if(note_allocated == NULL)
+    {
+        fprintf(stderr, "Memory allocation error at %s (%d)\n", __FILE__, __LINE__);
+        return NULL;
+    }
+
+    note_allocated->osc1 = alloc_osc(buff_nb_samples);
+    note_allocated->osc2 = alloc_osc(buff_nb_samples);
+    note_allocated->osc3 = alloc_osc(buff_nb_samples);
+    if((note_allocated->osc1 == NULL) || (note_allocated->osc2 == NULL) || (note_allocated->osc3 == NULL))
+    {
+        return NULL;
+    }
+
+    note_allocated->buffer = alloc_note_buffer(buff_nb_samples);
+    if(note_allocated->buffer == NULL)
+    {
+        return NULL;
+    }
+    return note_allocated;
+}
+int free_note(Note *note_to_free)
+{
+    free_osc(note_to_free->osc1);
+    free_osc(note_to_free->osc2);
+    free_osc(note_to_free->osc3);
+    free_note_buffer(note_to_free->buffer);
+    free(note_to_free);
+    return 0;
+}
 
 Note_Buffer alloc_note_buffer(Uint16 buff_nb_samples)
 {

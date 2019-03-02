@@ -17,20 +17,20 @@ int osc_fill_buffer(const Oscillator *osc, Osc_Buffer buffer, Uint16 buffer_leng
 {
     if(osc == NULL)
     {
-        perror("osc parameter is NULL\n");
+        fprintf(stderr, "Osc parameter is NULL at %s (%d)\n", __FILE__, __LINE__);
         return -1;
     }
 
-    if(osc->amp > INT16_MAX)
+    if((osc->amp > OSC_AMP_MAX) || (osc->amp < 0))
     {
-        perror("osc amplitude passed maximum, risk of audio buffer overflow\n");
+        fprintf(stderr, "Osc amplitude passed maximum, risk of audio buffer overflow at %s (%d)\n", __FILE__, __LINE__);
         return -1;
     }
 
     // Calculate actual frequency based on detune value
     Uint16 detuned_freq = (Uint16)(osc->freq * pow(chromatic_ratio, osc->detune));
 
-    double offset = 0;
+    //double offset = 0;
     double nb_samples_in_period=0;
 
     if(osc->onoff == OFF)
@@ -58,7 +58,7 @@ int osc_fill_buffer(const Oscillator *osc, Osc_Buffer buffer, Uint16 buffer_leng
 
 
             // Calculate signal offset (average value)
-            offset = (osc->duty / 100.0) * osc->amp + (1.0 - (osc->duty / 100.0)) * -osc->amp;
+            //offset = (osc->duty / 100.0) * osc->amp + (1.0 - (osc->duty / 100.0)) * -osc->amp;
 
             nb_samples_in_period = (double)sample_rate / detuned_freq;
 
@@ -101,15 +101,48 @@ int osc_fill_buffer(const Oscillator *osc, Osc_Buffer buffer, Uint16 buffer_leng
     return 0;
 }
 
+int osc_init_default_values(Oscillator *osc_to_init, Uint16 buffer_length, Uint64 sample_rate)
+{
+    osc_to_init->amp = OSC_AMP_MAX;
+    osc_to_init->wave = SIN;
+    osc_to_init->detune = 0;
+    osc_to_init->freq = 440;
+    osc_to_init->duty = 50;
+    osc_to_init->onoff = OFF;
+    return osc_fill_buffer(osc_to_init, osc_to_init->buffer, buffer_length, sample_rate, 0);
+}
+
+Oscillator *alloc_osc(Uint16 buff_nb_samples)
+{
+    Oscillator* osc_allocated = (Oscillator*) malloc(sizeof(Oscillator));
+    if(osc_allocated == NULL)
+    {
+        fprintf(stderr, "Memory allocation error at %s (%d)\n", __FILE__, __LINE__);
+        return NULL;
+    }
+    osc_allocated->buffer = alloc_osc_buffer(buff_nb_samples);
+    if(osc_allocated->buffer == NULL)
+    {
+        return NULL;
+    }
+    return osc_allocated;
+}
+
+int free_osc(Oscillator *osc_to_free)
+{
+    free_osc_buffer(osc_to_free->buffer);
+    free(osc_to_free);
+    return 0;
+}
+
 Osc_Buffer alloc_osc_buffer(Uint16 buff_nb_samples)
 {
     Osc_Buffer osc_buff = (Osc_Buffer) calloc(buff_nb_samples, sizeof(Osc_Buffer));
     if(osc_buff == NULL)
     {
-        perror("memory allocation error\n");
+        fprintf(stderr, "Memory allocation error at %s (%d)\n", __FILE__, __LINE__);
         return NULL;
     }
-
     return osc_buff;
 }
 

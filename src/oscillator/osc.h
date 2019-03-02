@@ -11,6 +11,8 @@
 
 #include <SDL2/SDL_stdinc.h>
 
+#define OSC_AMP_MAX INT16_MAX
+
 typedef Sint16 *Osc_Buffer;
 
 /**
@@ -66,6 +68,48 @@ typedef struct{
  * \return 0 if everything went OK, -1 otherwise
  */
 int osc_fill_buffer(const Oscillator *osc, Osc_Buffer buffer, Uint16 buffer_length, Uint64 sample_rate, Uint64 phase);
+
+
+/**
+ * \fn int osc_init_default_values(Oscillator *osc_to_init, Uint16 buffer_length, Uint64 sample_rate)
+ * \brief Function to initialize an oscillator with default values
+ *
+ * Defaults values are :
+ *  - Sine wave
+ *  - 440 Hz
+ *  - OFF
+ *  - amplitude max
+ *  - no detune
+ *  - 50% dutycycle
+ *  - buffer filled with zeros
+ *
+ * \param osc_to_init The oscillator to initialize
+ * \param buffer_length The size of the audio buffer (number of audio samples in the buffer)
+ * \param sample_rate The sample rate of the system
+ *
+ * \return 0
+ */
+int osc_init_default_values(Oscillator *osc_to_init, Uint16 buffer_length, Uint64 sample_rate);
+
+/**
+ * \fn Osc_Buffer *alloc_osc(Uint16 buff_nb_samples)
+ * \brief Function to allocate memory for an oscillator
+ *
+ * \param buff_nb_samples The number of samples in the audio buffer of the given oscillator
+ *
+ * \return the allocated Oscillator
+ */
+Oscillator *alloc_osc(Uint16 buff_nb_samples);
+
+/**
+ * \fn int free_osc(Oscillator *osc_to_free)
+ * \brief Function to free memory of an oscillator
+ *
+ * \param osc_to_free The oscillator to free
+ *
+ * \return 0
+ */
+int free_osc(Oscillator *osc_to_free);
 
 /**
  * \fn Osc_Buffer alloc_osc_buffer(Uint16 buff_nb_samples)
