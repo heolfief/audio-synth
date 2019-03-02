@@ -13,6 +13,13 @@
 
 #define OSC_AMP_MAX INT16_MAX
 
+#define DEFAULT_OSC_AMP OSC_AMP_MAX
+#define DEFAULT_OSC_WAVE SIN
+#define DEFAULT_OSC_DETUNE 0
+#define DEFAULT_OSC_FREQ 440
+#define DEFAULT_OSC_DUTY 50
+#define DEFAULT_OSC_ONOFF OFF
+
 typedef Sint16 *Osc_Buffer;
 
 /**
@@ -74,14 +81,7 @@ int osc_fill_buffer(const Oscillator *osc, Osc_Buffer buffer, Uint16 buffer_leng
  * \fn int osc_init_default_values(Oscillator *osc_to_init, Uint16 buffer_length, Uint64 sample_rate)
  * \brief Function to initialize an oscillator with default values
  *
- * Defaults values are :
- *  - Sine wave
- *  - 440 Hz
- *  - OFF
- *  - amplitude max
- *  - no detune
- *  - 50% dutycycle
- *  - buffer filled with zeros
+ * Defaults values are defined in this file as constants
  *
  * \param osc_to_init The oscillator to initialize
  * \param buffer_length The size of the audio buffer (number of audio samples in the buffer)

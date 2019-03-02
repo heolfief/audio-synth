@@ -9,21 +9,23 @@
 #ifndef AUDIO_SYNTH_OSC_TEST_H
 #define AUDIO_SYNTH_OSC_TEST_H
 
-/**
- * \fn int setup_osc_buffer(void **state)
- * \brief Function to allocate and test allocation of an oscillator buffer
- *
- * \return 0 if everything went OK, -1 otherwise
- */
-int setup_osc_buffer(void **state);
+#include "oscillator/osc.h"
 
 /**
- * \fn int teardown_osc_buffer(void **state)
- * \brief Function to deallocate an oscillator buffer
+ * \fn int setup_osc(void **state)
+ * \brief Function to allocate and test allocation of an oscillator
  *
  * \return 0 if everything went OK, -1 otherwise
  */
-int teardown_osc_buffer(void **state);
+int setup_osc(void **state);
+
+/**
+ * \fn int teardown_osc(void **state)
+ * \brief Function to deallocate an oscillator
+ *
+ * \return 0 if everything went OK, -1 otherwise
+ */
+int teardown_osc(void **state);
 
 /**
  * \fn void test_fill_osc_buffer_zeros(void **state)
@@ -36,5 +38,14 @@ void test_fill_osc_buffer_zeros(void **state);
  * \brief Function to test filling an oscillator buffer with square wave (osc is SQR)
  */
 void test_fill_osc_buffer_square(void **state);
+
+/**
+ * \fn void test_osc_init_default_values(void **state)
+ * \brief Function to test initialization of an oscillator with default values
+ *
+ * Check if defaults values are thoses defined in osc.h
+ */
+void test_osc_init_default_values(void **state);
+
 
 #endif //AUDIO_SYNTH_OSC_TEST_H

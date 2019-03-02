@@ -1,6 +1,0 @@
-#ifndef AUDIO_SYNTH_TEST_H
-#define AUDIO_SYNTH_TEST_H
-
-
-
-#endif //AUDIO_SYNTH_TEST_H
