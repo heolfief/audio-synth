@@ -50,10 +50,9 @@ $ ./coverage.sh
 La couverture est accessible depuis doc/coverage/index.html
 
 ## Générer documentation HTML
-Tapez la commande "doxygen" depuis le dossier doc.
+Tapez la commande suivante.
 ```bash
-$ cd doc
-$ doxygen
+$ doxygen doc/Doxyfile
 ```
 La documentation est accessible depuis doc/doxygen/index.html
 
