@@ -28,16 +28,36 @@ int setup_osc(void **state);
 int teardown_osc(void **state);
 
 /**
+ * \fn void test_fill_osc_buffer_unknown(void **state)
+ * \brief Function to test filling an oscillator buffer when wave is unknown (error handling)
+ */
+void test_fill_osc_buffer_unknown(void **state);
+
+
+/**
  * \fn void test_fill_osc_buffer_zeros(void **state)
  * \brief Function to test filling an oscillator buffer with zeros (osc is off)
  */
 void test_fill_osc_buffer_zeros(void **state);
 
 /**
+ * \fn void test_fill_osc_buffer_sine(void **state)
+ * \brief Function to test filling an oscillator buffer with sine wave (osc is SIN)
+ */
+void test_fill_osc_buffer_sine(void **state);
+
+/**
  * \fn void test_fill_osc_buffer_square(void **state)
  * \brief Function to test filling an oscillator buffer with square wave (osc is SQR)
  */
 void test_fill_osc_buffer_square(void **state);
+
+/**
+ * \fn void test_fill_osc_buffer_tri(void **state)
+ * \brief Function to test filling an oscillator buffer with tri wave (osc is TRI)
+ */
+void test_fill_osc_buffer_tri(void **state);
+
 
 /**
  * \fn void test_osc_init_default_values(void **state)
@@ -47,5 +67,18 @@ void test_fill_osc_buffer_square(void **state);
  */
 void test_osc_init_default_values(void **state);
 
+/**
+ * \fn void test_osc_fill_buffer_null(void **state)
+ * \brief Function to test filling an oscillator buffer when osc is NULL (error handling test)
+ *
+ */
+void test_osc_fill_buffer_null(void **state);
+
+/**
+ * \fn void test_osc_fill_buffer_incorect_amp(void **state)
+ * \brief Function to test filling an oscillator buffer when amplitude is too high or too low (error handling test)
+ *
+ */
+void test_osc_fill_buffer_incorect_amp(void **state);
 
 #endif //AUDIO_SYNTH_OSC_TEST_H

@@ -65,7 +65,14 @@ int osc_fill_buffer(const Oscillator *osc, Osc_Buffer buffer, Uint16 buffer_leng
             for (Uint16 sample = 0; sample < buffer_length; ++sample)
             {
                 // Fill the buffer with a square wave based on it's frequency, amplitude, phase, and duty cycle
-                buffer[sample] = (fmod((sample + phase), nb_samples_in_period) < ((osc->duty / 100.0) * nb_samples_in_period)) ? osc->amp : (Sint16)-osc->amp;
+                if (fmod((sample + phase), nb_samples_in_period) < ((osc->duty / 100.0) * nb_samples_in_period))
+                {
+                    buffer[sample] = osc->amp;
+                }
+                else
+                {
+                    buffer[sample] = (Sint16) -osc->amp;
+                }
 
                 // Remove offset to center signal on 0, stay on signed 16 bits representation
                 /*if(((Uint32)buffer[sample] - (Uint32)offset) > INT16_MAX)
@@ -89,13 +96,21 @@ int osc_fill_buffer(const Oscillator *osc, Osc_Buffer buffer, Uint16 buffer_leng
                 // Fill the buffer with a triangle wave based on it's frequency, amplitude and phase
                 double mod = fmod((sample + phase), nb_samples_in_period);
 
-                buffer[sample] = (mod < (((double)osc->duty / 100.0) * nb_samples_in_period))
-                        ? (Sint16)((100.0 / osc->duty) * mod * osc->amp / (Sint16)nb_samples_in_period) - (Sint16)(osc->amp / 2.0)
-                        : (Sint16)(- (mod - nb_samples_in_period * osc->duty / 100.0) * osc->amp / (nb_samples_in_period * (1 - osc->duty / 100.0))) + (Sint16)(osc->amp / 2.0);
+                if (mod < (((double) osc->duty / 100.0) * nb_samples_in_period))
+                {
+                    buffer[sample] = (Sint16) ((100.0 / osc->duty) * mod * osc->amp / (Sint16) nb_samples_in_period) -
+                                     (Sint16) (osc->amp / 2.0);
+                }
+                else
+                {
+                    buffer[sample] = (Sint16) (-(mod - nb_samples_in_period * osc->duty / 100.0) * osc->amp /
+                                     (nb_samples_in_period * (1 - osc->duty / 100.0))) + (Sint16) (osc->amp / 2.0);
+                }
             }
             break;
 
         default:
+            fprintf(stderr, "Waveform is unknown at %s (%d)\n", __FILE__, __LINE__);
             return -1; // if waveform is unknown
     }
     return 0;
