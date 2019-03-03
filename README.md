@@ -8,53 +8,54 @@ Librairie SDL2:
 $ sudo apt-get install libsdl2-dev
 ```
 
-## Auto build & Run
-Executer le script :
+## Build
+Executez le script :
+
+```bash
+$ ./build.sh
+```
+
+Le projet devrait compiler.
+
+## Run
+Compilez puis executez le script :
 
 ```bash
 $ ./run.sh
 ```
 
-Le projet devrait compiler et s'executer.
+Le projet devrait s'executer.
 
-
-## Manual building
-
-
-```bash
-$ rm -rf build/manual && mkdir build/manual
-$ cd build/manual
-$ cmake ../..
-$ make && make install
-$ cd ../..
-
-# Run the binary:
-$ bin/audio_synth
-
-# Run the tests:
-$ bin/audio_synth_test
-```
 
 ## Tests
-Executer le script :
+Compilez puis executez le script :
 
 ```bash
 $ ./test.sh
 ```
 
-Le projet devrait compiler et executer les programme de test.
+Le projet devrait executer les programme de test.
 
 Utilisez l'option `-V` pour passer en mode verbose et voir le détail des tests :
 ```bash
 $ ./test.sh -V
 ```
+
+## Code coverage
+Compilez puis executez le script :
+
+```bash
+$ ./coverage.sh
+```
+La couverture est accessible depuis doc/coverage/index.html
+
 ## Générer documentation HTML
 Tapez la commande "doxygen" depuis le dossier doc.
 ```bash
 $ cd doc
 $ doxygen
 ```
-La documentation est accessible depuis doc/HTML/index.html
+La documentation est accessible depuis doc/doxygen/index.html
 
 ## Utiliser IDE : CLion
 Ouvrez la racine du projet comme projet CLion, puis recharger Cmake en cliquant sur : "file/Reload Cmake Project".
