@@ -21,11 +21,13 @@ typedef struct {
 
 
 void fillHeaderRead (Header*H, FILE* f);
-__uint16_t  *readDataRange (FILE *f);
-__uint16_t  * readDataRangeSorted( u_int32_t size);
+__uint32_t  *readDataRange (FILE *f);
+__uint32_t  * readDataRangeSorted( u_int32_t size);
 void setAsBeginDataRange (FILE *f);
 u_int32_t passedMetaData(FILE *f,u_int32_t size,u_int32_t currentLine);
 u_int32_t recordDataRange(FILE *f,u_int32_t size);
 u_int32_t getSizeDataRange(FILE *f);
+void playDataRange(u_int32_t DataRangeSorted);
+
 
 #endif

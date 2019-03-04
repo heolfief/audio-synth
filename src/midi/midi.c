@@ -67,10 +67,10 @@ u_int32_t passedMetaData(FILE *f,u_int32_t size, __uint32_t currentLine) {
     return currentLine;
 }
 
-u_int16_t  * readDataRangeSorted ( u_int32_t  size) {
-    u_int16_t  * DataRange = NULL;
+u_int32_t  * readDataRangeSorted ( u_int32_t  size) {
+    u_int32_t  * DataRange = NULL;
     FILE *fichier = openFile(TMP, "r+", RETOUR);
-    DataRange = (u_int16_t*) BlockFileReader(fichier,size);
+    DataRange = (u_int32_t*) BlockFileReader(fichier,size);
     return DataRange;
 }
 
@@ -108,9 +108,9 @@ u_int32_t  getSizeDataRange(FILE *f){
 
 
 
-__uint16_t  * readDataRange (FILE * f){
+__uint32_t  * readDataRange (FILE * f){
     unsigned char * buffer = BlockFileReader(f,1);
-    u_int16_t * DataRange =NULL;
+    u_int32_t * DataRange =NULL;
     u_int32_t  size;
     setAsBeginDataRange(f);
     size = getSizeDataRange(f);
@@ -119,6 +119,9 @@ __uint16_t  * readDataRange (FILE * f){
     return DataRange;
 
 }
+
+
+
 
 
 
