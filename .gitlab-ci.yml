@@ -12,6 +12,10 @@ build:
     - apt update && apt -y install make autoconf && apt -y install cmake 
   script: 
     - ./build.sh
+  cache:
+    paths:
+      - bin/
+
   artifacts:
     paths:
       - bin/audio_synth
