@@ -42,7 +42,7 @@ int removeFile(FILE *f){
 }
 
 
-void getBackFile(FILE *f, int number){
+void moveFile(FILE *f, int number){
     fseek(f,number,SEEK_CUR);
 
 }
