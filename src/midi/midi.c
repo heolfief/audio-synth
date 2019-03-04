@@ -28,62 +28,77 @@ void fillHeaderRead (Header * H, FILE * f){
 
         H->NOIRE=buffer[12]*256 + buffer[13];
     free(buffer);
+    fseek(f,-1,SEEK_CUR);
 }
 
 
 
 void setAsBeginDataRange(FILE *f){
     unsigned char * buffer = BlockFileReader(f,1);
-    passedMetaData(f);
     while(buffer[0]== 0x4d || buffer[0] == 0x54 || buffer[0]== 0x72 || buffer[0]== 0x6b){
-        BlockFileReader(f,1);
+       buffer = BlockFileReader(f,1);
+
     }
     free(buffer);
-
+    fseek(f,-1,SEEK_CUR);
 }
 
 void passedMetaData(FILE *f) {
     unsigned char *test = BlockFileReader(f, 1);
     unsigned char *buffer = NULL;
     __uint16_t nbData;
-    if (test[0]== 0xFF)
-    {
+
+
     while (test[0] == 0xFF) {
         buffer = BlockFileReader(f, 2);
         nbData = buffer[1];
         fseek(f, nbData, SEEK_CUR);
         test = BlockFileReader(f, 1);
     }
+
     fseek(f, -1, SEEK_CUR);
 
-}
     free(test);
     free(buffer);
 }
 
 u_int16_t  * readDataRangeSorted ( u_int32_t size) {
     u_int16_t  * DataRange = NULL;
-    FILE *fichier =openFile(TMP, "r+", RETOUR);
+    FILE *fichier = openFile(TMP, "r+", RETOUR);
     DataRange = (u_int16_t*) BlockFileReader(fichier,size);
     return DataRange;
 }
 
-void recordDataRange (FILE *f){
-    FILE * FILERecord  = openFile("tmp.txt","w+",RETOUR);
-    u_int16_t * buffer = NULL;
-    while(feof((f))){
-        buffer =(u_int16_t *) BlockFileReader(f,1);
-        fprintf(FILERecord,"%d", buffer[0]);
+u_int32_t recordDataRange (FILE *f){
+    FILE * FILERecord  = fopen(TMP,"w+");
+    u_int16_t size;
+    unsigned char * buffer = NULL;
+  /*  while(!feof((f))){
+      //  printf("2");
+        buffer = BlockFileReader(f,1);
+        fprintf(FILERecord,"%2x  ", buffer[0]);
+        free(buffer);
         passedMetaData(f);
+        size ++;
+
+
     }
-    free(buffer);
+*/
+   closeFile(FILERecord);
+    return size;
 }
 
 
+u_int32_t  getSizeDataRange(FILE *f){
+    u_int32_t  size;
+    unsigned char * buffer =NULL;
+   buffer= BlockFileReader(f,4);
+   size =  buffer[0]*16777216 + buffer[1]*65536 + buffer[2]*256 +buffer[3];
+   size = buffer[3];
+    printf("%d",size);
 
 
-
-
+}
 
 
 
@@ -92,13 +107,11 @@ __uint16_t  * readDataRange (FILE * f){
     u_int16_t * DataRange =NULL;
     u_int32_t size;
     setAsBeginDataRange(f);
+   size = getSizeDataRange(f);
     passedMetaData(f);
-    recordDataRange(f);
+    size = recordDataRange(f);
     DataRange =readDataRangeSorted(size);
     return DataRange;
-
-
-
 
 }
 
