@@ -13,7 +13,7 @@ FILE * openFile (char * nom, char * mode, TypeRetour t);
 int closeFile(FILE * fichier);
 unsigned char * BlockFileReader (FILE * fichier, u_int32_t  nombre);
 int removeFile(FILE *f);
-
+void getBackFile (FILE *f, int number);
 
 
 
