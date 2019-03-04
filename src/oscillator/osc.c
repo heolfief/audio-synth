@@ -38,7 +38,7 @@ int osc_fill_buffer(const Oscillator *osc, Osc_Buffer buffer, Uint16 buffer_leng
         for (Uint16 sample = 0; sample < buffer_length; ++sample)
         {
             // Fill the buffer with nothing (no sound)
-            buffer[sample] = 1;
+            buffer[sample] = 0;
         }
         return 0;
     }

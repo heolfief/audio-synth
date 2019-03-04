@@ -12,6 +12,8 @@ build:
     - apt update && apt -y install make autoconf && apt -y install cmake 
   script: 
     - ./build.sh
+  after_script:
+    - rm -r Testing
   cache:
     paths:
       - bin/
