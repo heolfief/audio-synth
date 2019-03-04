@@ -4,6 +4,6 @@ BLUE='\033[1;36m'
 NC='\033[0m' # No Color
 
 echo -e "${BLUE}\nExecuting test program :${NC}"
-ctest $1
-rm Testing -r
+ctest --output-on-failure $1
+exit $?
 echo -e "${BLUE}\nDone${NC}"

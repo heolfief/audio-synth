@@ -1,5 +1,8 @@
 # audio-synth
 
+
+[![pipeline status](https://gitlab.insa-rennes.fr/hfief/audio-synth/badges/CI/pipeline.svg)](https://gitlab.insa-rennes.fr/hfief/audio-synth/commits/CI)
+
 Synthétiseur audio en C (bibliothèque SDL2). Projet 3ème année EII INSA Rennes.
 
 ## Dépendances
