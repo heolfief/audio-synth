@@ -18,7 +18,7 @@ int osc_fill_buffer(const Oscillator *osc, Osc_Buffer buffer, Uint16 buffer_leng
     if(osc == NULL)
     {
         perror("osc parameter is NULL\n");
-        return -1;
+        return 0;
     }
 
     if(osc->amp > INT16_MAX)
