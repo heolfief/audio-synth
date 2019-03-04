@@ -5,6 +5,5 @@ NC='\033[0m' # No Color
 
 echo -e "${BLUE}\nExecuting test program :${NC}"
 ctest --output-on-failure $1
-rm Testing -r
-exit $exit_status
+exit $?
 echo -e "${BLUE}\nDone${NC}"
