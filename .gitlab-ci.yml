@@ -19,6 +19,9 @@ build:
   artifacts:
     paths:
       - bin/audio_synth
+  cache:
+    paths:
+      - bin/
   # depending on your build setup it's most likely a good idea to cache outputs to reduce the build time
   # cache:
   #   paths:
