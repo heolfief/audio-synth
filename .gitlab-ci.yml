@@ -19,6 +19,7 @@ build:
   artifacts:
     paths:
       - bin/audio_synth
+      - bin/audio_synth_test
   cache:
     paths:
       - bin/
