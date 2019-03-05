@@ -15,18 +15,6 @@
 
 typedef Sint16 *Note_Buffer;
 
-/**
- * \struct Envelope
- * \brief define an ADSR envelope
- *
- * An ADSR envelope is defined with four parameters : attack, decay, sustain, release
- */
-typedef struct{
-    Uint64        attack;        /*!<the time for initial run-up of level from nil to peak in sample */
-    Uint64        decay;         /*!<the time for the subsequent run down from the attack level to the designated sustain level in samples */
-    Uint64        sustain;       /*!<the level during the main sequence of the sound's duration, until the note is off.*/
-    Uint64        release;       /*!<the time taken for the level to decay from the sustain level to zero after the note is off */
-}Envelope;
 
 /**
  * \struct Note
@@ -41,9 +29,11 @@ typedef struct{
     Oscillator*   osc3;       /*!<the third oscillator */
     Uint16        pitch;      /*!<the pitch / note*/
     Uint16        amp;        /*!<the amplitude of the note*/
-    OnOff         onoff;      /*!<the on/off value */
-    Envelope      env;        /*!<the ADSR envelope */
+    OnOff         onoff;      /*!<the on/off value of the note (MIDI protocol speaking)*/
+    OnOff         master_onoff;/*!<the master on/off value of the note (including release time, when master_onoff is OFF, there is no sound from the note) */
+    double        env_amp;    /*!<the envelope amplitude (range from 0 to 1) */
     Uint64        lifetime;   /*!<the number of samples passed since the note is ON (used to calculate envelope) */
+    Uint64        deathtime;  /*!<the number of samples passed when note is OFF since the note was ON */
     Note_Buffer   buffer;     /*!<the audio data buffer of the note, resulting of the mix of the oscillators buffers */
 }Note;
 
