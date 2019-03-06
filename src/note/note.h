@@ -12,21 +12,12 @@
 
 #include <SDL2/SDL_stdinc.h>
 #include "../oscillator/osc.h"
+#include "../note/adsr.h"
+
+#define print_error(s){fprintf(stderr, "%s : func %s at %s (%d)\n", s, __func__, __FILE__, __LINE__); }
 
 typedef Sint16 *Note_Buffer;
 
-/**
- * \struct Envelope
- * \brief define an ADSR envelope
- *
- * An ADSR envelope is defined with four parameters : attack, decay, sustain, release
- */
-typedef struct{
-    Uint64        attack;        /*!<the time for initial run-up of level from nil to peak in sample */
-    Uint64        decay;         /*!<the time for the subsequent run down from the attack level to the designated sustain level in samples */
-    Uint64        sustain;       /*!<the level during the main sequence of the sound's duration, until the note is off.*/
-    Uint64        release;       /*!<the time taken for the level to decay from the sustain level to zero after the note is off */
-}Envelope;
 
 /**
  * \struct Note
@@ -39,13 +30,63 @@ typedef struct{
     Oscillator*   osc1;       /*!<the first oscillator */
     Oscillator*   osc2;       /*!<the second oscillator */
     Oscillator*   osc3;       /*!<the third oscillator */
-    Uint16        pitch;      /*!<the pitch / note*/
-    Uint16        amp;        /*!<the amplitude of the note*/
-    OnOff         onoff;      /*!<the on/off value */
-    Envelope      env;        /*!<the ADSR envelope */
+    Uint16        freq;       /*!<the frequency of the note*/
+    double        velocity_amp;/*!<the velocity / amplitude of the note (range from 0 to 1) */
+    OnOff         onoff;      /*!<the on/off value of the note (MIDI protocol wise) */
+    OnOff         master_onoff;/*!<the master on/off value of the note (including release time, when master_onoff is OFF, there is no sound from the note) */
+    double        env_amp;    /*!<the envelope amplitude (range from 0 to 1) */
     Uint64        lifetime;   /*!<the number of samples passed since the note is ON (used to calculate envelope) */
+    Uint64        deathtime;  /*!<the number of samples passed when note is OFF since the note was ON */
     Note_Buffer   buffer;     /*!<the audio data buffer of the note, resulting of the mix of the oscillators buffers */
 }Note;
+
+/**
+ * \fn int note_on(Note *n)
+ * \brief Function to turn on a note
+ *
+ * \param n The note structure
+ *
+ * \return 0 if everything went OK, -1 otherwise
+ */
+int note_on(Note *n);
+
+/**
+ * \fn int note_off(Note *n)
+ * \brief Function to turn off a note
+ *
+ * \param n The note structure
+ *
+ * \return 0 if everything went OK, -1 otherwise
+ */
+int note_off(Note *n);
+
+/**
+ * \fn int note_fill_buffer(Note *n, Note_Buffer buffer, Uint16 buffer_length, const Envelope *env, Uint64 sample_rate, Uint64 phase)
+ * \brief Function to fill note audio buffer with note data (mixed oscillators and envelope)
+ *
+ * \param n The note structure
+ * \param buffer The audio buffer to write audio samples to
+ * \param buffer_length The size of the audio buffer (number of audio samples in the buffer)
+ * \param env The envelope parameters
+ * \param sample_rate The sample rate of the system
+ * \param phase The phase value at the beginning of the buffer
+ *
+ * \return 0 if everything went OK, -1 otherwise
+ */
+int note_fill_buffer(Note *n, Note_Buffer buffer, Uint16 buffer_length, const Envelope *env, Uint64 sample_rate, Uint64 phase);
+
+/**
+ * \fn int update_envelope(Note *n, Envelope *env)
+ * \brief Function to compute and update envelope amplitude based on an ADSR envelope filter
+ *
+ * Works on a sample, not a buffer.
+ *
+ * \param n The note object to update envelope to
+ * \param env The envelope object
+ *
+ * \return 0 if everything went OK, -1 otherwise
+ */
+int update_envelope(Note *n, const Envelope *env);
 
 /**
  * \fn Note *alloc_note(Uint16 buff_nb_samples)

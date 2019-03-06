@@ -20,6 +20,9 @@
 #define DEFAULT_OSC_DUTY 50
 #define DEFAULT_OSC_ONOFF OFF
 
+
+#define print_error(s){fprintf(stderr, "%s : func %s at %s (%d)\n", s, __func__, __FILE__, __LINE__); }
+
 typedef Sint16 *Osc_Buffer;
 
 /**

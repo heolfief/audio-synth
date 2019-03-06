@@ -6,16 +6,132 @@
  * Here are implemented the data structure of a note, and the related functions
  */
 
-#include <SDL2/SDL_stdinc.h>
 #include "note.h"
-#include "../oscillator/osc.h"
+
+int note_on(Note *n)
+{
+    if(n == NULL)
+    {
+        print_error("Note parameter is NULL");
+        return -1;
+    }
+
+    n->onoff = ON;
+
+    return 0;
+}
+
+int note_off(Note *n)
+{
+    if(n == NULL)
+    {
+        print_error("Note parameter is NULL");
+        return -1;
+    }
+
+    n->onoff = OFF;
+    n->deathtime = n->lifetime;
+
+    return 0;
+}
+
+int note_fill_buffer(Note *n, Note_Buffer buffer, Uint16 buffer_length, const Envelope *env, Uint64 sample_rate, Uint64 phase)
+{
+    if(n == NULL)
+    {
+        print_error("Note parameter is NULL");
+        return -1;
+    }
+
+    // Apply frequency to oscillators
+    n->osc1->freq = n->freq;
+    n->osc2->freq = n->freq;
+    n->osc3->freq = n->freq;
+
+    // Fill the oscillators buffers
+    osc_fill_buffer(n->osc1, n->osc1->buffer, buffer_length, sample_rate, phase);
+    osc_fill_buffer(n->osc2, n->osc2->buffer, buffer_length, sample_rate, phase);
+    osc_fill_buffer(n->osc3, n->osc3->buffer, buffer_length, sample_rate, phase);
+
+    for(Uint16 sample = 0; sample < buffer_length; ++sample)
+    {
+        // Mix the 3 oscillators
+        n->buffer[sample] = (Sint16)(n->osc1->buffer[sample] / 3 + n->osc2->buffer[sample] / 3 + n->osc3->buffer[sample] / 3);
+
+        // Apply the note velocity
+        n->buffer[sample] = (Sint16)((double)n->buffer[sample] * n->velocity_amp);
+
+        // Add one sample to the note lifetime
+        n->lifetime++;
+
+        // Process the envelope calculation for the sample
+        update_envelope(n,env);
+
+        // Apply the envelope
+        n->buffer[sample] = (Sint16)((double)n->buffer[sample] * n->env_amp);
+        //printf("env_amp : %lf\n", n->env_amp);
+    }
+    return 0;
+}
+
+int update_envelope(Note *n, const Envelope *env)
+{
+    if(env->sustain < 0 || env->sustain > 1)
+    {
+        print_error("Envelope parameter 'sustain' is out of range");
+        return -1;
+    }
+
+    if(n->onoff == ON && n->master_onoff == OFF)                        // If note just started
+    {
+        n->master_onoff = ON;
+        n->lifetime = 0;                                                // Reset lifetime
+        n->deathtime = 0;                                               // Reset deathtime
+        n->env_amp = 0;
+    }
+
+    if(n->master_onoff == ON)
+    {
+        if(n->lifetime >= 0 && n->lifetime < env->attack)               // If note is in attack phase
+        {
+            n->env_amp = (double)n->lifetime / (double)env->attack;     // Linear increase from 0 to 1
+        }
+
+        if(n->lifetime >= env->attack && n->lifetime < (env->decay + env->attack))      // If note is in decay phase
+        {
+            n->env_amp = (double)1.0 + ((double)(n->lifetime - env->attack) * ((env->sustain - (double)1.0) / (double)env->decay));     // Linear decrease from 1 to sustain
+        }
+
+        if(n->lifetime >= (env->decay + env->attack) && n->onoff != OFF)// If note is in sustain phase
+        {
+            n->env_amp = env->sustain;                                  // Constant amplitude
+
+            if(n->onoff == OFF)                                         // If note is in release phase
+            {
+                n->deathtime = n->lifetime;                             // Save deathtime
+            }
+        }
+
+        if(n->onoff == OFF)                                             // If note is in release phase
+        {
+            n->env_amp = - (env->sustain / (double)env->release) * (double)(n->lifetime - n->deathtime) + env->sustain;
+
+            if(n->env_amp <= 0)                                         // When env_amp is zero, put master_onoff OFF
+            {
+                n->master_onoff = OFF;
+            }
+        }
+    }
+
+    return 0;
+}
 
 Note *alloc_note(Uint16 buff_nb_samples)
 {
     Note *note_allocated = (Note*)malloc(sizeof(Note));
     if(note_allocated == NULL)
     {
-        fprintf(stderr, "Memory allocation error at %s (%d)\n", __FILE__, __LINE__);
+        print_error("Memory allocation error");
         return NULL;
     }
 
@@ -49,7 +165,7 @@ Note_Buffer alloc_note_buffer(Uint16 buff_nb_samples)
     Note_Buffer note_buff = (Note_Buffer) calloc(buff_nb_samples, sizeof(Note_Buffer));
     if(note_buff == NULL)
     {
-        perror("memory allocation error\n");
+        print_error("Memory allocation error");
         return NULL;
     }
 
