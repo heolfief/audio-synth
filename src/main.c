@@ -15,11 +15,14 @@
 
 #define SAMPLE_RATE 48000
 #define AUDIO_BUFF_SIZE 1024
-#define OSC_NBR 3
 
 // Global note variable
 Note *test_note;
 
+Envelope test_env = {.attack = 200, .decay =1000, .sustain =0.5, .release =10000};
+
+Uint16 mario_freq[7]={660, 660, 660, 510, 660, 770, 380};
+Uint16 mario_delay[7]={80, 200, 250, 80, 250, 450, 450};
 
 /**
  *  \fn void func_callback(void *unused, Uint8 *stream, int len)
@@ -44,16 +47,7 @@ void func_callback(void *unused, Uint8 *stream, int len)
     Sint16 *s_stream = (Sint16*) stream;    // Cast buffer data to signed 16 bits
     Uint16 s_len = (Uint16)len/(Uint16)2;   // data are 16bits=2*8bits, so (len/2) 16 bits data in the buffer
 
-
-    osc_fill_buffer(test_note->osc1, test_note->osc1->buffer, s_len, SAMPLE_RATE, phase);
-    osc_fill_buffer(test_note->osc2, test_note->osc2->buffer, s_len, SAMPLE_RATE, phase);
-    osc_fill_buffer(test_note->osc3, test_note->osc3->buffer, s_len, SAMPLE_RATE, phase);
-
-    for(Uint16 sample = 0; sample < s_len; ++sample)
-    {
-        // Add all oscillators into the note buffer [ONLY A TEST, A FUTURE FUNCTION WILL DO THIS]
-        test_note->buffer[sample] = (Sint16)(test_note->osc1->buffer[sample]/OSC_NBR + test_note->osc2->buffer[sample]/OSC_NBR + test_note->osc3->buffer[sample]/OSC_NBR);
-    }
+    note_fill_buffer(test_note, test_note->buffer, s_len, &test_env, SAMPLE_RATE, phase);
 
     for(Uint16 sample = 0; sample < s_len; ++sample)
     {
@@ -91,31 +85,42 @@ int main(int argc, char *argv[])
     test_note = alloc_note(AUDIO_BUFF_SIZE);
 
     test_note->osc1->amp = 32000;
-    test_note->osc1->wave = TRI;
+    test_note->osc1->wave = SQR;
     test_note->osc1->detune = 0;
-    test_note->osc1->freq = 440;
     test_note->osc1->duty = 50;
     test_note->osc1->onoff = ON;
 
-    test_note->osc2->amp = 32000;
+    test_note->osc2->amp = 5000;
     test_note->osc2->wave = SIN;
-    test_note->osc2->detune = -24;
-    test_note->osc2->freq = 440;
+    test_note->osc2->detune = 0;
     test_note->osc2->duty = 50;
     test_note->osc2->onoff = ON;
 
-    test_note->osc3->amp = 5000;
-    test_note->osc3->wave = SQR;
+    test_note->osc3->amp = 32000;
+    test_note->osc3->wave = TRI;
     test_note->osc3->detune = -12;
-    test_note->osc3->freq = 440;
     test_note->osc3->duty = 50;
     test_note->osc3->onoff = ON;
 
 
+    test_note->freq = 440;
+    test_note->onoff = OFF;
+    test_note->velocity_amp = 1;
+    test_note->master_onoff = OFF;
 
     SDL_PauseAudio(0);                      // Play audio (pause = off)
-    SDL_Delay(5000);                        // 5s sound
 
+
+    for(int i = 0; i < 7; ++i)
+    {
+        test_note->freq = mario_freq[i];
+        note_on(test_note);
+        SDL_Delay(100);
+        note_off(test_note);
+        SDL_Delay(mario_delay[i]);
+    }
+
+    SDL_Delay(2000);
 
     SDL_CloseAudio();
     SDL_Quit();
