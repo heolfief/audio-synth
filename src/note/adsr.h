@@ -10,7 +10,6 @@
 #define AUDIO_SYNTH_ADSR_H
 
 #include <SDL2/SDL_stdinc.h>
-#include "../note/note.h"
 
 /**
  * \struct Envelope
@@ -24,18 +23,5 @@ typedef struct{
     double        sustain;       /*!<the level during the main sequence of the sound's duration, until the note is off (range from 0 to 1)*/
     Uint64        release;       /*!<the time taken for the level to decay from the sustain level to zero after the note is off in samples*/
 }Envelope;
-
-/**
- * \fn int update_envelope(Note *n, Envelope *env)
- * \brief Function to compute and update envelope amplitude based on an ADSR envelope filter
- *
- * Works on a sample, not a buffer.
- *
- * \param n The note object to update envelope to
- * \param env The envelope object
- *
- * \return 0 if everything went OK, -1 otherwise
- */
-int update_envelope(Note *n, Envelope *env);
 
 #endif //AUDIO_SYNTH_ADSR_H
