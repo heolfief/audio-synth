@@ -6,7 +6,12 @@ include_directories ("${PROJECT_SOURCE_DIR}/src")
 
 find_library(CMOCKA_LIBRARY cmocka HINTS /lib)
 
-add_executable(audio_synth_test test.c ../src/oscillator/osc.h ../src/oscillator/osc.c oscillator/osc_test.c oscillator/osc_test.h)
+add_executable(audio_synth_test test.c
+        ../src/note/note.c ../src/note/note.h ../src/note/adsr.h
+        ../src/oscillator/osc.h ../src/oscillator/osc.c
+        oscillator_test/osc_test.c oscillator_test/osc_test.h
+        note_test/note_test.c note_test/note_test.h)
+
 add_dependencies(audio_synth_test audio_synth_test)
 
 add_test(audio_synth_test audio_synth_test)

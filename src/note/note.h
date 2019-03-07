@@ -61,11 +61,10 @@ int note_on(Note *n);
 int note_off(Note *n);
 
 /**
- * \fn int note_fill_buffer(Note *n, Note_Buffer buffer, Uint16 buffer_length, const Envelope *env, Uint64 sample_rate, Uint64 phase)
+ * \fn int note_fill_buffer(Note *n, Uint16 buffer_length, const Envelope *env, Uint64 sample_rate, Uint64 phase)
  * \brief Function to fill note audio buffer with note data (mixed oscillators and envelope)
  *
  * \param n The note structure
- * \param buffer The audio buffer to write audio samples to
  * \param buffer_length The size of the audio buffer (number of audio samples in the buffer)
  * \param env The envelope parameters
  * \param sample_rate The sample rate of the system
@@ -73,7 +72,7 @@ int note_off(Note *n);
  *
  * \return 0 if everything went OK, -1 otherwise
  */
-int note_fill_buffer(Note *n, Note_Buffer buffer, Uint16 buffer_length, const Envelope *env, Uint64 sample_rate, Uint64 phase);
+int note_fill_buffer(Note *n, Uint16 buffer_length, const Envelope *env, Uint64 sample_rate, Uint64 phase);
 
 /**
  * \fn int update_envelope(Note *n, Envelope *env)

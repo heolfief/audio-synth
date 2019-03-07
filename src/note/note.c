@@ -35,7 +35,7 @@ int note_off(Note *n)
     return 0;
 }
 
-int note_fill_buffer(Note *n, Note_Buffer buffer, Uint16 buffer_length, const Envelope *env, Uint64 sample_rate, Uint64 phase)
+int note_fill_buffer(Note *n, Uint16 buffer_length, const Envelope *env, Uint64 sample_rate, Uint64 phase)
 {
     if(n == NULL)
     {
@@ -49,9 +49,9 @@ int note_fill_buffer(Note *n, Note_Buffer buffer, Uint16 buffer_length, const En
     n->osc3->freq = n->freq;
 
     // Fill the oscillators buffers
-    osc_fill_buffer(n->osc1, n->osc1->buffer, buffer_length, sample_rate, phase);
-    osc_fill_buffer(n->osc2, n->osc2->buffer, buffer_length, sample_rate, phase);
-    osc_fill_buffer(n->osc3, n->osc3->buffer, buffer_length, sample_rate, phase);
+    osc_fill_buffer(n->osc1, buffer_length, sample_rate, phase);
+    osc_fill_buffer(n->osc2, buffer_length, sample_rate, phase);
+    osc_fill_buffer(n->osc3, buffer_length, sample_rate, phase);
 
     for(Uint16 sample = 0; sample < buffer_length; ++sample)
     {
@@ -59,7 +59,7 @@ int note_fill_buffer(Note *n, Note_Buffer buffer, Uint16 buffer_length, const En
         n->buffer[sample] = (Sint16)(n->osc1->buffer[sample] / 3 + n->osc2->buffer[sample] / 3 + n->osc3->buffer[sample] / 3);
 
         // Apply the note velocity
-        n->buffer[sample] = (Sint16)((double)n->buffer[sample] * n->velocity_amp);
+        n->buffer[sample] =     (Sint16)((double)n->buffer[sample] * n->velocity_amp);
 
         // Add one sample to the note lifetime
         n->lifetime++;
@@ -69,7 +69,6 @@ int note_fill_buffer(Note *n, Note_Buffer buffer, Uint16 buffer_length, const En
 
         // Apply the envelope
         n->buffer[sample] = (Sint16)((double)n->buffer[sample] * n->env_amp);
-        //printf("env_amp : %lf\n", n->env_amp);
     }
     return 0;
 }
@@ -105,11 +104,6 @@ int update_envelope(Note *n, const Envelope *env)
         if(n->lifetime >= (env->decay + env->attack) && n->onoff != OFF)// If note is in sustain phase
         {
             n->env_amp = env->sustain;                                  // Constant amplitude
-
-            if(n->onoff == OFF)                                         // If note is in release phase
-            {
-                n->deathtime = n->lifetime;                             // Save deathtime
-            }
         }
 
         if(n->onoff == OFF)                                             // If note is in release phase

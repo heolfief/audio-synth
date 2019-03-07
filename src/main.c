@@ -47,7 +47,7 @@ void func_callback(void *unused, Uint8 *stream, int len)
     Sint16 *s_stream = (Sint16*) stream;    // Cast buffer data to signed 16 bits
     Uint16 s_len = (Uint16)len/(Uint16)2;   // data are 16bits=2*8bits, so (len/2) 16 bits data in the buffer
 
-    note_fill_buffer(test_note, test_note->buffer, s_len, &test_env, SAMPLE_RATE, phase);
+    note_fill_buffer(test_note, s_len, &test_env, SAMPLE_RATE, phase);
 
     for(Uint16 sample = 0; sample < s_len; ++sample)
     {

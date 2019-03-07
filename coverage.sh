@@ -9,3 +9,5 @@ lcov --capture --directory build/run --output-file build/run/coverage.info
 genhtml build/run/coverage.info --output-directory doc/coverage
 echo -e "${BLUE}\nDone${NC}"
 echo -e "Please open doc/coverage/index.html to see result\n"
+echo -e "Opening doc/coverage/index.html with default browser\n"
+xdg-open doc/coverage/index.html

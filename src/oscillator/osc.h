@@ -66,18 +66,17 @@ typedef struct{
 
 
 /**
- * \fn int osc_fill_buffer(const Oscillator *osc, Osc_Buffer buffer, Uint16 buffer_length, Uint64 sample_rate, Uint64 phase)
+ * \fn int osc_fill_buffer(const Oscillator *osc, Uint16 buffer_length, Uint64 sample_rate, Uint64 phase)
  * \brief Function to fill audio buffer with oscillator wave
  *
  * \param osc The oscillator structure
- * \param buffer The audio buffer to write audio samples to
  * \param buffer_length The size of the audio buffer (number of audio samples in the buffer)
  * \param sample_rate The sample rate of the system
  * \param phase The phase value at the beginning of the buffer
  *
  * \return 0 if everything went OK, -1 otherwise
  */
-int osc_fill_buffer(const Oscillator *osc, Osc_Buffer buffer, Uint16 buffer_length, Uint64 sample_rate, Uint64 phase);
+int osc_fill_buffer(const Oscillator *osc, Uint16 buffer_length, Uint64 sample_rate, Uint64 phase);
 
 
 /**
