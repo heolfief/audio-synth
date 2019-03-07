@@ -116,6 +116,14 @@ void test_note_fill_buffer(void **state)
     Envelope env = {.attack = 4, .decay =2, .sustain =0.5, .release =2};
     int return_value=0;
 
+    n->freq = 440;
+    n->velocity_amp = 1;
+    n->lifetime = 0;
+    n->deathtime=0;
+    n->master_onoff = OFF;
+    n->velocity_amp = 1;
+    note_on(n);
+
     // NULL test
     return_value = note_fill_buffer(NULL, TEST_AUDIO_BUFF_SIZE, &env, TEST_SAMPLE_RATE, 0);
     assert_int_equal(return_value, -1);
