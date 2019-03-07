@@ -11,7 +11,6 @@
 #include <cmocka.h>
 
 #include "osc_test.h"
-#include "oscillator/osc.h"
 
 #define TEST_SAMPLE_RATE 48000
 #define TEST_AUDIO_BUFF_SIZE 1024
@@ -49,7 +48,7 @@ void test_fill_osc_buffer_unknown(void **state)
     osc->duty = 50;    // Set dutycycle to something
     osc->onoff = ON;   // Set oscillator to ON
 
-    return_value = osc_fill_buffer(osc, osc->buffer, TEST_AUDIO_BUFF_SIZE, TEST_SAMPLE_RATE, 0);
+    return_value = osc_fill_buffer(osc, TEST_AUDIO_BUFF_SIZE, TEST_SAMPLE_RATE, 0);
 
     assert_int_equal(return_value, -1);
 }
@@ -65,7 +64,7 @@ void test_fill_osc_buffer_zeros(void **state)
     osc->duty = 50;    // Set dutycycle to something
     osc->onoff = OFF;  // Most important : set oscillator to OFF, therefore buffer should be filled with zeros by osc_fill_buffer
 
-    osc_fill_buffer(osc, osc->buffer, TEST_AUDIO_BUFF_SIZE, TEST_SAMPLE_RATE, 0);
+    osc_fill_buffer(osc, TEST_AUDIO_BUFF_SIZE, TEST_SAMPLE_RATE, 0);
 
     for(Uint16 sample = 0; sample < TEST_AUDIO_BUFF_SIZE; ++sample)
     {
@@ -87,14 +86,14 @@ void test_fill_osc_buffer_sine(void **state)
     osc->onoff = ON;   // Set oscillator to ON
     osc->duty = 50;    // Set dutycycle 50%
 
-    osc_fill_buffer(osc, osc->buffer, 10, 10, 0);   // samplerate = buffsize = 10 (10 sample/s : 1Hz so 10 samples for a wave period)
+    osc_fill_buffer(osc, 10, 10, 0);   // samplerate = buffsize = 10 (10 sample/s : 1Hz so 10 samples for a wave period)
 
     for(int i = 0; i<10; ++i)
     {
         assert_int_equal(osc->buffer[i], res[i]);
     }
 
-    osc_fill_buffer(osc, osc->buffer, 10, 10, 5);   // test phase, phase = half period
+    osc_fill_buffer(osc, 10, 10, 5);   // test phase, phase = half period
 
     for(int i = 0; i<10; ++i)
     {
@@ -128,35 +127,35 @@ void test_fill_osc_buffer_square(void **state)
     osc->onoff = ON;   // Set oscillator to ON
 
     osc->duty = 0;    // Set dutycycle 0%
-    osc_fill_buffer(osc, osc->buffer, 10, 10, 0);   // samplerate = buffsize = 10 (10 sample/s : 1Hz so 10 samples for a wave period)
+    osc_fill_buffer(osc, 10, 10, 0);   // samplerate = buffsize = 10 (10 sample/s : 1Hz so 10 samples for a wave period)
     for(int i = 0; i<10; ++i)
     {
         assert_int_equal(osc->buffer[i], res_0[i]);
     }
 
     osc->duty = 25;    // Set dutycycle 25%
-    osc_fill_buffer(osc, osc->buffer, 10, 10, 0);   // samplerate = buffsize = 10 (10 sample/s : 1Hz so 10 samples for a wave period)
+    osc_fill_buffer(osc, 10, 10, 0);   // samplerate = buffsize = 10 (10 sample/s : 1Hz so 10 samples for a wave period)
     for(int i = 0; i<10; ++i)
     {
         assert_int_equal(osc->buffer[i], res_25[i]);
     }
 
     osc->duty = 50;    // Set dutycycle 50%
-    osc_fill_buffer(osc, osc->buffer, 10, 10, 0);   // samplerate = buffsize = 10 (10 sample/s : 1Hz so 10 samples for a wave period)
+    osc_fill_buffer(osc, 10, 10, 0);   // samplerate = buffsize = 10 (10 sample/s : 1Hz so 10 samples for a wave period)
     for(int i = 0; i<10; ++i)
     {
         assert_int_equal(osc->buffer[i], res_50[i]);
     }
 
     osc->duty = 75;    // Set dutycycle 75%
-    osc_fill_buffer(osc, osc->buffer, 10, 10, 0);   // samplerate = buffsize = 10 (10 sample/s : 1Hz so 10 samples for a wave period)
+    osc_fill_buffer(osc, 10, 10, 0);   // samplerate = buffsize = 10 (10 sample/s : 1Hz so 10 samples for a wave period)
     for(int i = 0; i<10; ++i)
     {
         assert_int_equal(osc->buffer[i], res_75[i]);
     }
 
     osc->duty = 100;    // Set dutycycle 100%
-    osc_fill_buffer(osc, osc->buffer, 10, 10, 0);   // samplerate = buffsize = 10 (10 sample/s : 1Hz so 10 samples for a wave period)
+    osc_fill_buffer(osc, 10, 10, 0);   // samplerate = buffsize = 10 (10 sample/s : 1Hz so 10 samples for a wave period)
     for(int i = 0; i<10; ++i)
     {
         assert_int_equal(osc->buffer[i], res_100[i]);
@@ -183,7 +182,7 @@ void test_fill_osc_buffer_tri(void **state)
 
     osc->duty = 50;    // Set dutycycle 50%
 
-    osc_fill_buffer(osc, osc->buffer, 10, 10, 0);   // samplerate = buffsize = 10 (10 sample/s : 1Hz so 10 samples for a wave period)
+    osc_fill_buffer(osc, 10, 10, 0);   // samplerate = buffsize = 10 (10 sample/s : 1Hz so 10 samples for a wave period)
 
     for(int i = 0; i<10; ++i)
     {
@@ -192,12 +191,34 @@ void test_fill_osc_buffer_tri(void **state)
 
     osc->duty = 100;    // Set dutycycle 100%
 
-    osc_fill_buffer(osc, osc->buffer, 10, 10, 0);   // samplerate = buffsize = 10 (10 sample/s : 1Hz so 10 samples for a wave period)
+    osc_fill_buffer(osc, 10, 10, 0);   // samplerate = buffsize = 10 (10 sample/s : 1Hz so 10 samples for a wave period)
 
     for(int i = 0; i<10; ++i)
     {
         assert_int_equal(osc->buffer[i], res_100[i]-avg);
     }
+}
+
+void test_osc_fill_buffer_null(void **state)
+{
+    Oscillator *osc = *state;
+
+    int return_value = osc_fill_buffer(NULL, TEST_AUDIO_BUFF_SIZE, TEST_SAMPLE_RATE, 0);
+    assert_int_equal(return_value, -1);
+}
+
+void test_osc_fill_buffer_incorect_amp(void **state)
+{
+    Oscillator *osc = *state;
+    int return_value = 0;
+
+
+    osc_init_default_values(osc, TEST_AUDIO_BUFF_SIZE, TEST_SAMPLE_RATE);
+
+    osc->amp = OSC_AMP_MAX + 1;
+
+    return_value = osc_fill_buffer(osc, TEST_AUDIO_BUFF_SIZE, TEST_SAMPLE_RATE, 0);
+    assert_int_equal(return_value, -1);
 }
 
 void test_osc_init_default_values(void **state)
@@ -212,26 +233,4 @@ void test_osc_init_default_values(void **state)
     assert_int_equal(osc->onoff, DEFAULT_OSC_ONOFF);
     assert_int_equal(osc->duty, DEFAULT_OSC_DUTY);
     assert_int_equal(osc->freq, DEFAULT_OSC_FREQ);
-}
-
-void test_osc_fill_buffer_null(void **state)
-{
-    Oscillator *osc = *state;
-
-    int return_value = osc_fill_buffer(NULL, osc->buffer, TEST_AUDIO_BUFF_SIZE, TEST_SAMPLE_RATE, 0);
-    assert_int_equal(return_value, -1);
-}
-
-void test_osc_fill_buffer_incorect_amp(void **state)
-{
-    Oscillator *osc = *state;
-    int return_value = 0;
-
-
-    osc_init_default_values(osc, TEST_AUDIO_BUFF_SIZE, TEST_SAMPLE_RATE);
-
-    osc->amp = OSC_AMP_MAX + 1;
-
-    return_value = osc_fill_buffer(osc, osc->buffer, TEST_AUDIO_BUFF_SIZE, TEST_SAMPLE_RATE, 0);
-    assert_int_equal(return_value, -1);
 }
