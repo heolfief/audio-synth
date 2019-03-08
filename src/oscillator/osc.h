@@ -59,7 +59,7 @@ typedef struct{
     Uint16      freq;       /*!<the frequency */
     Uint16      amp;        /*!<the amplitude */
     Sint8       detune;     /*!<the detune in number of notes */
-    Sint8       duty;       /*!<the dutycyle in percents (if available for the selected waveform) */
+    Uint8       duty;       /*!<the dutycyle in percents (if available for the selected waveform) */
     OnOff       onoff;      /*!<the on/off value */
     Osc_Buffer  buffer;     /*!<the audio data buffer of the oscillator */
 }Oscillator;
