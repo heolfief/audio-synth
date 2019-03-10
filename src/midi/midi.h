@@ -6,6 +6,8 @@
 #define MIDI_H
 #define TMP "tmp.txt"
 
+
+
 typedef struct {
     unsigned char MTHD[4]; // 4 bytes for header flag
     unsigned char SPEC_ADDR[4]; // 4 bytes to inform about the addressing specs
@@ -14,7 +16,16 @@ typedef struct {
     u_int16_t NOIRE; // 2 bytes: number divisions of the black
 
 } Header;
+/*
+typedef struct {
+    u
 
+
+
+
+
+}NOTE;
+*/
 
 
 

@@ -1,7 +1,12 @@
 
-//
-// Created by vincent on 10/02/19.
-//
+/**
+ * \file fichier.c
+ * \brief File functions
+ *
+ *
+ * Here are defined the data structure of the Open File, and the related functions
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include "fichier.h"

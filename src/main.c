@@ -9,7 +9,7 @@
 int main(int argc, char *argv[])
 {
 
-
+    u_int32_t * DataRange;
 
   FILE * test;
 
@@ -17,8 +17,8 @@ int main(int argc, char *argv[])
 
     Header h;
     fillHeaderRead(&h,test);
-    readDataRange(test);
-
+    DataRange=readDataRange(test);
+    //playDataRange(DataRange);
    closeFile(test);
 
   }

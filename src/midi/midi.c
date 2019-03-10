@@ -102,8 +102,6 @@ u_int32_t  getSizeDataRange(FILE *f){
    buffer= BlockFileReader(f,4);
    size =  buffer[0]*16777216 + buffer[1]*65536 + buffer[2]*256 +buffer[3];
     return size;
-
-
 }
 
 
@@ -112,15 +110,32 @@ __uint32_t  * readDataRange (FILE * f){
     unsigned char * buffer = BlockFileReader(f,1);
     u_int32_t * DataRange =NULL;
     u_int32_t  size;
+
     setAsBeginDataRange(f);
     size = getSizeDataRange(f);
     size = recordDataRange(f,size);
     DataRange =readDataRangeSorted(size);
+
     return DataRange;
 
 }
 
 
+
+/*
+void playDataRange (u_int32_t DataRangeSorted){
+
+
+
+
+
+
+
+
+
+}
+
+*/
 
 
 
