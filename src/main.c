@@ -9,17 +9,24 @@
 #include <math.h>
 #include <stdio.h>
 
+#include "sys_param/sys_param.h"
 #include "oscillator/osc.h"
 #include "note/note.h"
+#include "note/polyphony.h"
 #include "gui/gui.h"
 
 #define SAMPLE_RATE 48000
 #define AUDIO_BUFF_SIZE 1024
 
-// Global note variable
-Note *test_note;
+// Global notes variable
+Polyphony note_array[10];
+Audio_Buffer master_audio;
 
-Envelope test_env = {.attack = 200, .decay =1000, .sustain =0.5, .release =10000};
+// Global system parameters changed by the GUI
+Sys_param* sys_param = NULL;
+
+
+
 
 Uint16 mario_freq[7]={660, 660, 660, 510, 660, 770, 380};
 Uint16 mario_delay[7]={80, 200, 250, 80, 250, 450, 450};
@@ -47,16 +54,19 @@ void func_callback(void *unused, Uint8 *stream, int len)
     Sint16 *s_stream = (Sint16*) stream;    // Cast buffer data to signed 16 bits
     Uint16 s_len = (Uint16)len/(Uint16)2;   // data are 16bits=2*8bits, so (len/2) 16 bits data in the buffer
 
-    note_fill_buffer(test_note, s_len, &test_env, SAMPLE_RATE, phase);
+    polyphony_fill_buffer(master_audio, note_array, s_len, sys_param->env, SAMPLE_RATE, phase);
 
     for(Uint16 sample = 0; sample < s_len; ++sample)
     {
-        s_stream[sample] = test_note->buffer[sample];
+        s_stream[sample] = master_audio[sample];
     }
 
 
     phase = (phase + len/2)%SAMPLE_RATE;    // Update phase based on play position
 }
+
+
+
 
 int main(int argc, char *argv[])
 {
@@ -82,41 +92,62 @@ int main(int argc, char *argv[])
         exit(EXIT_FAILURE);
     }
 
-    test_note = alloc_note(AUDIO_BUFF_SIZE);
 
-    test_note->osc1->amp = 32000;
-    test_note->osc1->wave = SQR;
-    test_note->osc1->detune = 0;
-    test_note->osc1->duty = 50;
-    test_note->osc1->onoff = ON;
+    // Memory allocation
+    if(alloc_polyphony(note_array, AUDIO_BUFF_SIZE) < 0) exit(EXIT_FAILURE);
 
-    test_note->osc2->amp = 5000;
-    test_note->osc2->wave = SIN;
-    test_note->osc2->detune = 0;
-    test_note->osc2->duty = 50;
-    test_note->osc2->onoff = ON;
+    master_audio = alloc_audio_buffer(AUDIO_BUFF_SIZE);
+    if(master_audio == NULL) exit(EXIT_FAILURE);
 
-    test_note->osc3->amp = 32000;
-    test_note->osc3->wave = TRI;
-    test_note->osc3->detune = -12;
-    test_note->osc3->duty = 50;
-    test_note->osc3->onoff = ON;
+    sys_param = alloc_sys_param(AUDIO_BUFF_SIZE);
+    if(sys_param == NULL) exit(EXIT_FAILURE);
 
 
-    test_note->freq = 440;
-    test_note->onoff = OFF;
-    test_note->velocity_amp = 1;
-    test_note->master_onoff = OFF;
+
+    // Hard coded system parameters, will be changed by the GUI in the future
+    sys_param->env->attack   = 200;
+    sys_param->env->decay    = 1000;
+    sys_param->env->sustain  = 0.5;
+    sys_param->env->release  = 10000;
+
+    sys_param->osc1->amp     = 32000;
+    sys_param->osc1->wave    = SQR;
+    sys_param->osc1->detune  = 0;
+    sys_param->osc1->duty    = 50;
+    sys_param->osc1->onoff   = ON;
+
+    sys_param->osc2->amp     = 5000;
+    sys_param->osc2->wave    = SIN;
+    sys_param->osc2->detune  = 0;
+    sys_param->osc2->duty    = 50;
+    sys_param->osc2->onoff   = ON;
+
+    sys_param->osc3->amp     = 32000;
+    sys_param->osc3->wave    = TRI;
+    sys_param->osc3->detune  = -12;
+    sys_param->osc3->duty    = 50;
+    sys_param->osc3->onoff   = ON;
+
+    // Each time oscillator parameters changed, this function needs to be called
+    int re = copy_osc_sys_param_to_notes_osc(sys_param, note_array);
+
+
+    // Hard coded note data, will be changed by reading MIDI files in the future
+    note_array[0]->freq = 440;
+    note_array[0]->onoff = OFF;
+    note_array[0]->velocity_amp = 1;
+    note_array[0]->master_onoff = OFF;
+
 
     SDL_PauseAudio(0);                      // Play audio (pause = off)
 
 
     for(int i = 0; i < 7; ++i)
     {
-        test_note->freq = mario_freq[i];
-        note_on(test_note);
+        note_array[0]->freq = mario_freq[i];
+        note_on(note_array[0]);
         SDL_Delay(100);
-        note_off(test_note);
+        note_off(note_array[0]);
         SDL_Delay(mario_delay[i]);
     }
 
@@ -125,7 +156,10 @@ int main(int argc, char *argv[])
     SDL_CloseAudio();
     SDL_Quit();
 
-    free_note(test_note);
+    // Free all the data
+    free_polyphony(note_array);
+    free_audio_buffer(master_audio);
+    free_sys_param(sys_param);
 
     return 0;
 }
