@@ -59,7 +59,7 @@ int note_fill_buffer(Note *n, Uint16 buffer_length, const Envelope *env, Uint64 
         n->buffer[sample] = (Sint16)(n->osc1->buffer[sample] / 3 + n->osc2->buffer[sample] / 3 + n->osc3->buffer[sample] / 3);
 
         // Apply the note velocity
-        n->buffer[sample] =     (Sint16)((double)n->buffer[sample] * n->velocity_amp);
+        n->buffer[sample] = (Sint16)((double)n->buffer[sample] * n->velocity_amp);
 
         // Add one sample to the note lifetime
         n->lifetime++;

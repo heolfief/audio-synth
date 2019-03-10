@@ -112,7 +112,6 @@ int osc_fill_buffer(const Oscillator *osc, Uint16 buffer_length, Uint64 sample_r
 
         default:
             print_error("Waveform is unknown");
-            fprintf(stderr, "Waveform is unknown at %s (%d)\n", __FILE__, __LINE__);
             return -1; // if waveform is unknown
     }
     return 0;
