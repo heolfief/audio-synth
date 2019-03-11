@@ -1,6 +1,10 @@
-//
-// Created by vincent on 10/02/19.
-//
+/**
+ * \file midi.c
+ * \brief Midi functions
+ *
+ *
+ * Here are defined the function that works on midi
+ */
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -43,7 +47,7 @@ void setAsBeginDataRange(FILE *f){
     moveFile(f,-1);
 }
 
-u_int32_t passedMetaData(FILE *f,u_int32_t size, __uint32_t currentLine) {
+u_int32_t skipMetaData(FILE *f,u_int32_t size, __uint32_t currentLine) {
     unsigned char *test = BlockFileReader(f, 1);
     unsigned char *buffer = NULL;
     __uint16_t nbData;
@@ -74,17 +78,17 @@ u_int32_t  * readDataRangeSorted ( u_int32_t  size) {
     return DataRange;
 }
 
-u_int32_t recordDataRange (FILE *f,u_int32_t size){
+u_int32_t writeRomDataRange (FILE *f,u_int32_t size){
     FILE * FILERecord  = fopen(TMP,"w+");
     u_int32_t  sizeTMP= 0;
     unsigned char * buffer = NULL;
     __uint32_t currentLine =0;
-    currentLine = passedMetaData( f, size,currentLine);
+    currentLine = skipMetaData( f, size,currentLine);
      while(!feof((f)) && currentLine<size){
         buffer = BlockFileReader(f,1);
         fprintf(FILERecord,"%2x  ", buffer[0]);
         free(buffer);
-        currentLine = passedMetaData(f, size, currentLine) ;
+        currentLine = skipMetaData(f, size, currentLine) ;
         sizeTMP ++;
         currentLine++;
 
@@ -113,7 +117,7 @@ __uint32_t  * readDataRange (FILE * f){
 
     setAsBeginDataRange(f);
     size = getSizeDataRange(f);
-    size = recordDataRange(f,size);
+    size = writeRomDataRange(f,size);
     DataRange =readDataRangeSorted(size);
 
     return DataRange;

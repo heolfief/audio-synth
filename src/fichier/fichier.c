@@ -4,7 +4,7 @@
  * \brief File functions
  *
  *
- * Here are defined the data structure of the Open File, and the related functions
+ * Here are defined  the related functions to control a file
  */
 
 #include <stdio.h>
