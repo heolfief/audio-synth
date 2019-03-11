@@ -19,7 +19,7 @@
  */
 
 typedef struct {
-   const unsigned char MTHD{0x4d,0x54,0x68,0x64}; /*!< 4 bytes for header flag*/
+    const unsigned char MTHD[4]={0x4d,0x54,0x68,0x64}; /*!< 4 bytes for header flag*/
     unsigned char SPEC_ADDR[4]; /*!< 4 bytes to inform about the addressing specs*/
     u_int16_t SMF ;/*!<2 bytes to indicate the data ranges: 0 only one data range, 1 several tracks played simultaneously, 2 more tracks but to be played one after the other*/
     u_int16_t MTRK ; /*!<2 bytes for the number of data ranges*/
