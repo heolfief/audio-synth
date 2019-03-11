@@ -15,15 +15,14 @@
 
 
 void fillHeaderRead (Header * H, FILE * f){
-    unsigned char *  buffer = BlockFileReader(f,14);
+    unsigned char *  buffer = BlockFileReader(f,14);//control that the file is a midi file, with the Header flag MTHD
     for (int i =0; i<4;i++){
         H->MTHD[i]= buffer[i];
+        if (H->MTHD[i]!=buffer[i])
+            printf("unrecognized file");
     }
-    if (H->MTHD[0]!= 0x4d && H->MTHD[1]!= 0x54 && H->MTHD[2]!=0x68 && H->MTHD[3]!=0x64){
-        printf("unrecognized file");
-        return;
-    }
-    for (int i= 4; i<8; i++){
+
+    for (int i= 4; i<8; i++){   // fill header
         H->SPEC_ADDR[i-4]=buffer[i];
    }
         H->SMF=buffer[8]*256+buffer[9];
@@ -39,32 +38,31 @@ void fillHeaderRead (Header * H, FILE * f){
 
 void setAsBeginDataRange(FILE *f){
     unsigned char * buffer = BlockFileReader(f,1);
-    while(buffer[0]== 0x4d || buffer[0] == 0x54 || buffer[0]== 0x72 || buffer[0]== 0x6b){
+    while(buffer[0]== 0x4d || buffer[0] == 0x54 || buffer[0]== 0x72 || buffer[0]== 0x6b){ // go to the begining of data range detect with the flags 0x4d 0x54 0x72 0x6b
        buffer = BlockFileReader(f,1);
-
     }
     free(buffer);
     moveFile(f,-1);
 }
 
 u_int32_t skipMetaData(FILE *f,u_int32_t size, __uint32_t currentLine) {
-    unsigned char *test = BlockFileReader(f, 1);
+    unsigned char *test = BlockFileReader(f, 1); // buffer for know if they have a 0xff
     unsigned char *buffer = NULL;
     __uint16_t nbData;
 
 
     while (test[0] == 0xFF && currentLine <size) {
-        buffer = BlockFileReader(f, 2);
-       if (buffer[0] == 0x2F && buffer[1] == 0x00){
+        buffer = BlockFileReader(f, 2); // buffer of two for know size of meta data
+       if (buffer[0] == 0x2F && buffer[1] == 0x00){ // flags of end of the data Range
             return size;
         }
         nbData = buffer[1];
-        moveFile(f, nbData);
+        moveFile(f, nbData); // move the position in a file
         test = BlockFileReader(f, 1);
-        currentLine ++;
+        currentLine ++; // Position updated +1
     }
 
-    moveFile(f, -1);
+    moveFile(f, -1); // Position updated -1 because of the first read of this function
 
     free(test);
     free(buffer);
