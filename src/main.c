@@ -19,7 +19,7 @@
 #define AUDIO_BUFF_SIZE 1024
 
 // Global notes variable
-Polyphony note_array[10];
+Polyphony *note_array;
 Audio_Buffer master_audio;
 
 // Global system parameters changed by the GUI
@@ -94,7 +94,8 @@ int main(int argc, char *argv[])
 
 
     // Memory allocation
-    if(alloc_polyphony(note_array, AUDIO_BUFF_SIZE) < 0) exit(EXIT_FAILURE);
+    note_array = alloc_polyphony(AUDIO_BUFF_SIZE);
+    if(note_array == NULL) exit(EXIT_FAILURE);
 
     master_audio = alloc_audio_buffer(AUDIO_BUFF_SIZE);
     if(master_audio == NULL) exit(EXIT_FAILURE);

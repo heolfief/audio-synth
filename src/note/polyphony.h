@@ -46,14 +46,13 @@ int polyphony_fill_buffer(Audio_Buffer audio_buff, Polyphony p[], Uint16 buffer_
 
 /**
  * \fn int alloc_polyphony(Polyphony p, Uint16 buff_nb_samples)
- * \brief Function to allocate memory for Polyphony
+ * \brief Function to allocate memory for Polyphony array
  *
- * \param p[] The Polyphony array to allocate
  * \param buff_nb_samples The number of samples in the audio buffer of the notes
  *
- * \return 0 if everything went OK, -1 otherwise
+ * \return The allocated polyphony array
  */
-int alloc_polyphony(Polyphony p[], Uint16 buff_nb_samples);
+Polyphony *alloc_polyphony(Uint16 buff_nb_samples);
 
 /**
  * \fn int free_polyphony(Polyphony p[])
