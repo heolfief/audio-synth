@@ -12,10 +12,11 @@
 
 #define print_error(s){fprintf(stderr, "%s : func %s at %s (%d)\n", s, __func__, __FILE__, __LINE__); }
 
-static const double chromatic_ratio = 1.059463094359295264562;
 
 int osc_fill_buffer(const Oscillator *osc, Uint16 buffer_length, Uint64 sample_rate, Uint64 phase)
 {
+    static const double chromatic_ratio = 1.059463094359295264562;
+
     if(osc == NULL)
     {
         print_error("Osc parameter is NULL");

@@ -134,5 +134,27 @@ void test_note_fill_buffer(void **state)
     return_value = note_fill_buffer(n, TEST_AUDIO_BUFF_SIZE, &env, TEST_SAMPLE_RATE, 0);
     assert_int_equal(return_value, 0);
     assert_int_equal(n->lifetime, TEST_AUDIO_BUFF_SIZE-1);
+}
 
+void test_get_freq_from_note_nbr(void **state)
+{
+    assert_int_equal(get_freq_from_note_nbr(-15,440),184);
+    assert_int_equal(get_freq_from_note_nbr(-5,440),329);
+    assert_int_equal(get_freq_from_note_nbr(-2,440),391);
+    assert_int_equal(get_freq_from_note_nbr(-1,440),415);
+    assert_int_equal(get_freq_from_note_nbr(0,440),440);
+    assert_int_equal(get_freq_from_note_nbr(1,440),466);
+    assert_int_equal(get_freq_from_note_nbr(2,440),493);
+    assert_int_equal(get_freq_from_note_nbr(5,440),587);
+    assert_int_equal(get_freq_from_note_nbr(15,440),1046);
+
+    assert_int_equal(get_freq_from_note_nbr(-15,2217),932);
+    assert_int_equal(get_freq_from_note_nbr(-5,2217),1660);
+    assert_int_equal(get_freq_from_note_nbr(-2,2217),1975);
+    assert_int_equal(get_freq_from_note_nbr(-1,2217),2092);
+    assert_int_equal(get_freq_from_note_nbr(0,2217),2217);
+    assert_int_equal(get_freq_from_note_nbr(1,2217),2348);
+    assert_int_equal(get_freq_from_note_nbr(2,2217),2488);
+    assert_int_equal(get_freq_from_note_nbr(5,2217),2959);
+    assert_int_equal(get_freq_from_note_nbr(15,2217),5272);
 }

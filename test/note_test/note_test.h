@@ -51,4 +51,10 @@ void test_update_envelope(void **state);
  */
 void test_note_fill_buffer(void **state);
 
+/**
+ * \fn void test_get_freq_from_note_nbr(void **state)
+ * \brief Function to test get_freq_from_note_nbr function
+ */
+void test_get_freq_from_note_nbr(void **state);
+
 #endif //AUDIO_SYNTH_NOTE_TEST_H

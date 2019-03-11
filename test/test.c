@@ -24,7 +24,8 @@ int main(void) {
         cmocka_unit_test_setup_teardown(test_note_on, setup_note, teardown_note),
         cmocka_unit_test_setup_teardown(test_note_off, setup_note, teardown_note),
         cmocka_unit_test_setup_teardown(test_update_envelope, setup_note, teardown_note),
-        cmocka_unit_test_setup_teardown(test_note_fill_buffer, setup_note, teardown_note)
+        cmocka_unit_test_setup_teardown(test_note_fill_buffer, setup_note, teardown_note),
+        cmocka_unit_test(test_get_freq_from_note_nbr)
     };
 
     return cmocka_run_group_tests(tests, NULL, NULL);

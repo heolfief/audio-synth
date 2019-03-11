@@ -8,6 +8,15 @@
 
 #include "note.h"
 
+
+Uint16 get_freq_from_note_nbr(Sint8 note_nbr, Uint16 ref_freq)
+{
+    static const double chromatic_ratio = 1.059463094359295264562;
+
+    // Calculate actual frequency based on note number, from reference frequency
+    return (Uint16)(ref_freq * pow(chromatic_ratio, note_nbr));
+}
+
 int note_on(Note *n)
 {
     if(n == NULL)

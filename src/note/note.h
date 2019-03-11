@@ -41,6 +41,17 @@ typedef struct{
 }Note;
 
 /**
+ * \fn Uint16 get_freq_from_note_nbr(Sint8 note_nbr, Uint16 ref_freq)
+ * \brief Function to calculate actual frequency of a note based on the number (ID) of a note, relative to a reference note
+ *
+ * \param note_nbr The number of the note
+ * \param ref_nbr The reference frequency of the note number 0
+ *
+ * \return The frequency of the note
+ */
+Uint16 get_freq_from_note_nbr(Sint8 note_nbr, Uint16 ref_freq);
+
+/**
  * \fn int note_on(Note *n)
  * \brief Function to turn on a note
  *

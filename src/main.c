@@ -129,7 +129,7 @@ int main(int argc, char *argv[])
     sys_param->osc3->onoff   = ON;
 
     // Each time oscillator parameters changed, this function needs to be called
-    int re = copy_osc_sys_param_to_notes_osc(sys_param, note_array);
+    copy_osc_sys_param_to_notes_osc(sys_param, note_array);
 
 
     // Hard coded note data, will be changed by reading MIDI files in the future
