@@ -44,11 +44,19 @@ void test_note_on(void **state)
     Note *n = *state;
 
     n->onoff = OFF;
+    n->master_onoff = OFF;
+    n->lifetime = 1;
+    n->deathtime = 1;
+    n->env_amp = 1;
 
     int return_value = note_on(n);
 
     assert_int_equal(return_value, 0);
     assert_int_equal(n->onoff, ON);
+    assert_int_equal(n->master_onoff, ON);
+    assert_int_equal(n->lifetime, 0);
+    assert_int_equal(n->deathtime, 0);
+    assert_int_equal(n->env_amp, 0);
 
     return_value = note_on(NULL);
 
@@ -133,28 +141,30 @@ void test_note_fill_buffer(void **state)
 
     return_value = note_fill_buffer(n, TEST_AUDIO_BUFF_SIZE, &env, TEST_SAMPLE_RATE, 0);
     assert_int_equal(return_value, 0);
-    assert_int_equal(n->lifetime, TEST_AUDIO_BUFF_SIZE-1);
+    assert_int_equal(n->lifetime, TEST_AUDIO_BUFF_SIZE);
 }
 
 void test_get_freq_from_note_nbr(void **state)
 {
-    assert_int_equal(get_freq_from_note_nbr(-15,440),184);
-    assert_int_equal(get_freq_from_note_nbr(-5,440),329);
-    assert_int_equal(get_freq_from_note_nbr(-2,440),391);
-    assert_int_equal(get_freq_from_note_nbr(-1,440),415);
-    assert_int_equal(get_freq_from_note_nbr(0,440),440);
-    assert_int_equal(get_freq_from_note_nbr(1,440),466);
-    assert_int_equal(get_freq_from_note_nbr(2,440),493);
-    assert_int_equal(get_freq_from_note_nbr(5,440),587);
-    assert_int_equal(get_freq_from_note_nbr(15,440),1046);
+    int delta = 2; // maximum authorized delta of frequency
 
-    assert_int_equal(get_freq_from_note_nbr(-15,2217),932);
-    assert_int_equal(get_freq_from_note_nbr(-5,2217),1660);
-    assert_int_equal(get_freq_from_note_nbr(-2,2217),1975);
-    assert_int_equal(get_freq_from_note_nbr(-1,2217),2092);
-    assert_int_equal(get_freq_from_note_nbr(0,2217),2217);
-    assert_int_equal(get_freq_from_note_nbr(1,2217),2348);
-    assert_int_equal(get_freq_from_note_nbr(2,2217),2488);
-    assert_int_equal(get_freq_from_note_nbr(5,2217),2959);
-    assert_int_equal(get_freq_from_note_nbr(15,2217),5272);
+    assert_in_range(get_freq_from_note_nbr(-15,440),184-delta,184+delta);
+    assert_in_range(get_freq_from_note_nbr(-5,440),329-delta,329+delta);
+    assert_in_range(get_freq_from_note_nbr(-2,440),391-delta,391+delta);
+    assert_in_range(get_freq_from_note_nbr(-1,440),415-delta,415+delta);
+    assert_in_range(get_freq_from_note_nbr(0,440),440-delta,440+delta);
+    assert_in_range(get_freq_from_note_nbr(1,440),466-delta,466+delta);
+    assert_in_range(get_freq_from_note_nbr(2,440),493-delta,493+delta);
+    assert_in_range(get_freq_from_note_nbr(5,440),587-delta,587+delta);
+    assert_in_range(get_freq_from_note_nbr(15,440),1046-delta,1046+delta);
+
+    assert_in_range(get_freq_from_note_nbr(-15,2217),932-delta,932+delta);
+    assert_in_range(get_freq_from_note_nbr(-5,2217),1660-delta,1660+delta);
+    assert_in_range(get_freq_from_note_nbr(-2,2217),1975-delta,1975+delta);
+    assert_in_range(get_freq_from_note_nbr(-1,2217),2092-delta,2092+delta);
+    assert_in_range(get_freq_from_note_nbr(0,2217),2217-delta,2217+delta);
+    assert_in_range(get_freq_from_note_nbr(1,2217),2348-delta,2348+delta);
+    assert_in_range(get_freq_from_note_nbr(2,2217),2488-delta,2488+delta);
+    assert_in_range(get_freq_from_note_nbr(5,2217),2959-delta,2959+delta);
+    assert_in_range(get_freq_from_note_nbr(15,2217),5272-delta,5275+delta);
 }

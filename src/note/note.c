@@ -24,7 +24,10 @@ int note_on(Note *n)
         print_error("Note parameter is NULL");
         return -1;
     }
-
+    n->lifetime = 0;
+    n->deathtime = 0;
+    n->env_amp = 0;
+    n->master_onoff = ON;
     n->onoff = ON;
 
     return 0;
@@ -88,14 +91,6 @@ int update_envelope(Note *n, const Envelope *env)
     {
         print_error("Envelope parameter 'sustain' is out of range");
         return -1;
-    }
-
-    if(n->onoff == ON && n->master_onoff == OFF)                        // If note just started
-    {
-        n->master_onoff = ON;
-        n->lifetime = 0;                                                // Reset lifetime
-        n->deathtime = 0;                                               // Reset deathtime
-        n->env_amp = 0;
     }
 
     if(n->master_onoff == ON)

@@ -5,6 +5,7 @@
 
 #include "oscillator_test/osc_test.h"
 #include "note_test/note_test.h"
+#include "note_test/polyphony_test.h"
 
 int main(void) {
     const struct CMUnitTest tests[] =
@@ -25,7 +26,11 @@ int main(void) {
         cmocka_unit_test_setup_teardown(test_note_off, setup_note, teardown_note),
         cmocka_unit_test_setup_teardown(test_update_envelope, setup_note, teardown_note),
         cmocka_unit_test_setup_teardown(test_note_fill_buffer, setup_note, teardown_note),
-        cmocka_unit_test(test_get_freq_from_note_nbr)
+        cmocka_unit_test(test_get_freq_from_note_nbr),
+
+        //Polyphony tests
+        cmocka_unit_test_setup_teardown(test_find_free_note, setup_polyphony, teardown_polyphony),
+        cmocka_unit_test_setup_teardown(test_polyphony_fill_buffer, setup_polyphony, teardown_polyphony)
     };
 
     return cmocka_run_group_tests(tests, NULL, NULL);
