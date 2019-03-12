@@ -12,23 +12,25 @@
 #include <SDL2/SDL_stdinc.h>
 #include "../note/note.h"
 
+#define POLYPHONY_MAX 10
+
 #define print_error(s){fprintf(stderr, "%s : func %s at %s (%d)\n", s, __func__, __FILE__, __LINE__); }
 
 typedef Note*   Polyphony;    // Polyphony is an array of Note
 typedef Sint16* Audio_Buffer;
 
 /**
- * \fn int find_free_note(Polyphony p)
+ * \fn int find_free_note(Polyphony *p)
  * \brief Function to find a note which is not used (=OFF) in Polyphony
  *
  * \param p The Polyphony array
  *
  * \return The index of the note in the Polyphony array if found, -1 otherwise
  */
-int find_free_note(Polyphony p[]);
+int find_free_note(Polyphony *p);
 
 /**
- * \fn int polyphony_fill_buffer(Polyphony p[], Uint16 buffer_length, const Envelope *env, Uint64 sample_rate, Uint64 phase)
+ * \fn int polyphony_fill_buffer(Polyphony *p, Uint16 buffer_length, const Envelope *env, Uint64 sample_rate, Uint64 phase)
  * \brief Function to fill Polyphony array audio buffer with all the notes buffers.
  *
  * Volume of each note depends on the number of active notes, to keep audio amplitude within the data range
@@ -42,7 +44,7 @@ int find_free_note(Polyphony p[]);
  *
  * \return 0 if everything went OK, -1 otherwise
  */
-int polyphony_fill_buffer(Audio_Buffer audio_buff, Polyphony p[], Uint16 buffer_length, const Envelope *env, Uint64 sample_rate, Uint64 phase);
+int polyphony_fill_buffer(Audio_Buffer audio_buff, Polyphony *p, Uint16 buffer_length, const Envelope *env, Uint64 sample_rate, Uint64 phase);
 
 /**
  * \fn int alloc_polyphony(Polyphony p, Uint16 buff_nb_samples)
@@ -55,14 +57,14 @@ int polyphony_fill_buffer(Audio_Buffer audio_buff, Polyphony p[], Uint16 buffer_
 Polyphony *alloc_polyphony(Uint16 buff_nb_samples);
 
 /**
- * \fn int free_polyphony(Polyphony p[])
+ * \fn int free_polyphony(Polyphony *p)
  * \brief Function to free memory of a polyphony
  *
  * \param p The polyphony array to free
  *
  * \return 0
  */
-int free_polyphony(Polyphony p[]);
+int free_polyphony(Polyphony *p);
 
 /**
  * \fn Note_Buffer alloc_audio_buffer(Uint16 buff_nb_samples)
