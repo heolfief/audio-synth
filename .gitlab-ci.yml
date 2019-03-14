@@ -9,7 +9,7 @@ build:
   # instead of calling g++ directly you can also use some build toolkit like make
   # install the necessary build tools when needed
   before_script: 
-    - apt update && apt -y install make autoconf && apt -y install cmake 
+    - apt update && apt -y install make autoconf && apt -y install cmake && apt -y install lcov
   script: 
     - ./build.sh
   after_script:
@@ -35,3 +35,10 @@ test:
   stage: test
   script:
     - ./test.sh
+
+# run code coverage report
+coverage:
+  stage: deploy
+  script:
+    - ./coverage.sh
+    - lcov --list build/run/coverage_clean.info

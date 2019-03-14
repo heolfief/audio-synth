@@ -10,5 +10,8 @@ lcov --remove build/run/coverage.info $PWD'/test/*' -o build/run/coverage_clean.
 genhtml build/run/coverage_clean.info --output-directory doc/coverage
 echo -e "${BLUE}\nDone${NC}"
 echo -e "Please open doc/coverage/index.html to see result\n"
-echo -e "Opening doc/coverage/index.html with default browser\n"
-xdg-open doc/coverage/index.html
+if [ $# -eq 0 ]; then
+    echo -e "Opening doc/coverage/index.html with default browser\n"
+    xdg-open doc/coverage/index.html
+    exit 1
+fi
