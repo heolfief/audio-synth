@@ -38,4 +38,4 @@ coverage:
   stage: deploy
   script:
     - ./coverage.sh -a
-    - lcov --list build/run/coverage_clean.info
+    - lcov --list build/run/coverage_clean.info >1>&2
