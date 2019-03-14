@@ -9,7 +9,7 @@ build:
   # instead of calling g++ directly you can also use some build toolkit like make
   # install the necessary build tools when needed
   before_script: 
-    - apt update && apt -y install make autoconf && apt -y install cmake 
+    - apt update && apt -y install make autoconf && apt -y install cmake && apt -y install lcov
   script: 
     - ./build.sh
   after_script:
@@ -22,16 +22,20 @@ build:
     paths:
       - bin/audio_synth
       - bin/audio_synth_test
+      - build/run
   cache:
     paths:
       - bin/
-  # depending on your build setup it's most likely a good idea to cache outputs to reduce the build time
-  # cache:
-  #   paths:
-  #     - "*.o"
 
 # run tests using the binary built before
 test:
   stage: test
   script:
     - ./test.sh
+
+# run code coverage report
+coverage:
+  stage: deploy
+  script:
+    - ./coverage.sh -a
+    - lcov --list build/run/coverage_clean.info 1>&2
