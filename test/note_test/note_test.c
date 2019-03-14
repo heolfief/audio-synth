@@ -85,7 +85,7 @@ void test_note_off(void **state)
 void test_update_envelope(void **state)
 {
     Note *n = *state;
-    Envelope env = {.attack = 4, .decay =2, .sustain =0.5, .release =2};
+    Envelope env = {.attack = 4.0/TEST_SAMPLE_RATE, .decay =2.0/TEST_SAMPLE_RATE, .sustain =0.5, .release =2.0/TEST_SAMPLE_RATE};
     int return_value=-1;
 
     double env_known_values[15]= {0,0.25,0.5,0.75,1,0.75,0.5,0.5,0.5,0.5,0.5,0.25,0,0,0};
@@ -98,7 +98,7 @@ void test_update_envelope(void **state)
 
     for(int sample = 0; sample < 15; ++sample)
     {
-        return_value = update_envelope(n,&env);
+        return_value = update_envelope(n,&env, TEST_SAMPLE_RATE);
         assert_int_equal(return_value, 0);
 
         if(sample == 10)note_off(n);
@@ -109,19 +109,19 @@ void test_update_envelope(void **state)
 
     // Out of range test
     env.sustain = -0.2;
-    return_value = update_envelope(n,&env);
+    return_value = update_envelope(n,&env, TEST_SAMPLE_RATE);
     assert_int_equal(return_value, -1);
 
     // Out of range test
     env.sustain = 1.2;
-    return_value = update_envelope(n,&env);
+    return_value = update_envelope(n,&env, TEST_SAMPLE_RATE);
     assert_int_equal(return_value, -1);
 }
 
 void test_note_fill_buffer(void **state)
 {
     Note *n = *state;
-    Envelope env = {.attack = 4, .decay =2, .sustain =0.5, .release =2};
+    Envelope env = {.attack = 4.0/TEST_SAMPLE_RATE, .decay =2.0/TEST_SAMPLE_RATE, .sustain =0.5, .release =2.0/TEST_SAMPLE_RATE};
     int return_value=0;
 
     n->freq = 440;

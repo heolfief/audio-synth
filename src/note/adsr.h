@@ -18,10 +18,10 @@
  * An ADSR envelope is defined with four parameters : attack, decay, sustain, release
  */
 typedef struct{
-    Uint64        attack;        /*!<the time for initial run-up of level from nil to peak in sample */
-    Uint64        decay;         /*!<the time for the subsequent run down from the attack level to the designated sustain level in samples */
+    double        attack;        /*!<the time for initial run-up of level from nil to peak in seconds */
+    double        decay;         /*!<the time for the subsequent run down from the attack level to the designated sustain level in seconds */
     double        sustain;       /*!<the level during the main sequence of the sound's duration, until the note is off (range from 0 to 1)*/
-    Uint64        release;       /*!<the time taken for the level to decay from the sustain level to zero after the note is off in samples*/
+    double        release;       /*!<the time taken for the level to decay from the sustain level to zero after the note is off in seconds*/
 }Envelope;
 
 #endif //AUDIO_SYNTH_ADSR_H

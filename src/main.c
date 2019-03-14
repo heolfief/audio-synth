@@ -1,6 +1,6 @@
 /**
  * \file main.c
- * \brief Main programm
+ * \brief Main program
  *
  */
 
@@ -10,15 +10,14 @@
 #include <stdio.h>
 
 #include "sys_param/sys_param.h"
-#include "oscillator/osc.h"
-#include "note/note.h"
 #include "note/polyphony.h"
 #include "gui/gui.h"
+#include "audio/audio.h"
 
-#define SAMPLE_RATE 48000
-#define AUDIO_BUFF_SIZE 1024
+#define print_error(s){fprintf(stderr, "%s : func %s at %s (%d)\n", s, __func__, __FILE__, __LINE__); }
 
-// Global notes variable
+
+// Global audio variable
 Polyphony *note_array;
 Audio_Buffer master_audio;
 
@@ -27,89 +26,50 @@ Sys_param* sys_param = NULL;
 
 
 
-
+// JUST A TEST
 Uint16 mario_freq[7]={660, 660, 660, 510, 660, 770, 380};
 Uint16 mario_delay[7]={80, 200, 250, 80, 250, 450, 450};
-
-/**
- *  \fn void func_callback(void *unused, Uint8 *stream, int len)
- *  \brief This function is called when the audio device needs more data.
- *
- *  \param userdata An application-specific parameter saved in
- *                  the SDL_AudioSpec structure
- *  \param stream A pointer to the audio data buffer.
- *  \param len    The length of that buffer in bytes.
- *
- *  Once the callback returns, the buffer will no longer be valid.
- *  Stereo samples are stored in a LRLRLR ordering.
- *
- *  You can choose to avoid callbacks and use SDL_QueueAudio() instead, if
- *  you like. Just open your audio device with a NULL callback.
- */
-void func_callback(void *unused, Uint8 *stream, int len)
-{
-    static Uint64 phase;
-
-    memset(stream, 0, (size_t)len);         // Empty buffer
-    Sint16 *s_stream = (Sint16*) stream;    // Cast buffer data to signed 16 bits
-    Uint16 s_len = (Uint16)len/(Uint16)2;   // data are 16bits=2*8bits, so (len/2) 16 bits data in the buffer
-
-    polyphony_fill_buffer(master_audio, note_array, s_len, sys_param->env, SAMPLE_RATE, phase);
-
-    for(Uint16 sample = 0; sample < s_len; ++sample)
-    {
-        s_stream[sample] = master_audio[sample];
-    }
-
-
-    phase = (phase + len/2)%SAMPLE_RATE;    // Update phase based on play position
-}
-
-
 
 
 int main(int argc, char *argv[])
 {
-    if(SDL_Init(SDL_INIT_EVERYTHING)<0)
-    {
-        fprintf(stderr, "Error initializing SDL\n");
-        exit(EXIT_FAILURE);
-    }
-
     SDL_AudioSpec as;
 
-    as.freq = SAMPLE_RATE;
-    as.format = AUDIO_S16LSB;               // Audio samples are signed 16 bits
-    as.samples = AUDIO_BUFF_SIZE;
-    as.callback = func_callback;            // Function that fills the audio buffer, called once it is empty
-    as.userdata = NULL;
-    as.channels = 1;                        // Mono audio
+    sys_param = alloc_sys_param();
+    if(sys_param == NULL) exit(EXIT_FAILURE);
 
-
-    if (SDL_OpenAudio(&as, NULL)<0)
-    {
-        fprintf(stderr, "Unable to open audio..");
-        exit(EXIT_FAILURE);
-    }
+    // Default parameters. If changed, memory allocation needs to be redone
+    sys_param->sample_rate         = 48000;
+    sys_param->audio_buffer_length = 1024;
 
 
     // Memory allocation
-    note_array = alloc_polyphony(AUDIO_BUFF_SIZE);
+    note_array = alloc_polyphony(sys_param->audio_buffer_length);
     if(note_array == NULL) exit(EXIT_FAILURE);
 
-    master_audio = alloc_audio_buffer(AUDIO_BUFF_SIZE);
+    master_audio = alloc_audio_buffer(sys_param->audio_buffer_length);
     if(master_audio == NULL) exit(EXIT_FAILURE);
 
-    sys_param = alloc_sys_param(AUDIO_BUFF_SIZE);
-    if(sys_param == NULL) exit(EXIT_FAILURE);
+    set_audio_spec(&as);
 
+    // SDL initialisations
+    if(SDL_Init(SDL_INIT_EVERYTHING) < 0)
+    {
+        print_error("Error initializing SDL");
+        exit(EXIT_FAILURE);
+    }
+    if (SDL_OpenAudio(&as, NULL) < 0)
+    {
+        print_error("Unable to open audio");
+        exit(EXIT_FAILURE);
+    }
 
 
     // Hard coded system parameters, will be changed by the GUI in the future
-    sys_param->env->attack   = 200;
-    sys_param->env->decay    = 1000;
+    sys_param->env->attack   = 0.001;
+    sys_param->env->decay    = 0.01;
     sys_param->env->sustain  = 0.5;
-    sys_param->env->release  = 10000;
+    sys_param->env->release  = 0.2;
 
     sys_param->osc1->amp     = 32000;
     sys_param->osc1->wave    = SQR;

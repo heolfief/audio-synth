@@ -22,10 +22,12 @@
  *
  */
 typedef struct{
-    Oscillator*   osc1;       /*!<the first oscillator */
-    Oscillator*   osc2;       /*!<the second oscillator */
-    Oscillator*   osc3;       /*!<the third oscillator */
-    Envelope*     env;        /*!<the sound envelope */
+    Uint16        sample_rate;                            /*!<the sample rate of the audio system */
+    Uint16        audio_buffer_length;                    /*!<the length of the audio buffer of the audio system */
+    Oscillator*   osc1;                                   /*!<the first oscillator */
+    Oscillator*   osc2;                                   /*!<the second oscillator */
+    Oscillator*   osc3;                                   /*!<the third oscillator */
+    Envelope*     env;                                    /*!<the sound envelope */
 }Sys_param;
 
 
@@ -46,7 +48,7 @@ int copy_osc_sys_param_to_notes_osc(Sys_param *sys_param_to_copy, Polyphony p[])
  *
  * \return the allocated Sys_param
  */
-Sys_param *alloc_sys_param(Uint16 buff_nb_samples);
+Sys_param *alloc_sys_param();
 
 /**
  * \fn int free_sys_param(Sys_param *sys_param_to_free)

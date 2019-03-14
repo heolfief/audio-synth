@@ -93,10 +93,11 @@ int note_fill_buffer(Note *n, Uint16 buffer_length, const Envelope *env, Uint64 
  *
  * \param n The note object to update envelope to
  * \param env The envelope object
+ * \param sample_rate The sample rate of the system
  *
  * \return 0 if everything went OK, -1 otherwise
  */
-int update_envelope(Note *n, const Envelope *env);
+int update_envelope(Note *n, const Envelope *env, Uint16 sample_rate);
 
 /**
  * \fn Note *alloc_note(Uint16 buff_nb_samples)

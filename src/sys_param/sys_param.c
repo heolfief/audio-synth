@@ -45,8 +45,11 @@ int copy_osc_sys_param_to_notes_osc(Sys_param *sys_param_to_copy, Polyphony p[])
     return 0;
 }
 
-Sys_param *alloc_sys_param(Uint16 buff_nb_samples)
+Sys_param *alloc_sys_param()
 {
+    Uint16 buff_nb_samples = 1;   // Not needed as sys param oscillators are just used to store parameters,
+                                  // therefore their buffers are useless
+
     Sys_param *sp = (Sys_param*) malloc(sizeof(Sys_param));
     if(sp == NULL)
     {

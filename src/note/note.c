@@ -77,7 +77,7 @@ int note_fill_buffer(Note *n, Uint16 buffer_length, const Envelope *env, Uint64 
         n->lifetime++;
 
         // Process the envelope calculation for the sample
-        update_envelope(n,env);
+        update_envelope(n,env,sample_rate);
 
         // Apply the envelope
         n->buffer[sample] = (Sint16)((double)n->buffer[sample] * n->env_amp);
@@ -85,8 +85,13 @@ int note_fill_buffer(Note *n, Uint16 buffer_length, const Envelope *env, Uint64 
     return 0;
 }
 
-int update_envelope(Note *n, const Envelope *env)
+int update_envelope(Note *n, const Envelope *env, Uint16 sample_rate)
 {
+    // Convert times to number of samples based on sample rate
+    int samples_attack  = (int)(env->attack  * (double)sample_rate);
+    int samples_decay   = (int)(env->decay   * (double)sample_rate);
+    int samples_release = (int)(env->release * (double)sample_rate);
+
     if(env->sustain < 0 || env->sustain > 1)
     {
         print_error("Envelope parameter 'sustain' is out of range");
@@ -95,24 +100,24 @@ int update_envelope(Note *n, const Envelope *env)
 
     if(n->master_onoff == ON)
     {
-        if(n->lifetime >= 0 && n->lifetime < env->attack)               // If note is in attack phase
+        if(n->lifetime >= 0 && n->lifetime < samples_attack)               // If note is in attack phase
         {
-            n->env_amp = (double)n->lifetime / (double)env->attack;     // Linear increase from 0 to 1
+            n->env_amp = (double)n->lifetime / (double)samples_attack;     // Linear increase from 0 to 1
         }
 
-        if(n->lifetime >= env->attack && n->lifetime < (env->decay + env->attack))      // If note is in decay phase
+        if(n->lifetime >= samples_attack && n->lifetime < (samples_decay + samples_attack))      // If note is in decay phase
         {
-            n->env_amp = (double)1.0 + ((double)(n->lifetime - env->attack) * ((env->sustain - (double)1.0) / (double)env->decay));     // Linear decrease from 1 to sustain
+            n->env_amp = (double)1.0 + ((double)(n->lifetime - samples_attack) * ((env->sustain - (double)1.0) / (double)samples_decay));     // Linear decrease from 1 to sustain
         }
 
-        if(n->lifetime >= (env->decay + env->attack) && n->onoff != OFF)// If note is in sustain phase
+        if(n->lifetime >= (samples_decay + samples_attack) && n->onoff != OFF)// If note is in sustain phase
         {
             n->env_amp = env->sustain;                                  // Constant amplitude
         }
 
         if(n->onoff == OFF)                                             // If note is in release phase
         {
-            n->env_amp = - (env->sustain / (double)env->release) * (double)(n->lifetime - n->deathtime) + env->sustain;
+            n->env_amp = - (env->sustain / (double)samples_release) * (double)(n->lifetime - n->deathtime) + env->sustain;
 
             if(n->env_amp <= 0)                                         // When env_amp is zero, put master_onoff OFF
             {
