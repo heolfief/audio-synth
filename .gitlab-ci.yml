@@ -40,5 +40,5 @@ test:
 coverage:
   stage: deploy
   script:
-    - ./coverage.sh
+    - ./coverage.sh -a
     - lcov --list build/run/coverage_clean.info
