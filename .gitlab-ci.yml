@@ -22,13 +22,10 @@ build:
     paths:
       - bin/audio_synth
       - bin/audio_synth_test
+      - build/run
   cache:
     paths:
       - bin/
-  # depending on your build setup it's most likely a good idea to cache outputs to reduce the build time
-  # cache:
-  #   paths:
-  #     - "*.o"
 
 # run tests using the binary built before
 test:
