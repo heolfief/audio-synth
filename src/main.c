@@ -52,6 +52,7 @@ int main(int argc, char *argv[])
 
     set_audio_spec(&as);
 
+#ifndef VALGRIND
     // SDL initialisations
     if(SDL_Init(SDL_INIT_EVERYTHING) < 0)
     {
@@ -116,6 +117,8 @@ int main(int argc, char *argv[])
 
     SDL_CloseAudio();
     SDL_Quit();
+
+#endif
 
     // Free all the data
     free_polyphony(note_array);
