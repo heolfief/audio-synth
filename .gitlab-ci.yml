@@ -22,6 +22,7 @@ build:
     paths:
       - bin/audio_synth
       - bin/audio_synth_test
+      - bin/audio_synth_valgrind
       - build/run
   cache:
     paths:
