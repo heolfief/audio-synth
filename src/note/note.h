@@ -13,8 +13,7 @@
 #include <SDL2/SDL_stdinc.h>
 #include "../oscillator/osc.h"
 #include "../note/adsr.h"
-
-#define print_error(s){fprintf(stderr, "%s : func %s at %s (%d)\n", s, __func__, __FILE__, __LINE__); }
+#include "../system/error_handler.h"
 
 typedef Sint16 *Note_Buffer;
 

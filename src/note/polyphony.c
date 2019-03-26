@@ -12,14 +12,14 @@ int find_free_note(Polyphony *p)
 {
     if(p == NULL)
     {
-        print_error("Parameter p is NULL");
+        sys_print_error("Parameter p is NULL");
         return -1;
     }
     for(int i = 0; i < POLYPHONY_MAX; ++i)
     {
         if(p[i]->master_onoff == OFF)return i;
     }
-    print_error("No free note found for polyphony");
+    sys_print_error("No free note found for polyphony");
     return -1;
 }
 
@@ -30,7 +30,7 @@ int polyphony_fill_buffer(Audio_Buffer audio_buff, Polyphony *p, Uint16 buffer_l
 
     if(p == NULL)
     {
-        print_error("Note parameter is NULL");
+        sys_print_error("Note parameter is NULL");
         return -1;
     }
 
@@ -71,7 +71,7 @@ Polyphony *alloc_polyphony(Uint16 buff_nb_samples)
     note_array = (Polyphony*)calloc(POLYPHONY_MAX, sizeof(Polyphony));
     if(note_array == NULL)
     {
-        print_error("Memory allocation error");
+        sys_print_error("Memory allocation error");
         return NULL;
     }
 
@@ -80,7 +80,7 @@ Polyphony *alloc_polyphony(Uint16 buff_nb_samples)
         note_array[i] = alloc_note(buff_nb_samples);
         if(note_array[i] == NULL)
         {
-            print_error("Memory allocation error");
+            sys_print_error("Memory allocation error");
             return NULL;
         }
     }
@@ -102,7 +102,7 @@ Audio_Buffer alloc_audio_buffer(Uint16 buff_nb_samples)
     Audio_Buffer audio_buff = (Note_Buffer) calloc(buff_nb_samples, sizeof(Audio_Buffer));
     if(audio_buff == NULL)
     {
-        print_error("Memory allocation error");
+        sys_print_error("Memory allocation error");
         return NULL;
     }
 

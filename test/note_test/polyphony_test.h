@@ -9,6 +9,10 @@
 #ifndef AUDIO_SYNTH_POLYPHONY_TEST_H
 #define AUDIO_SYNTH_POLYPHONY_TEST_H
 
+#include <stdarg.h>
+#include <stddef.h>
+#include <setjmp.h>
+#include <cmocka.h>
 #include "note/polyphony.h"
 
 /**

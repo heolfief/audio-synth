@@ -5,11 +5,6 @@
  *
  * Here are implemented the test functions for the oscillator
  */
-#include <stdarg.h>
-#include <stddef.h>
-#include <setjmp.h>
-#include <cmocka.h>
-
 #include "osc_test.h"
 
 #define TEST_SAMPLE_RATE 48000

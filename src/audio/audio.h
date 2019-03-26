@@ -12,6 +12,7 @@
 #include <SDL2/SDL.h>
 #include "../sys_param/sys_param.h"
 #include "../note/polyphony.h"
+#include "../system/error_handler.h"
 
 /**
  *  \fn void func_callback(void *unused, Uint8 *stream, int len)

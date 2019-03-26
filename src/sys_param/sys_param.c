@@ -12,12 +12,12 @@ int copy_osc_sys_param_to_notes_osc(Sys_param *sys_param_to_copy, Polyphony p[])
 {
     if(sys_param_to_copy == NULL)
     {
-        print_error("sys_param_to_copy parameter is NULL");
+        sys_print_error("sys_param_to_copy parameter is NULL");
         return -1;
     }
     if(p == NULL)
     {
-        print_error("Polyphony parameter is NULL");
+        sys_print_error("Polyphony parameter is NULL");
         return -1;
     }
 
@@ -53,7 +53,7 @@ Sys_param *alloc_sys_param()
     Sys_param *sp = (Sys_param*) malloc(sizeof(Sys_param));
     if(sp == NULL)
     {
-        print_error("Memory allocation error");
+        sys_print_error("Memory allocation error");
         return NULL;
     }
 
@@ -68,7 +68,7 @@ Sys_param *alloc_sys_param()
     sp->env = (Envelope*)malloc(sizeof(Envelope));
     if(sp->env == NULL)
     {
-        print_error("Memory allocation error");
+        sys_print_error("Memory allocation error");
         return NULL;
     }
 

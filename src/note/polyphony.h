@@ -11,10 +11,9 @@
 
 #include <SDL2/SDL_stdinc.h>
 #include "../note/note.h"
+#include "../system/error_handler.h"
 
-#define POLYPHONY_MAX 10
-
-#define print_error(s){fprintf(stderr, "%s : func %s at %s (%d)\n", s, __func__, __FILE__, __LINE__); }
+#define POLYPHONY_MAX 100
 
 typedef Note*   Polyphony;    // Polyphony is an array of Note
 typedef Sint16* Audio_Buffer;

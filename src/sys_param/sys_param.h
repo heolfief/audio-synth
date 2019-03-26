@@ -12,8 +12,8 @@
 
 #include <SDL2/SDL_stdinc.h>
 #include "../note/polyphony.h"
+#include "../system/error_handler.h"
 
-#define print_error(s){fprintf(stderr, "%s : func %s at %s (%d)\n", s, __func__, __FILE__, __LINE__); }
 
 /**
  * \struct Sys_param

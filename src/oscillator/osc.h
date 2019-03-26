@@ -10,6 +10,8 @@
 #define AUDIO_SYNTH_OSC_H
 
 #include <SDL2/SDL_stdinc.h>
+#include <math.h>
+#include "../system/error_handler.h"
 
 #define OSC_AMP_MAX INT16_MAX
 
@@ -20,8 +22,6 @@
 #define DEFAULT_OSC_DUTY 50
 #define DEFAULT_OSC_ONOFF OFF
 
-
-#define print_error(s){fprintf(stderr, "%s : func %s at %s (%d)\n", s, __func__, __FILE__, __LINE__); }
 
 typedef Sint16 *Osc_Buffer;
 

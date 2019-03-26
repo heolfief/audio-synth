@@ -13,9 +13,7 @@
 #include "note/polyphony.h"
 #include "gui/gui.h"
 #include "audio/audio.h"
-
-#define print_error(s){fprintf(stderr, "%s : func %s at %s (%d)\n", s, __func__, __FILE__, __LINE__); }
-
+#include "system/error_handler.h"
 
 // Global audio variable
 Polyphony *note_array;
@@ -56,12 +54,12 @@ int main(int argc, char *argv[])
     // SDL initialisations
     if(SDL_Init(SDL_INIT_EVERYTHING) < 0)
     {
-        print_error("Error initializing SDL");
+        sys_print_error("Error initializing SDL");
         exit(EXIT_FAILURE);
     }
     if (SDL_OpenAudio(&as, NULL) < 0)
     {
-        print_error("Unable to open audio");
+        sys_print_error("Unable to open audio");
         exit(EXIT_FAILURE);
     }
 

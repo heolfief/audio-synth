@@ -11,6 +11,7 @@ add_executable(audio_synth_test test.c
         ../src/note/note.c ../src/note/note.h ../src/note/adsr.h
         ../src/note/polyphony.h ../src/note/polyphony.c
         ../src/oscillator/osc.h ../src/oscillator/osc.c
+        ../src/system/error_handler.h ../src/system/error_handler.c
 
         #Tests files
         oscillator_test/osc_test.c oscillator_test/osc_test.h

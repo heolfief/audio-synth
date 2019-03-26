@@ -10,6 +10,7 @@ set(SOURCE_FILES main.c
 		 gui/gui.c gui/gui.h
 		 sys_param/sys_param.c sys_param/sys_param.h
 		 audio/audio.c audio/audio.h
+         system/error_handler.c system/error_handler.h
 		 )
 
 add_executable(audio_synth ${SOURCE_FILES})

@@ -6,11 +6,6 @@
  * Here are implemented the test functions for the note
  */
 
-#include <stdarg.h>
-#include <stddef.h>
-#include <setjmp.h>
-#include <cmocka.h>
-
 #include "note_test.h"
 
 #define TEST_SAMPLE_RATE 48000

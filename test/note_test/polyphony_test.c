@@ -6,11 +6,6 @@
  * Here are implemented the test functions for polyphony
  */
 
-#include <stdarg.h>
-#include <stddef.h>
-#include <setjmp.h>
-#include <cmocka.h>
-
 #include "polyphony_test.h"
 
 #define TEST_SAMPLE_RATE 48000

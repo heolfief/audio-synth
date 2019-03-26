@@ -36,7 +36,7 @@ int set_audio_spec(SDL_AudioSpec *as)
 {
     if(as == NULL)
     {
-        print_error("AudioSpec parameter is NULL");
+        sys_print_error("AudioSpec parameter is NULL");
         return -1;
     }
     as->freq = sys_param->sample_rate;

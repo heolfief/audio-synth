@@ -6,11 +6,7 @@
  * Here are implemented the oscillator's related functions
  */
 
-#include <math.h>
-#include <SDL2/SDL_stdinc.h>
 #include "osc.h"
-
-#define print_error(s){fprintf(stderr, "%s : func %s at %s (%d)\n", s, __func__, __FILE__, __LINE__); }
 
 
 int osc_fill_buffer(const Oscillator *osc, Uint16 buffer_length, Uint64 sample_rate, Uint64 phase)
@@ -19,13 +15,13 @@ int osc_fill_buffer(const Oscillator *osc, Uint16 buffer_length, Uint64 sample_r
 
     if(osc == NULL)
     {
-        print_error("Osc parameter is NULL");
+        sys_print_error("Osc parameter is NULL");
         return -1;
     }
 
     if((osc->amp > OSC_AMP_MAX) || (osc->amp < 0))
     {
-        print_error("Osc amplitude passed maximum, risk of audio buffer overflow");
+        sys_print_error("Osc amplitude passed maximum, risk of audio buffer overflow");
         return -1;
     }
 
@@ -112,7 +108,7 @@ int osc_fill_buffer(const Oscillator *osc, Uint16 buffer_length, Uint64 sample_r
             break;
 
         default:
-            print_error("Waveform is unknown");
+            sys_print_error("Waveform is unknown");
             return -1; // if waveform is unknown
     }
     return 0;
@@ -134,7 +130,7 @@ Oscillator *alloc_osc(Uint16 buff_nb_samples)
     Oscillator* osc_allocated = (Oscillator*) malloc(sizeof(Oscillator));
     if(osc_allocated == NULL)
     {
-        print_error("Memory allocation error");
+        sys_print_error("Memory allocation error");
         return NULL;
     }
     osc_allocated->buffer = alloc_osc_buffer(buff_nb_samples);
@@ -157,7 +153,7 @@ Osc_Buffer alloc_osc_buffer(Uint16 buff_nb_samples)
     Osc_Buffer osc_buff = (Osc_Buffer) calloc(buff_nb_samples, sizeof(Osc_Buffer));
     if(osc_buff == NULL)
     {
-        print_error("Memory allocation error");
+        sys_print_error("Memory allocation error");
         return NULL;
     }
     return osc_buff;

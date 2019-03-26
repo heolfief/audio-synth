@@ -21,7 +21,7 @@ int note_on(Note *n)
 {
     if(n == NULL)
     {
-        print_error("Note parameter is NULL");
+        sys_print_error("Note parameter is NULL");
         return -1;
     }
     n->lifetime = 0;
@@ -37,7 +37,7 @@ int note_off(Note *n)
 {
     if(n == NULL)
     {
-        print_error("Note parameter is NULL");
+        sys_print_error("Note parameter is NULL");
         return -1;
     }
 
@@ -51,7 +51,7 @@ int note_fill_buffer(Note *n, Uint16 buffer_length, const Envelope *env, Uint64 
 {
     if(n == NULL)
     {
-        print_error("Note parameter is NULL");
+        sys_print_error("Note parameter is NULL");
         return -1;
     }
 
@@ -94,7 +94,7 @@ int update_envelope(Note *n, const Envelope *env, Uint16 sample_rate)
 
     if(env->sustain < 0 || env->sustain > 1)
     {
-        print_error("Envelope parameter 'sustain' is out of range");
+        sys_print_error("Envelope parameter 'sustain' is out of range");
         return -1;
     }
 
@@ -134,7 +134,7 @@ Note *alloc_note(Uint16 buff_nb_samples)
     Note *note_allocated = (Note*)malloc(sizeof(Note));
     if(note_allocated == NULL)
     {
-        print_error("Memory allocation error");
+        sys_print_error("Memory allocation error");
         return NULL;
     }
 
@@ -168,7 +168,7 @@ Note_Buffer alloc_note_buffer(Uint16 buff_nb_samples)
     Note_Buffer note_buff = (Note_Buffer) calloc(buff_nb_samples, sizeof(Note_Buffer));
     if(note_buff == NULL)
     {
-        print_error("Memory allocation error");
+        sys_print_error("Memory allocation error");
         return NULL;
     }
 

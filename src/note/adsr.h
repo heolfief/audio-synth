@@ -10,6 +10,7 @@
 #define AUDIO_SYNTH_ADSR_H
 
 #include <SDL2/SDL_stdinc.h>
+#include "../system/error_handler.h"
 
 /**
  * \struct Envelope
