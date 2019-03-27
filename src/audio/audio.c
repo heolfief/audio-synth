@@ -9,11 +9,11 @@
 #include "audio.h"
 
 // Global parameters defined in main.c
-extern Polyphony *note_array;
 extern Audio_Buffer master_audio;
 extern Sys_param* sys_param;
 
-void func_callback(void *unused, Uint8 *stream, int len)
+
+void func_callback(void *userdata, Uint8 *stream, int len)
 {
     static Uint64 phase;
 
@@ -21,7 +21,7 @@ void func_callback(void *unused, Uint8 *stream, int len)
     Sint16 *s_stream = (Sint16*) stream;    // Cast buffer data to signed 16 bits
     Uint16 s_len = (Uint16)len/(Uint16)2;   // data are 16bits=2*8bits, so (len/2) 16 bits data in the buffer
 
-    polyphony_fill_buffer(master_audio, note_array, s_len, sys_param->env, sys_param->sample_rate, phase);
+    synthesis_fill_buffer(phase);
 
     for(Uint16 sample = 0; sample < s_len; ++sample)
     {

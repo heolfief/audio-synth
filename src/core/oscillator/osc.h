@@ -11,7 +11,7 @@
 
 #include <SDL2/SDL_stdinc.h>
 #include <math.h>
-#include "../system/error_handler.h"
+#include "../../system/error_handler.h"
 
 #define OSC_AMP_MAX INT16_MAX
 

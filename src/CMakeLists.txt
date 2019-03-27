@@ -3,15 +3,15 @@ cmake_minimum_required(VERSION 3.2)
 find_package(SDL2 REQUIRED)
 include_directories(${SDL2_INCLUDE_DIRS})
 set(SOURCE_FILES main.c
-		 oscillator/osc.h oscillator/osc.c
-		 note/note.c note/note.h
-		 note/adsr.h
-		 note/polyphony.c note/polyphony.h
-		 gui/gui.c gui/gui.h
-		 sys_param/sys_param.c sys_param/sys_param.h
-		 audio/audio.c audio/audio.h
-         system/error_handler.c system/error_handler.h
-		 )
+		core/audio_core.c core/audio_core.h
+		core/oscillator/osc.h core/oscillator/osc.c
+		core/note/note.c core/note/note.h
+		core/note/adsr.h
+		core/note/polyphony.c core/note/polyphony.h
+		gui/gui.c gui/gui.h
+		sys_param/sys_param.c sys_param/sys_param.h
+		audio/audio.c audio/audio.h
+        system/error_handler.c system/error_handler.h)
 
 add_executable(audio_synth ${SOURCE_FILES})
 add_executable(audio_synth_valgrind ${SOURCE_FILES})

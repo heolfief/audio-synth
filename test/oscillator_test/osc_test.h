@@ -13,7 +13,7 @@
 #include <stddef.h>
 #include <setjmp.h>
 #include <cmocka.h>
-#include "oscillator/osc.h"
+#include "core/oscillator/osc.h"
 
 /**
  * \fn int setup_osc(void **state)

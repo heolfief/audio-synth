@@ -11,7 +11,7 @@
 #define AUDIO_SYNTH_SYS_PARAM_H
 
 #include <SDL2/SDL_stdinc.h>
-#include "../note/polyphony.h"
+#include "../core/note/polyphony.h"
 #include "../system/error_handler.h"
 
 
