@@ -10,19 +10,16 @@
 #include <stdio.h>
 
 #include "sys_param/sys_param.h"
-#include "note/polyphony.h"
+#include "core/note/polyphony.h"
 #include "gui/gui.h"
 #include "audio/audio.h"
 #include "system/error_handler.h"
 
-// Global audio variable
-Polyphony *note_array;
-Audio_Buffer master_audio;
+// Global audio variable defined in audio_core.h [TEMPORARY, JUST NEEDED FOR HARDCODING OF MARIO SOUND]
+extern Polyphony *note_array;
 
 // Global system parameters changed by the GUI
 Sys_param* sys_param = NULL;
-
-
 
 // JUST A TEST
 Uint16 mario_freq[7]={660, 660, 660, 510, 660, 770, 380};
@@ -41,28 +38,28 @@ int main(int argc, char *argv[])
     sys_param->audio_buffer_length = 1024;
 
 
-    // Memory allocation
-    note_array = alloc_polyphony(sys_param->audio_buffer_length);
-    if(note_array == NULL) exit(EXIT_FAILURE);
+    // Audio core init
+    if(init_core() != 0){
+        sys_print_error("Failed initializing audio core");
+        exit(EXIT_FAILURE);
+    }
 
-    master_audio = alloc_audio_buffer(sys_param->audio_buffer_length);
-    if(master_audio == NULL) exit(EXIT_FAILURE);
+#ifndef VALGRIND
 
     set_audio_spec(&as);
 
-#ifndef VALGRIND
     // SDL initialisations
     if(SDL_Init(SDL_INIT_EVERYTHING) < 0)
     {
-        sys_print_error("Error initializing SDL");
-        exit(EXIT_FAILURE);
-    }
-    if (SDL_OpenAudio(&as, NULL) < 0)
-    {
-        sys_print_error("Unable to open audio");
+        sys_print_error("Failed initializing SDL");
         exit(EXIT_FAILURE);
     }
 
+    if(SDL_OpenAudio(&as, NULL) != 0)
+    {
+        sys_print_error("Failed opening audio");
+        exit(EXIT_FAILURE);
+    }
 
     // Hard coded system parameters, will be changed by the GUI in the future
     sys_param->env->attack   = 0.001;
@@ -119,8 +116,7 @@ int main(int argc, char *argv[])
 #endif
 
     // Free all the data
-    free_polyphony(note_array);
-    free_audio_buffer(master_audio);
+    quit_core();
     free_sys_param(sys_param);
 
     return 0;

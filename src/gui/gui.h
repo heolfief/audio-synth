@@ -10,7 +10,7 @@
 #define AUDIO_SYNTH_GUI_H
 
 #include <SDL2/SDL_stdinc.h>
-#include "../oscillator/osc.h"
+#include "../core/oscillator/osc.h"
 #include "../system/error_handler.h"
 
 

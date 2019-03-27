@@ -8,9 +8,9 @@ find_library(CMOCKA_LIBRARY cmocka HINTS /lib)
 
 add_executable(audio_synth_test test.c
         #Sources files
-        ../src/note/note.c ../src/note/note.h ../src/note/adsr.h
-        ../src/note/polyphony.h ../src/note/polyphony.c
-        ../src/oscillator/osc.h ../src/oscillator/osc.c
+        ../src/core/note/note.c ../src/core/note/note.h ../src/core/note/adsr.h
+        ../src/core/note/polyphony.h ../src/core/note/polyphony.c
+        ../src/core/oscillator/osc.h ../src/core/oscillator/osc.c
         ../src/system/error_handler.h ../src/system/error_handler.c
 
         #Tests files

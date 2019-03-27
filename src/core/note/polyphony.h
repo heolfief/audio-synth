@@ -11,7 +11,7 @@
 
 #include <SDL2/SDL_stdinc.h>
 #include "../note/note.h"
-#include "../system/error_handler.h"
+#include "../../system/error_handler.h"
 
 #define POLYPHONY_MAX 100
 

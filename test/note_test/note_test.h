@@ -13,7 +13,7 @@
 #include <stddef.h>
 #include <setjmp.h>
 #include <cmocka.h>
-#include "note/note.h"
+#include "core/note/note.h"
 
 /**
  * \fn int setup_note(void **state)

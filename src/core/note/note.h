@@ -13,7 +13,7 @@
 #include <SDL2/SDL_stdinc.h>
 #include "../oscillator/osc.h"
 #include "../note/adsr.h"
-#include "../system/error_handler.h"
+#include "../../system/error_handler.h"
 
 typedef Sint16 *Note_Buffer;
 

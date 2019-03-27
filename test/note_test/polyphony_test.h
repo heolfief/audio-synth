@@ -13,7 +13,7 @@
 #include <stddef.h>
 #include <setjmp.h>
 #include <cmocka.h>
-#include "note/polyphony.h"
+#include "core/note/polyphony.h"
 
 /**
  * \fn int setup_polyphony(void **state)
