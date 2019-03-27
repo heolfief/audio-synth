@@ -11,8 +11,8 @@
 
 #include <SDL2/SDL.h>
 #include "../sys_param/sys_param.h"
-#include "../note/polyphony.h"
 #include "../system/error_handler.h"
+#include "../core/audio_core.h"
 
 /**
  *  \fn void func_callback(void *unused, Uint8 *stream, int len)
@@ -29,7 +29,7 @@
  *  You can choose to avoid callbacks and use SDL_QueueAudio() instead, if
  *  you like. Just open your audio device with a NULL callback.
  */
-void func_callback(void *unused, Uint8 *stream, int len);
+void func_callback(void *userdata, Uint8 *stream, int len);
 
 /**
  * \fn int set_audio_spec(SDL_AudioSpec *as)
