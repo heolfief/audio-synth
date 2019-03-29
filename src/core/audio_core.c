@@ -8,20 +8,11 @@
 
 #include "audio_core.h"
 
-// Global parameters defined in main.c
+// Global parameters defined in main.c and audio.c
 Polyphony *note_array;
 Audio_Buffer master_audio;
 extern Sys_param* sys_param;
-
-int quit_core()
-{
-    int ret;
-
-    ret = free_polyphony(note_array);
-    ret += free_audio_buffer(master_audio);
-
-    return ret == 0 ? 0 : -1;
-}
+extern Uint64 phase;
 
 int init_core()
 {
@@ -37,7 +28,34 @@ int init_core()
     return ret;
 }
 
-int synthesis_fill_buffer(Uint64 phase)
+int quit_core()
+{
+    int ret;
+
+    ret = free_polyphony(note_array);
+    ret += free_audio_buffer(master_audio);
+
+    return ret == 0 ? 0 : -1;
+}
+
+int synthesis_fill_buffer()
 {
     return polyphony_fill_buffer(master_audio, note_array, sys_param->audio_buffer_length, sys_param->env, sys_param->sample_rate, phase);
+}
+
+int master_audio_fill_buffer()
+{
+    int ret;
+
+    ret = synthesis_fill_buffer();
+    if (ret == -1) return -1;
+
+    ret = master_effects();
+    if (ret == -1) return -1;
+}
+
+int master_effects()
+{
+    // Apply each effect to master audio buffer
+
 }

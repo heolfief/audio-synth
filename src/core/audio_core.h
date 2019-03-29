@@ -35,14 +35,19 @@ int init_core();
 int quit_core();
 
 /**
- * \fn int synthesis_fill_buffer(Uint64 phase)
- * \brief Function Fill master audio buffer with audio synthesis
- *
- * \param phase The phase value at the beginning of the buffer
+ * \fn int synthesis_fill_buffer()
+ * \brief Function to fill master audio buffer with audio synthesis
  *
  * \return 0 if everything went OK, -1 otherwise
  */
-int synthesis_fill_buffer(Uint64 phase);
+int synthesis_fill_buffer();
 
+/**
+ * \fn int master_effects()
+ * \brief Function to apply effects to master audio buffer
+ *
+ * \return 0 if everything went OK, -1 otherwise
+ */
+int master_effects();
 
 #endif //AUDIO_SYNTH_AUDIO_CORE_H

@@ -1,9 +1,9 @@
 /**
  * \file audio.h
- * \brief Audio functions definition.
+ * \brief Audio (SDL related) functions definition.
  *
  *
- * Here are defined the audio related functions
+ * Here are defined the SDL related audio functions
  */
 
 #ifndef AUDIO_SYNTH_AUDIO_H
