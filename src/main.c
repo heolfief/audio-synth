@@ -14,6 +14,7 @@
 #include "gui/gui.h"
 #include "audio/audio.h"
 #include "system/error_handler.h"
+#include "sys_param/xml/preset_xml.h"
 
 // Global audio variable defined in audio_core.h [TEMPORARY, JUST NEEDED FOR HARDCODING OF MARIO SOUND]
 extern Polyphony *note_array;
@@ -44,6 +45,14 @@ int main(int argc, char *argv[])
         exit(EXIT_FAILURE);
     }
 
+    if(load_preset("default.prst"))
+    {
+        sys_print_error("Failed loading preset");
+        exit(EXIT_FAILURE);
+    }
+
+    save_preset("save_test.prst");
+
 #ifndef VALGRIND
 
     set_audio_spec(&as);
@@ -60,30 +69,6 @@ int main(int argc, char *argv[])
         sys_print_error("Failed opening audio");
         exit(EXIT_FAILURE);
     }
-
-    // Hard coded system parameters, will be changed by the GUI in the future
-    sys_param->env->attack   = 0.001;
-    sys_param->env->decay    = 0.01;
-    sys_param->env->sustain  = 0.5;
-    sys_param->env->release  = 0.2;
-
-    sys_param->osc1->amp     = 32000;
-    sys_param->osc1->wave    = SQR;
-    sys_param->osc1->detune  = 0;
-    sys_param->osc1->duty    = 50;
-    sys_param->osc1->onoff   = ON;
-
-    sys_param->osc2->amp     = 5000;
-    sys_param->osc2->wave    = SIN;
-    sys_param->osc2->detune  = 0;
-    sys_param->osc2->duty    = 50;
-    sys_param->osc2->onoff   = ON;
-
-    sys_param->osc3->amp     = 32000;
-    sys_param->osc3->wave    = TRI;
-    sys_param->osc3->detune  = -12;
-    sys_param->osc3->duty    = 50;
-    sys_param->osc3->onoff   = ON;
 
     // Each time oscillator parameters changed, this function needs to be called
     copy_osc_sys_param_to_notes_osc(sys_param, note_array);
