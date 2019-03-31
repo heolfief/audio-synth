@@ -12,6 +12,11 @@ Librairie SDL2:
 $ sudo apt-get install libsdl2-dev
 ```
 
+Librairie libxml2:
+```bash
+$ sudo apt-get install libxml2-dev
+```
+
 ## Build
 Executez le script :
 
