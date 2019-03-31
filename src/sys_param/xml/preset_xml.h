@@ -24,6 +24,7 @@
 #define xmlosc2     xmlosc1->next->next
 #define xmlosc3     xmlosc2->next->next
 
+// Relative to xmloscX
 #define xmlonoff    children->next->xmlvalue
 #define xmlamp      children->next->next->next->xmlvalue
 #define xmldetune   children->next->next->next->next->next->xmlvalue
@@ -32,6 +33,7 @@
 
 #define xmlenv      xmlosc3->next->next
 
+// Relative to xmlenv
 #define xmlattack   children->next->xmlvalue
 #define xmldecay    children->next->next->next->xmlvalue
 #define xmlsustain  children->next->next->next->next->next->xmlvalue
@@ -60,11 +62,10 @@ double read_XML_param(xmlChar* param);
 int write_XML_param(xmlChar* param, double value);
 
 /**
- * \fn int write_XML_param(xmlChar* param, double value)
- * \brief Writes parameter to XML preset file
+ * \fn int load_preset(const char* filename)
+ * \brief Load system parameters from an XML preset file
  *
- * \param param the address of the xmlChar parameter to change
- * \param value the value to write
+ * \param filename the name of the preset file (relative to project's root folder)
  *
  * \return 0 if everything went OK, -1 otherwise
  */

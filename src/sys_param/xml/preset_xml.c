@@ -8,6 +8,7 @@
 
 #include "preset_xml.h"
 
+// Global system parameters defined in main.c
 extern Sys_param* sys_param;
 
 double read_XML_param(xmlChar* param)
