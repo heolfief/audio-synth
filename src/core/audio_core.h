@@ -17,10 +17,8 @@
 
 
 /**
- * \fn
- * \brief
- *
- * \param param description
+ * \fn int init_core()
+ * \brief Initialize audio core
  *
  * \return 0 if everything went OK, -1 otherwise
  */
