@@ -71,4 +71,14 @@ int write_XML_param(xmlChar* param, double value);
  */
 int load_preset(const char* filename);
 
+/**
+ * \fn int save_preset(const char* filename)
+ * \brief Save system parameters to an XML preset file
+ *
+ * \param filename the name of the preset file (relative to project's root folder)
+ *
+ * \return 0 if everything went OK, -1 otherwise
+ */
+int save_preset(const char* filename);
+
 #endif //AUDIO_SYNTH_PRESET_XML_H

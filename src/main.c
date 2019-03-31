@@ -51,6 +51,8 @@ int main(int argc, char *argv[])
         exit(EXIT_FAILURE);
     }
 
+    save_preset("save_test.prst");
+
 #ifndef VALGRIND
 
     set_audio_spec(&as);
