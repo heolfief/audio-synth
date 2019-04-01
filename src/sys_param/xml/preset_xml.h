@@ -16,11 +16,10 @@
 #include "../../system/error_handler.h"
 
 
-#define xmldoc      doc
 #define xmlvalue    children->content
 
 // In XML file, each tab is considered as a child. Therefore there is a "next->" statement in between each pair of "next" statements.
-#define xmlosc1     xmldoc->children->children->next
+#define xmlosc1     children->children->next
 #define xmlosc2     xmlosc1->next->next
 #define xmlosc3     xmlosc2->next->next
 
