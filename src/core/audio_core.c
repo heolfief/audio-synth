@@ -7,6 +7,7 @@
  */
 
 #include "audio_core.h"
+#include "../audio_fx/audio_fx.h"
 
 // Global parameters defined in main.c and audio.c
 Polyphony *note_array;
@@ -56,6 +57,15 @@ int master_audio_fill_buffer()
 
 int master_effects()
 {
-    // Apply each effect to master audio buffer
+    int ret;
 
+    // Leave headroom
+    for(Uint16 sample = 0; sample < sys_param->audio_buffer_length; ++sample) master_audio[sample] = 0.8*master_audio[sample];
+
+    // Apply each effect to master audio buffer
+    ret = distortion(master_audio,sys_param->audio_buffer_length,80,50);
+    if(ret != 0) return -1;
+
+
+    return 0;
 }

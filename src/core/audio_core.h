@@ -14,6 +14,7 @@
 #include "../system/error_handler.h"
 #include "../audio/audio.h"
 #include "note/polyphony.h"
+#include "../audio_fx/audio_fx.h"
 
 
 /**
@@ -39,6 +40,14 @@ int quit_core();
  * \return 0 if everything went OK, -1 otherwise
  */
 int synthesis_fill_buffer();
+
+/**
+ * \fn int master_audio_fill_buffer()
+ * \brief Function to fill master audio buffer with audio synthesis and effects
+ *
+ * \return 0 if everything went OK, -1 otherwise
+ */
+int master_audio_fill_buffer();
 
 /**
  * \fn int master_effects()

@@ -21,12 +21,9 @@ void func_callback(void *userdata, Uint8 *stream, int len)
     Sint16 *s_stream = (Sint16*) stream;    // Cast buffer data to signed 16 bits
     Uint16 s_len = (Uint16)len/(Uint16)2;   // data are 16bits=2*8bits, so (len/2) 16 bits data in the buffer
 
-    synthesis_fill_buffer(phase);
+    if(master_audio_fill_buffer() != 0) exit(EXIT_FAILURE);
 
-    for(Uint16 sample = 0; sample < s_len; ++sample)
-    {
-        s_stream[sample] = master_audio[sample];
-    }
+    for(Uint16 sample = 0; sample < s_len; ++sample) s_stream[sample] = master_audio[sample];
 
     phase = (phase + s_len)%sys_param->sample_rate;    // Update phase based on play position
 }
