@@ -6,6 +6,7 @@
  * Here are defined the data structure of Midi data, and the relative function for works on midi data
  */
 #include <stdio.h>
+#include "../Listmidi/listMidi.h"
 #ifndef MIDI_H
 #define MIDI_H
 #define TMP "tmp.txt"
@@ -155,4 +156,8 @@ int readAction (u_int16_t * DataRange, int increments);
  */
 
 u_int32_t calculDelay (__uint16_t * DataDelay, int power,u_int16_t Noire);
+
+
+
+int readEvent (__uint16_t * midiNote, u_int16_t * attack, event * midiEvent,u_int16_t * DataRange , int i);
 #endif

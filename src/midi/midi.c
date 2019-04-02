@@ -79,8 +79,13 @@ u_int16_t  * readDataRange (u_int32_t  sizeDataRange,FILE *fichier) {
 void playDataRange (u_int16_t * DataRange,Header * H){
     u_int16_t dataDelay [4];
     u_int16_t delay;
+    u_int16_t * midiNote = NULL;
+    u_int16_t * attack = NULL;
+    enum event * midiEvent =NULL;
     int power = 0;
     int i = 0;
+
+
 while (DataRange[i]!=0xFF && DataRange [i+1] != 0x2F && DataRange[i+2] != 0x00){
     if (DataRange[i]>127){
         dataDelay [power] = DataRange[i];
@@ -89,7 +94,8 @@ while (DataRange[i]!=0xFF && DataRange [i+1] != 0x2F && DataRange[i+2] != 0x00){
     }
     else {
        delay = calculDelay(dataDelay, power, H->NOIRE );
-        i = readaction(DataRange, i);
+        i += readEvent(midiNote,attack,midiEvent,DataRange,i);
+        // fill list (delay)
 
 
         power = 0;
@@ -123,6 +129,25 @@ u_int32_t calculDelay(u_int16_t * DataDelay,int power, u_int16_t Noire){
     return res;
 }
 
+int  readEvent (__uint16_t * midiNote, u_int16_t * attack, enum event * midiEvent,u_int16_t * DataRange , int i){
+    int res = 0;
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    return res;
+}
 
 
 
