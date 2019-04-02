@@ -60,7 +60,7 @@ void fillHeaderRead (Header*Header, FILE* file);
  * \return buffer __uint32_t*  with the data range sorted
  */
 
-__uint32_t  * playDataRange (FILE *file);
+//__uint32_t  * playDataRange (FILE *file);
 /**
  * \fn __uint32_t  * readDataRangeSorted( u_int32_t size)
  * \brief Function read Data range and stock in buffer with size of data range
@@ -126,7 +126,33 @@ u_int32_t getSizeDataRange(FILE *f);
  * \return 0 if everything went OK, -1 otherwise
  */
 
-//void playDataRange(u_int32_t DataRangeSorted);
+void playDataRange(u_int16_t * DataRange);
 
+/**
+ * \fn playDataRange(u_int32_t DataRangeSorted)
+ * \brief Function to know the length of midi Data Range
+ *
+ * \param
+ * \param buffer_length The size of the audio buffer (number of audio samples in the buffer)
+ * \param sample_rate The sample rate of the system
+ * \param phase The phase value at the beginning of the buffer
+ *
+ * \return 0 if everything went OK, -1 otherwise
+ */
 
+int readAction (u_int16_t * DataRange, int increments);
+
+/**
+ * \fn playDataRange(u_int32_t DataRangeSorted)
+ * \brief Function to know the length of midi Data Range
+ *
+ * \param
+ * \param buffer_length The size of the audio buffer (number of audio samples in the buffer)
+ * \param sample_rate The sample rate of the system
+ * \param phase The phase value at the beginning of the buffer
+ *
+ * \return 0 if everything went OK, -1 otherwise
+ */
+
+u_int16_t calculDelay (__uint16_t * DataDelay, int power);
 #endif
