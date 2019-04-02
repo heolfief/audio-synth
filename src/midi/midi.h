@@ -154,5 +154,5 @@ int readAction (u_int16_t * DataRange, int increments);
  * \return 0 if everything went OK, -1 otherwise
  */
 
-u_int16_t calculDelay (__uint16_t * DataDelay, int power);
+u_int16_t calculDelay (__uint16_t * DataDelay, int power,u_int16_t Noire);
 #endif

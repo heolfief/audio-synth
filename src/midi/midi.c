@@ -69,14 +69,14 @@ u_int32_t skipMetaData(FILE *f,u_int32_t size, __uint32_t currentLine) {
 }
 */
 
-u_int16_t  * readDataRange ( u_int32_t  sizeDataRange,FILE *fichier) {
+u_int16_t  * readDataRange (u_int32_t  sizeDataRange,FILE *fichier) {
     u_int16_t * DataRange;
     DataRange = (u_int16_t*) BlockFileReader(fichier,sizeDataRange);
     return DataRange;
 }
 
 
-void playDataRange (u_int16_t * DataRange){
+void playDataRange (u_int16_t * DataRange,Header * H){
     u_int16_t dataDelay [4];
     u_int16_t delay;
     int power = 0;
@@ -88,7 +88,7 @@ while (DataRange[i]!=0xFF && DataRange [i+1] != 0x2F && DataRange[i+2] != 0x00){
 
     }
     else {
-       delay = calculdelay(dataDelay, power);
+       delay = calculdelay(dataDelay, power, H->NOIRE );
         i = readaction(DataRange, i)
 
 
@@ -110,7 +110,7 @@ i +=1;
 }
 
 
-int calculDelay(u_int16_t * DataDelay,int power){
+int calculDelay(u_int16_t * DataDelay,int power, u_int16_t Noire){
     int res = 0;
     int length = power;
     for(int i = 0;i<length;i++){
@@ -118,10 +118,8 @@ int calculDelay(u_int16_t * DataDelay,int power){
         res += DataDelay[i]*pow(126,(double) power);
         power --;
 
-
     }
-
-
+    res = res /Noire;
     return res;
 }
 
