@@ -17,7 +17,7 @@ int main(int argc, char *argv[])
 
     Header h;
     fillHeaderRead(&h,test);
-    DataRange=readDataRange(test);
+    //playDataRange=readDataRange(test);
     //playDataRange(DataRange);
    closeFile(test);
 

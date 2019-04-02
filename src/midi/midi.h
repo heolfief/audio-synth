@@ -60,17 +60,18 @@ void fillHeaderRead (Header*Header, FILE* file);
  * \return buffer __uint32_t*  with the data range sorted
  */
 
-__uint32_t  *readDataRange (FILE *file);
+__uint32_t  * playDataRange (FILE *file);
 /**
  * \fn __uint32_t  * readDataRangeSorted( u_int32_t size)
- * \brief Function read Data range in a predefined file with it's size
+ * \brief Function read Data range and stock in buffer with size of data range
  *
  * \param size Size of the length of data
+ * \param f midi File targeted for read
  *
  * \return buffer __uint32_t*  with the data range sorted
  */
 
-__uint32_t  * readDataRangeSorted( u_int32_t size);
+__uint16_t  * readDataRange( u_int32_t sizeDataRange, FILE *file);
 /**
  * \fn void setAsBeginDataRange (FILE *f)
  * \brief Function to go at the begining of  midi data ranged and passed it to begin the reading
@@ -125,7 +126,7 @@ u_int32_t getSizeDataRange(FILE *f);
  * \return 0 if everything went OK, -1 otherwise
  */
 
-void playDataRange(u_int32_t DataRangeSorted);
+//void playDataRange(u_int32_t DataRangeSorted);
 
 
 #endif

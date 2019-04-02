@@ -18,7 +18,7 @@ void fillHeaderRead (Header * H, FILE * f){
     unsigned char *  buffer = BlockFileReader(f,14);//control that the file is a midi file, with the Header flag MTHD
     for (int i =0; i<4;i++){
         H->MTHD[i] = buffer[i];
-        if (H->MTHD[0]!= 0x4d && H->MTHD[1]!=0x54 && H->MTHD[2] != 0x68 && H->MTHD[3] != 0x64 )
+        if (H->MTHD[0]!= 0x4d && H->MTHD[1]!=0x54 && H->MTHD[2] != 0x68 && H->MTHD[3] != 0x64 ) // header number of a midi file
             printf("unrecognized file");
     }
 
@@ -45,6 +45,7 @@ void setAsBeginDataRange(FILE *f){
     moveFile(f,-1);
 }
 
+/*
 u_int32_t skipMetaData(FILE *f,u_int32_t size, __uint32_t currentLine) {
     unsigned char *test = BlockFileReader(f, 1); // buffer for know if they have a 0xff
     unsigned char *buffer = NULL;
@@ -65,14 +66,29 @@ u_int32_t skipMetaData(FILE *f,u_int32_t size, __uint32_t currentLine) {
     free(buffer);
     return currentLine;
 }
+*/
 
-u_int32_t  * readDataRangeSorted ( u_int32_t  size) {
-    u_int32_t  * DataRange = NULL;
-    FILE *fichier = openFile(TMP, "r+", RETOUR);
-    DataRange = (u_int32_t*) BlockFileReader(fichier,size);
+u_int16_t  * readDataRange ( u_int32_t  sizeDataRange,FILE *fichier) {
+    u_int16_t * DataRange;
+    DataRange = (u_int16_t*) BlockFileReader(fichier,sizeDataRange);
     return DataRange;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
 u_int32_t writeRomDataRange (FILE *f,u_int32_t size){
     FILE * FILERecord  = fopen(TMP,"w+");
     u_int32_t  sizeTMP= 0;
@@ -93,7 +109,7 @@ u_int32_t writeRomDataRange (FILE *f,u_int32_t size){
    closeFile(FILERecord);
     return sizeTMP;
 }
-
+*/
 
 u_int32_t  getSizeDataRange(FILE *f){
     u_int32_t  size;
@@ -105,19 +121,11 @@ u_int32_t  getSizeDataRange(FILE *f){
 
 
 
-__uint32_t  * readDataRange (FILE * f){
-    unsigned char * buffer = BlockFileReader(f,1);
-    u_int32_t * DataRange =NULL;
-    u_int32_t  size;
-    //for (int i=0; i<Header.MTRK; i++) {
-        setAsBeginDataRange(f);
-        size = getSizeDataRange(f);
-        size = writeRomDataRange(f, size);
-        DataRange = readDataRangeSorted(size);
 
-    return DataRange;
 
-}
+
+
+
 
 
 
@@ -139,23 +147,3 @@ void playDataRange (u_int32_t DataRangeSorted){
 
 
 
-/*
-void setAtData(FILE *f){
-    unsigned char * buffer = NULL;
-    long int offset;
-    buffer=BlockFileReader(f,9);
-    buffer=BlockFileReader(f,1);
-    printf ("%x",buffer[0]);
-    while(buffer[0]== 0xFF ){
-        buffer=BlockFileReader(f,2);
-        offset = buffer[1];
-        printf ("%ld",offset);
-
-        fseek(f,,SEEK_CUR);
-        buffer=BlockFileReader(f,1);
-    }
-
-    buffer=BlockFileReader(f,1);
-    printf ("%x",buffer[0]);
-
-}*/
