@@ -50,7 +50,6 @@ u_int32_t skipMetaData(FILE *f,u_int32_t size, __uint32_t currentLine) {
     unsigned char *buffer = NULL;
     __uint16_t nbData;
 
-
     while (test[0] == 0xFF && currentLine <size) {
         buffer = BlockFileReader(f, 2); // buffer of two for know size of meta data
        if (buffer[0] == 0x2F && buffer[1] == 0x00){ // flags of end of the data Range
@@ -61,9 +60,7 @@ u_int32_t skipMetaData(FILE *f,u_int32_t size, __uint32_t currentLine) {
         test = BlockFileReader(f, 1);
         currentLine ++; // Position updated +1
     }
-
     moveFile(f, -1); // Position updated -1 because of the first read of this function
-
     free(test);
     free(buffer);
     return currentLine;

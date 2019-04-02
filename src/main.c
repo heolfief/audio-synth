@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
 
   FILE * test;
 
-  test= openFile("../fichier_midi/test midi 2 note.mid","r",RETOUR);
+  test= openFile("../fichier_midi/clairdelune.mid","r",RETOUR);
 
     Header h;
     fillHeaderRead(&h,test);
