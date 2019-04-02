@@ -46,28 +46,9 @@ void setAsBeginDataRange(FILE *f){
     moveFile(f,-1);
 }
 
-/*
-int skipMetaData(int i, __uint16_t ) {
-    unsigned char *test = BlockFileReader(f, 1); // buffer for know if they have a 0xff
-    unsigned char *buffer = NULL;
-    __uint16_t nbData;
 
-    while (test[0] == 0xFF && currentLine <size) {
-        buffer = BlockFileReader(f, 2); // buffer of two for know size of meta data
-       if (buffer[0] == 0x2F && buffer[1] == 0x00){ // flags of end of the data Range
-            return size;
-        }
-        nbData = buffer[1];
-        moveFile(f, nbData); // move the position in a file
-        test = BlockFileReader(f, 1);
-        currentLine ++; // Position updated +1
-    }
-    moveFile(f, -1); // Position updated -1 because of the first read of this function
-    free(test);
-    free(buffer);
-    return currentLine;
-}
-*/
+
+
 
 u_int16_t  * readDataRange (u_int32_t  sizeDataRange,FILE *fichier) {
     u_int16_t * DataRange;
@@ -94,7 +75,7 @@ while (DataRange[i]!=0xFF && DataRange [i+1] != 0x2F && DataRange[i+2] != 0x00){
     }
     else {
        delay = calculDelay(dataDelay, power, H->NOIRE );
-        i += readEvent(midiNote,attack,midiEvent,DataRange,i);
+        i = readEvent(midiNote,attack,midiEvent,DataRange,i);
         // fill list (delay)
 
 
@@ -136,8 +117,7 @@ int  readEvent (__uint16_t * midiNote, u_int16_t * attack, enum event * midiEven
         case 0xF0:
             if (DataRange [i+1]== 0x2f && DataRange[i+2]== 0x00) // just to be sure
                 break;
-           i+= skipMetaData()
-
+           i+= DataRange[2];
             break;
         case 0x90 :
             *midiEvent = ON;

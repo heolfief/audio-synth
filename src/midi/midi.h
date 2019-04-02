@@ -95,7 +95,7 @@ void setAsBeginDataRange (FILE *file);
  * \return u_int32_t  currentLine
  */
 
-u_int32_t skipMetaData(FILE *file,u_int32_t size,u_int32_t currentLine);
+u_int16_t getSizeMetaData(int i, u_int16_t * DataRange);
 /**
  * \fn u_int32_t writeRomDataRange(FILE *f,u_int32_t size)
  * \brief Write Data Range sorted without Meta Data in a file tmp.txt, this function use  skipMetaData
