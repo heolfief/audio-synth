@@ -13,7 +13,6 @@
   <component name="ChangeListManager">
     <list default="true" id="eda1cbde-e667-42ab-83eb-31f4066e3b33" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/src/midi/midi.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/midi/midi.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/midi/midi.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/midi/midi.h" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/src/cmake-build-debug/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -31,8 +30,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/midi/midi.c">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="150">
-              <caret line="133" column="4" selection-start-line="133" selection-start-column="4" selection-end-line="133" selection-end-column="4" />
+            <state relative-caret-position="-1020">
+              <caret line="49" column="35" selection-start-line="49" selection-start-column="35" selection-end-line="49" selection-end-column="35" />
               <folding>
                 <element signature="e#107#125#0" expanded="true" />
               </folding>
@@ -223,12 +222,12 @@
       <workItem from="1554099983004" duration="901000" />
       <workItem from="1554115289091" duration="524000" />
       <workItem from="1554121598865" duration="938000" />
-      <workItem from="1554188173612" duration="5965000" />
+      <workItem from="1554188173612" duration="6733000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="12561000" />
+    <option name="totallyTimeSpent" value="13329000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="67" y="25" width="1853" height="1055" extended-state="6" />
@@ -314,8 +313,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/midi/midi.c">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="133" column="4" selection-start-line="133" selection-start-column="4" selection-end-line="133" selection-end-column="4" />
+        <state relative-caret-position="-1020">
+          <caret line="49" column="35" selection-start-line="49" selection-start-column="35" selection-end-line="49" selection-end-column="35" />
           <folding>
             <element signature="e#107#125#0" expanded="true" />
           </folding>
