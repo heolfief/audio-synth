@@ -131,31 +131,42 @@ u_int32_t calculDelay(u_int16_t * DataDelay,int power, u_int16_t Noire){
 
 int  readEvent (__uint16_t * midiNote, u_int16_t * attack, enum event * midiEvent,u_int16_t * DataRange , int i){
 
-    int res = 0;
     i +=1;
-    switch (DataRange[i]) {
-        case 0xFF:
+    switch (DataRange[i] & MSKHEX) {
+        case 0xF0:
             if (DataRange [i+1]== 0x2f && DataRange[i+2]== 0x00) // just to be sure
                 break;
-          //  i+= skipMetaData()
-
-
-
+           i+= skipMetaData()
 
             break;
-        case 0x9 :
-            // note on
+        case 0x90 :
+            *midiEvent = ON;
+            *attack =   DataRange[i+1];
+            *midiNote =  DataRange[i+2];
+            if (DataRange[i+2] == 0 )
+                *midiEvent = OFF;
             break;
-        case 0x8 :
-            // note off
+        case 0x80 :
+            *midiEvent = OFF;
+            *attack =  DataRange[i+1];
+           * midiNote = DataRange[i+2];
             break;
-       /* case 0xA || 0XB || 0XE:
+        case  0XE0:
             i += 3;
             break;
-        case 0xC || 0xD:
+        case  0XB0 :
+            i += 3;
+            break;
+        case 0xA0 :
+            i += 3;
+            break;
+        case 0xC0 :
             i += 2;
             break;
-     */   default :
+        case 0xD0 :
+            i += 2;
+            break;
+       default :
             printf("error file courrupted");
             break;
     }
