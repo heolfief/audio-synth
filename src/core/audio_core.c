@@ -53,6 +53,8 @@ int master_audio_fill_buffer()
 
     ret = master_effects();
     if (ret == -1) return -1;
+
+    return 0;
 }
 
 int master_effects()

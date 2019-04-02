@@ -11,6 +11,6 @@
 
 #include <stdio.h>
 
-void sys_print_error(char* message);
+#define sys_print_error(message) fprintf(stderr, "ERROR %s : in function %s at %s (line %d)\n", message, __func__, __FILE__, __LINE__)
 
 #endif //AUDIO_SYNTH_ERROR_HANDLER_H

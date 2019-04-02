@@ -30,14 +30,14 @@ int polyphony_fill_buffer(Audio_Buffer audio_buff, Polyphony *p, Uint16 buffer_l
 
     if(p == NULL)
     {
-        sys_print_error("Note parameter is NULL");
+        sys_print_error("Polyphony parameter is NULL");
         return -1;
     }
 
     for(int i = 0; i < POLYPHONY_MAX; ++i)
     {
         // Fill all the note buffers
-        note_fill_buffer(p[i], buffer_length, env, sample_rate, phase);
+        if(note_fill_buffer(p[i], buffer_length, env, sample_rate, phase))return -1;
 
         // Count number of active notes
         if(p[i]->master_onoff == ON)

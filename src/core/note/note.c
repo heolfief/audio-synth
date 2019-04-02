@@ -61,9 +61,9 @@ int note_fill_buffer(Note *n, Uint16 buffer_length, const Envelope *env, Uint64 
     n->osc3->freq = n->freq;
 
     // Fill the oscillators buffers
-    osc_fill_buffer(n->osc1, buffer_length, sample_rate, phase);
-    osc_fill_buffer(n->osc2, buffer_length, sample_rate, phase);
-    osc_fill_buffer(n->osc3, buffer_length, sample_rate, phase);
+    if(osc_fill_buffer(n->osc1, buffer_length, sample_rate, phase))return -1;
+    if(osc_fill_buffer(n->osc2, buffer_length, sample_rate, phase))return -1;
+    if(osc_fill_buffer(n->osc3, buffer_length, sample_rate, phase))return -1;
 
     for(Uint16 sample = 0; sample < buffer_length; ++sample)
     {
