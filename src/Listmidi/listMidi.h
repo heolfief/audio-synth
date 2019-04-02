@@ -4,18 +4,31 @@
 #define LISTMIDI_H
 
 
+typedef enum event {ON, OFF};
+
+
+
+typedef struct midiList{
+    __uint16_t  midiNote;
+    __uint16_t  attack;
+    event midiEvent;
+    __uint32_t delay;
+    struct midiList * next;
+};
+
+
 /*!
 * \brief Une liste chaînée d'éléments génériques (void*)
 */
 typedef struct {
-    nodeList * first;		/*!< L'adresse du premier élément de la liste */
-    nodeList * current;		/*!< L'adresse de l'élément courant de la liste */
-    nodeList * last;		/*!< L'adresse du dernier élément de la liste */
+    midiList * first;		/*!< L'adresse du premier élément de la liste */
+    midiList * current;		/*!< L'adresse de l'élément courant de la liste */
+    midiList * last;		/*!< L'adresse du dernier élément de la liste */
 }list;
 
 
 
-nodeList * newNodeList(void * ptr, nodeList * next, nodeList * previous);
+midiList * newList(void * ptr, nodeList * next, nodeList * previous);
 
 
 void initList(list * l);
