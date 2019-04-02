@@ -88,8 +88,8 @@ while (DataRange[i]!=0xFF && DataRange [i+1] != 0x2F && DataRange[i+2] != 0x00){
 
     }
     else {
-       delay = calculdelay(dataDelay, power, H->NOIRE );
-        i = readaction(DataRange, i)
+       delay = calculDelay(dataDelay, power, H->NOIRE );
+        i = readaction(DataRange, i);
 
 
         power = 0;
@@ -110,7 +110,7 @@ i +=1;
 }
 
 
-int calculDelay(u_int16_t * DataDelay,int power, u_int16_t Noire){
+u_int32_t calculDelay(u_int16_t * DataDelay,int power, u_int16_t Noire){
     int res = 0;
     int length = power;
     for(int i = 0;i<length;i++){

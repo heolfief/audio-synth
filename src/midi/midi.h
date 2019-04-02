@@ -126,7 +126,7 @@ u_int32_t getSizeDataRange(FILE *f);
  * \return 0 if everything went OK, -1 otherwise
  */
 
-void playDataRange(u_int16_t * DataRange);
+void playDataRange(u_int16_t * DataRange, Header * H);
 
 /**
  * \fn playDataRange(u_int32_t DataRangeSorted)
@@ -154,5 +154,5 @@ int readAction (u_int16_t * DataRange, int increments);
  * \return 0 if everything went OK, -1 otherwise
  */
 
-u_int16_t calculDelay (__uint16_t * DataDelay, int power,u_int16_t Noire);
+u_int32_t calculDelay (__uint16_t * DataDelay, int power,u_int16_t Noire);
 #endif
