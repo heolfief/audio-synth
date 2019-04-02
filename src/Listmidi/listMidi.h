@@ -4,26 +4,26 @@
 #define LISTMIDI_H
 
 
-typedef enum event {ON, OFF};
+typedef enum event {OFF,ON};
 
 
 
-typedef struct midiList{
+typedef struct {
     __uint16_t  midiNote;
     __uint16_t  attack;
-    event midiEvent;
+   enum  event midiEvent;
     __uint32_t delay;
     struct midiList * next;
-};
+}midiList;
 
 
 /*!
 * \brief Une liste chaînée d'éléments génériques (void*)
 */
 typedef struct {
-    midiList * first;		/*!< L'adresse du premier élément de la liste */
-    midiList * current;		/*!< L'adresse de l'élément courant de la liste */
-    midiList * last;		/*!< L'adresse du dernier élément de la liste */
+    struct midiList * first;		/*!< L'adresse du premier élément de la liste */
+    struct  midiList * current;		/*!< L'adresse de l'élément courant de la liste */
+    struct midiList * last;		/*!< L'adresse du dernier élément de la liste */
 }list;
 
 /**
@@ -37,7 +37,7 @@ typedef struct {
  * \return the target File open
  */
 
-midiList * newList(void * ptr, nodeList * next);
+midiList * newList(void * ptr, midiList * next);
 
 /**
  * \fn void initList(list * l)
@@ -212,7 +212,7 @@ int deleteFirst(list * l, void** data);
  * \return the target File open
  */
 
-void freeNodeList(nodeList * n);
+void freeNodeList(midiList * n);
 /**
  * \fn void freeList(list * l)
  * \brief Function to open a target File

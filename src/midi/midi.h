@@ -9,7 +9,9 @@
 #include "../Listmidi/listMidi.h"
 #ifndef MIDI_H
 #define MIDI_H
-#define TMP "tmp.txt"
+#define MSKHEX 0xF0
+#define MSKBIN 0x80
+
 
 
 /**
@@ -159,5 +161,5 @@ u_int32_t calculDelay (__uint16_t * DataDelay, int power,u_int16_t Noire);
 
 
 
-int readEvent (__uint16_t * midiNote, u_int16_t * attack, event * midiEvent,u_int16_t * DataRange , int i);
+int readEvent (__uint16_t * midiNote, u_int16_t * attack,enum event * midiEvent,u_int16_t * DataRange , int i);
 #endif
