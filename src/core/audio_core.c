@@ -65,7 +65,7 @@ int master_effects()
     for(Uint16 sample = 0; sample < sys_param->audio_buffer_length; ++sample) master_audio[sample] = 0.8*master_audio[sample];
 
     // Apply each effect to master audio buffer
-    ret = distortion(master_audio,sys_param->audio_buffer_length,80,50);
+    //if(distortion(master_audio,sys_param->audio_buffer_length,80,50))return -1;
     if(ret != 0) return -1;
 
 
