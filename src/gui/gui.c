@@ -8,3 +8,10 @@
 
 #include "gui.h"
 
+// Global parameters defined in main.c and audio_core.c
+extern Sys_param* sys_param;
+extern Polyphony *note_array;
+
+
+
+// functions ...
