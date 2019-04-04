@@ -56,7 +56,7 @@ typedef enum{
  */
 typedef struct{
     Waveform    wave;       /*!<the waveform type */
-    Uint16      freq;       /*!<the frequency */
+    double      freq;       /*!<the frequency */
     Uint16      amp;        /*!<the amplitude */
     Sint8       detune;     /*!<the detune in number of notes */
     Uint8       duty;       /*!<the dutycyle in percents (if available for the selected waveform) */
