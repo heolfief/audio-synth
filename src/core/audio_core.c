@@ -60,11 +60,14 @@ int master_audio_fill_buffer()
 int master_effects()
 {
     double headroom = 0.8;
+
     // Leave headroom
     for(Uint16 sample = 0; sample < sys_param->audio_buffer_length; ++sample) master_audio[sample] = (Sint16)(headroom*master_audio[sample]);
 
     // Apply each effect to master audio buffer
-    if(distortion(master_audio,sys_param->audio_buffer_length,80,50))return -1;
+    if(distortion(master_audio,sys_param->audio_buffer_length,80,0))return -1;
+
+    if(amp_mod(master_audio,sys_param->audio_buffer_length,sys_param->sample_rate,15,50))return -1;
 
     return 0;
 }
