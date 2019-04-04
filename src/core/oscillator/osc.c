@@ -26,7 +26,7 @@ int osc_fill_buffer(const Oscillator *osc, Uint16 buffer_length, Uint64 sample_r
     }
 
     // Calculate actual frequency based on detune value
-    Uint16 detuned_freq = (Uint16)(osc->freq * pow(chromatic_ratio, osc->detune));
+    double detuned_freq = (double)(osc->freq * (double)pow(chromatic_ratio, osc->detune));
 
     //double offset = 0;
     double nb_samples_in_period=0;
