@@ -11,7 +11,7 @@
 #include <math.h>
 #include "midi.h"
 #include "../fichier/fichier.h"
-
+#include "../Listmidi/listMidi.h
 
 
 
@@ -85,11 +85,6 @@ while (DataRange[i]!=0xFF && DataRange [i+1] != 0x2F && DataRange[i+2] != 0x00){
         //init dataDelay
     }
 
-
-
-
-
-
 i +=1;
 
 }
@@ -119,7 +114,7 @@ int  readEvent (__uint16_t * midiNote, u_int16_t * attack, enum event * midiEven
                 break;
            i+= DataRange[2];
             break;
-        case 0x90 :
+        case 0x90 : //running status pas pris en compte
             *midiEvent = ON;
             *attack =   DataRange[i+1];
             *midiNote =  DataRange[i+2];
@@ -156,33 +151,6 @@ int  readEvent (__uint16_t * midiNote, u_int16_t * attack, enum event * midiEven
 
 
 
-
-
-
-
-/*
-u_int32_t writeRomDataRange (FILE *f,u_int32_t size){
-    FILE * FILERecord  = fopen(TMP,"w+");
-    u_int32_t  sizeTMP= 0;
-    unsigned char * buffer = NULL;
-    __uint32_t currentLine =0;
-    currentLine = skipMetaData( f, size,currentLine);
-     while(!feof((f)) && currentLine<size){
-        buffer = BlockFileReader(f,1);
-        fprintf(FILERecord,"%2x  ", buffer[0]);
-        free(buffer);
-        currentLine = skipMetaData(f, size, currentLine) ;
-        sizeTMP ++;
-        currentLine++;
-
-
-    }
-
-   closeFile(FILERecord);
-    return sizeTMP;
-}
-*/
-
 u_int32_t  getSizeDataRange(FILE *f){
     u_int32_t  size;
     unsigned char * buffer =NULL;
@@ -192,29 +160,6 @@ u_int32_t  getSizeDataRange(FILE *f){
 }
 
 
-
-
-
-
-
-
-
-
-
-/*
-void playDataRange (u_int32_t DataRangeSorted){
-
-
-
-
-
-
-
-
-
-}
-
-*/
 
 
 
