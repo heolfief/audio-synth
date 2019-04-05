@@ -4,31 +4,26 @@
 #include <stdlib.h>
 #include "fichier/fichier.h"
 #include "midi/midi.h"
+#include "Listmidi/listMidi.h"
+
 
 
 int main(int argc, char *argv[])
 {
-    u_int16_t MSK = 0xF0;
 
-    u_int32_t * DataRange;
-    u_int16_t nombre1 = 0x83;
-    unsigned char nombre2 = 0x89;
   FILE * test;
+    int size;
+    u_int16_t * datarange = NULL;
 
   test= openFile("../fichier_midi/clairdelune.mid","r",RETOUR);
+  Header * H = NULL;
+  fillHeaderRead(H,test);
+  setAsBeginDataRange(test);
+ size =  getSizeDataRange(test);
+ datarange = readDataRange(size,test);
+ list * l  = playDataRange(datarange,H);
+ printList(l);
 
-    switch(nombre1 & MSK)
-    {
-        case 0x80:
-            printf ("c'est le 8");
-            break;
-        case 0x90:
-            printf("c'est le 9");
-            break;
-        default :
-            printf ("dommage , %x", nombre1 & MSK);
-            break;
-    }
 
 
   }

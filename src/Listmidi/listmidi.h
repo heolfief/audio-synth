@@ -4,7 +4,8 @@
 #define LISTMIDI_H
 
 
-typedef enum event {OFF,ON};
+typedef enum event event;
+enum event {OFF,ON};
 
 
 
@@ -37,7 +38,7 @@ typedef struct {
  * \return the target File open
  */
 
-midiList * newList(void * ptr, midiList * next);
+midiList * newNodeList(__uint16_t  *midiNote, __uint16_t *attack, __uint16_t  *midiEvent, __uint32_t  delay, midiList * next);
 
 /**
  * \fn void initList(list * l)

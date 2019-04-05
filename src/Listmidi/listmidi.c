@@ -8,7 +8,7 @@
 
 
 
-midiList * newList(__uint16_t  midiNote, __uint16_t attack, __uint16_t  midiEvent, __uint32_t  delay, midiList * next);
+midiList * newNodeList(__uint16_t * midiNote, __uint16_t *attack, __uint16_t  *midiEvent, __uint32_t  delay, midiList * next)
 {
     midiList * new = (midiList*)malloc(sizeof(nodeList));  /*Allocation de l'espace mmoire*/
     if (new == NULL)
@@ -45,19 +45,15 @@ int oneElement(list * l)
     return (l->first != NULL && l->first == l->last);
 }
 
-
-int insertFirst(list * l, void* data)
+void printList(list * l)
 {
-
-    midiList* new = newList(data, l->first, NULL);
-    if (new == NULL)
-        return 0;
-    if (empty(l))
-        l->last = l->current = new;
-    else
-        l->first->previous = new;
-    l->first = new;
-
-    return 1;
-
+    midiList* n;
+    printf("{");
+    n = l->first;
+    while (n != NULL)
+    {
+        printf(" %d %2X %2x %2x \n ", n->midiEvent, n->delay, n->midiNote,n->attack);
+        n = n->next;
+    }
+    printf("}\n");
 }

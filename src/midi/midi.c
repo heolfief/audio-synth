@@ -11,7 +11,7 @@
 #include <math.h>
 #include "midi.h"
 #include "../fichier/fichier.h"
-#include "../Listmidi/listMidi.h
+#include "../Listmidi/listMidi.h"
 
 
 
@@ -57,14 +57,17 @@ u_int16_t  * readDataRange (u_int32_t  sizeDataRange,FILE *fichier) {
 }
 
 
-void playDataRange (u_int16_t * DataRange,Header * H){
+list * playDataRange (u_int16_t * DataRange,Header * H){
     u_int16_t dataDelay [4];
-    u_int16_t delay;
+    u_int16_t  delay;
     u_int16_t * midiNote = NULL;
     u_int16_t * attack = NULL;
     enum event * midiEvent =NULL;
     int power = 0;
     int i = 0;
+    int g=0;
+    list * l = NULL;
+    initList(l);
 
 
 while (DataRange[i]!=0xFF && DataRange [i+1] != 0x2F && DataRange[i+2] != 0x00){
@@ -74,21 +77,25 @@ while (DataRange[i]!=0xFF && DataRange [i+1] != 0x2F && DataRange[i+2] != 0x00){
 
     }
     else {
+        g++;
        delay = calculDelay(dataDelay, power, H->NOIRE );
         i = readEvent(midiNote,attack,midiEvent,DataRange,i);
-        // fill list (delay)
-
+        l->current = newNodeList(midiNote,attack,midiEvent,delay,l->current);
+        if (g ==1 )
+        l->first=l->current;
 
         power = 0;
+        for (int v = 0 ; v<4; v++){
+            dataDelay[v] = 0;
+        }
 
 
-        //init dataDelay
     }
 
 i +=1;
 
 }
-
+return l;
 }
 
 

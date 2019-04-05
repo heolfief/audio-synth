@@ -129,7 +129,7 @@ u_int32_t getSizeDataRange(FILE *f);
  * \return 0 if everything went OK, -1 otherwise
  */
 
-void playDataRange(u_int16_t * DataRange, Header * H);
+list * playDataRange(u_int16_t * DataRange, Header * H);
 
 /**
  * \fn playDataRange(u_int32_t DataRangeSorted)
