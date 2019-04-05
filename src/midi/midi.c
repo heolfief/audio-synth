@@ -11,12 +11,12 @@
 #include <math.h>
 #include "midi.h"
 #include "../fichier/fichier.h"
-#include "../Listmidi/listMidi.h"
+#include "../Listmidi/listmidi.h"
 
 
 
 void fillHeaderRead (Header * H, FILE * f){
-    unsigned char *  buffer = BlockFileReader(f,14);//control that the file is a midi file, with the Header flag MTHD
+    u_int16_t *  buffer = BlockFileReader(f,14);//control that the file is a midi file, with the Header flag MTHD
     for (int i =0; i<4;i++){
         H->MTHD[i] = buffer[i];
         if (H->MTHD[0]!= 0x4d && H->MTHD[1]!=0x54 && H->MTHD[2] != 0x68 && H->MTHD[3] != 0x64 ) // header number of a midi file
@@ -66,8 +66,8 @@ list * playDataRange (u_int16_t * DataRange,Header * H){
     int power = 0;
     int i = 0;
     int g=0;
-    list * l = NULL;
-    initList(l);
+    list * l ;
+   // initList(l);
 
 
 while (DataRange[i]!=0xFF && DataRange [i+1] != 0x2F && DataRange[i+2] != 0x00){

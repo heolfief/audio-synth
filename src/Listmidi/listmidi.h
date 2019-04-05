@@ -1,5 +1,4 @@
 #include <stdio.h>
-
 #ifndef LISTMIDI_H
 #define LISTMIDI_H
 

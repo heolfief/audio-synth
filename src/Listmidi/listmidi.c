@@ -1,39 +1,36 @@
 #include <stdio.h>
-#include "../Listmidi/listMidi.h
-
-
-
-
+#include "listmidi.h"
+#include <stdlib.h>
 
 
 
 
 midiList * newNodeList(__uint16_t * midiNote, __uint16_t *attack, __uint16_t  *midiEvent, __uint32_t  delay, midiList * next)
 {
-    midiList * new = (midiList*)malloc(sizeof(nodeList));  /*Allocation de l'espace mmoire*/
+    midiList * new = (midiList*)malloc(sizeof(midiList));  /*Allocation de l'espace mmoire*/
     if (new == NULL)
     {
         fprintf(stderr, "Warning/error : allocation mmoire dynamique chou dans la fonction %s\n", __FUNCTION__);
         return NULL;		/*L'allocation  chou*/
     }
-    new->midiNote= midiNote;
-    new->midiEvent= midiEvent;
-    new->attack= attack;
+    new->midiNote = (*midiNote);
+    new->midiEvent= (*midiEvent);
+    new->attack= (*attack);
     new->delay = delay;
     next->next = new;
     new->next = NULL;
     return new;				/*Return du pointeur vers la node cre*/
 }
 
-
+/*
 
 void initList(list * l)
 {
-    l->first = NULL;
+    l->first  ;
     l->current = NULL;
     l->last = NULL;
 }
-
+*/
 
 int empty(list * l)
 {

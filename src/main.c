@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include "fichier/fichier.h"
 #include "midi/midi.h"
-#include "Listmidi/listMidi.h"
+#include "Listmidi/listmidi.h"
 
 
 
@@ -16,7 +16,7 @@ int main(int argc, char *argv[])
     u_int16_t * datarange = NULL;
 
   test= openFile("../fichier_midi/clairdelune.mid","r",RETOUR);
-  Header * H = NULL;
+  Header * H ;
   fillHeaderRead(H,test);
   setAsBeginDataRange(test);
  size =  getSizeDataRange(test);

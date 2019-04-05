@@ -6,7 +6,7 @@
  * Here are defined the data structure of Midi data, and the relative function for works on midi data
  */
 #include <stdio.h>
-#include "../Listmidi/listMidi.h"
+#include "../Listmidi/listmidi.h"
 #ifndef MIDI_H
 #define MIDI_H
 #define MSKHEX 0xF0
@@ -22,8 +22,8 @@
  */
 
 typedef struct {
-    unsigned char MTHD[4]; /*!< 4 bytes for header flag*/
-    unsigned char SPEC_ADDR[4]; /*!< 4 bytes to inform about the addressing specs*/
+    u_int16_t MTHD[4]; /*!< 4 bytes for header flag*/
+    u_int16_t SPEC_ADDR[4]; /*!< 4 bytes to inform about the addressing specs*/
     u_int16_t SMF ;/*!<2 bytes to indicate the data ranges: 0 only one data range, 1 several tracks played simultaneously, 2 more tracks but to be played one after the other*/
     u_int16_t MTRK ; /*!<2 bytes for the number of data ranges*/
     u_int16_t NOIRE; /*!< 2 bytes: number divisions of the black*/
