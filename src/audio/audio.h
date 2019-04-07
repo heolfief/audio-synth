@@ -20,6 +20,7 @@
  *
  *  \param userdata An application-specific parameter saved in
  *                  the SDL_AudioSpec structure
+ *                  Here Core structure is passed
  *  \param stream A pointer to the audio data buffer.
  *  \param len    The length of that buffer in bytes.
  *
@@ -32,16 +33,18 @@
 void func_callback(void *userdata, Uint8 *stream, int len);
 
 /**
- * \fn int set_audio_spec(SDL_AudioSpec *as)
+ * \fn int set_audio_spec(SDL_AudioSpec *as, const Core* ac)
  * \brief Function to setup SDL audio spec
  *
  * This function sets the SDL audio spec to MONO, signed 16bits (little indian) audio sample data
  * with sample rate and buffer length as set in system parameters
  *
  * \param as The SDL_AudioSpec structure
+ * \param ac The audio core structure of the system
+
  *
  * \return 0 if everything went OK, -1 otherwise
  */
-int set_audio_spec(SDL_AudioSpec *as);
+int set_audio_spec(SDL_AudioSpec *as, const Core* ac);
 
 #endif //AUDIO_SYNTH_AUDIO_H

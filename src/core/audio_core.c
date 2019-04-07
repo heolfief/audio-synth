@@ -9,65 +9,58 @@
 #include "audio_core.h"
 #include "../audio_fx/audio_fx.h"
 
-// Global parameters defined in main.c and audio.c
-Polyphony *note_array;
-Audio_Buffer master_audio;
-extern Sys_param* sys_param;
-extern Uint64 phase;
 
-int init_core()
+int init_core(Core* ac)
 {
     int ret = 0;
 
     // Core memory allocation
-    note_array = alloc_polyphony(sys_param->audio_buffer_length);
-    if(note_array == NULL) ret = -1;
+    ac->note_array = alloc_polyphony(ac->sys_param->audio_buffer_length);
+    if(ac->note_array == NULL) ret = -1;
 
-    master_audio = alloc_audio_buffer(sys_param->audio_buffer_length);
-    if(master_audio == NULL) ret = -1;
+    ac->master_audio = alloc_audio_buffer(ac->sys_param->audio_buffer_length);
+    if(ac->master_audio == NULL) ret = -1;
 
     return ret;
 }
 
-int quit_core()
+int quit_core(Core* ac)
+{
+    if(free_polyphony(ac->note_array))return -1;
+    if(free_audio_buffer(ac->master_audio))return -1;
+
+    return 0;
+}
+
+int synthesis_fill_buffer(Core* ac)
+{
+    return polyphony_fill_buffer(ac->master_audio, ac->note_array, ac->sys_param->audio_buffer_length, ac->sys_param->env, ac->sys_param->sample_rate, ac->phase);
+}
+
+int master_audio_fill_buffer(Core* ac)
 {
     int ret;
 
-    ret = free_polyphony(note_array);
-    ret += free_audio_buffer(master_audio);
-
-    return ret == 0 ? 0 : -1;
-}
-
-int synthesis_fill_buffer()
-{
-    return polyphony_fill_buffer(master_audio, note_array, sys_param->audio_buffer_length, sys_param->env, sys_param->sample_rate, phase);
-}
-
-int master_audio_fill_buffer()
-{
-    int ret;
-
-    ret = synthesis_fill_buffer();
+    ret = synthesis_fill_buffer(ac);
     if (ret == -1) return -1;
 
-    ret = master_effects();
+    ret = master_effects(ac);
     if (ret == -1) return -1;
 
     return 0;
 }
 
-int master_effects()
+int master_effects(Core* ac)
 {
     double headroom = 0.8;
 
     // Leave headroom
-    for(Uint16 sample = 0; sample < sys_param->audio_buffer_length; ++sample) master_audio[sample] = (Sint16)(headroom*master_audio[sample]);
+    for(Uint16 sample = 0; sample < ac->sys_param->audio_buffer_length; ++sample) ac->master_audio[sample] = (Sint16)(headroom*ac->master_audio[sample]);
 
     // Apply each effect to master audio buffer
-    if(distortion(master_audio,sys_param->audio_buffer_length,80,0))return -1;
+    if(distortion(ac->master_audio,ac->sys_param->audio_buffer_length,80,0))return -1;
 
-    if(amp_mod(master_audio,sys_param->audio_buffer_length,sys_param->sample_rate,15,50))return -1;
+    if(amp_mod(ac->master_audio,ac->sys_param->audio_buffer_length,ac->sys_param->sample_rate,15,50))return -1;
 
     return 0;
 }

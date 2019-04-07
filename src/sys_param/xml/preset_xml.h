@@ -14,6 +14,7 @@
 #include <string.h>
 #include "../sys_param.h"
 #include "../../system/error_handler.h"
+#include "../../core/audio_core.h"
 
 
 #define xmlvalue    children->content
@@ -65,19 +66,21 @@ int write_XML_param(xmlChar* param, double value);
  * \brief Load system parameters from an XML preset file
  *
  * \param filename the name of the preset file (relative to project's root folder)
+ * \param sys_param the system parameters
  *
  * \return 0 if everything went OK, -1 otherwise
  */
-int load_preset(const char* filename);
+int load_preset(const char* filename, Sys_param* sysParam);
 
 /**
  * \fn int save_preset(const char* filename)
  * \brief Save system parameters to an XML preset file
  *
  * \param filename the name of the preset file (relative to project's root folder)
+ * \param sys_param the system parameters
  *
  * \return 0 if everything went OK, -1 otherwise
  */
-int save_preset(const char* filename);
+int save_preset(const char* filename, Sys_param* sysParam);
 
 #endif //AUDIO_SYNTH_PRESET_XML_H

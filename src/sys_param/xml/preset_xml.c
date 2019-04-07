@@ -8,8 +8,6 @@
 
 #include "preset_xml.h"
 
-// Global system parameters defined in main.c
-extern Sys_param* sys_param;
 
 double read_XML_param(xmlChar* param)
 {
@@ -36,7 +34,7 @@ int write_XML_param(xmlChar* param, double value)
     return 0;
 }
 
-int load_preset(const char* filename)
+int load_preset(const char* filename, Sys_param* sys_param)
 {
     xmlDocPtr doc = NULL;
     char filename_relat[30]= "../presets/";
@@ -58,31 +56,31 @@ int load_preset(const char* filename)
     }
 
     // Load oscillator 1 parameters
-    sys_param->osc1->onoff  = (OnOff)read_XML_param(doc->xmlosc1->xmlonoff);
-    sys_param->osc1->amp    = (Uint16)read_XML_param(doc->xmlosc1->xmlamp);
-    sys_param->osc1->detune = (Sint8)read_XML_param(doc->xmlosc1->xmldetune);
-    sys_param->osc1->duty   = (Uint8)read_XML_param(doc->xmlosc1->xmlduty);
-    sys_param->osc1->wave   = (Waveform)read_XML_param(doc->xmlosc1->xmlwave);
+   sys_param->osc1->onoff  = (OnOff)read_XML_param(doc->xmlosc1->xmlonoff);
+   sys_param->osc1->amp    = (Uint16)read_XML_param(doc->xmlosc1->xmlamp);
+   sys_param->osc1->detune = (Sint8)read_XML_param(doc->xmlosc1->xmldetune);
+   sys_param->osc1->duty   = (Uint8)read_XML_param(doc->xmlosc1->xmlduty);
+   sys_param->osc1->wave   = (Waveform)read_XML_param(doc->xmlosc1->xmlwave);
 
     // Load oscillator 2 parameters
-    sys_param->osc2->onoff  = (OnOff)read_XML_param(doc->xmlosc2->xmlonoff);
-    sys_param->osc2->amp    = (Uint16)read_XML_param(doc->xmlosc2->xmlamp);
-    sys_param->osc2->detune = (Sint8)read_XML_param(doc->xmlosc2->xmldetune);
-    sys_param->osc2->duty   = (Uint8)read_XML_param(doc->xmlosc2->xmlduty);
-    sys_param->osc2->wave   = (Waveform)read_XML_param(doc->xmlosc2->xmlwave);
+   sys_param->osc2->onoff  = (OnOff)read_XML_param(doc->xmlosc2->xmlonoff);
+   sys_param->osc2->amp    = (Uint16)read_XML_param(doc->xmlosc2->xmlamp);
+   sys_param->osc2->detune = (Sint8)read_XML_param(doc->xmlosc2->xmldetune);
+   sys_param->osc2->duty   = (Uint8)read_XML_param(doc->xmlosc2->xmlduty);
+   sys_param->osc2->wave   = (Waveform)read_XML_param(doc->xmlosc2->xmlwave);
 
     // Load oscillator 3 parameters
-    sys_param->osc3->onoff  = (OnOff)read_XML_param(doc->xmlosc3->xmlonoff);
-    sys_param->osc3->amp    = (Uint16)read_XML_param(doc->xmlosc3->xmlamp);
-    sys_param->osc3->detune = (Sint8)read_XML_param(doc->xmlosc3->xmldetune);
-    sys_param->osc3->duty   = (Uint8)read_XML_param(doc->xmlosc3->xmlduty);
-    sys_param->osc3->wave   = (Waveform)read_XML_param(doc->xmlosc3->xmlwave);
+   sys_param->osc3->onoff  = (OnOff)read_XML_param(doc->xmlosc3->xmlonoff);
+   sys_param->osc3->amp    = (Uint16)read_XML_param(doc->xmlosc3->xmlamp);
+   sys_param->osc3->detune = (Sint8)read_XML_param(doc->xmlosc3->xmldetune);
+   sys_param->osc3->duty   = (Uint8)read_XML_param(doc->xmlosc3->xmlduty);
+   sys_param->osc3->wave   = (Waveform)read_XML_param(doc->xmlosc3->xmlwave);
 
     // Load envelope parameters
-    sys_param->env->attack  = read_XML_param(doc->xmlenv->xmlattack);
-    sys_param->env->decay   = read_XML_param(doc->xmlenv->xmldecay);
-    sys_param->env->sustain = read_XML_param(doc->xmlenv->xmlsustain);
-    sys_param->env->release = read_XML_param(doc->xmlenv->xmlrelease);
+   sys_param->env->attack  = read_XML_param(doc->xmlenv->xmlattack);
+   sys_param->env->decay   = read_XML_param(doc->xmlenv->xmldecay);
+   sys_param->env->sustain = read_XML_param(doc->xmlenv->xmlsustain);
+   sys_param->env->release = read_XML_param(doc->xmlenv->xmlrelease);
 
     // Load other parameters
 
@@ -99,7 +97,7 @@ static char* double_to_char(double value)
     return buff;
 }
 
-int save_preset(const char* filename)
+int save_preset(const char* filename, Sys_param* sys_param)
 {
     char filename_relat[30]= "../presets/";
     xmlDocPtr doc;
