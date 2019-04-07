@@ -16,7 +16,6 @@
 #include "../../system/error_handler.h"
 #include "../../core/audio_core.h"
 
-
 #define xmlvalue    children->content
 
 // In XML file, each tab is considered as a child. Therefore there is a "next->" statement in between each pair of "next" statements.
@@ -39,7 +38,6 @@
 #define xmlsustain  children->next->next->next->next->next->xmlvalue
 #define xmlrelease  children->next->next->next->next->next->next->next->xmlvalue
 
-
 /**
  * \fn double read_XML_param(xmlChar* param)
  * \brief Reads parameter from XML preset file
@@ -48,7 +46,7 @@
  *
  * \return the read parameter
  */
-double read_XML_param(xmlChar* param);
+double read_XML_param(xmlChar *param);
 
 /**
  * \fn int write_XML_param(xmlChar* param, double value)
@@ -59,7 +57,7 @@ double read_XML_param(xmlChar* param);
  *
  * \return 0 if everything went OK, -1 otherwise
  */
-int write_XML_param(xmlChar* param, double value);
+int write_XML_param(xmlChar *param, double value);
 
 /**
  * \fn int load_preset(const char* filename)
@@ -70,7 +68,7 @@ int write_XML_param(xmlChar* param, double value);
  *
  * \return 0 if everything went OK, -1 otherwise
  */
-int load_preset(const char* filename, Sys_param* sysParam);
+int load_preset(const char *filename, Sys_param *sysParam);
 
 /**
  * \fn int save_preset(const char* filename)
@@ -81,6 +79,6 @@ int load_preset(const char* filename, Sys_param* sysParam);
  *
  * \return 0 if everything went OK, -1 otherwise
  */
-int save_preset(const char* filename, Sys_param* sysParam);
+int save_preset(const char *filename, Sys_param *sysParam);
 
 #endif //AUDIO_SYNTH_PRESET_XML_H

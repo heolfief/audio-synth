@@ -9,14 +9,12 @@
 #ifndef AUDIO_SYNTH_NOTE_H
 #define AUDIO_SYNTH_NOTE_H
 
-
 #include <SDL2/SDL_stdinc.h>
 #include "../oscillator/osc.h"
 #include "../note/adsr.h"
 #include "../../system/error_handler.h"
 
 typedef Sint16 *Note_Buffer;
-
 
 /**
  * \struct Note
@@ -25,19 +23,21 @@ typedef Sint16 *Note_Buffer;
  * A note is defined with : Oscillator 1, Oscillator 2, Oscillator 3, pitch, amplitude, on/off state, envelope and lifetime value
  * It is associated with it's own buffer to store the audio samples resulting of the mixed oscillators
  */
-typedef struct{
-    Oscillator*   osc1;       /*!<the first oscillator */
-    Oscillator*   osc2;       /*!<the second oscillator */
-    Oscillator*   osc3;       /*!<the third oscillator */
-    Uint16        freq;       /*!<the frequency of the note*/
-    double        velocity_amp;/*!<the velocity / amplitude of the note (range from 0 to 1) */
-    OnOff         onoff;      /*!<the on/off value of the note (MIDI protocol wise) */
-    OnOff         master_onoff;/*!<the master on/off value of the note (including release time, when master_onoff is OFF, there is no sound from the note) */
-    double        env_amp;    /*!<the envelope amplitude (range from 0 to 1) */
-    Uint64        lifetime;   /*!<the number of samples passed since the note is ON (used to calculate envelope) */
-    Uint64        deathtime;  /*!<the number of samples passed when note is OFF since the note was ON */
-    Note_Buffer   buffer;     /*!<the audio data buffer of the note, resulting of the mix of the oscillators buffers */
-}Note;
+typedef struct
+{
+  Oscillator *osc1;       /*!<the first oscillator */
+  Oscillator *osc2;       /*!<the second oscillator */
+  Oscillator *osc3;       /*!<the third oscillator */
+  Uint16 freq;       /*!<the frequency of the note*/
+  double velocity_amp;/*!<the velocity / amplitude of the note (range from 0 to 1) */
+  OnOff onoff;      /*!<the on/off value of the note (MIDI protocol wise) */
+  OnOff
+      master_onoff;/*!<the master on/off value of the note (including release time, when master_onoff is OFF, there is no sound from the note) */
+  double env_amp;    /*!<the envelope amplitude (range from 0 to 1) */
+  Uint64 lifetime;   /*!<the number of samples passed since the note is ON (used to calculate envelope) */
+  Uint64 deathtime;  /*!<the number of samples passed when note is OFF since the note was ON */
+  Note_Buffer buffer;     /*!<the audio data buffer of the note, resulting of the mix of the oscillators buffers */
+} Note;
 
 /**
  * \fn Uint16 get_freq_from_note_nbr(Sint8 note_nbr, Uint16 ref_freq)
@@ -137,6 +137,5 @@ Note_Buffer alloc_note_buffer(Uint16 buff_nb_samples);
  * \return 0
  */
 int free_note_buffer(Note_Buffer note_buff);
-
 
 #endif //AUDIO_SYNTH_NOTE_H

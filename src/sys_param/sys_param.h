@@ -14,22 +14,21 @@
 #include "../core/note/polyphony.h"
 #include "../system/error_handler.h"
 
-
 /**
  * \struct Sys_param
  * \brief define the system parameters, meant to be changed by the GUI
  *
  *
  */
-typedef struct{
-    Uint16        sample_rate;                            /*!<the sample rate of the audio system */
-    Uint16        audio_buffer_length;                    /*!<the length of the audio buffer of the audio system */
-    Oscillator*   osc1;                                   /*!<the first oscillator */
-    Oscillator*   osc2;                                   /*!<the second oscillator */
-    Oscillator*   osc3;                                   /*!<the third oscillator */
-    Envelope*     env;                                    /*!<the sound envelope */
-}Sys_param;
-
+typedef struct
+{
+  Uint16 sample_rate;                            /*!<the sample rate of the audio system */
+  Uint16 audio_buffer_length;                    /*!<the length of the audio buffer of the audio system */
+  Oscillator *osc1;                                   /*!<the first oscillator */
+  Oscillator *osc2;                                   /*!<the second oscillator */
+  Oscillator *osc3;                                   /*!<the third oscillator */
+  Envelope *env;                                    /*!<the sound envelope */
+} Sys_param;
 
 /**
  * \fn int copy_osc_sys_param_to_notes_osc(Sys_param *sys_param_to_copy, Polyphony p[])

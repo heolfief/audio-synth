@@ -10,36 +10,36 @@
 
 int copy_osc_sys_param_to_notes_osc(Sys_param *sys_param_to_copy, Polyphony p[])
 {
-    if(sys_param_to_copy == NULL)
+    if (sys_param_to_copy == NULL)
     {
         sys_print_error("sys_param_to_copy parameter is NULL");
         return -1;
     }
-    if(p == NULL)
+    if (p == NULL)
     {
         sys_print_error("Polyphony parameter is NULL");
         return -1;
     }
 
-    for(int i = 0; i < POLYPHONY_MAX; ++i)
+    for (int i = 0; i < POLYPHONY_MAX; ++i)
     {
-        p[i]->osc1->onoff  = sys_param_to_copy->osc1->onoff;
-        p[i]->osc1->amp    = sys_param_to_copy->osc1->amp;
+        p[i]->osc1->onoff = sys_param_to_copy->osc1->onoff;
+        p[i]->osc1->amp = sys_param_to_copy->osc1->amp;
         p[i]->osc1->detune = sys_param_to_copy->osc1->detune;
-        p[i]->osc1->duty   = sys_param_to_copy->osc1->duty;
-        p[i]->osc1->wave   = sys_param_to_copy->osc1->wave;
+        p[i]->osc1->duty = sys_param_to_copy->osc1->duty;
+        p[i]->osc1->wave = sys_param_to_copy->osc1->wave;
 
-        p[i]->osc2->onoff  = sys_param_to_copy->osc2->onoff;
-        p[i]->osc2->amp    = sys_param_to_copy->osc2->amp;
+        p[i]->osc2->onoff = sys_param_to_copy->osc2->onoff;
+        p[i]->osc2->amp = sys_param_to_copy->osc2->amp;
         p[i]->osc2->detune = sys_param_to_copy->osc2->detune;
-        p[i]->osc2->duty   = sys_param_to_copy->osc2->duty;
-        p[i]->osc2->wave   = sys_param_to_copy->osc2->wave;
+        p[i]->osc2->duty = sys_param_to_copy->osc2->duty;
+        p[i]->osc2->wave = sys_param_to_copy->osc2->wave;
 
-        p[i]->osc3->onoff  = sys_param_to_copy->osc3->onoff;
-        p[i]->osc3->amp    = sys_param_to_copy->osc3->amp;
+        p[i]->osc3->onoff = sys_param_to_copy->osc3->onoff;
+        p[i]->osc3->amp = sys_param_to_copy->osc3->amp;
         p[i]->osc3->detune = sys_param_to_copy->osc3->detune;
-        p[i]->osc3->duty   = sys_param_to_copy->osc3->duty;
-        p[i]->osc3->wave   = sys_param_to_copy->osc3->wave;
+        p[i]->osc3->duty = sys_param_to_copy->osc3->duty;
+        p[i]->osc3->wave = sys_param_to_copy->osc3->wave;
 
     }
     return 0;
@@ -48,10 +48,10 @@ int copy_osc_sys_param_to_notes_osc(Sys_param *sys_param_to_copy, Polyphony p[])
 Sys_param *alloc_sys_param()
 {
     Uint16 buff_nb_samples = 1;   // Not needed as sys param oscillators are just used to store parameters,
-                                  // therefore their buffers are useless
+    // therefore their buffers are useless
 
-    Sys_param *sp = (Sys_param*) malloc(sizeof(Sys_param));
-    if(sp == NULL)
+    Sys_param *sp = (Sys_param *) malloc(sizeof(Sys_param));
+    if (sp == NULL)
     {
         sys_print_error("Memory allocation error");
         return NULL;
@@ -60,13 +60,13 @@ Sys_param *alloc_sys_param()
     sp->osc1 = alloc_osc(buff_nb_samples);
     sp->osc2 = alloc_osc(buff_nb_samples);
     sp->osc3 = alloc_osc(buff_nb_samples);
-    if((sp->osc1 == NULL) || (sp->osc2 == NULL) || (sp->osc3 == NULL))
+    if ((sp->osc1 == NULL) || (sp->osc2 == NULL) || (sp->osc3 == NULL))
     {
         return NULL;
     }
 
-    sp->env = (Envelope*)malloc(sizeof(Envelope));
-    if(sp->env == NULL)
+    sp->env = (Envelope *) malloc(sizeof(Envelope));
+    if (sp->env == NULL)
     {
         sys_print_error("Memory allocation error");
         return NULL;

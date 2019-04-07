@@ -22,12 +22,13 @@
  * An audio core is consisted of a buffer containing final audio data to be played by the soundcard, the system parameters,
  * the polyphony array of the system and the phase of the system.
  */
-typedef struct{
-    Polyphony *note_array;       /*!<the polyphony array of the system */
-    Audio_Buffer master_audio;   /*!<the master audio buffer */
-    Sys_param* sys_param;        /*!<the system parameters */
-    Uint64 phase;                /*!<the phase of the oscillators */
-}Core;
+typedef struct
+{
+  Polyphony *note_array;       /*!<the polyphony array of the system */
+  Audio_Buffer master_audio;   /*!<the master audio buffer */
+  Sys_param *sys_param;        /*!<the system parameters */
+  Uint64 phase;                /*!<the phase of the oscillators */
+} Core;
 
 /**
  * \fn int init_core(Core* ac)
@@ -37,7 +38,7 @@ typedef struct{
  *
  * \return 0 if everything went OK, -1 otherwise
  */
-int init_core(Core* ac);
+int init_core(Core *ac);
 
 /**
  * \fn int quit_core(Core* ac)
@@ -47,7 +48,7 @@ int init_core(Core* ac);
  *
  * \return 0 if everything went OK, -1 otherwise
  */
-int quit_core(Core* ac);
+int quit_core(Core *ac);
 
 /**
  * \fn int synthesis_fill_buffer(Core* ac)
@@ -57,7 +58,7 @@ int quit_core(Core* ac);
  *
  * \return 0 if everything went OK, -1 otherwise
  */
-int synthesis_fill_buffer(Core* ac);
+int synthesis_fill_buffer(Core *ac);
 
 /**
  * \fn int master_audio_fill_buffer(Core* ac)
@@ -67,7 +68,7 @@ int synthesis_fill_buffer(Core* ac);
  *
  * \return 0 if everything went OK, -1 otherwise
  */
-int master_audio_fill_buffer(Core* ac);
+int master_audio_fill_buffer(Core *ac);
 
 /**
  * \fn int master_effects(Core* ac)
@@ -77,6 +78,6 @@ int master_audio_fill_buffer(Core* ac);
  *
  * \return 0 if everything went OK, -1 otherwise
  */
-int master_effects(Core* ac);
+int master_effects(Core *ac);
 
 #endif //AUDIO_SYNTH_AUDIO_CORE_H

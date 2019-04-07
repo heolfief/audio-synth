@@ -17,9 +17,8 @@
 #include "sys_param/xml/preset_xml.h"
 
 // JUST A TEST
-Uint16 mario_freq[7]={660, 660, 660, 510, 660, 770, 380};
-Uint16 mario_delay[7]={80, 200, 250, 80, 250, 450, 450};
-
+Uint16 mario_freq[7] = {660, 660, 660, 510, 660, 770, 380};
+Uint16 mario_delay[7] = {80, 200, 250, 80, 250, 450, 450};
 
 int main(int argc, char *argv[])
 {
@@ -27,20 +26,21 @@ int main(int argc, char *argv[])
     Core audio_core;
 
     audio_core.sys_param = alloc_sys_param();
-    if(audio_core.sys_param == NULL) exit(EXIT_FAILURE);
+    if (audio_core.sys_param == NULL) exit(EXIT_FAILURE);
 
     // Default parameters. If changed, memory allocation needs to be redone
-    audio_core.sys_param->sample_rate         = 48000;
+    audio_core.sys_param->sample_rate = 48000;
     audio_core.sys_param->audio_buffer_length = 1024;
 
 
     // Audio core init
-    if(init_core(&audio_core) != 0){
+    if (init_core(&audio_core) != 0)
+    {
         sys_print_error("Failed initializing audio core");
         exit(EXIT_FAILURE);
     }
 
-    if(load_preset("default.prst", audio_core.sys_param))
+    if (load_preset("default.prst", audio_core.sys_param))
     {
         sys_print_error("Failed loading preset");
         exit(EXIT_FAILURE);
@@ -53,13 +53,13 @@ int main(int argc, char *argv[])
     set_audio_spec(&as, &audio_core);
 
     // SDL initialisations
-    if(SDL_Init(SDL_INIT_EVERYTHING) < 0)
+    if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
     {
         sys_print_error("Failed initializing SDL");
         exit(EXIT_FAILURE);
     }
 
-    if(SDL_OpenAudio(&as, NULL) != 0)
+    if (SDL_OpenAudio(&as, NULL) != 0)
     {
         sys_print_error("Failed opening audio");
         exit(EXIT_FAILURE);
@@ -75,11 +75,10 @@ int main(int argc, char *argv[])
     audio_core.note_array[0]->velocity_amp = 1;
     audio_core.note_array[0]->master_onoff = OFF;
 
-
     SDL_PauseAudio(0);                      // Play audio (pause = off)
 
 
-    for(int i = 0; i < 7; ++i)
+    for (int i = 0; i < 7; ++i)
     {
         audio_core.note_array[0]->freq = mario_freq[i];
         note_on(audio_core.note_array[0]);

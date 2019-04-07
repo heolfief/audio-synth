@@ -19,7 +19,8 @@ int setup_core(void **state)
 
     ac = (Core *) malloc(sizeof(Core));
     if (ac == NULL)
-    { sys_print_error_test("Memory allocation error");
+    {
+        sys_print_error_test("Memory allocation error");
         return -1;
     }
 

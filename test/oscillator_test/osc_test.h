@@ -37,7 +37,6 @@ int teardown_osc(void **state);
  */
 void test_fill_osc_buffer_unknown(void **state);
 
-
 /**
  * \fn void test_fill_osc_buffer_zeros(void **state)
  * \brief Function to test filling an oscillator buffer with zeros (osc is off)
@@ -61,7 +60,6 @@ void test_fill_osc_buffer_square(void **state);
  * \brief Function to test filling an oscillator buffer with tri wave (osc is TRI)
  */
 void test_fill_osc_buffer_tri(void **state);
-
 
 /**
  * \fn void test_osc_init_default_values(void **state)

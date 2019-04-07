@@ -67,25 +67,25 @@ void test_copy_osc_sys_param_to_notes_osc(void **state)
 
     assert_int_equal(copy_osc_sys_param_to_notes_osc(sp, note_array), 0);
 
-    for(int i=0;i<POLYPHONY_MAX;++i)
+    for (int i = 0; i < POLYPHONY_MAX; ++i)
     {
-        assert_int_equal(note_array[i]->osc1->onoff,sp->osc1->onoff);
-        assert_int_equal(note_array[i]->osc1->amp,sp->osc1->amp);
-        assert_int_equal(note_array[i]->osc1->detune,sp->osc1->detune);
-        assert_int_equal(note_array[i]->osc1->duty,sp->osc1->duty);
-        assert_int_equal(note_array[i]->osc1->wave,sp->osc1->wave);
+        assert_int_equal(note_array[i]->osc1->onoff, sp->osc1->onoff);
+        assert_int_equal(note_array[i]->osc1->amp, sp->osc1->amp);
+        assert_int_equal(note_array[i]->osc1->detune, sp->osc1->detune);
+        assert_int_equal(note_array[i]->osc1->duty, sp->osc1->duty);
+        assert_int_equal(note_array[i]->osc1->wave, sp->osc1->wave);
 
-        assert_int_equal(note_array[i]->osc2->onoff,sp->osc2->onoff);
-        assert_int_equal(note_array[i]->osc2->amp,sp->osc2->amp);
-        assert_int_equal(note_array[i]->osc2->detune,sp->osc2->detune);
-        assert_int_equal(note_array[i]->osc2->duty,sp->osc2->duty);
-        assert_int_equal(note_array[i]->osc2->wave,sp->osc2->wave);
+        assert_int_equal(note_array[i]->osc2->onoff, sp->osc2->onoff);
+        assert_int_equal(note_array[i]->osc2->amp, sp->osc2->amp);
+        assert_int_equal(note_array[i]->osc2->detune, sp->osc2->detune);
+        assert_int_equal(note_array[i]->osc2->duty, sp->osc2->duty);
+        assert_int_equal(note_array[i]->osc2->wave, sp->osc2->wave);
 
-        assert_int_equal(note_array[i]->osc3->onoff,sp->osc3->onoff);
-        assert_int_equal(note_array[i]->osc3->amp,sp->osc3->amp);
-        assert_int_equal(note_array[i]->osc3->detune,sp->osc3->detune);
-        assert_int_equal(note_array[i]->osc3->duty,sp->osc3->duty);
-        assert_int_equal(note_array[i]->osc3->wave,sp->osc3->wave);
+        assert_int_equal(note_array[i]->osc3->onoff, sp->osc3->onoff);
+        assert_int_equal(note_array[i]->osc3->amp, sp->osc3->amp);
+        assert_int_equal(note_array[i]->osc3->detune, sp->osc3->detune);
+        assert_int_equal(note_array[i]->osc3->duty, sp->osc3->duty);
+        assert_int_equal(note_array[i]->osc3->wave, sp->osc3->wave);
     }
 
     free_polyphony(note_array);

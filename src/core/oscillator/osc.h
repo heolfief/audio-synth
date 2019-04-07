@@ -22,7 +22,6 @@
 #define DEFAULT_OSC_DUTY 50
 #define DEFAULT_OSC_ONOFF OFF
 
-
 typedef Sint16 *Osc_Buffer;
 
 /**
@@ -31,10 +30,11 @@ typedef Sint16 *Osc_Buffer;
  *
  * This enum defines the various waveform types : sine, square and triangle
  */
-typedef enum{
-    SIN,                 /*!< Sinusoidal waveform */
-    SQR,                 /*!< Square waveform */
-    TRI,                 /*!< Triangle waveform */
+typedef enum
+{
+  SIN,                 /*!< Sinusoidal waveform */
+  SQR,                 /*!< Square waveform */
+  TRI,                 /*!< Triangle waveform */
 } Waveform;
 
 /**
@@ -42,9 +42,10 @@ typedef enum{
  * \brief defines ON and OFF values
  *
  */
-typedef enum{
-    OFF,                 /*!< object is OFF */
-    ON,                  /*!< object is ON */
+typedef enum
+{
+  OFF,                 /*!< object is OFF */
+  ON,                  /*!< object is ON */
 } OnOff;
 
 /**
@@ -54,16 +55,16 @@ typedef enum{
  * An oscillator is defined with : wave, frequency, amplitude, detune, dutycycle and on/off value
  * It is associated with it's own buffer to store the audio samples it created
  */
-typedef struct{
-    Waveform    wave;       /*!<the waveform type */
-    double      freq;       /*!<the frequency */
-    Uint16      amp;        /*!<the amplitude */
-    Sint8       detune;     /*!<the detune in number of notes */
-    Uint8       duty;       /*!<the dutycyle in percents (if available for the selected waveform) */
-    OnOff       onoff;      /*!<the on/off value */
-    Osc_Buffer  buffer;     /*!<the audio data buffer of the oscillator */
-}Oscillator;
-
+typedef struct
+{
+  Waveform wave;       /*!<the waveform type */
+  double freq;       /*!<the frequency */
+  Uint16 amp;        /*!<the amplitude */
+  Sint8 detune;     /*!<the detune in number of notes */
+  Uint8 duty;       /*!<the dutycyle in percents (if available for the selected waveform) */
+  OnOff onoff;      /*!<the on/off value */
+  Osc_Buffer buffer;     /*!<the audio data buffer of the oscillator */
+} Oscillator;
 
 /**
  * \fn int osc_fill_buffer(const Oscillator *osc, Uint16 buffer_length, Uint64 sample_rate, Uint64 phase)
@@ -77,7 +78,6 @@ typedef struct{
  * \return 0 if everything went OK, -1 otherwise
  */
 int osc_fill_buffer(const Oscillator *osc, Uint16 buffer_length, Uint64 sample_rate, Uint64 phase);
-
 
 /**
  * \fn int osc_init_default_values(Oscillator *osc_to_init, Uint16 buffer_length, Uint64 sample_rate)
@@ -132,6 +132,5 @@ Osc_Buffer alloc_osc_buffer(Uint16 buff_nb_samples);
  * \return 0
  */
 int free_osc_buffer(Osc_Buffer osc_buff);
-
 
 #endif //AUDIO_SYNTH_OSC_H

@@ -8,30 +8,29 @@
 
 #include "osc.h"
 
-
 int osc_fill_buffer(const Oscillator *osc, Uint16 buffer_length, Uint64 sample_rate, Uint64 phase)
 {
     static const double chromatic_ratio = 1.059463094359295264562;
 
-    if(osc == NULL)
+    if (osc == NULL)
     {
         sys_print_error("Osc parameter is NULL");
         return -1;
     }
 
-    if((osc->amp > OSC_AMP_MAX) || (osc->amp < 0))
+    if ((osc->amp > OSC_AMP_MAX) || (osc->amp < 0))
     {
         sys_print_error("Osc amplitude passed maximum, risk of audio buffer overflow");
         return -1;
     }
 
     // Calculate actual frequency based on detune value
-    double detuned_freq = (double)(osc->freq * (double)pow(chromatic_ratio, osc->detune));
+    double detuned_freq = (double) (osc->freq * (double) pow(chromatic_ratio, osc->detune));
 
     //double offset = 0;
-    double nb_samples_in_period=0;
+    double nb_samples_in_period = 0;
 
-    if(osc->onoff == OFF)
+    if (osc->onoff == OFF)
     {
         for (Uint16 sample = 0; sample < buffer_length; ++sample)
         {
@@ -48,7 +47,8 @@ int osc_fill_buffer(const Oscillator *osc, Uint16 buffer_length, Uint64 sample_r
             for (Uint16 sample = 0; sample < buffer_length; ++sample)
             {
                 // Fill the buffer with a sine wave based on it's frequency, amplitude and phase
-                osc->buffer[sample] = (Sint16)(osc->amp * (sin((sample + phase) * detuned_freq * 2 * M_PI / sample_rate)));
+                osc->buffer[sample] =
+                    (Sint16) (osc->amp * (sin((sample + phase) * detuned_freq * 2 * M_PI / sample_rate)));
             }
             break;
 
@@ -58,7 +58,7 @@ int osc_fill_buffer(const Oscillator *osc, Uint16 buffer_length, Uint64 sample_r
             // Calculate signal offset (average value)
             //offset = (osc->duty / 100.0) * osc->amp + (1.0 - (osc->duty / 100.0)) * -osc->amp;
 
-            nb_samples_in_period = (double)sample_rate / detuned_freq;
+            nb_samples_in_period = (double) sample_rate / detuned_freq;
 
             for (Uint16 sample = 0; sample < buffer_length; ++sample)
             {
@@ -87,7 +87,7 @@ int osc_fill_buffer(const Oscillator *osc, Uint16 buffer_length, Uint64 sample_r
 
         case TRI:
 
-            nb_samples_in_period = (double)sample_rate / detuned_freq;
+            nb_samples_in_period = (double) sample_rate / detuned_freq;
 
             for (Uint16 sample = 0; sample < buffer_length; ++sample)
             {
@@ -96,19 +96,19 @@ int osc_fill_buffer(const Oscillator *osc, Uint16 buffer_length, Uint64 sample_r
 
                 if (mod < (((double) osc->duty / 100.0) * nb_samples_in_period))
                 {
-                    osc->buffer[sample] = (Sint16) ((100.0 / osc->duty) * mod * osc->amp / (Sint16) nb_samples_in_period) -
-                                     (Sint16) (osc->amp / 2.0);
+                    osc->buffer[sample] =
+                        (Sint16) ((100.0 / osc->duty) * mod * osc->amp / (Sint16) nb_samples_in_period) -
+                            (Sint16) (osc->amp / 2.0);
                 }
                 else
                 {
                     osc->buffer[sample] = (Sint16) (-(mod - nb_samples_in_period * osc->duty / 100.0) * osc->amp /
-                                     (nb_samples_in_period * (1 - osc->duty / 100.0))) + (Sint16) (osc->amp / 2.0);
+                        (nb_samples_in_period * (1 - osc->duty / 100.0))) + (Sint16) (osc->amp / 2.0);
                 }
             }
             break;
 
-        default:
-            sys_print_error("Waveform is unknown");
+        default:sys_print_error("Waveform is unknown");
             return -1; // if waveform is unknown
     }
     return 0;
@@ -127,14 +127,14 @@ int osc_init_default_values(Oscillator *osc_to_init, Uint16 buffer_length, Uint6
 
 Oscillator *alloc_osc(Uint16 buff_nb_samples)
 {
-    Oscillator* osc_allocated = (Oscillator*) malloc(sizeof(Oscillator));
-    if(osc_allocated == NULL)
+    Oscillator *osc_allocated = (Oscillator *) malloc(sizeof(Oscillator));
+    if (osc_allocated == NULL)
     {
         sys_print_error("Memory allocation error");
         return NULL;
     }
     osc_allocated->buffer = alloc_osc_buffer(buff_nb_samples);
-    if(osc_allocated->buffer == NULL)
+    if (osc_allocated->buffer == NULL)
     {
         return NULL;
     }
@@ -151,7 +151,7 @@ int free_osc(Oscillator *osc_to_free)
 Osc_Buffer alloc_osc_buffer(Uint16 buff_nb_samples)
 {
     Osc_Buffer osc_buff = (Osc_Buffer) calloc(buff_nb_samples, sizeof(Osc_Buffer));
-    if(osc_buff == NULL)
+    if (osc_buff == NULL)
     {
         sys_print_error("Memory allocation error");
         return NULL;

@@ -14,8 +14,6 @@
 #include "../sys_param/sys_param.h"
 #include "../system/error_handler.h"
 
-
-
 /**
  * \struct Switch
  * \brief define a graphical switch
@@ -23,13 +21,14 @@
  * A Potentiometer is defined with : it's x and y position on the screen, the percentages set of the potentiometer,
  * the image of the potentiometer, the parameter it controls, and the min and max value of ths parameter
  */
-typedef struct{
-    Uint16      posX;        /*!<the X position on the screen (in pixels) */
-    Uint16      posY;        /*!<the Y position on the screen (in pixels) */
-    char*       img;         /*!<the image of the switch */
-    OnOff       onoff;       /*!<the percentage set by the user of the switch */
-    void*       param;       /*!<the parameter set by the switch */
-}Switch;
+typedef struct
+{
+  Uint16 posX;        /*!<the X position on the screen (in pixels) */
+  Uint16 posY;        /*!<the Y position on the screen (in pixels) */
+  char *img;         /*!<the image of the switch */
+  OnOff onoff;       /*!<the percentage set by the user of the switch */
+  void *param;       /*!<the parameter set by the switch */
+} Switch;
 
 /**
  * \struct Potentiometer
@@ -38,15 +37,15 @@ typedef struct{
  * A Potentiometer is defined with : it's x and y position on the screen, the percentages set of the potentiometer,
  * the image of the potentiometer, the parameter it controls, and the min and max value of ths parameter
  */
-typedef struct{
-    Uint16      posX;        /*!<the X position on the screen (in pixels) */
-    Uint16      posY;        /*!<the Y position on the screen (in pixels) */
-    char*       img;         /*!<the image of the potentiometer */
-    Uint8       percent;     /*!<the percentage set by the user of the potentiometer */
-    void*       param;       /*!<the parameter set by the potentiometer */
-    Sint64      paramMAX;    /*!<the max value of the parameter set by the potentiometer, when percent is 100% */
-    Sint64      paramMIN;    /*!<the min value of the parameter set by the potentiometer, when percent is 0% */
-}Potentiometer;
-
+typedef struct
+{
+  Uint16 posX;        /*!<the X position on the screen (in pixels) */
+  Uint16 posY;        /*!<the Y position on the screen (in pixels) */
+  char *img;         /*!<the image of the potentiometer */
+  Uint8 percent;     /*!<the percentage set by the user of the potentiometer */
+  void *param;       /*!<the parameter set by the potentiometer */
+  Sint64 paramMAX;    /*!<the max value of the parameter set by the potentiometer, when percent is 100% */
+  Sint64 paramMIN;    /*!<the min value of the parameter set by the potentiometer, when percent is 0% */
+} Potentiometer;
 
 #endif //AUDIO_SYNTH_GUI_H

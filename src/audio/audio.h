@@ -45,6 +45,6 @@ void func_callback(void *userdata, Uint8 *stream, int len);
  *
  * \return 0 if everything went OK, -1 otherwise
  */
-int set_audio_spec(SDL_AudioSpec *as, const Core* ac);
+int set_audio_spec(SDL_AudioSpec *as, const Core *ac);
 
 #endif //AUDIO_SYNTH_AUDIO_H

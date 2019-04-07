@@ -15,8 +15,8 @@
 
 #define POLYPHONY_MAX 100
 
-typedef Note*   Polyphony;    // Polyphony is an array of Note
-typedef Sint16* Audio_Buffer;
+typedef Note *Polyphony;    // Polyphony is an array of Note
+typedef Sint16 *Audio_Buffer;
 
 /**
  * \fn int find_free_note(Polyphony *p)
