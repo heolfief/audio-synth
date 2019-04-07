@@ -40,6 +40,6 @@ int distortion(Audio_Buffer buff, Uint16 buffer_length, Uint8 dist_level, Uint8 
  *
  * \return 0 if everything went OK, -1 otherwise
  */
-int amp_mod(Audio_Buffer buff, Uint16 buffer_length, Uint32 sample_rate, double freq, double mod_level);
+int amp_mod(Audio_Buffer buff, Uint16 buffer_length, Uint32 sample_rate, double freq, Uint8 mod_level);
 
 #endif //AUDIO_SYNTH_AUDIO_FX_H

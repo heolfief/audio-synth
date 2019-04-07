@@ -6,6 +6,8 @@
 #include "oscillator_test/osc_test.h"
 #include "note_test/note_test.h"
 #include "note_test/polyphony_test.h"
+#include "core_test/core_test.h"
+#include "sys_param_test/sys_param_test.h"
 
 int main(void) {
     const struct CMUnitTest tests[] =
@@ -30,7 +32,14 @@ int main(void) {
 
         //Polyphony tests
         cmocka_unit_test_setup_teardown(test_find_free_note, setup_polyphony, teardown_polyphony),
-        cmocka_unit_test_setup_teardown(test_polyphony_fill_buffer, setup_polyphony, teardown_polyphony)
+        cmocka_unit_test_setup_teardown(test_polyphony_fill_buffer, setup_polyphony, teardown_polyphony),
+
+        //Core tests
+        cmocka_unit_test_setup_teardown(test_master_audio_fill_buffer, setup_core, teardown_core),
+        cmocka_unit_test_setup_teardown(test_fx, setup_core, teardown_core),
+
+        //System parameters tests
+        cmocka_unit_test_setup_teardown(test_copy_osc_sys_param_to_notes_osc, setup_sys_param, teardown_sys_param)
     };
 
     return cmocka_run_group_tests(tests, NULL, NULL);

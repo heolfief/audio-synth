@@ -21,7 +21,7 @@ int copy_osc_sys_param_to_notes_osc(Sys_param *sys_param_to_copy, Polyphony p[])
         return -1;
     }
 
-    for(int i = 0; i < 10; ++i)
+    for(int i = 0; i < POLYPHONY_MAX; ++i)
     {
         p[i]->osc1->onoff  = sys_param_to_copy->osc1->onoff;
         p[i]->osc1->amp    = sys_param_to_copy->osc1->amp;
