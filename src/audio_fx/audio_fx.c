@@ -39,13 +39,20 @@ int distortion(Audio_Buffer buff, Uint16 buffer_length, Uint8 dist_level, Uint8 
     return 0;
 }
 
-int amp_mod(Audio_Buffer buff, Uint16 buffer_length, Uint32 sample_rate, double freq, double mod_level)
+int amp_mod(Audio_Buffer buff, Uint16 buffer_length, Uint32 sample_rate, double freq, Uint8 mod_level)
 {
     if (buff == NULL)
     {
         sys_print_error("Audio buffer is NULL");
         return -1;
     }
+
+    if(mod_level > 100 || freq < 0)
+    {
+        sys_print_error("Parameter is out of range");
+        return -1;
+    }
+
     double temp_sample;
     static Uint64 lfo_phase;
     Oscillator *lfo = alloc_osc(buffer_length);
