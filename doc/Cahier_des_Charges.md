@@ -24,7 +24,6 @@
   - Decay
   - Sustain
   - Release
-  - Indépendant pour les 3 VCO
 
 
 - **Filtres :**
