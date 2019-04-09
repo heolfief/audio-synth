@@ -12,6 +12,7 @@
 
 #include <SDL2/SDL_stdinc.h>
 #include "../core/note/polyphony.h"
+#include "../audio_fx/audio_fx.h"
 #include "../system/error_handler.h"
 
 /**
@@ -24,10 +25,11 @@ typedef struct
 {
   Uint16 sample_rate;                            /*!<the sample rate of the audio system */
   Uint16 audio_buffer_length;                    /*!<the length of the audio buffer of the audio system */
-  Oscillator *osc1;                                   /*!<the first oscillator */
-  Oscillator *osc2;                                   /*!<the second oscillator */
-  Oscillator *osc3;                                   /*!<the third oscillator */
-  Envelope *env;                                    /*!<the sound envelope */
+  Oscillator *osc1;                              /*!<the first oscillator */
+  Oscillator *osc2;                              /*!<the second oscillator */
+  Oscillator *osc3;                              /*!<the third oscillator */
+  Envelope *env;                                 /*!<the sound envelope */
+  Filter_param *filter_param;                    /*!<the filter parameter */
 } Sys_param;
 
 /**

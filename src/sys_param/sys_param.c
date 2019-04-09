@@ -72,6 +72,13 @@ Sys_param *alloc_sys_param()
         return NULL;
     }
 
+    sp->filter_param = (Filter_param *) malloc(sizeof(Filter_param));
+    if (sp->filter_param == NULL)
+    {
+        sys_print_error("Memory allocation error");
+        return NULL;
+    }
+
     return sp;
 }
 
@@ -81,6 +88,7 @@ int free_sys_param(Sys_param *sys_param_to_free)
     free_osc(sys_param_to_free->osc2);
     free_osc(sys_param_to_free->osc3);
     free(sys_param_to_free->env);
+    free(sys_param_to_free->filter_param);
     free(sys_param_to_free);
     return 0;
 }
