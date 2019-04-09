@@ -92,3 +92,98 @@ int amp_mod(Audio_Buffer buff, Uint16 buffer_length, Uint32 sample_rate, double 
 
     return 0;
 }
+
+int biquad(Audio_Buffer buff, Uint16 buffer_length, sf_biquad_state_st *state)
+{
+    if (buff == NULL)
+    {
+        sys_print_error("Audio buffer is NULL");
+        return -1;
+    }
+
+    if (state == NULL)
+    {
+        sys_print_error("State object (=filter coefficients) is NULL");
+        return -1;
+    }
+
+    if (buffer_length == 0)
+    {
+        sys_print_error("Buffer length is zero");
+        return -1;
+    }
+
+    sf_sample_st st_buff[buffer_length];
+
+    for (Uint16 sample = 0; sample < buffer_length; ++sample)
+    {
+        // Convert to float < 1 to work with the library filter code
+        st_buff[sample].L = (float) (buff[sample]) / 32768.0f;
+        st_buff[sample].R = (float) (buff[sample]) / 32768.0f;
+    }
+
+    sf_biquad_process(state, buffer_length, st_buff, st_buff);
+
+    for (Uint16 sample = 0; sample < buffer_length; ++sample)
+    {
+        buff[sample] = (Sint16) (st_buff[sample].L * 32767.0f); // Convert back to full range Sint16
+    }
+
+    return 0;
+}
+
+int compute_filter_coeffs(Filter_param *filter_param, Uint32 sample_rate, sf_biquad_state_st *state)
+{
+    if (filter_param == NULL)
+    {
+        sys_print_error("System parameters is NULL");
+        return -1;
+    }
+
+    if (state == NULL)
+    {
+        sys_print_error("State object (=filter coefficients) is NULL");
+        return -1;
+    }
+
+    switch (filter_param->filter_type)
+    {
+        case LOWPASS:sf_lowpass(state, sample_rate, (float) filter_param->cutoff_freq, (float) filter_param->resonance);
+            break;
+        case HIGHPASS:sf_highpass(state, sample_rate, (float) filter_param->cutoff_freq, (float) filter_param->resonance);
+            break;
+        case BANDPASS:sf_bandpass(state, sample_rate, (float) filter_param->cutoff_freq, (float) filter_param->resonance);
+            break;
+        case NOTCH:sf_notch(state, sample_rate, (float) filter_param->cutoff_freq, (float) filter_param->resonance);
+            break;
+        default :sys_print_error("Filter type is unknown");
+            return -1;
+    }
+
+    return 0;
+}
+
+Effect_core *alloc_effect_core()
+{
+    Effect_core *ec = (Effect_core *) malloc(sizeof(Effect_core));
+    if (ec == NULL)
+    {
+        sys_print_error("Memory allocation error");
+        return NULL;
+    }
+    ec->filter_state = (sf_biquad_state_st *) malloc(sizeof(sf_biquad_state_st));
+    if (ec->filter_state == NULL)
+    {
+        sys_print_error("Memory allocation error");
+        return NULL;
+    }
+
+    return ec;
+}
+
+int free_effect_core(Effect_core *ec)
+{
+    free(ec->filter_state);
+    free(ec);
+    return 0;
+}
