@@ -8,9 +8,6 @@
 
 #include "audio.h"
 
-// Global phase variable
-Uint64 phase;
-
 void func_callback(void *userdata, Uint8 *stream, int len)
 {
     Core *audio_core = (Core *) userdata;
