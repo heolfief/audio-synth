@@ -105,6 +105,11 @@ void test_fx(void **state)
     // Error behaviour test
     assert_int_equal(distortion(NULL, TEST_AUDIO_BUFF_SIZE, 0, 0), -1);
 
+    for (Uint16 sample = 0; sample < ac->sys_param->audio_buffer_length; ++sample)
+    {
+        ac->master_audio[sample] = 0;
+    }
+
     // Normal behaviour test
     assert_int_equal(distortion(ac->master_audio, TEST_AUDIO_BUFF_SIZE, 50, 50), 0);
 
