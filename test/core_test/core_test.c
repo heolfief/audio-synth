@@ -75,19 +75,19 @@ void test_fx(void **state)
     Core *ac = *state;
 
     memset(ac->master_audio, 0, TEST_AUDIO_BUFF_SIZE);
-    ac->effect_core->filter_state->a1=0;
-    ac->effect_core->filter_state->a2=0;
-    ac->effect_core->filter_state->b0=0;
-    ac->effect_core->filter_state->b1=0;
-    ac->effect_core->filter_state->b0=0;
-    ac->effect_core->filter_state->xn1.L=0;
-    ac->effect_core->filter_state->xn1.R=0;
-    ac->effect_core->filter_state->xn2.L=0;
-    ac->effect_core->filter_state->xn2.R=0;
-    ac->effect_core->filter_state->yn1.L=0;
-    ac->effect_core->filter_state->yn1.R=0;
-    ac->effect_core->filter_state->yn2.L=0;
-    ac->effect_core->filter_state->yn2.R=0;
+    ac->effect_core->filter_state->a1 = 0;
+    ac->effect_core->filter_state->a2 = 0;
+    ac->effect_core->filter_state->b0 = 0;
+    ac->effect_core->filter_state->b1 = 0;
+    ac->effect_core->filter_state->b0 = 0;
+    ac->effect_core->filter_state->xn1.L = 0;
+    ac->effect_core->filter_state->xn1.R = 0;
+    ac->effect_core->filter_state->xn2.L = 0;
+    ac->effect_core->filter_state->xn2.R = 0;
+    ac->effect_core->filter_state->yn1.L = 0;
+    ac->effect_core->filter_state->yn1.R = 0;
+    ac->effect_core->filter_state->yn2.L = 0;
+    ac->effect_core->filter_state->yn2.R = 0;
 
     /*
      * MASTER EFFECTS
@@ -107,7 +107,15 @@ void test_fx(void **state)
 
     for (Uint16 sample = 0; sample < ac->sys_param->audio_buffer_length; ++sample)
     {
-        ac->master_audio[sample] = 0;
+        ac->master_audio[sample] = 5;
+    }
+
+    // Normal behaviour test
+    assert_int_equal(distortion(ac->master_audio, TEST_AUDIO_BUFF_SIZE, 50, 50), 0);
+
+    for (Uint16 sample = 0; sample < ac->sys_param->audio_buffer_length; ++sample)
+    {
+        ac->master_audio[sample] = -5;
     }
 
     // Normal behaviour test
@@ -137,16 +145,24 @@ void test_fx(void **state)
     /*
     * FILTER
     */
-    ac->sys_param->filter_param->filter_type = LOWPASS;
     ac->sys_param->filter_param->cutoff_freq = 440;
     ac->sys_param->filter_param->resonance = 10;
-    assert_int_equal(compute_filter_coeffs(ac->sys_param->filter_param, ac->sys_param->sample_rate, ac->effect_core->filter_state), 0);
 
     // Error behaviour test
+    assert_int_equal(compute_filter_coeffs(ac->sys_param->filter_param, ac->sys_param->sample_rate, NULL), -1);
+    assert_int_equal(compute_filter_coeffs(NULL, ac->sys_param->sample_rate, ac->effect_core->filter_state), -1);
     assert_int_equal(biquad(NULL, TEST_AUDIO_BUFF_SIZE, ac->effect_core->filter_state), -1);
     assert_int_equal(biquad(ac->master_audio, TEST_AUDIO_BUFF_SIZE, NULL), -1);
     assert_int_equal(biquad(ac->master_audio, 0, ac->effect_core->filter_state), -1);
 
-    // Normal behaviour test
-    assert_int_equal(biquad(ac->master_audio, TEST_AUDIO_BUFF_SIZE, ac->effect_core->filter_state), 0);
+    for (Filter_type filter_type = LOWPASS; filter_type <= NOTCH; ++filter_type)
+    {
+        ac->sys_param->filter_param->filter_type = filter_type;
+        assert_int_equal(compute_filter_coeffs(ac->sys_param->filter_param, ac->sys_param->sample_rate, ac->effect_core->filter_state), 0);
+
+        // Normal behaviour test
+        assert_int_equal(biquad(ac->master_audio, TEST_AUDIO_BUFF_SIZE, ac->effect_core->filter_state), 0);
+    }
+    ac->sys_param->filter_param->filter_type = 120; // unknown filter type
+    assert_int_equal(compute_filter_coeffs(ac->sys_param->filter_param, ac->sys_param->sample_rate, ac->effect_core->filter_state), -1);
 }

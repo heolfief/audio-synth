@@ -12,7 +12,7 @@
 #include <SDL2/SDL_stdinc.h>
 #include "../system/error_handler.h"
 #include "../core/note/polyphony.h"
-#include "biquad.h"
+#include "ext_effects/biquad.h"
 
 /**
  * \enum Filter_type

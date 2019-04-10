@@ -17,9 +17,9 @@ set(SOURCE_FILES main.c
         system/error_handler.h
         audio_fx/audio_fx.c audio_fx/audio_fx.h
         sys_param/xml/preset_xml.c sys_param/xml/preset_xml.h
-        audio_fx/snd.c audio_fx/snd.h
-        audio_fx/biquad.c audio_fx/biquad.h
-        audio_fx/mem.c audio_fx/mem.h
+        audio_fx/ext_effects/snd.c audio_fx/ext_effects/snd.h
+        audio_fx/ext_effects/biquad.c audio_fx/ext_effects/biquad.h
+        audio_fx/ext_effects/mem.c audio_fx/ext_effects/mem.h
         )
 
 add_executable(audio_synth ${SOURCE_FILES})

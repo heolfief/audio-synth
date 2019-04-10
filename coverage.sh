@@ -7,6 +7,7 @@ echo -e "${BLUE}\nExecuting code coverage :${NC}"
 bin/audio_synth_test > /dev/null 2>&1 #mute output
 lcov --capture --directory build/run --output-file build/run/coverage.info
 lcov --remove build/run/coverage.info $PWD'/test/*' -o build/run/coverage_clean.info
+lcov --remove build/run/coverage_clean.info $PWD'/src/audio_fx/ext_effects/*' -o build/run/coverage_clean.info
 genhtml build/run/coverage_clean.info --output-directory doc/coverage
 echo -e "${BLUE}\nDone${NC}"
 echo -e "Please open doc/coverage/index.html to see result\n"
