@@ -13,23 +13,14 @@
 
 int setup_core(void **state)
 {
-    Core *ac = NULL;
-
-    assert_int_equal(init_core(NULL), -1);
-
-    ac = (Core *) malloc(sizeof(Core));
+    Core *ac = alloc_core(TEST_AUDIO_BUFF_SIZE);
     if (ac == NULL)
     {
         sys_print_error_test("Memory allocation error");
         return -1;
     }
 
-    ac->sys_param = alloc_sys_param();
-    if (ac->sys_param == NULL) return -1;
     ac->sys_param->sample_rate = TEST_SAMPLE_RATE;
-    ac->sys_param->audio_buffer_length = TEST_AUDIO_BUFF_SIZE;
-
-    if (init_core(ac))return -1;
 
     *state = ac;
 
@@ -40,13 +31,10 @@ int teardown_core(void **state)
 {
     Core *ac = *state;
 
-    assert_int_equal(quit_core(NULL), -1);
+    // Error handling behaviour test
+    assert_int_equal(free_core(NULL), -1);
 
-    free_sys_param(ac->sys_param);
-
-    if (quit_core(ac))return -1;
-
-    free(ac);
+    if (free_core(ac))return -1;
 
     return 0;
 }
@@ -54,7 +42,7 @@ int teardown_core(void **state)
 void test_master_audio_fill_buffer(void **state)
 {
     Core *ac = *state;
-    Envelope env = {.attack = 0, .decay =0, .sustain =1, .release =0};
+    Envelope env = {.attack = 0, .decay = 0, .sustain = 1, .release = 0};
 
     for (int i = 0; i < POLYPHONY_MAX; ++i)
     {
@@ -86,6 +74,21 @@ void test_fx(void **state)
 {
     Core *ac = *state;
 
+    memset(ac->master_audio, 0, TEST_AUDIO_BUFF_SIZE);
+    ac->effect_core->filter_state->a1=0;
+    ac->effect_core->filter_state->a2=0;
+    ac->effect_core->filter_state->b0=0;
+    ac->effect_core->filter_state->b1=0;
+    ac->effect_core->filter_state->b0=0;
+    ac->effect_core->filter_state->xn1.L=0;
+    ac->effect_core->filter_state->xn1.R=0;
+    ac->effect_core->filter_state->xn2.L=0;
+    ac->effect_core->filter_state->xn2.R=0;
+    ac->effect_core->filter_state->yn1.L=0;
+    ac->effect_core->filter_state->yn1.R=0;
+    ac->effect_core->filter_state->yn2.L=0;
+    ac->effect_core->filter_state->yn2.R=0;
+
     /*
      * MASTER EFFECTS
      */
@@ -102,8 +105,13 @@ void test_fx(void **state)
     // Error behaviour test
     assert_int_equal(distortion(NULL, TEST_AUDIO_BUFF_SIZE, 0, 0), -1);
 
+    for (Uint16 sample = 0; sample < ac->sys_param->audio_buffer_length; ++sample)
+    {
+        ac->master_audio[sample] = 0;
+    }
+
     // Normal behaviour test
-    assert_int_equal(distortion(ac->master_audio, TEST_AUDIO_BUFF_SIZE, 0, 0), 0);
+    assert_int_equal(distortion(ac->master_audio, TEST_AUDIO_BUFF_SIZE, 50, 50), 0);
 
     // Out of range parameters behaviour test
     assert_int_equal(distortion(ac->master_audio, TEST_AUDIO_BUFF_SIZE, 101, 0), -1);
@@ -124,4 +132,21 @@ void test_fx(void **state)
     assert_int_equal(amp_mod(ac->master_audio, TEST_AUDIO_BUFF_SIZE, TEST_SAMPLE_RATE, -5, 0), -1);
     assert_int_equal(amp_mod(ac->master_audio, TEST_AUDIO_BUFF_SIZE, TEST_SAMPLE_RATE, 0, 101), -1);
     assert_int_equal(amp_mod(ac->master_audio, TEST_AUDIO_BUFF_SIZE, TEST_SAMPLE_RATE, -50, 185), -1);
+
+
+    /*
+    * FILTER
+    */
+    ac->sys_param->filter_param->filter_type = LOWPASS;
+    ac->sys_param->filter_param->cutoff_freq = 440;
+    ac->sys_param->filter_param->resonance = 10;
+    assert_int_equal(compute_filter_coeffs(ac->sys_param->filter_param, ac->sys_param->sample_rate, ac->effect_core->filter_state), 0);
+
+    // Error behaviour test
+    assert_int_equal(biquad(NULL, TEST_AUDIO_BUFF_SIZE, ac->effect_core->filter_state), -1);
+    assert_int_equal(biquad(ac->master_audio, TEST_AUDIO_BUFF_SIZE, NULL), -1);
+    assert_int_equal(biquad(ac->master_audio, 0, ac->effect_core->filter_state), -1);
+
+    // Normal behaviour test
+    assert_int_equal(biquad(ac->master_audio, TEST_AUDIO_BUFF_SIZE, ac->effect_core->filter_state), 0);
 }

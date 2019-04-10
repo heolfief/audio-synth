@@ -69,3 +69,10 @@ La documentation est accessible depuis doc/doxygen/index.html
 Ouvrez la racine du projet comme projet CLion, puis recharger Cmake en cliquant sur : "file/Reload Cmake Project".
 Vous pouvez choisir dans le menu déroulant de la barre d'outil de compilation la cible entre "audio_synth" pour le projet et "audio_synth_test" pour les tests.
 Vous pouvez maintenant compiler.
+
+___
+
+LICENSING
+
+DSP part of filters in this project are taken from https://github.com/voidqk/sndfilter,
+and are designed by Sean Connelly (@voidqk) who used the chromium code source. His work is licensed under MIT license.

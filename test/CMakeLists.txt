@@ -15,6 +15,9 @@ add_executable(audio_synth_test test.c
         ../src/core/oscillator/osc.h ../src/core/oscillator/osc.c
         ../src/system/error_handler.h
         ../src/sys_param/sys_param.h ../src/sys_param/sys_param.c
+        ../src/audio_fx/snd.c ../src/audio_fx/snd.h
+        ../src/audio_fx/biquad.c ../src/audio_fx/biquad.h
+        ../src/audio_fx/mem.c ../src/audio_fx/mem.h
 
         #Tests files
         oscillator_test/osc_test.c oscillator_test/osc_test.h

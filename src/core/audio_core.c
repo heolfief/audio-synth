@@ -7,27 +7,34 @@
  */
 
 #include "audio_core.h"
-#include "../audio_fx/audio_fx.h"
 
-int init_core(Core *ac)
+Core *alloc_core(Uint16 buffer_length)
 {
+    Core *ac = (Core *) malloc(sizeof(Core));
     if (ac == NULL)
     {
         sys_print_error("Core parameter is NULL");
-        return -1;
+        return NULL;
     }
 
     // Core memory allocation
-    ac->note_array = alloc_polyphony(ac->sys_param->audio_buffer_length);
-    if (ac->note_array == NULL) return -1;
+    ac->sys_param = alloc_sys_param();
+    if (ac->sys_param == NULL) return NULL;
+    ac->sys_param->audio_buffer_length = buffer_length;
 
-    ac->master_audio = alloc_audio_buffer(ac->sys_param->audio_buffer_length);
-    if (ac->master_audio == NULL) return -1;
+    ac->note_array = alloc_polyphony(buffer_length);
+    if (ac->note_array == NULL) return NULL;
 
-    return 0;
+    ac->master_audio = alloc_audio_buffer(buffer_length);
+    if (ac->master_audio == NULL) return NULL;
+
+    ac->effect_core = alloc_effect_core();
+    if (ac->effect_core == NULL) return NULL;
+
+    return ac;
 }
 
-int quit_core(Core *ac)
+int free_core(Core *ac)
 {
     if (ac == NULL)
     {
@@ -35,8 +42,12 @@ int quit_core(Core *ac)
         return -1;
     }
 
+    if (free_sys_param(ac->sys_param))return -1;
     if (free_polyphony(ac->note_array))return -1;
     if (free_audio_buffer(ac->master_audio))return -1;
+    if (free_effect_core(ac->effect_core))return -1;
+
+    free(ac);
 
     return 0;
 }
@@ -83,10 +94,18 @@ int master_effects(Core *ac)
         ac->master_audio[sample] = (Sint16) (headroom * ac->master_audio[sample]);
     }
 
-    // Apply each effect to master audio buffer
-    if (distortion(ac->master_audio, ac->sys_param->audio_buffer_length, 80, 0))return -1;
+
+    /*
+     * Apply each effect to master audio buffer
+     */
+
+    if (distortion(ac->master_audio, ac->sys_param->audio_buffer_length, 80, 100))return -1;
 
     if (amp_mod(ac->master_audio, ac->sys_param->audio_buffer_length, ac->sys_param->sample_rate, 15, 50))return -1;
+
+    if (biquad(ac->master_audio, ac->sys_param->audio_buffer_length, ac->effect_core->filter_state))return -1;
+
+    // Other future effects
 
     return 0;
 }

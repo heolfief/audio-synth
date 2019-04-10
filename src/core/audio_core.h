@@ -28,27 +28,28 @@ typedef struct
   Audio_Buffer master_audio;   /*!<the master audio buffer */
   Sys_param *sys_param;        /*!<the system parameters */
   Uint64 phase;                /*!<the phase of the oscillators */
+  Effect_core *effect_core;     /*!<the structure containing effect related objects */
 } Core;
 
 /**
- * \fn int init_core(Core* ac)
- * \brief Initialize audio core
+ * \fn Core alloc_core()
+ * \brief Allocate an audio core
  *
- * \param ac The audio core structure of the system
+ * \param buffer_length The size of the audio buffer (number of audio samples in the buffer)
  *
- * \return 0 if everything went OK, -1 otherwise
+ * \return The allocated Core
  */
-int init_core(Core *ac);
+Core* alloc_core(Uint16 buffer_length);
 
 /**
- * \fn int quit_core(Core* ac)
- * \brief Function to quit and desallocate audio core
+ * \fn int free_core(Core* ac)
+ * \brief Function to free audio core memory
  *
  * \param ac The audio core structure of the system
  *
  * \return 0 if everything went OK, -1 otherwise
  */
-int quit_core(Core *ac);
+int free_core(Core *ac);
 
 /**
  * \fn int synthesis_fill_buffer(Core* ac)

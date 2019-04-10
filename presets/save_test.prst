@@ -27,4 +27,9 @@
     <sustain>0.5</sustain>
     <release>0.2</release>
   </env>
+  <filter>
+    <filter_type>0</filter_type>
+    <cutoff_freq>700</cutoff_freq>
+    <resonance>20</resonance>
+  </filter>
 </parameters>

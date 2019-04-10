@@ -81,6 +81,12 @@ int load_preset(const char *filename, Sys_param *sys_param)
     sys_param->env->sustain = read_XML_param(doc->xmlenv->xmlsustain);
     sys_param->env->release = read_XML_param(doc->xmlenv->xmlrelease);
 
+    // Load filter parameters
+    sys_param->filter_param->filter_type = read_XML_param(doc->xmlfilt->xmlfiltertype);
+    sys_param->filter_param->cutoff_freq = read_XML_param(doc->xmlfilt->xmlcutofffreq);
+    sys_param->filter_param->resonance = read_XML_param(doc->xmlfilt->xmlresonance);
+    sys_param->env->release = read_XML_param(doc->xmlenv->xmlrelease);
+
     // Load other parameters
 
     // Free xml file
@@ -100,7 +106,7 @@ int save_preset(const char *filename, Sys_param *sys_param)
 {
     char filename_relat[30] = "../presets/";
     xmlDocPtr doc;
-    xmlNodePtr root_node, node_osc1, node_osc2, node_osc3, node_env;
+    xmlNodePtr root_node, node_osc1, node_osc2, node_osc3, node_env, node_filter;
 
     if (filename == NULL)
     {
@@ -140,6 +146,11 @@ int save_preset(const char *filename, Sys_param *sys_param)
     xmlNewChild(node_env, NULL, BAD_CAST "decay", (xmlChar *) double_to_char(sys_param->env->decay));
     xmlNewChild(node_env, NULL, BAD_CAST "sustain", (xmlChar *) double_to_char(sys_param->env->sustain));
     xmlNewChild(node_env, NULL, BAD_CAST "release", (xmlChar *) double_to_char(sys_param->env->release));
+
+    node_filter = xmlNewChild(root_node, NULL, BAD_CAST "filter", NULL);
+    xmlNewChild(node_filter, NULL, BAD_CAST "filter_type", (xmlChar *) double_to_char(sys_param->filter_param->filter_type));
+    xmlNewChild(node_filter, NULL, BAD_CAST "cutoff_freq", (xmlChar *) double_to_char(sys_param->filter_param->cutoff_freq));
+    xmlNewChild(node_filter, NULL, BAD_CAST "resonance", (xmlChar *) double_to_char(sys_param->filter_param->resonance));
 
     xmlSaveFormatFileEnc(filename_relat, doc, "UTF-8", 1);
 

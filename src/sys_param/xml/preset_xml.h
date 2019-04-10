@@ -38,6 +38,13 @@
 #define xmlsustain  children->next->next->next->next->next->xmlvalue
 #define xmlrelease  children->next->next->next->next->next->next->next->xmlvalue
 
+#define xmlfilt      xmlenv->next->next
+
+// Relative to xmfilt
+#define xmlfiltertype children->next->xmlvalue
+#define xmlcutofffreq children->next->next->next->xmlvalue
+#define xmlresonance  children->next->next->next->next->next->xmlvalue
+
 /**
  * \fn double read_XML_param(xmlChar* param)
  * \brief Reads parameter from XML preset file
