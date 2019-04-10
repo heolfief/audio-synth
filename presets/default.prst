@@ -22,10 +22,10 @@
     <wave>2</wave>
   </osc3>
   <env>
-    <attack>0.001</attack>
-    <decay>0.01</decay>
+    <attack>0.01</attack>
+    <decay>0.1</decay>
     <sustain>0.5</sustain>
-    <release>0.2</release>
+    <release>0.1</release>
   </env>
   <filter>
     <filter_type>0</filter_type>
