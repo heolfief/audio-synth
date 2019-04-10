@@ -23,8 +23,7 @@ void func_callback(void *userdata, Uint8 *stream, int len)
 
     for (Uint16 sample = 0; sample < s_len; ++sample) s_stream[sample] = audio_core->master_audio[sample];
 
-    audio_core->phase =
-        (audio_core->phase + s_len) % audio_core->sys_param->sample_rate;    // Update phase based on play position
+    audio_core->phase = (audio_core->phase + s_len);    // Update phase based on play position
 }
 
 int set_audio_spec(SDL_AudioSpec *as, const Core *ac)
