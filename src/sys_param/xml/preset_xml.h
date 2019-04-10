@@ -38,7 +38,19 @@
 #define xmlsustain  children->next->next->next->next->next->xmlvalue
 #define xmlrelease  children->next->next->next->next->next->next->next->xmlvalue
 
-#define xmlfilt      xmlenv->next->next
+#define xmlampmod      xmlenv->next->next
+
+// Relative to xmfilt
+#define xmlmodfreq    children->next->xmlvalue
+#define xmlmodlevel   children->next->next->next->xmlvalue
+
+#define xmldist      xmlampmod->next->next
+
+// Relative to xmfilt
+#define xmldistlevel  children->next->xmlvalue
+#define xmldistwet    children->next->next->next->xmlvalue
+
+#define xmlfilt      xmldist->next->next
 
 // Relative to xmfilt
 #define xmlfiltertype children->next->xmlvalue

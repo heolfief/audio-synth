@@ -76,16 +76,23 @@ int load_preset(const char *filename, Sys_param *sys_param)
     sys_param->osc3->wave = (Waveform) read_XML_param(doc->xmlosc3->xmlwave);
 
     // Load envelope parameters
-    sys_param->env->attack = read_XML_param(doc->xmlenv->xmlattack);
-    sys_param->env->decay = read_XML_param(doc->xmlenv->xmldecay);
-    sys_param->env->sustain = read_XML_param(doc->xmlenv->xmlsustain);
-    sys_param->env->release = read_XML_param(doc->xmlenv->xmlrelease);
+    sys_param->env->attack = (double) read_XML_param(doc->xmlenv->xmlattack);
+    sys_param->env->decay = (double) read_XML_param(doc->xmlenv->xmldecay);
+    sys_param->env->sustain = (double) read_XML_param(doc->xmlenv->xmlsustain);
+    sys_param->env->release = (double) read_XML_param(doc->xmlenv->xmlrelease);
+
+    // Load amp mod parameters
+    sys_param->amp_mod_param->freq = (double) read_XML_param(doc->xmlampmod->xmlmodfreq);
+    sys_param->amp_mod_param->mod_level = (Uint8) read_XML_param(doc->xmlampmod->xmlmodlevel);
+
+    // Load distortion parameters
+    sys_param->dist_param->dist_level = (Uint8) read_XML_param(doc->xmldist->xmldistlevel);
+    sys_param->dist_param->wet = (Uint8) read_XML_param(doc->xmldist->xmldistwet);
 
     // Load filter parameters
-    sys_param->filter_param->filter_type = read_XML_param(doc->xmlfilt->xmlfiltertype);
-    sys_param->filter_param->cutoff_freq = read_XML_param(doc->xmlfilt->xmlcutofffreq);
-    sys_param->filter_param->resonance = read_XML_param(doc->xmlfilt->xmlresonance);
-    sys_param->env->release = read_XML_param(doc->xmlenv->xmlrelease);
+    sys_param->filter_param->filter_type = (Filter_type) read_XML_param(doc->xmlfilt->xmlfiltertype);
+    sys_param->filter_param->cutoff_freq = (Uint16) read_XML_param(doc->xmlfilt->xmlcutofffreq);
+    sys_param->filter_param->resonance = (double) read_XML_param(doc->xmlfilt->xmlresonance);
 
     // Load other parameters
 
@@ -106,7 +113,7 @@ int save_preset(const char *filename, Sys_param *sys_param)
 {
     char filename_relat[30] = "../presets/";
     xmlDocPtr doc;
-    xmlNodePtr root_node, node_osc1, node_osc2, node_osc3, node_env, node_filter;
+    xmlNodePtr root_node, node_osc1, node_osc2, node_osc3, node_env, node_filter, node_dist, node_amp_mod;
 
     if (filename == NULL)
     {
@@ -146,6 +153,14 @@ int save_preset(const char *filename, Sys_param *sys_param)
     xmlNewChild(node_env, NULL, BAD_CAST "decay", (xmlChar *) double_to_char(sys_param->env->decay));
     xmlNewChild(node_env, NULL, BAD_CAST "sustain", (xmlChar *) double_to_char(sys_param->env->sustain));
     xmlNewChild(node_env, NULL, BAD_CAST "release", (xmlChar *) double_to_char(sys_param->env->release));
+
+    node_amp_mod = xmlNewChild(root_node, NULL, BAD_CAST "amp_mod", NULL);
+    xmlNewChild(node_amp_mod, NULL, BAD_CAST "freq", (xmlChar *) double_to_char(sys_param->amp_mod_param->freq));
+    xmlNewChild(node_amp_mod, NULL, BAD_CAST "mod_level", (xmlChar *) double_to_char(sys_param->amp_mod_param->mod_level));
+
+    node_dist = xmlNewChild(root_node, NULL, BAD_CAST "distortion", NULL);
+    xmlNewChild(node_dist, NULL, BAD_CAST "dist_level", (xmlChar *) double_to_char(sys_param->dist_param->dist_level));
+    xmlNewChild(node_dist, NULL, BAD_CAST "wet", (xmlChar *) double_to_char(sys_param->dist_param->wet));
 
     node_filter = xmlNewChild(root_node, NULL, BAD_CAST "filter", NULL);
     xmlNewChild(node_filter, NULL, BAD_CAST "filter_type", (xmlChar *) double_to_char(sys_param->filter_param->filter_type));

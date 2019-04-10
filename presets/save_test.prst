@@ -27,6 +27,14 @@
     <sustain>0.5</sustain>
     <release>0.2</release>
   </env>
+  <amp_mod>
+    <freq>15</freq>
+    <mod_level>50</mod_level>
+  </amp_mod>
+  <distortion>
+    <dist_level>80</dist_level>
+    <wet>30</wet>
+  </distortion>
   <filter>
     <filter_type>0</filter_type>
     <cutoff_freq>700</cutoff_freq>
