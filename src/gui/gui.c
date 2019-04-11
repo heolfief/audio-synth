@@ -29,19 +29,19 @@ int testGUI()
     SDL_Rect rect = {100, 100, 100, 100}, dst = {0, 0, 0, 0};
     SDL_Color rouge = {255, 0, 0, 255}, bleu = {0, 0, 255, 255};
 
-    if(0 != SDL_Init(SDL_INIT_VIDEO))
+    if (0 != SDL_Init(SDL_INIT_VIDEO))
     {
         fprintf(stderr, "Erreur SDL_Init : %s", SDL_GetError());
         goto Quit;
     }
-    if(0 != SDL_CreateWindowAndRenderer(1280, 800, SDL_WINDOW_SHOWN, &window, &renderer))
+    if (0 != SDL_CreateWindowAndRenderer(1280, 800, SDL_WINDOW_SHOWN, &window, &renderer))
     {
         fprintf(stderr, "Erreur SDL_CreateWindowAndRenderer : %s", SDL_GetError());
         goto Quit;
     }
     texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888,
                                 SDL_TEXTUREACCESS_TARGET, 1280, 800);
-    if(NULL == texture)
+    if (NULL == texture)
     {
         fprintf(stderr, "Erreur SDL_CreateTexture : %s", SDL_GetError());
         goto Quit;
@@ -49,15 +49,15 @@ int testGUI()
 
     SDL_Surface *tmp = NULL;
     //SDL_Texture *texture = NULL;
-    tmp = SDL_LoadBMP("/home/lscotto/Documents/audio-synth/src/gui/Figs/bg_fix_3.BMP"); //Loading the image onto the tmp surface
-    if(NULL == tmp)
+    tmp = SDL_LoadBMP("../src/gui/Figs/bg_fix_3.BMP"); //Loading the image onto the tmp surface
+    if (NULL == tmp)
     {
         fprintf(stderr, "Erreur SDL_LoadBMP : %s", SDL_GetError());
         goto Quit;
     }
     texture = SDL_CreateTextureFromSurface(renderer, tmp);
     SDL_FreeSurface(tmp); /* On libère la surface, on n’en a plus besoin */
-    if(NULL == texture)
+    if (NULL == texture)
     {
         fprintf(stderr, "Erreur SDL_CreateTextureFromSurface : %s", SDL_GetError());
         goto Quit;
@@ -76,18 +76,36 @@ int testGUI()
        et on met à jour l’écran. */
     SDL_QueryTexture(texture, NULL, NULL, &dst.w, &dst.h);
     SDL_RenderCopy(renderer, texture, NULL, &dst);
-    SDL_SetWindowTitle(window,"meilleur Synthé du monde");
+    SDL_SetWindowTitle(window, "meilleur Synthé du monde");
     SDL_RenderPresent(renderer);
-    statut = EXIT_SUCCESS;
-    SDL_Delay(30000);
+    SDL_Event event;
+    SDL_bool quit = SDL_FALSE;
+    while(!quit)
+    {
+        SDL_PollEvent(&event);
+        if(event.type == SDL_QUIT)
+            quit = SDL_TRUE;
+        else if(event.type == SDL_KEYDOWN)
+        {
+                printf("keysym A\n");
+        }
+        else if(event.type == SDL_MOUSEBUTTONDOWN){
 
-    Quit:
-    if(NULL != texture)
-        SDL_DestroyTexture(texture);
-    if(NULL != renderer)
-        SDL_DestroyRenderer(renderer);
-    if(NULL != window)
-        SDL_DestroyWindow(window);
-    SDL_Quit();
-    return statut;
+            printf ("%d %d", event.button.x, event.button.y);
+        }
+        SDL_Delay(20);
+    }
+
+    goto Quit;
+
+        Quit:
+            if (NULL != texture)
+                SDL_DestroyTexture(texture);
+            if (NULL != renderer)
+                SDL_DestroyRenderer(renderer);
+            if (NULL != window)
+                SDL_DestroyWindow(window);
+            SDL_Quit();
+            return statut;
 }
+
