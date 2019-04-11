@@ -88,7 +88,8 @@ int main(int argc, char *argv[])
     }
 
     SDL_Delay(2000);
-
+    //Testing GUI function :
+    testGUI();
     SDL_CloseAudio();
     SDL_Quit();
 

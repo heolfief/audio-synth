@@ -48,4 +48,6 @@ typedef struct
   Sint64 paramMIN;    /*!<the min value of the parameter set by the potentiometer, when percent is 0% */
 } Potentiometer;
 
+int testGUI();
+
 #endif //AUDIO_SYNTH_GUI_H
