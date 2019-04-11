@@ -49,9 +49,30 @@ typedef struct
 {
   Filter_type filter_type;                       /*!<the type of the filter */
   Uint16 cutoff_freq;                            /*!<the frequency cutoff of the filter */
-  float resonance;                              /*!<the resonance of the filter */
+  double resonance;                              /*!<the resonance of the filter */
 } Filter_param;
 
+/**
+ * \struct Distortion_param
+ * \brief define the distortion parameters
+ *
+ */
+typedef struct
+{
+  Uint8 dist_level;                       /*!<the distortion level in percent */
+  Uint8 wet;                              /*!<the balance between dry(no effect) and wet(only effect) in percent */
+} Distortion_param;
+
+/**
+ * \struct Amp_mod_param
+ * \brief define the amplitude modulation parameters
+ *
+ */
+typedef struct
+{
+  double freq;                            /*!<the frequency of the modulation */
+  Uint8 mod_level;                        /*!<the depth or effect level in percents */
+} Amp_mod_param;
 
 /**
  * \fn int distortion(Audio_Buffer buff, Uint16 buffer_length, Uint8 dist_level, Uint8 wet)
@@ -76,7 +97,7 @@ int distortion(Audio_Buffer buff, Uint16 buffer_length, Uint8 dist_level, Uint8 
  * \param buffer_length The size of the audio buffer (number of audio samples in the buffer)
  * \param sample_rate The sample rate of the system
  * \param freq the frequency of the modulation
- * \param mod_level the distortion level in percents
+ * \param mod_level the depth or effect level in percents
  *
  * \return 0 if everything went OK, -1 otherwise
  */
@@ -114,7 +135,7 @@ int compute_filter_coeffs(Filter_param *filter_param, Uint32 sample_rate, sf_biq
  *
  * \return the allocated Effect_core
  */
-Effect_core* alloc_effect_core();
+Effect_core *alloc_effect_core();
 
 /**
  * \fn int free_osc_buffer(Osc_Buffer osc_buff)
