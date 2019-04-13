@@ -28,6 +28,9 @@ Core *alloc_core(Uint16 buffer_length)
     ac->master_audio = alloc_audio_buffer(buffer_length);
     if (ac->master_audio == NULL) return NULL;
 
+    ac->average_audio_level = alloc_audio_buffer(buffer_length);
+    if (ac->average_audio_level == NULL) return NULL;
+
     ac->effect_core = alloc_effect_core();
     if (ac->effect_core == NULL) return NULL;
 
@@ -45,6 +48,7 @@ int free_core(Core *ac)
     if (free_sys_param(ac->sys_param))return -1;
     if (free_polyphony(ac->note_array))return -1;
     if (free_audio_buffer(ac->master_audio))return -1;
+    if (free_audio_buffer(ac->average_audio_level))return -1;
     if (free_effect_core(ac->effect_core))return -1;
 
     free(ac);
@@ -60,7 +64,14 @@ int synthesis_fill_buffer(Core *ac)
         return -1;
     }
 
-    return polyphony_fill_buffer(ac->master_audio, ac->note_array, ac->sys_param->audio_buffer_length, ac->sys_param->env, ac->sys_param->sample_rate, ac->phase);
+    if (polyphony_fill_buffer(ac->master_audio, ac->note_array, ac->sys_param->audio_buffer_length, ac->sys_param->env, ac->sys_param->sample_rate, ac->phase))return -1;
+
+    for (int sample = 0; sample < ac->sys_param->audio_buffer_length; ++sample)
+    {
+        ac->average_audio_level[sample] = moving_average(ac->master_audio[sample]);
+    }
+
+    return 0;
 }
 
 int master_audio_fill_buffer(Core *ac)
@@ -108,4 +119,23 @@ int master_effects(Core *ac)
     // Other future effects
 
     return 0;
+}
+
+Sint16 moving_average(Sint16 sample)
+{
+    Uint64 mean = 0;
+    static Sint16 sample_array[512];
+    static Uint32 cursor;
+
+    sample_array[cursor++] = sample;
+    cursor &= 0x1FF;                 // Perform the same as "cursor = cursor % 512;" but speed is highly greater
+
+    for (int i = 0; i < 512; ++i)
+    {
+        mean += abs(sample_array[i]);
+    }
+
+    mean = mean >> 10;  // same as "mean / 512"
+
+    return mean;
 }

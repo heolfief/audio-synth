@@ -24,11 +24,12 @@
  */
 typedef struct
 {
-  Polyphony *note_array;       /*!<the polyphony array of the system */
-  Audio_Buffer master_audio;   /*!<the master audio buffer */
-  Sys_param *sys_param;        /*!<the system parameters */
-  Uint64 phase;                /*!<the phase of the oscillators */
-  Effect_core *effect_core;     /*!<the structure containing effect related objects */
+  Polyphony *note_array;             /*!<the polyphony array of the system */
+  Audio_Buffer master_audio;         /*!<the master audio buffer */
+  Sys_param *sys_param;              /*!<the system parameters */
+  Uint64 phase;                      /*!<the phase of the oscillators */
+  Effect_core *effect_core;          /*!<the structure containing effect related objects */
+  Audio_Buffer average_audio_level;  /*!<the average instantaneous volume level that is played by the soundcard */
 } Core;
 
 /**
@@ -80,5 +81,15 @@ int master_audio_fill_buffer(Core *ac);
  * \return 0 if everything went OK, -1 otherwise
  */
 int master_effects(Core *ac);
+
+/**
+ * \fn Sint16 moving_average(Sint16 sample)
+ * \brief Performs the moving average of a stream of audio samples
+ *
+ * \param sample new sample to take account in the average calculation
+ *
+ * \return the actual average
+ */
+Sint16 moving_average(Sint16 sample);
 
 #endif //AUDIO_SYNTH_AUDIO_CORE_H

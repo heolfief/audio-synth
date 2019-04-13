@@ -77,7 +77,6 @@ int main(int argc, char *argv[])
 
     SDL_PauseAudio(0);                      // Play audio (pause = off)
 
-
     for (int i = 0; i < 7; ++i)
     {
         audio_core->note_array[0]->freq = mario_freq[i];
