@@ -63,6 +63,7 @@ int amp_mod(Audio_Buffer buff, Uint16 buffer_length, Uint32 sample_rate, double 
 
     double temp_sample;
     static Uint64 lfo_phase;
+
     Oscillator *lfo = alloc_osc(buffer_length);
     if (lfo == NULL)
     {
@@ -86,6 +87,59 @@ int amp_mod(Audio_Buffer buff, Uint16 buffer_length, Uint32 sample_rate, double 
         temp_sample /= (lfo->amp * 2);
         temp_sample += 1;
         buff[sample] = (Sint16) ((double) buff[sample] * (1 - temp_sample * (mod_level / 100.0)));
+    }
+
+    free_osc(lfo);
+
+    return 0;
+}
+
+int flanger(Audio_Buffer buff, Uint16 buffer_length, Uint32 sample_rate, double freq, Uint16 delay, Uint8 depth, Waveform wave)
+{
+    if (buff == NULL)
+    {
+        sys_print_error("Audio buffer is NULL");
+        return -1;
+    }
+
+    if (depth > 100 || freq < 0)
+    {
+        sys_print_error("Parameter is out of range");
+        return -1;
+    }
+
+    double temp_sample;
+    static Uint64 lfo_phase;
+    static Sint16 delay_line[MAX_SAMPLE_DELAY_LINE];
+    static Uint32 cursor;
+
+    Oscillator *lfo = alloc_osc(buffer_length);
+    if (lfo == NULL)
+    {
+        sys_print_error("Osc is NULL");
+        return -1;
+    }
+
+    // Fill delay_line
+    for (Uint16 sample = 0; sample < buffer_length; ++sample)
+    {
+        cursor = (cursor + 1) % MAX_SAMPLE_DELAY_LINE;  // Increment cursor, avoid delay_line array overflow
+        delay_line[cursor] = buff[sample];
+    }
+
+    lfo->wave = wave;
+    lfo->duty = 100;
+    lfo->detune = 0;
+    lfo->amp = delay;
+    lfo->onoff = ON;
+    lfo->freq = freq;
+
+    if (osc_fill_buffer(lfo, buffer_length, sample_rate, lfo_phase))return -1;
+    lfo_phase = lfo_phase + buffer_length;
+
+    for (Uint16 sample = 0; sample < buffer_length; ++sample)
+    {
+        buff[sample] = buff[sample] + depth * delay_line[(sample + lfo->buffer[sample]) % buffer_length];
     }
 
     free_osc(lfo);

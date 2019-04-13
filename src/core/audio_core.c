@@ -110,11 +110,13 @@ int master_effects(Core *ac)
      * Apply each effect to master audio buffer
      */
 
-    if (distortion(ac->master_audio, ac->sys_param->audio_buffer_length, 80, 100))return -1;
+    //if (distortion(ac->master_audio, ac->sys_param->audio_buffer_length, ac->sys_param->dist_param->dist_level, ac->sys_param->dist_param->wet))return -1;
 
-    if (amp_mod(ac->master_audio, ac->sys_param->audio_buffer_length, ac->sys_param->sample_rate, 15, 50))return -1;
+    //if (amp_mod(ac->master_audio, ac->sys_param->audio_buffer_length, ac->sys_param->sample_rate, ac->sys_param->amp_mod_param->freq, ac->sys_param->amp_mod_param->mod_level))return -1;
 
-    if (biquad(ac->master_audio, ac->sys_param->audio_buffer_length, ac->effect_core->filter_state))return -1;
+    if (flanger(ac->master_audio, ac->sys_param->audio_buffer_length, ac->sys_param->sample_rate, 0.5, 500, 1, SIN))return -1;
+
+    //if (biquad(ac->master_audio, ac->sys_param->audio_buffer_length, ac->effect_core->filter_state))return -1;
 
     // Other future effects
 

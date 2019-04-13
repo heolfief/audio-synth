@@ -14,6 +14,8 @@
 #include "../core/note/polyphony.h"
 #include "ext_effects/biquad.h"
 
+#define MAX_SAMPLE_DELAY_LINE 8192
+
 /**
  * \enum Filter_type
  * \brief various waveform types
@@ -102,6 +104,24 @@ int distortion(Audio_Buffer buff, Uint16 buffer_length, Uint8 dist_level, Uint8 
  * \return 0 if everything went OK, -1 otherwise
  */
 int amp_mod(Audio_Buffer buff, Uint16 buffer_length, Uint32 sample_rate, double freq, Uint8 mod_level);
+
+/**
+ * \fn int flanger(Audio_Buffer buff, Uint16 buffer_length, Uint32 sample_rate, double freq, Uint16 delay, Uint8 depth)
+ * \brief Function to apply a flanger effect (delay effect) to an audio buffer
+ *
+ *  Delay is modulated by an LFO
+ *
+ * \param buff the Audio_Buffer object to apply distortion to
+ * \param buffer_length The size of the audio buffer (number of audio samples in the buffer)
+ * \param sample_rate The sample rate of the system
+ * \param freq the frequency of the modulation
+ * \param depth the depth of the effect in percents
+ * \param delay the delay value used for the flanging effect (= LFO amplitude)
+ * \param wave the waveform type of the LFO
+ *
+ * \return 0 if everything went OK, -1 otherwise
+ */
+int flanger(Audio_Buffer buff, Uint16 buffer_length, Uint32 sample_rate, double freq, Uint16 delay, Uint8 depth, Waveform wave);
 
 /**
  * \fn int biquad(Audio_Buffer buff, Uint16 buffer_length, Uint32 sample_rate, sf_biquad_state_st *state)
