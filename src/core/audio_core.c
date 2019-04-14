@@ -114,7 +114,7 @@ int master_effects(Core *ac)
 
     //if (amp_mod(ac->master_audio, ac->sys_param->audio_buffer_length, ac->sys_param->sample_rate, ac->sys_param->amp_mod_param->freq, ac->sys_param->amp_mod_param->mod_level))return -1;
 
-    if (flanger(ac->master_audio, ac->sys_param->audio_buffer_length, ac->sys_param->sample_rate, 0.5, 500, 1, SIN))return -1;
+    if (flanger(ac->master_audio, ac->sys_param->audio_buffer_length, ac->sys_param->sample_rate, 0.2, 100, 100, TRI))return -1;
 
     //if (biquad(ac->master_audio, ac->sys_param->audio_buffer_length, ac->effect_core->filter_state))return -1;
 

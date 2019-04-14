@@ -108,7 +108,7 @@ int flanger(Audio_Buffer buff, Uint16 buffer_length, Uint32 sample_rate, double 
         return -1;
     }
 
-    double temp_sample;
+    Uint64 ind, actual_ind;
     static Uint64 lfo_phase;
     static Sint16 delay_line[MAX_SAMPLE_DELAY_LINE];
     static Uint32 cursor;
@@ -123,12 +123,12 @@ int flanger(Audio_Buffer buff, Uint16 buffer_length, Uint32 sample_rate, double 
     // Fill delay_line
     for (Uint16 sample = 0; sample < buffer_length; ++sample)
     {
-        cursor = (cursor + 1) % MAX_SAMPLE_DELAY_LINE;  // Increment cursor, avoid delay_line array overflow
+        cursor = (cursor + 1) & (MAX_SAMPLE_DELAY_LINE - 1);  // Increment cursor, avoid delay_line array overflow
         delay_line[cursor] = buff[sample];
     }
 
     lfo->wave = wave;
-    lfo->duty = 100;
+    lfo->duty = 50;
     lfo->detune = 0;
     lfo->amp = delay;
     lfo->onoff = ON;
@@ -139,7 +139,11 @@ int flanger(Audio_Buffer buff, Uint16 buffer_length, Uint32 sample_rate, double 
 
     for (Uint16 sample = 0; sample < buffer_length; ++sample)
     {
-        buff[sample] = buff[sample] + depth * delay_line[(sample + lfo->buffer[sample]) % buffer_length];
+        actual_ind = cursor - buffer_length + sample;
+        ind = (actual_ind - (lfo->buffer[sample] + lfo->amp))
+            & (MAX_SAMPLE_DELAY_LINE - 1);
+        buff[sample] =
+            (Sint16) ((double) buff[sample] - (((double) depth / 100.0) * (double) delay_line[ind]));
     }
 
     free_osc(lfo);
