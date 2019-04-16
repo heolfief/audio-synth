@@ -27,6 +27,13 @@
     <sustain>0.5</sustain>
     <release>0.2</release>
   </env>
+  <flanger>
+    <lfowave>0</lfowave>
+    <lfofreq>1</lfofreq>
+    <lforange>100</lforange>
+    <delay>2</delay>
+    <depth>100</depth>
+  </flanger>
   <amp_mod>
     <freq>15</freq>
     <mod_level>50</mod_level>

@@ -94,7 +94,7 @@ int amp_mod(Audio_Buffer buff, Uint16 buffer_length, Uint32 sample_rate, double 
     return 0;
 }
 
-int flanger(Audio_Buffer buff, Uint16 buffer_length, Uint32 sample_rate, double freq, Uint16 delay, Uint8 depth, Waveform wave)
+int flanger(Audio_Buffer buff, Uint16 buffer_length, Uint32 sample_rate, double freq, double delay, Uint8 lfo_range, Uint8 depth, Waveform wave)
 {
     if (buff == NULL)
     {
@@ -102,7 +102,7 @@ int flanger(Audio_Buffer buff, Uint16 buffer_length, Uint32 sample_rate, double 
         return -1;
     }
 
-    if (depth > 100 || freq < 0)
+    if (depth > 100 || freq < 0 || depth > 100 || lfo_range > 100 || delay > (1000.0 * (double)MAX_SAMPLE_DELAY_LINE/(double)sample_rate))
     {
         sys_print_error("Parameter is out of range");
         return -1;
@@ -130,7 +130,7 @@ int flanger(Audio_Buffer buff, Uint16 buffer_length, Uint32 sample_rate, double 
     lfo->wave = wave;
     lfo->duty = 50;
     lfo->detune = 0;
-    lfo->amp = delay;
+    lfo->amp = (Uint16) (((double) lfo_range / 100.0) * (double) delay);
     lfo->onoff = ON;
     lfo->freq = freq;
 
@@ -140,7 +140,7 @@ int flanger(Audio_Buffer buff, Uint16 buffer_length, Uint32 sample_rate, double 
     for (Uint16 sample = 0; sample < buffer_length; ++sample)
     {
         actual_ind = cursor - buffer_length + sample;
-        ind = (actual_ind - (lfo->buffer[sample] + lfo->amp))
+        ind = (actual_ind - (lfo->buffer[sample] + lfo->amp + (int) (delay * 0.001 * (double) sample_rate)))
             & (MAX_SAMPLE_DELAY_LINE - 1);
         buff[sample] =
             (Sint16) ((double) buff[sample] - (((double) depth / 100.0) * (double) delay_line[ind]));

@@ -14,7 +14,7 @@
 #include "../core/note/polyphony.h"
 #include "ext_effects/biquad.h"
 
-#define MAX_SAMPLE_DELAY_LINE 8192
+#define MAX_SAMPLE_DELAY_LINE 16384
 
 /**
  * \enum Filter_type
@@ -42,10 +42,9 @@ typedef struct
 } Effect_core;
 
 /**
- * \struct Effect_core
- * \brief define an effect core
+ * \struct Filter_param
+ * \brief define the filter parameters
  *
- * An effect core contains all the objects needed for the effects like for example the filter coefficients
  */
 typedef struct
 {
@@ -77,6 +76,20 @@ typedef struct
 } Amp_mod_param;
 
 /**
+ * \struct Flanger_param
+ * \brief define the flanger parameters
+ *
+ */
+typedef struct
+{
+  Waveform lfo_wave;                      /*!<the waveform of the LFO */
+  double lfo_freq;                        /*!<the frequency of the LFO */
+  Uint8 lfo_range;                        /*!<the range of the LFO in percents */
+  double delay;                           /*!<the delay time in milliseconds */
+  Uint8 depth;                            /*!<the depth of the effect in percent */
+} Flanger_param;
+
+/**
  * \fn int distortion(Audio_Buffer buff, Uint16 buffer_length, Uint8 dist_level, Uint8 wet)
  * \brief Function to apply distortion to an audio buffer
  *
@@ -106,7 +119,7 @@ int distortion(Audio_Buffer buff, Uint16 buffer_length, Uint8 dist_level, Uint8 
 int amp_mod(Audio_Buffer buff, Uint16 buffer_length, Uint32 sample_rate, double freq, Uint8 mod_level);
 
 /**
- * \fn int flanger(Audio_Buffer buff, Uint16 buffer_length, Uint32 sample_rate, double freq, Uint16 delay, Uint8 depth)
+ * \fn int flanger(Audio_Buffer buff, Uint16 buffer_length, Uint32 sample_rate, double freq, double delay, Uint8 lfo_range, Uint8 depth, Waveform wave)
  * \brief Function to apply a flanger effect (delay effect) to an audio buffer
  *
  *  Delay is modulated by an LFO
@@ -115,13 +128,14 @@ int amp_mod(Audio_Buffer buff, Uint16 buffer_length, Uint32 sample_rate, double 
  * \param buffer_length The size of the audio buffer (number of audio samples in the buffer)
  * \param sample_rate The sample rate of the system
  * \param freq the frequency of the modulation
+ * \param delay the delay value in milliseconds used for the flanging effect
+ * \param lfo_range the range of the low frequency oscillator in percents
  * \param depth the depth of the effect in percents
- * \param delay the delay value used for the flanging effect (= LFO amplitude)
  * \param wave the waveform type of the LFO
  *
  * \return 0 if everything went OK, -1 otherwise
  */
-int flanger(Audio_Buffer buff, Uint16 buffer_length, Uint32 sample_rate, double freq, Uint16 delay, Uint8 depth, Waveform wave);
+int flanger(Audio_Buffer buff, Uint16 buffer_length, Uint32 sample_rate, double freq, double delay, Uint8 lfo_range, Uint8 depth, Waveform wave);
 
 /**
  * \fn int biquad(Audio_Buffer buff, Uint16 buffer_length, Uint32 sample_rate, sf_biquad_state_st *state)
