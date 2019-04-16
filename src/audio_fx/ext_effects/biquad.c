@@ -5,6 +5,14 @@
 #include "biquad.h"
 #include <math.h>
 
+/*
+ * Faster 10^x calculation:
+ * http://openaudio.blogspot.com/2017/02/faster-log10-and-pow.html
+ *
+ * powf(10.0f,x) is exactly exp(log(10.0f)*x)
+ */
+#define pow10f(x) expf(2.302585092994046f*x)
+
 // biquad filtering is based on a small sliding window, where the different filters are a result of
 // simply changing the coefficients used while processing the samples
 //
@@ -102,7 +110,8 @@ static inline void state_zero(sf_biquad_state_st *state){
 
 // initialize the biquad state to be a lowpass filter
 void sf_lowpass(sf_biquad_state_st *state, int rate, float cutoff, float resonance){
-	state_reset(state);
+	// Next line is commented out to allow dynamic change of the filter by an LFO :
+    //state_reset(state);
 	float nyquist = rate * 0.5f;
 	cutoff /= nyquist;
 
@@ -111,7 +120,7 @@ void sf_lowpass(sf_biquad_state_st *state, int rate, float cutoff, float resonan
 	else if (cutoff <= 0.0f)
 		state_zero(state);
 	else{
-		resonance = powf(10.0f, resonance * 0.05f); // convert resonance from dB to linear
+		resonance = pow10f(resonance * 0.05f); // convert resonance from dB to linear
 		float theta = (float)M_PI * 2.0f * cutoff;
 		float alpha = sinf(theta) / (2.0f * resonance);
 		float cosw  = cosf(theta);
@@ -126,7 +135,8 @@ void sf_lowpass(sf_biquad_state_st *state, int rate, float cutoff, float resonan
 }
 
 void sf_highpass(sf_biquad_state_st *state, int rate, float cutoff, float resonance){
-	state_reset(state);
+    // Next line is commented out to allow dynamic change of the filter by an LFO :
+    //state_reset(state);
 	float nyquist = rate * 0.5f;
 	cutoff /= nyquist;
 
@@ -135,7 +145,7 @@ void sf_highpass(sf_biquad_state_st *state, int rate, float cutoff, float resona
 	else if (cutoff <= 0.0f)
 		state_passthrough(state);
 	else{
-		resonance = powf(10.0f, resonance * 0.05f); // convert resonance from dB to linear
+		resonance = pow10f(resonance * 0.05f); // convert resonance from dB to linear
 		float theta = (float)M_PI * 2.0f * cutoff;
 		float alpha = sinf(theta) / (2.0f * resonance);
 		float cosw  = cosf(theta);
@@ -150,7 +160,8 @@ void sf_highpass(sf_biquad_state_st *state, int rate, float cutoff, float resona
 }
 
 void sf_bandpass(sf_biquad_state_st *state, int rate, float freq, float Q){
-	state_reset(state);
+    // Next line is commented out to allow dynamic change of the filter by an LFO :
+    //state_reset(state);
 	float nyquist = rate * 0.5f;
 	freq /= nyquist;
 
@@ -172,7 +183,8 @@ void sf_bandpass(sf_biquad_state_st *state, int rate, float freq, float Q){
 }
 
 void sf_notch(sf_biquad_state_st *state, int rate, float freq, float Q){
-	state_reset(state);
+    // Next line is commented out to allow dynamic change of the filter by an LFO :
+    //state_reset(state);
 	float nyquist = rate * 0.5f;
 	freq /= nyquist;
 
@@ -194,7 +206,8 @@ void sf_notch(sf_biquad_state_st *state, int rate, float freq, float Q){
 }
 
 void sf_peaking(sf_biquad_state_st *state, int rate, float freq, float Q, float gain){
-	state_reset(state);
+    // Next line is commented out to allow dynamic change of the filter by an LFO :
+    //state_reset(state);
 	float nyquist = rate * 0.5f;
 	freq /= nyquist;
 
@@ -203,7 +216,7 @@ void sf_peaking(sf_biquad_state_st *state, int rate, float freq, float Q, float 
 		return;
 	}
 
-	float A = powf(10.0f, gain * 0.025f); // square root of gain converted from dB to linear
+	float A = pow10f(gain * 0.025f); // square root of gain converted from dB to linear
 
 	if (Q <= 0.0f){
 		state_scale(state, A * A); // scale by A squared
@@ -222,7 +235,8 @@ void sf_peaking(sf_biquad_state_st *state, int rate, float freq, float Q, float 
 }
 
 void sf_allpass(sf_biquad_state_st *state, int rate, float freq, float Q){
-	state_reset(state);
+    // Next line is commented out to allow dynamic change of the filter by an LFO :
+    //state_reset(state);
 	float nyquist = rate * 0.5f;
 	freq /= nyquist;
 
@@ -245,7 +259,8 @@ void sf_allpass(sf_biquad_state_st *state, int rate, float freq, float Q){
 
 // WebAudio hardcodes Q=1
 void sf_lowshelf(sf_biquad_state_st *state, int rate, float freq, float Q, float gain){
-	state_reset(state);
+    // Next line is commented out to allow dynamic change of the filter by an LFO :
+    //state_reset(state);
 	float nyquist = rate * 0.5f;
 	freq /= nyquist;
 
@@ -254,7 +269,7 @@ void sf_lowshelf(sf_biquad_state_st *state, int rate, float freq, float Q, float
 		return;
 	}
 
-	float A = powf(10.0f, gain * 0.025f); // square root of gain converted from dB to linear
+	float A = pow10f(gain * 0.025f); // square root of gain converted from dB to linear
 
 	if (freq >= 1.0f){
 		state_scale(state, A * A); // scale by A squared
@@ -280,7 +295,8 @@ void sf_lowshelf(sf_biquad_state_st *state, int rate, float freq, float Q, float
 
 // WebAudio hardcodes Q=1
 void sf_highshelf(sf_biquad_state_st *state, int rate, float freq, float Q, float gain){
-	state_reset(state);
+    // Next line is commented out to allow dynamic change of the filter by an LFO :
+    //state_reset(state);
 	float nyquist = rate * 0.5f;
 	freq /= nyquist;
 
@@ -289,7 +305,7 @@ void sf_highshelf(sf_biquad_state_st *state, int rate, float freq, float Q, floa
 		return;
 	}
 
-	float A = powf(10.0f, gain * 0.025f); // square root of gain converted from dB to linear
+	float A = pow10f(gain * 0.025f); // square root of gain converted from dB to linear
 
 	if (freq <= 0.0f){
 		state_scale(state, A * A); // scale by A squared
