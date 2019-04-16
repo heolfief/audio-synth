@@ -13,6 +13,8 @@
 
 int setup_core(void **state)
 {
+    Envelope env = {.attack = 0, .decay = 0, .sustain = 1, .release = 0};
+
     Core *ac = alloc_core(TEST_AUDIO_BUFF_SIZE);
     if (ac == NULL)
     {
@@ -21,6 +23,31 @@ int setup_core(void **state)
     }
 
     ac->sys_param->sample_rate = TEST_SAMPLE_RATE;
+
+    for (int i = 0; i < POLYPHONY_MAX; ++i)
+    {
+        osc_init_default_values(ac->note_array[i]->osc1, TEST_AUDIO_BUFF_SIZE, TEST_SAMPLE_RATE);
+        osc_init_default_values(ac->note_array[i]->osc2, TEST_AUDIO_BUFF_SIZE, TEST_SAMPLE_RATE);
+        osc_init_default_values(ac->note_array[i]->osc3, TEST_AUDIO_BUFF_SIZE, TEST_SAMPLE_RATE);
+
+        ac->note_array[i]->master_onoff = OFF;
+        ac->note_array[i]->onoff = OFF;
+        ac->note_array[i]->lifetime = 0;
+        ac->note_array[i]->deathtime = 0;
+    }
+
+    ac->sys_param->env->attack = env.attack;
+    ac->sys_param->env->decay = env.decay;
+    ac->sys_param->env->sustain = env.sustain;
+    ac->sys_param->env->release = env.release;
+    ac->sys_param->dist_param->wet=50;
+    ac->sys_param->dist_param->dist_level=50;
+    ac->sys_param->amp_mod_param->mod_level=50;
+    ac->sys_param->amp_mod_param->freq=440;
+    ac->sys_param->filter_param->resonance=20;
+    ac->sys_param->filter_param->filter_type=LOWPASS;
+    ac->sys_param->filter_param->cutoff_freq=440;
+
 
     *state = ac;
 
@@ -42,23 +69,6 @@ int teardown_core(void **state)
 void test_master_audio_fill_buffer(void **state)
 {
     Core *ac = *state;
-    Envelope env = {.attack = 0, .decay = 0, .sustain = 1, .release = 0};
-
-    for (int i = 0; i < POLYPHONY_MAX; ++i)
-    {
-        osc_init_default_values(ac->note_array[i]->osc1, TEST_AUDIO_BUFF_SIZE, TEST_SAMPLE_RATE);
-        osc_init_default_values(ac->note_array[i]->osc2, TEST_AUDIO_BUFF_SIZE, TEST_SAMPLE_RATE);
-        osc_init_default_values(ac->note_array[i]->osc3, TEST_AUDIO_BUFF_SIZE, TEST_SAMPLE_RATE);
-
-        ac->note_array[i]->master_onoff = OFF;
-        ac->note_array[i]->onoff = OFF;
-        ac->note_array[i]->lifetime = 0;
-        ac->note_array[i]->deathtime = 0;
-        ac->sys_param->env->attack = env.attack;
-        ac->sys_param->env->decay = env.decay;
-        ac->sys_param->env->sustain = env.sustain;
-        ac->sys_param->env->release = env.release;
-    }
 
     // Error behaviour test
     assert_int_equal(master_audio_fill_buffer(NULL), -1);
