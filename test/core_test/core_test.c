@@ -40,14 +40,18 @@ int setup_core(void **state)
     ac->sys_param->env->decay = env.decay;
     ac->sys_param->env->sustain = env.sustain;
     ac->sys_param->env->release = env.release;
-    ac->sys_param->dist_param->wet=50;
-    ac->sys_param->dist_param->dist_level=50;
-    ac->sys_param->amp_mod_param->mod_level=50;
-    ac->sys_param->amp_mod_param->freq=440;
-    ac->sys_param->filter_param->resonance=20;
-    ac->sys_param->filter_param->filter_type=LOWPASS;
-    ac->sys_param->filter_param->cutoff_freq=440;
-
+    ac->sys_param->dist_param->wet = 50;
+    ac->sys_param->dist_param->dist_level = 50;
+    ac->sys_param->amp_mod_param->mod_level = 50;
+    ac->sys_param->amp_mod_param->freq = 440;
+    ac->sys_param->filter_param->resonance = 20;
+    ac->sys_param->filter_param->filter_type = LOWPASS;
+    ac->sys_param->filter_param->cutoff_freq = 440;
+    ac->sys_param->flanger_param->lfo_wave = SIN;
+    ac->sys_param->flanger_param->lfo_freq = 1;
+    ac->sys_param->flanger_param->lfo_range = 100;
+    ac->sys_param->flanger_param->delay = 2;
+    ac->sys_param->flanger_param->depth = 100;
 
     *state = ac;
 
@@ -108,6 +112,27 @@ void test_fx(void **state)
     // Normal behaviour test
     assert_int_equal(master_effects(ac), 0);
 
+
+    /*
+     * FLANGER
+     */
+    // Error behaviour test
+    assert_int_equal(flanger(NULL, TEST_AUDIO_BUFF_SIZE, TEST_SAMPLE_RATE, 1, 1, 100, 100, SIN), -1);
+
+    for (Uint16 sample = 0; sample < ac->sys_param->audio_buffer_length; ++sample)
+    {
+        ac->master_audio[sample] = -5;
+    }
+
+    // Normal behaviour test
+    assert_int_equal(flanger(ac->master_audio, TEST_AUDIO_BUFF_SIZE, TEST_SAMPLE_RATE, 1, 1, 100, 100, SIN), 0);
+
+    // Out of range parameters behaviour test
+    assert_int_equal(flanger(ac->master_audio, TEST_AUDIO_BUFF_SIZE, TEST_SAMPLE_RATE, -5, 1, 100, 100, SIN), -1);
+    assert_int_equal(flanger(ac->master_audio, TEST_AUDIO_BUFF_SIZE, TEST_SAMPLE_RATE, 5, 5000, 100, 100, SIN), -1);
+    assert_int_equal(flanger(ac->master_audio, TEST_AUDIO_BUFF_SIZE, TEST_SAMPLE_RATE, 5, 1, 101, 100, SIN), -1);
+    assert_int_equal(flanger(ac->master_audio, TEST_AUDIO_BUFF_SIZE, TEST_SAMPLE_RATE, 5, 1, 100, 101, SIN), -1);
+    assert_int_equal(flanger(ac->master_audio, TEST_AUDIO_BUFF_SIZE, TEST_SAMPLE_RATE, 5, 1, 100, 100, 9), -1);
 
     /*
      * DISTORTION

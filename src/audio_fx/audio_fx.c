@@ -134,7 +134,11 @@ int flanger(Audio_Buffer buff, Uint16 buffer_length, Uint32 sample_rate, double 
     lfo->onoff = ON;
     lfo->freq = freq;
 
-    if (osc_fill_buffer(lfo, buffer_length, sample_rate, lfo_phase))return -1;
+    if (osc_fill_buffer(lfo, buffer_length, sample_rate, lfo_phase))
+    {
+        free_osc(lfo);
+        return -1;
+    }
     lfo_phase = lfo_phase + buffer_length;
 
     for (Uint16 sample = 0; sample < buffer_length; ++sample)
