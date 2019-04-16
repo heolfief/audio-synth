@@ -93,6 +93,13 @@ Sys_param *alloc_sys_param()
         return NULL;
     }
 
+    sp->flanger_param = (Flanger_param *) malloc(sizeof(Flanger_param));
+    if (sp->flanger_param == NULL)
+    {
+        sys_print_error("Memory allocation error");
+        return NULL;
+    }
+
     return sp;
 }
 
@@ -105,6 +112,7 @@ int free_sys_param(Sys_param *sys_param_to_free)
     free(sys_param_to_free->amp_mod_param);
     free(sys_param_to_free->dist_param);
     free(sys_param_to_free->filter_param);
+    free(sys_param_to_free->flanger_param);
     free(sys_param_to_free);
     return 0;
 }

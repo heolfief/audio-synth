@@ -32,6 +32,7 @@ typedef struct
   Amp_mod_param *amp_mod_param;                  /*!<the amplitude modulation parameters */
   Distortion_param *dist_param;                  /*!<the distortion parameters */
   Filter_param *filter_param;                    /*!<the filter parameter */
+  Flanger_param *flanger_param;                  /*!<the filter parameter */
 } Sys_param;
 
 /**
