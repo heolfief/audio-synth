@@ -16,8 +16,9 @@
 #include "sys_param/xml/preset_xml.h"
 
 // JUST A TEST
-Uint16 mario_freq[7] = {660, 660, 660, 510, 660, 770, 380};
-Uint16 mario_delay[7] = {80, 200, 250, 80, 250, 450, 450};
+Uint16 europe_freq[20] =   {587, 880, 784, 880, 587, 932, 880, 932, 880, 784};
+Uint16 europe_length[20] = {800, 100, 100, 400, 800, 100, 100, 200, 200, 800};
+Uint16 europe_delay[20] =  {400, 100, 100, 400, 400, 100, 100, 200, 200, 400};
 
 int main(int argc, char *argv[])
 {
@@ -77,13 +78,13 @@ int main(int argc, char *argv[])
 
     SDL_PauseAudio(0);                      // Play audio (pause = off)
 
-    for (int i = 0; i < 7; ++i)
+    for (int i = 0; i < 10; ++i)
     {
-        audio_core->note_array[0]->freq = mario_freq[i];
+        audio_core->note_array[0]->freq = europe_freq[i];
         note_on(audio_core->note_array[0]);
-        SDL_Delay(100);
+        SDL_Delay((int)((double)europe_length[i]/1.5));
         note_off(audio_core->note_array[0]);
-        SDL_Delay(mario_delay[i]);
+        SDL_Delay(europe_delay[i]);
     }
 
     SDL_Delay(2000);
