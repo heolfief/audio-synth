@@ -37,6 +37,7 @@ int load_preset(const char *filename, Sys_param *sys_param)
 {
     xmlDocPtr doc = NULL;
     char filename_relat[30] = "../presets/";
+    char filename_relat_alternate[30] = "presets/";
 
     if (filename == NULL)
     {
@@ -50,8 +51,18 @@ int load_preset(const char *filename, Sys_param *sys_param)
     doc = xmlParseFile(filename_relat);
     if (doc == NULL)
     {
-        sys_print_error("Cannot parse preset file");
-        return -1;
+        printf("Retying with alternate path : \n");
+        strcat(filename_relat_alternate, filename);
+
+        // retry parse XML file with alternate path
+        doc = xmlParseFile(filename_relat_alternate);
+
+        if (doc == NULL)
+        {
+            sys_print_error("Cannot parse preset file");
+            return -1;
+        }
+        printf("Preset found.\n");
     }
 
     // Load oscillator 1 parameters
@@ -80,6 +91,13 @@ int load_preset(const char *filename, Sys_param *sys_param)
     sys_param->env->decay = (double) read_XML_param(doc->xmlenv->xmldecay);
     sys_param->env->sustain = (double) read_XML_param(doc->xmlenv->xmlsustain);
     sys_param->env->release = (double) read_XML_param(doc->xmlenv->xmlrelease);
+
+    // Load flanger parameters
+    sys_param->flanger_param->lfo_wave = (Waveform) read_XML_param(doc->xmlflanger->xmlflanglfowave);
+    sys_param->flanger_param->lfo_freq = (double) read_XML_param(doc->xmlflanger->xmlflanglfofreq);
+    sys_param->flanger_param->lfo_range = (Uint8) read_XML_param(doc->xmlflanger->xmlflanglforange);
+    sys_param->flanger_param->delay = (double) read_XML_param(doc->xmlflanger->xmlflangdelay);
+    sys_param->flanger_param->depth = (double) read_XML_param(doc->xmlflanger->xmlflangdepth);
 
     // Load amp mod parameters
     sys_param->amp_mod_param->freq = (double) read_XML_param(doc->xmlampmod->xmlmodfreq);
@@ -113,7 +131,7 @@ int save_preset(const char *filename, Sys_param *sys_param)
 {
     char filename_relat[30] = "../presets/";
     xmlDocPtr doc;
-    xmlNodePtr root_node, node_osc1, node_osc2, node_osc3, node_env, node_filter, node_dist, node_amp_mod;
+    xmlNodePtr root_node, node_osc1, node_osc2, node_osc3, node_env, node_filter, node_dist, node_amp_mod, node_flanger;
 
     if (filename == NULL)
     {
@@ -153,6 +171,13 @@ int save_preset(const char *filename, Sys_param *sys_param)
     xmlNewChild(node_env, NULL, BAD_CAST "decay", (xmlChar *) double_to_char(sys_param->env->decay));
     xmlNewChild(node_env, NULL, BAD_CAST "sustain", (xmlChar *) double_to_char(sys_param->env->sustain));
     xmlNewChild(node_env, NULL, BAD_CAST "release", (xmlChar *) double_to_char(sys_param->env->release));
+
+    node_flanger = xmlNewChild(root_node, NULL, BAD_CAST "flanger", NULL);
+    xmlNewChild(node_flanger, NULL, BAD_CAST "lfowave", (xmlChar *) double_to_char(sys_param->flanger_param->lfo_wave));
+    xmlNewChild(node_flanger, NULL, BAD_CAST "lfofreq", (xmlChar *) double_to_char(sys_param->flanger_param->lfo_freq));
+    xmlNewChild(node_flanger, NULL, BAD_CAST "lforange", (xmlChar *) double_to_char(sys_param->flanger_param->lfo_range));
+    xmlNewChild(node_flanger, NULL, BAD_CAST "delay", (xmlChar *) double_to_char(sys_param->flanger_param->delay));
+    xmlNewChild(node_flanger, NULL, BAD_CAST "depth", (xmlChar *) double_to_char(sys_param->flanger_param->depth));
 
     node_amp_mod = xmlNewChild(root_node, NULL, BAD_CAST "amp_mod", NULL);
     xmlNewChild(node_amp_mod, NULL, BAD_CAST "freq", (xmlChar *) double_to_char(sys_param->amp_mod_param->freq));

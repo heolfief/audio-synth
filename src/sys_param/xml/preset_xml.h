@@ -38,9 +38,18 @@
 #define xmlsustain  children->next->next->next->next->next->xmlvalue
 #define xmlrelease  children->next->next->next->next->next->next->next->xmlvalue
 
-#define xmlampmod      xmlenv->next->next
+#define xmlflanger  xmlenv->next->next
 
-// Relative to xmfilt
+// Relative to xmlflanger
+#define xmlflanglfowave  children->next->xmlvalue
+#define xmlflanglfofreq  children->next->next->next->xmlvalue
+#define xmlflanglforange children->next->next->next->next->next->xmlvalue
+#define xmlflangdelay    children->next->next->next->next->next->next->next->xmlvalue
+#define xmlflangdepth    children->next->next->next->next->next->next->next->next->next->xmlvalue
+
+#define xmlampmod   xmlflanger->next->next
+
+// Relative to xmlfilt
 #define xmlmodfreq    children->next->xmlvalue
 #define xmlmodlevel   children->next->next->next->xmlvalue
 

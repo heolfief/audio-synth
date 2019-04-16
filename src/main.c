@@ -78,13 +78,13 @@ int main(int argc, char *argv[])
 
     SDL_PauseAudio(0);                      // Play audio (pause = off)
 
-    for (int i = 0; i < 10; ++i)
+    for (int i = 0; i < 10*4; ++i)
     {
-        audio_core->note_array[0]->freq = europe_freq[i];
+        audio_core->note_array[0]->freq = europe_freq[i%10];
         note_on(audio_core->note_array[0]);
-        SDL_Delay((int)((double)europe_length[i]/1.5));
+        SDL_Delay((int)((double)europe_length[i%10]/1.5));
         note_off(audio_core->note_array[0]);
-        SDL_Delay(europe_delay[i]);
+        SDL_Delay(europe_delay[i%10]);
     }
 
     SDL_Delay(2000);
