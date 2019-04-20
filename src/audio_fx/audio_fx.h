@@ -15,6 +15,7 @@
 #include "ext_effects/biquad.h"
 
 #define MAX_SAMPLE_DELAY_LINE 16384
+#define LFO_FILTER_SAMPLE_INCREMENT 64  // Needs to be power of two, this is the equivalent to the refresh rate in samples of the filter LFO
 
 /**
  * \enum Filter_type
@@ -48,6 +49,7 @@ typedef struct
  */
 typedef struct
 {
+  OnOff onoff;                            /*!<master on off of the effect */
   Filter_type filter_type;                       /*!<the type of the filter */
   Uint16 cutoff_freq;                            /*!<the frequency cutoff of the filter */
   double resonance;                              /*!<the resonance of the filter */
@@ -60,9 +62,27 @@ typedef struct
  */
 typedef struct
 {
+  OnOff onoff;                            /*!<master on off of the effect */
   Uint8 dist_level;                       /*!<the distortion level in percent */
   Uint8 wet;                              /*!<the balance between dry(no effect) and wet(only effect) in percent */
 } Distortion_param;
+
+/**
+ * \struct Lfo_filter_param
+ * \brief define the LFO modulated filter parameters
+ *
+ */
+typedef struct
+{
+  OnOff onoff;                            /*!<master on off of the effect */
+  Filter_type filter_type;                /*!<the filter type (LOWPASS, HIGHPASS, BANDPASS, NOTCH */
+  Uint16 filter_freq;                     /*!<the center frequency of the filter */
+  double lfo_freq;                        /*!<the frequency of the modulation */
+  double resonance;                       /*!<the resonance of the filter */
+  Waveform wave;                          /*!<the waveform of the LFO */
+  Uint8 duty;                             /*!<the duty cycle of the LFO */
+  Uint16 filter_excursion;                /*!<the excursion of the modulated filter in Hz */
+} Lfo_filter_param;
 
 /**
  * \struct Amp_mod_param
@@ -71,8 +91,11 @@ typedef struct
  */
 typedef struct
 {
-  double freq;                            /*!<the frequency of the modulation */
+  OnOff onoff;                            /*!<master on off of the effect */
   Uint8 mod_level;                        /*!<the depth or effect level in percents */
+  double freq;                            /*!<the frequency of the modulation */
+  Waveform wave;                          /*!<the waveform of the LFO */
+  Uint8 duty;                             /*!<the duty cycle of the LFO */
 } Amp_mod_param;
 
 /**
@@ -82,6 +105,7 @@ typedef struct
  */
 typedef struct
 {
+  OnOff onoff;                            /*!<master on off of the effect */
   Waveform lfo_wave;                      /*!<the waveform of the LFO */
   double lfo_freq;                        /*!<the frequency of the LFO */
   Uint8 lfo_range;                        /*!<the range of the LFO in percents */
@@ -103,7 +127,7 @@ typedef struct
 int distortion(Audio_Buffer buff, Uint16 buffer_length, Uint8 dist_level, Uint8 wet);
 
 /**
- * \fn int amp_mod(Audio_Buffer buff, Uint16 buffer_length, Uint32 sample_rate, double freq, double mod_level)
+ * \fn int amp_mod(Audio_Buffer buff, Uint16 buffer_length, Uint32 sample_rate, double freq, Waveform wave, Uint8 duty, Uint8 mod_level)
  * \brief Function to apply amplitude modulation to an audio buffer
  *
  *  Volume is modulated by an LFO
@@ -112,11 +136,13 @@ int distortion(Audio_Buffer buff, Uint16 buffer_length, Uint8 dist_level, Uint8 
  * \param buffer_length The size of the audio buffer (number of audio samples in the buffer)
  * \param sample_rate The sample rate of the system
  * \param freq the frequency of the modulation
+ * \param wave the waveform type of the LFO
+ * \param duty the duty cycle of the waveform in percents
  * \param mod_level the depth or effect level in percents
  *
  * \return 0 if everything went OK, -1 otherwise
  */
-int amp_mod(Audio_Buffer buff, Uint16 buffer_length, Uint32 sample_rate, double freq, Uint8 mod_level);
+int amp_mod(Audio_Buffer buff, Uint16 buffer_length, Uint32 sample_rate, double freq, Waveform wave, Uint8 duty, Uint8 mod_level);
 
 /**
  * \fn int flanger(Audio_Buffer buff, Uint16 buffer_length, Uint32 sample_rate, double freq, double delay, Uint8 lfo_range, Uint8 depth, Waveform wave)
@@ -136,6 +162,27 @@ int amp_mod(Audio_Buffer buff, Uint16 buffer_length, Uint32 sample_rate, double 
  * \return 0 if everything went OK, -1 otherwise
  */
 int flanger(Audio_Buffer buff, Uint16 buffer_length, Uint32 sample_rate, double freq, double delay, Uint8 lfo_range, Uint8 depth, Waveform wave);
+
+/**
+ * \fn int lfo_filter(Audio_Buffer buff, Uint16 buffer_length, Uint32 sample_rate, Filter_type filter_type, Uint16 filter_freq, double lfo_freq, double resonance, Waveform wave, Uint8 duty, Uint16 filter_excursion)
+ * \brief Function to apply a biquad filter to an audio buffer, moded by an LFO
+ *
+ *  depending on the filter coefficients, could be either a lowpass, highpass or bandpass filter
+ *
+ * \param buff the Audio_Buffer object to apply distortion to
+ * \param buffer_length The size of the audio buffer (number of audio samples in the buffer)
+ * \param sample_rate The sample rate of the system
+ * \param filter_type the filter type (LOWPASS, HIGHPASS, BANDPASS, NOTCH)
+ * \param filter_freq the center frequency of the filter in Hz
+ * \param lfo_freq the frequency of the modulation
+ * \param resonance the resonance of the filter
+ * \param wave the waveform type of the LFO
+ * \param duty the duty cycle of the waveform in percents
+ * \param filter_excursion the filter excursion in Hz
+ *
+ * \return 0 if everything went OK, -1 otherwise
+ */
+int lfo_filter(Audio_Buffer buff, Uint16 buffer_length, Uint32 sample_rate, Filter_type filter_type, Uint16 filter_freq, double lfo_freq, double resonance, Waveform wave, Uint8 duty, Uint16 filter_excursion);
 
 /**
  * \fn int biquad(Audio_Buffer buff, Uint16 buffer_length, Uint32 sample_rate, sf_biquad_state_st *state)
