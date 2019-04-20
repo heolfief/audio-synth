@@ -26,7 +26,7 @@ int find_free_note(Polyphony *p)
 int polyphony_fill_buffer(Audio_Buffer audio_buff, Polyphony *p, Uint16 buffer_length, const Envelope *env, Uint64 sample_rate, Uint64 phase)
 {
     int nbr_active_notes = 0;
-    Sint32 temp_mix = 0;
+    double temp_mix = 0;
 
     if (p == NULL)
     {
@@ -54,14 +54,21 @@ int polyphony_fill_buffer(Audio_Buffer audio_buff, Polyphony *p, Uint16 buffer_l
         // Mix all the notes buffer fo the sample
         for (int i = 0; i < POLYPHONY_MAX; ++i)
         {
-            if (p[i]->master_onoff == ON) temp_mix += p[i]->buffer[sample];
+            if (p[i]->master_onoff == ON)
+            {
+                temp_mix += (double) p[i]->buffer[sample];
+            }
         }
 
         // Get amplitude back within data range
         if (nbr_active_notes != 0)
-        { audio_buff[sample] = (Sint16) (temp_mix / nbr_active_notes); }
+        {
+            audio_buff[sample] = (Sint16) ((double) temp_mix / (double) nbr_active_notes);
+        }
         else
-        { audio_buff[sample] = 0; }
+        {
+            audio_buff[sample] = 0;
+        }
     }
 
     return 0;

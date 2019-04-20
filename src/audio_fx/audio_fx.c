@@ -8,6 +8,12 @@
 
 #include "audio_fx.h"
 
+static Sint8 sgn(double x)
+{
+    // return 1 if positive, -1 if negative
+    return (x >= 0) ? 1 : -1;
+}
+
 int distortion(Audio_Buffer buff, Uint16 buffer_length, Uint8 dist_level, Uint8 wet)
 {
     if (buff == NULL)
@@ -22,6 +28,8 @@ int distortion(Audio_Buffer buff, Uint16 buffer_length, Uint8 dist_level, Uint8 
         return -1;
     }
 
+    double temp_sample;
+
     /**
      * Basic distortion algorithm :
      * y=(1+a*sgn(x)*(1-exp(-b*abs(x)))
@@ -30,18 +38,19 @@ int distortion(Audio_Buffer buff, Uint16 buffer_length, Uint8 dist_level, Uint8 
      *
      * Dynamic plot (GEOGEBRA) : https://www.geogebra.org/graphing/z8wzf8et
      */
+
     for (Uint16 sample = 0; sample < buffer_length; ++sample)
     {
-        if (buff[sample] > 0)
-        {
-            buff[sample] = (Sint16) (buff[sample] * (1 - ((double) wet / 100)
-                + ((double) wet / 100) * (double) (1 - exp(-((double) dist_level / 2) * buff[sample]))));
-        }
-        else
-        {
-            buff[sample] = (Sint16) (buff[sample] * (1 - ((double) wet / 100)
-                + ((double) wet / 100) * (double) (-1 + exp(((double) dist_level / 2) * buff[sample]))));
-        }
+        temp_sample = (double) sgn((double) buff[sample])
+            * (1.0 - exp((-((double) dist_level + 1.0) / (double)DIST_ATTENUATOR) * fabs((double) buff[sample]) / (double) INT16_MAX));
+
+        // Clipper
+        if (temp_sample > INT16_MAX)temp_sample = INT16_MAX;
+        if (temp_sample < INT16_MIN) temp_sample = INT16_MIN;
+
+        buff[sample] = (Sint16) ((double) buff[sample] * (1.0 - (double) wet / 100.0)
+            + ((double) wet / 100.0) * temp_sample * (double) INT16_MAX);
+
     }
 
     return 0;
@@ -198,13 +207,14 @@ int lfo_filter(Audio_Buffer buff, Uint16 buffer_length, Uint32 sample_rate, Filt
     for (Uint16 sample = 0; sample < buffer_length; ++sample)
     {
         // Convert to float < 1 to work with the library filter code
-        st_buff[sample].L = (float) (buff[sample]) / 32768.0f;
+        st_buff[sample].L = (double) (buff[sample]) / 32768.0;
     }
 
     for (Uint16 sample = 0; sample < buffer_length; sample += LFO_FILTER_SAMPLE_INCREMENT)
     {
         // Mod filter freq with LFO
-        filter_param.cutoff_freq = (filter_freq + lfo->buffer[sample] > 0) ? (Uint16) (filter_freq + lfo->buffer[sample]) : 0;
+        filter_param.cutoff_freq =
+            (filter_freq + lfo->buffer[sample] > 0) ? (Uint16) (filter_freq + lfo->buffer[sample]) : 0;
 
         // Compute filter coefficients with new frequency
         if (compute_filter_coeffs(&filter_param, sample_rate, &filter_state))return -1;
@@ -215,7 +225,7 @@ int lfo_filter(Audio_Buffer buff, Uint16 buffer_length, Uint32 sample_rate, Filt
 
     for (Uint16 sample = 0; sample < buffer_length; ++sample)
     {
-        buff[sample] = (Sint16) (st_buff[sample].L * 32767.0f); // Convert back to full range Sint16
+        buff[sample] = (Sint16) (st_buff[sample].L * 32767.0); // Convert back to full range Sint16
     }
 
     free_osc(lfo);

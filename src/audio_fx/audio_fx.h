@@ -16,6 +16,7 @@
 
 #define MAX_SAMPLE_DELAY_LINE 16384
 #define LFO_FILTER_SAMPLE_INCREMENT 64  // Needs to be power of two, this is the equivalent to the refresh rate in samples of the filter LFO
+#define DIST_ATTENUATOR 8.0
 
 /**
  * \enum Filter_type

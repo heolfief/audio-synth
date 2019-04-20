@@ -4,6 +4,8 @@
 
 #include "biquad.h"
 #include <math.h>
+#include <inttypes.h>
+#include <stdio.h>
 
 /*
  * Faster 10^x calculation:
@@ -20,15 +22,14 @@
 //   b0, b1, b2, a1, a2      transformation coefficients
 //   xn0, xn1, xn2           the unfiltered sample at position x[n], x[n-1], and x[n-2]
 //   yn1, yn2                the filtered sample at position y[n-1] and y[n-2]
-void sf_biquad_process(sf_biquad_state_st *state, int size, sf_sample_st *input,
-	sf_sample_st *output){
+void sf_biquad_process(sf_biquad_state_st *state, int size, sf_sample_st *input, sf_sample_st *output){
 
 	// pull out the state into local variables
-	float b0 = state->b0;
-	float b1 = state->b1;
-	float b2 = state->b2;
-	float a1 = state->a1;
-	float a2 = state->a2;
+    float b0 = state->b0;
+    float b1 = state->b1;
+    float b2 = state->b2;
+    float a1 = state->a1;
+    float a2 = state->a2;
 	sf_sample_st xn1 = state->xn1;
 	sf_sample_st xn2 = state->xn2;
 	sf_sample_st yn1 = state->yn1;
@@ -40,18 +41,25 @@ void sf_biquad_process(sf_biquad_state_st *state, int size, sf_sample_st *input,
 		sf_sample_st xn0 = input[n];
 
 		// the formula is the same for each channel
-		float L =
+        float L =
 			b0 * xn0.L +
 			b1 * xn1.L +
 			b2 * xn2.L -
 			a1 * yn1.L -
 			a2 * yn2.L;
-		float R =
+        float R =
 			b0 * xn0.R +
 			b1 * xn1.R +
 			b2 * xn2.R -
 			a1 * yn1.R -
 			a2 * yn2.R;
+
+		// Clipping
+		if(L > 1.0) L = (float)1.0f;
+		if(L < -1.0) L = (float)-1.0f;
+        if(R > 1.0) R = (float)1.0f;
+        if(R < -1.0) R = (float)-1.0f;
+
 
 		// save the result
 		output[n] = (sf_sample_st){ L, R };
