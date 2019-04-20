@@ -72,6 +72,21 @@ int setup_core(void **state)
     ac->sys_param->lfo_filter_param->filter_freq = 200;
     ac->sys_param->lfo_filter_param->filter_type  = LOWPASS;
 
+    memset(ac->master_audio, 0, TEST_AUDIO_BUFF_SIZE);
+    ac->effect_core->filter_state->a1 = 0;
+    ac->effect_core->filter_state->a2 = 0;
+    ac->effect_core->filter_state->b0 = 0;
+    ac->effect_core->filter_state->b1 = 0;
+    ac->effect_core->filter_state->b2 = 0;
+    ac->effect_core->filter_state->xn1.L = 0;
+    ac->effect_core->filter_state->xn1.R = 0;
+    ac->effect_core->filter_state->xn2.L = 0;
+    ac->effect_core->filter_state->xn2.R = 0;
+    ac->effect_core->filter_state->yn1.L = 0;
+    ac->effect_core->filter_state->yn1.R = 0;
+    ac->effect_core->filter_state->yn2.L = 0;
+    ac->effect_core->filter_state->yn2.R = 0;
+
     *state = ac;
 
     return 0;
@@ -97,7 +112,8 @@ void test_master_audio_fill_buffer(void **state)
     assert_int_equal(master_audio_fill_buffer(NULL), -1);
 
     // Normal behaviour test
-    assert_int_equal(master_audio_fill_buffer(*state), 0);
+    assert_int_equal(master_audio_fill_buffer(ac), 0);
+
 
     // Error behaviour test
     assert_int_equal(synthesis_fill_buffer(NULL), -1);
@@ -106,27 +122,12 @@ void test_master_audio_fill_buffer(void **state)
 void test_fx(void **state)
 {
     Core *ac = *state;
-
-    memset(ac->master_audio, 0, TEST_AUDIO_BUFF_SIZE);
-    ac->effect_core->filter_state->a1 = 0;
-    ac->effect_core->filter_state->a2 = 0;
-    ac->effect_core->filter_state->b0 = 0;
-    ac->effect_core->filter_state->b1 = 0;
-    ac->effect_core->filter_state->b0 = 0;
-    ac->effect_core->filter_state->xn1.L = 0;
-    ac->effect_core->filter_state->xn1.R = 0;
-    ac->effect_core->filter_state->xn2.L = 0;
-    ac->effect_core->filter_state->xn2.R = 0;
-    ac->effect_core->filter_state->yn1.L = 0;
-    ac->effect_core->filter_state->yn1.R = 0;
-    ac->effect_core->filter_state->yn2.L = 0;
-    ac->effect_core->filter_state->yn2.R = 0;
-
     /*
      * MASTER EFFECTS
      */
     // Error behaviour test
     assert_int_equal(master_effects(NULL), -1);
+
 
     // Normal behaviour test
     assert_int_equal(master_effects(ac), 0);

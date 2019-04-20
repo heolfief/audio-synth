@@ -42,7 +42,8 @@ int distortion(Audio_Buffer buff, Uint16 buffer_length, Uint8 dist_level, Uint8 
     for (Uint16 sample = 0; sample < buffer_length; ++sample)
     {
         temp_sample = (double) sgn((double) buff[sample])
-            * (1.0 - exp((-((double) dist_level + 1.0) / (double)DIST_ATTENUATOR) * fabs((double) buff[sample]) / (double) INT16_MAX));
+            * (1.0 - exp((-((double) dist_level + 1.0) / (double) DIST_ATTENUATOR) * fabs((double) buff[sample])
+                             / (double) INT16_MAX));
 
         // Clipper
         if (temp_sample > INT16_MAX)temp_sample = INT16_MAX;
@@ -208,6 +209,7 @@ int lfo_filter(Audio_Buffer buff, Uint16 buffer_length, Uint32 sample_rate, Filt
     {
         // Convert to float < 1 to work with the library filter code
         st_buff[sample].L = (double) (buff[sample]) / 32768.0;
+        st_buff[sample].R = 0;
     }
 
     for (Uint16 sample = 0; sample < buffer_length; sample += LFO_FILTER_SAMPLE_INCREMENT)
@@ -259,6 +261,7 @@ int biquad(Audio_Buffer buff, Uint16 buffer_length, sf_biquad_state_st *state)
     {
         // Convert to float < 1 to work with the library filter code
         st_buff[sample].L = (float) (buff[sample]) / 32768.0f;
+        st_buff[sample].R = 0;
     }
 
     sf_biquad_process(state, buffer_length, st_buff, st_buff);
