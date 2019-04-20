@@ -25,7 +25,7 @@ int distortion(Audio_Buffer buff, Uint16 buffer_length, Uint8 dist_level, Uint8 
     /**
      * Basic distortion algorithm :
      * y=(1+a*sgn(x)*(1-exp(-b*abs(x)))
-     * a is the wet level aka the mix bettwen dry(no effect) and wet(only effect)
+     * a is the wet level aka the mix between dry(no effect) and wet(only effect)
      * b is the distortion level
      *
      * Dynamic plot (GEOGEBRA) : https://www.geogebra.org/graphing/z8wzf8et
