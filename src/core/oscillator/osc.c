@@ -105,6 +105,8 @@ int osc_fill_buffer(const Oscillator *osc, Uint16 buffer_length, Uint64 sample_r
                     osc->buffer[sample] = (Sint16) (-(mod - nb_samples_in_period * osc->duty / 100.0) * osc->amp /
                         (nb_samples_in_period * (1 - osc->duty / 100.0))) + (Sint16) (osc->amp / 2.0);
                 }
+
+                osc->buffer[sample] *= 2;
             }
             break;
 
