@@ -162,12 +162,12 @@ void test_fill_osc_buffer_tri(void **state)
     Oscillator *osc = *state;
 
     // Known values for dutycycle = 50%
-    static const int res_50[10] = {0, 2000, 4000, 6000, 8000, 10000, 8000, 6000, 4000, 2000};
+    static const int res_50[10] = {0, 4000, 8000, 12000, 16000, 20000, 16000, 12000, 8000, 4000};
 
     // Known values for dutycycle = 100%
-    static const int res_100[10] = {0, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000};
+    static const int res_100[10] = {0, 2000, 4000, 6000, 8000, 10000, 12000, 14000, 16000, 18000};
 
-    int avg = 5000;
+    int avg = 10000;
 
     osc->amp = 10000;  // Set amplitude
     osc->wave = TRI;   // Set wave to sine

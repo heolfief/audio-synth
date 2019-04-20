@@ -172,18 +172,11 @@ int lfo_filter(Audio_Buffer buff, Uint16 buffer_length, Uint32 sample_rate, Filt
 
     static Uint64 lfo_phase;
     static sf_biquad_state_st filter_state;
-    Filter_param *filter_param = NULL;
+    Filter_param filter_param;
     sf_sample_st st_buff[buffer_length];
 
-    filter_param = (Filter_param *) malloc(sizeof(Filter_param));
-    if (filter_param == NULL)
-    {
-        sys_print_error("Memory allocation error");
-        return -1;
-    }
-
-    filter_param->filter_type = filter_type;
-    filter_param->resonance = resonance;
+    filter_param.filter_type = filter_type;
+    filter_param.resonance = resonance;
 
     Oscillator *lfo = alloc_osc(buffer_length);
     if (lfo == NULL)
@@ -210,12 +203,11 @@ int lfo_filter(Audio_Buffer buff, Uint16 buffer_length, Uint32 sample_rate, Filt
 
     for (Uint16 sample = 0; sample < buffer_length; sample += LFO_FILTER_SAMPLE_INCREMENT)
     {
-        //if (sample > buffer_length) break;
         // Mod filter freq with LFO
-        filter_param->cutoff_freq = (filter_freq + lfo->buffer[sample] > 0) ? (Uint16) (filter_freq + lfo->buffer[sample]) : 0;
+        filter_param.cutoff_freq = (filter_freq + lfo->buffer[sample] > 0) ? (Uint16) (filter_freq + lfo->buffer[sample]) : 0;
 
         // Compute filter coefficients with new frequency
-        if (compute_filter_coeffs(filter_param, sample_rate, &filter_state))return -1;
+        if (compute_filter_coeffs(&filter_param, sample_rate, &filter_state))return -1;
 
         // Apply filter
         sf_biquad_process(&filter_state, LFO_FILTER_SAMPLE_INCREMENT, &st_buff[sample], &st_buff[sample]);

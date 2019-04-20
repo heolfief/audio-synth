@@ -40,18 +40,37 @@ int setup_core(void **state)
     ac->sys_param->env->decay = env.decay;
     ac->sys_param->env->sustain = env.sustain;
     ac->sys_param->env->release = env.release;
+
+    ac->sys_param->dist_param->onoff = ON;
     ac->sys_param->dist_param->wet = 50;
     ac->sys_param->dist_param->dist_level = 50;
+
+    ac->sys_param->amp_mod_param->onoff = ON;
     ac->sys_param->amp_mod_param->mod_level = 50;
     ac->sys_param->amp_mod_param->freq = 440;
+    ac->sys_param->amp_mod_param->wave = SIN;
+    ac->sys_param->amp_mod_param->duty = 50;
+
+    ac->sys_param->filter_param->onoff = ON;
     ac->sys_param->filter_param->resonance = 20;
     ac->sys_param->filter_param->filter_type = LOWPASS;
     ac->sys_param->filter_param->cutoff_freq = 440;
+
+    ac->sys_param->flanger_param->onoff = ON;
     ac->sys_param->flanger_param->lfo_wave = SIN;
     ac->sys_param->flanger_param->lfo_freq = 1;
     ac->sys_param->flanger_param->lfo_range = 100;
     ac->sys_param->flanger_param->delay = 2;
     ac->sys_param->flanger_param->depth = 100;
+
+    ac->sys_param->lfo_filter_param->onoff = ON;
+    ac->sys_param->lfo_filter_param->filter_excursion = 100;
+    ac->sys_param->lfo_filter_param->duty = 50;
+    ac->sys_param->lfo_filter_param->wave = SIN;
+    ac->sys_param->lfo_filter_param->resonance = 2;
+    ac->sys_param->lfo_filter_param->lfo_freq = 2;
+    ac->sys_param->lfo_filter_param->filter_freq = 200;
+    ac->sys_param->lfo_filter_param->filter_type  = LOWPASS;
 
     *state = ac;
 
@@ -166,15 +185,17 @@ void test_fx(void **state)
      * AMPLITUDE MODULATION
      */
     // Error behaviour test
-    assert_int_equal(amp_mod(NULL, TEST_AUDIO_BUFF_SIZE, TEST_SAMPLE_RATE, 0, 0), -1);
+    assert_int_equal(amp_mod(NULL, TEST_AUDIO_BUFF_SIZE, TEST_SAMPLE_RATE, 0, SIN, 50, 0), -1);
 
     // Normal behaviour test
-    assert_int_equal(amp_mod(ac->master_audio, TEST_AUDIO_BUFF_SIZE, TEST_SAMPLE_RATE, 0, 0), 0);
+    assert_int_equal(amp_mod(ac->master_audio, TEST_AUDIO_BUFF_SIZE, TEST_SAMPLE_RATE, 0, SIN, 50, 0), 0);
 
     // Out of range parameters behaviour test
-    assert_int_equal(amp_mod(ac->master_audio, TEST_AUDIO_BUFF_SIZE, TEST_SAMPLE_RATE, -5, 0), -1);
-    assert_int_equal(amp_mod(ac->master_audio, TEST_AUDIO_BUFF_SIZE, TEST_SAMPLE_RATE, 0, 101), -1);
-    assert_int_equal(amp_mod(ac->master_audio, TEST_AUDIO_BUFF_SIZE, TEST_SAMPLE_RATE, -50, 185), -1);
+    assert_int_equal(amp_mod(ac->master_audio, TEST_AUDIO_BUFF_SIZE, TEST_SAMPLE_RATE, -5, SIN, 50, 0), -1);
+    assert_int_equal(amp_mod(ac->master_audio, TEST_AUDIO_BUFF_SIZE, TEST_SAMPLE_RATE, 0, SIN, 50, 101), -1);
+    assert_int_equal(amp_mod(ac->master_audio, TEST_AUDIO_BUFF_SIZE, TEST_SAMPLE_RATE, -50, SIN, 50, 185), -1);
+    assert_int_equal(amp_mod(ac->master_audio, TEST_AUDIO_BUFF_SIZE, TEST_SAMPLE_RATE, 0, 45, 50, 0), -1);
+    assert_int_equal(amp_mod(ac->master_audio, TEST_AUDIO_BUFF_SIZE, TEST_SAMPLE_RATE, 0, SIN, 102, 0), -1);
 
 
     /*
