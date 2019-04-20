@@ -16,9 +16,9 @@
 #include "sys_param/xml/preset_xml.h"
 
 // JUST A TEST
-Uint16 europe_freq[20] =   {587, 880, 784, 880, 587, 932, 880, 932, 880, 784};
-Uint16 europe_length[20] = {800, 100, 100, 400, 800, 100, 100, 200, 200, 800};
-Uint16 europe_delay[20] =  {400, 100, 100, 400, 400, 100, 100, 200, 200, 400};
+Uint16 test_freq[20] =   {87, 87, 87, 87, 87, 87, 87, 87, 87, 175, 175, 175, 175, 175, 175};
+Uint16 test_length[20] = {150, 150, 150, 150, 150, 150, 150, 150, 150, 100, 100, 100, 100, 100, 100};
+Uint16 test_delay[20] =  {200, 200, 200, 200, 200, 200, 200, 200, 200, 100, 100, 100, 100, 100, 100};
 
 int main(int argc, char *argv[])
 {
@@ -78,13 +78,13 @@ int main(int argc, char *argv[])
 
     SDL_PauseAudio(0);                      // Play audio (pause = off)
 
-    for (int i = 0; i < 10*4; ++i)
+    for (int i = 0; i < 15*5; ++i)
     {
-        audio_core->note_array[0]->freq = europe_freq[i%10];
+        audio_core->note_array[0]->freq = test_freq[i%15];
         note_on(audio_core->note_array[0]);
-        SDL_Delay((int)((double)europe_length[i%10]/1.5));
+        SDL_Delay((int)((double)test_length[i%15]/1.5));
         note_off(audio_core->note_array[0]);
-        SDL_Delay(europe_delay[i%10]);
+        SDL_Delay(test_delay[i%15]);
     }
 
     SDL_Delay(2000);
