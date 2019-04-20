@@ -33,6 +33,7 @@ typedef struct
   Distortion_param *dist_param;                  /*!<the distortion parameters */
   Filter_param *filter_param;                    /*!<the filter parameter */
   Flanger_param *flanger_param;                  /*!<the filter parameter */
+  Lfo_filter_param *lfo_filter_param;            /*!<the LFO filter parameters */
 } Sys_param;
 
 /**

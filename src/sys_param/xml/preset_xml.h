@@ -23,48 +23,78 @@
 #define xmlosc2     xmlosc1->next->next
 #define xmlosc3     xmlosc2->next->next
 
+
+
 // Relative to xmloscX
-#define xmlonoff    children->next->xmlvalue
-#define xmlamp      children->next->next->next->xmlvalue
-#define xmldetune   children->next->next->next->next->next->xmlvalue
-#define xmlduty     children->next->next->next->next->next->next->next->xmlvalue
-#define xmlwave     children->next->next->next->next->next->next->next->next->next->xmlvalue
+#define xmlosconoff    children->next->xmlvalue
+#define xmloscamp      children->next->next->next->xmlvalue
+#define xmloscdetune   children->next->next->next->next->next->xmlvalue
+#define xmloscduty     children->next->next->next->next->next->next->next->xmlvalue
+#define xmloscwave     children->next->next->next->next->next->next->next->next->next->xmlvalue
 
 #define xmlenv      xmlosc3->next->next
 
 // Relative to xmlenv
-#define xmlattack   children->next->xmlvalue
-#define xmldecay    children->next->next->next->xmlvalue
-#define xmlsustain  children->next->next->next->next->next->xmlvalue
-#define xmlrelease  children->next->next->next->next->next->next->next->xmlvalue
+#define xmlenvattack   children->next->xmlvalue
+#define xmlenvdecay    children->next->next->next->xmlvalue
+#define xmlenvsustain  children->next->next->next->next->next->xmlvalue
+#define xmlenvrelease  children->next->next->next->next->next->next->next->xmlvalue
+
+
 
 #define xmlflanger  xmlenv->next->next
 
 // Relative to xmlflanger
-#define xmlflanglfowave  children->next->xmlvalue
-#define xmlflanglfofreq  children->next->next->next->xmlvalue
-#define xmlflanglforange children->next->next->next->next->next->xmlvalue
-#define xmlflangdelay    children->next->next->next->next->next->next->next->xmlvalue
-#define xmlflangdepth    children->next->next->next->next->next->next->next->next->next->xmlvalue
+#define xmlflangonoff  children->next->xmlvalue
+#define xmlflanglfowave  children->next->next->next->xmlvalue
+#define xmlflanglfofreq  children->next->next->next->next->next->xmlvalue
+#define xmlflanglforange children->next->next->next->next->next->next->next->xmlvalue
+#define xmlflangdelay    children->next->next->next->next->next->next->next->next->next->xmlvalue
+#define xmlflangdepth    children->next->next->next->next->next->next->next->next->next->next->next->xmlvalue
+
+
 
 #define xmlampmod   xmlflanger->next->next
 
-// Relative to xmlfilt
-#define xmlmodfreq    children->next->xmlvalue
-#define xmlmodlevel   children->next->next->next->xmlvalue
+// Relative to xmlampmod
+#define xmlmodonoff  children->next->xmlvalue
+#define xmlmodlevel  children->next->next->next->xmlvalue
+#define xmlmodfreq   children->next->next->next->next->next->xmlvalue
+#define xmlmodwave   children->next->next->next->next->next->next->next->xmlvalue
+#define xmlmodduty   children->next->next->next->next->next->next->next->next->next->xmlvalue
+
+
 
 #define xmldist      xmlampmod->next->next
 
-// Relative to xmfilt
-#define xmldistlevel  children->next->xmlvalue
-#define xmldistwet    children->next->next->next->xmlvalue
+// Relative to xmdist
+#define xmldistonoff  children->next->xmlvalue
+#define xmldistlevel  children->next->next->next->xmlvalue
+#define xmldistwet    children->next->next->next->next->next->xmlvalue
 
-#define xmlfilt      xmldist->next->next
+
+
+#define xmllfofilt    xmldist->next->next
+
+// Relative to xmflfoilt
+#define xmllfofiltonoff        children->next->xmlvalue
+#define xmllfofiltfilttype        children->next->next->next->xmlvalue
+#define xmllfofiltfiltfreq        children->next->next->next->next->next->xmlvalue
+#define xmllfofiltlfofreq         children->next->next->next->next->next->next->next->xmlvalue
+#define xmllfofiltresonance       children->next->next->next->next->next->next->next->next->next->xmlvalue
+#define xmllfofiltwave            children->next->next->next->next->next->next->next->next->next->next->next->xmlvalue
+#define xmllfofiltduty            children->next->next->next->next->next->next->next->next->next->next->next->next->next->xmlvalue
+#define xmllfofiltfilterexcurs    children->next->next->next->next->next->next->next->next->next->next->next->next->next->next->next->xmlvalue
+
+
+
+#define xmlfilt      xmllfofilt->next->next
 
 // Relative to xmfilt
-#define xmlfiltertype children->next->xmlvalue
-#define xmlcutofffreq children->next->next->next->xmlvalue
-#define xmlresonance  children->next->next->next->next->next->xmlvalue
+#define xmlfiltonoff children->next->xmlvalue
+#define xmlfiltfiltertype children->next->next->next->xmlvalue
+#define xmlfiltcutofffreq children->next->next->next->next->next->xmlvalue
+#define xmlfiltresonance  children->next->next->next->next->next->next->next->xmlvalue
 
 /**
  * \fn double read_XML_param(xmlChar* param)
