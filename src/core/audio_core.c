@@ -110,13 +110,30 @@ int master_effects(Core *ac)
      * Apply each effect to master audio buffer
      */
 
-    if (distortion(ac->master_audio, ac->sys_param->audio_buffer_length, ac->sys_param->dist_param->dist_level, ac->sys_param->dist_param->wet))return -1;
+    if(ac->sys_param->dist_param->onoff == ON)
+    {
+        if (distortion(ac->master_audio, ac->sys_param->audio_buffer_length, ac->sys_param->dist_param->dist_level, ac->sys_param->dist_param->wet))return -1;
+    }
 
-    if (amp_mod(ac->master_audio, ac->sys_param->audio_buffer_length, ac->sys_param->sample_rate, ac->sys_param->amp_mod_param->freq, ac->sys_param->amp_mod_param->mod_level))return -1;
+    if(ac->sys_param->amp_mod_param->onoff == ON)
+    {
+        if (amp_mod(ac->master_audio, ac->sys_param->audio_buffer_length, ac->sys_param->sample_rate, ac->sys_param->amp_mod_param->freq, ac->sys_param->amp_mod_param->wave, ac->sys_param->amp_mod_param->duty, ac->sys_param->amp_mod_param->mod_level))return -1;
+    }
 
-    if (flanger(ac->master_audio, ac->sys_param->audio_buffer_length, ac->sys_param->sample_rate, ac->sys_param->flanger_param->lfo_freq, ac->sys_param->flanger_param->delay, ac->sys_param->flanger_param->lfo_range, ac->sys_param->flanger_param->depth, ac->sys_param->flanger_param->lfo_wave))return -1;
+    if(ac->sys_param->flanger_param->onoff == ON)
+    {
+        if (flanger(ac->master_audio, ac->sys_param->audio_buffer_length, ac->sys_param->sample_rate, ac->sys_param->flanger_param->lfo_freq, ac->sys_param->flanger_param->delay, ac->sys_param->flanger_param->lfo_range, ac->sys_param->flanger_param->depth, ac->sys_param->flanger_param->lfo_wave))return -1;
+    }
 
-    if (biquad(ac->master_audio, ac->sys_param->audio_buffer_length, ac->effect_core->filter_state))return -1;
+    if(ac->sys_param->lfo_filter_param->onoff == ON)
+    {
+        if (lfo_filter(ac->master_audio, ac->sys_param->audio_buffer_length, ac->sys_param->sample_rate, ac->sys_param->lfo_filter_param->filter_type, ac->sys_param->lfo_filter_param->filter_freq, ac->sys_param->lfo_filter_param->lfo_freq, ac->sys_param->lfo_filter_param->resonance, ac->sys_param->lfo_filter_param->wave, ac->sys_param->lfo_filter_param->duty, ac->sys_param->lfo_filter_param->filter_excursion))return -1;
+    }
+
+    if(ac->sys_param->filter_param->onoff == ON)
+    {
+        if (biquad(ac->master_audio, ac->sys_param->audio_buffer_length, ac->effect_core->filter_state))return -1;
+    }
 
     // Other future effects
 
@@ -130,14 +147,14 @@ Sint16 moving_average(Sint16 sample)
     static Uint32 cursor;
 
     sample_array[cursor++] = sample;
-    cursor &= 0x1FF;                 // Perform the same as "cursor = cursor % 512;" but speed is highly greater
+    cursor &= 0x1FFu;                 // Perform the same as "cursor = cursor % 512;" but speed is highly greater
 
     for (int i = 0; i < 512; ++i)
     {
         mean += abs(sample_array[i]);
     }
 
-    mean = mean >> 10;  // same as "mean / 512"
+    mean = mean >> 10u;  // same as "mean / 512"
 
     return mean;
 }
