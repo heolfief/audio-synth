@@ -47,7 +47,7 @@ int distortion(Audio_Buffer buff, Uint16 buffer_length, Uint8 dist_level, Uint8 
     return 0;
 }
 
-int amp_mod(Audio_Buffer buff, Uint16 buffer_length, Uint32 sample_rate, double freq, Uint8 mod_level)
+int amp_mod(Audio_Buffer buff, Uint16 buffer_length, Uint32 sample_rate, double freq, Waveform wave, Uint8 duty, Uint8 mod_level)
 {
     if (buff == NULL)
     {
@@ -55,7 +55,7 @@ int amp_mod(Audio_Buffer buff, Uint16 buffer_length, Uint32 sample_rate, double 
         return -1;
     }
 
-    if (mod_level > 100 || freq < 0)
+    if (mod_level > 100 || freq < 0 || wave > TRI || duty > 100)
     {
         sys_print_error("Parameter is out of range");
         return -1;
@@ -71,8 +71,8 @@ int amp_mod(Audio_Buffer buff, Uint16 buffer_length, Uint32 sample_rate, double 
         return -1;
     }
 
-    lfo->wave = SIN;
-    lfo->duty = 100;
+    lfo->wave = wave;
+    lfo->duty = duty;
     lfo->detune = 0;
     lfo->amp = INT16_MAX;
     lfo->onoff = ON;
@@ -102,7 +102,8 @@ int flanger(Audio_Buffer buff, Uint16 buffer_length, Uint32 sample_rate, double 
         return -1;
     }
 
-    if (depth > 100 || freq < 0 || depth > 100 || lfo_range > 100 || delay > (1000.0 * (double)MAX_SAMPLE_DELAY_LINE/(double)sample_rate))
+    if (depth > 100 || freq < 0 || depth > 100 || lfo_range > 100
+        || delay > (1000.0 * (double) MAX_SAMPLE_DELAY_LINE / (double) sample_rate))
     {
         sys_print_error("Parameter is out of range");
         return -1;
@@ -123,7 +124,7 @@ int flanger(Audio_Buffer buff, Uint16 buffer_length, Uint32 sample_rate, double 
     // Fill delay_line
     for (Uint16 sample = 0; sample < buffer_length; ++sample)
     {
-        cursor = (cursor + 1) & (MAX_SAMPLE_DELAY_LINE - 1);  // Increment cursor, avoid delay_line array overflow
+        cursor = (cursor + 1u) & (MAX_SAMPLE_DELAY_LINE - 1u);  // Increment cursor, avoid delay_line array overflow
         delay_line[cursor] = buff[sample];
     }
 
@@ -145,9 +146,76 @@ int flanger(Audio_Buffer buff, Uint16 buffer_length, Uint32 sample_rate, double 
     {
         actual_ind = cursor - buffer_length + sample;
         ind = (actual_ind - (lfo->buffer[sample] + lfo->amp + (int) (delay * 0.001 * (double) sample_rate)))
-            & (MAX_SAMPLE_DELAY_LINE - 1);
+            & (MAX_SAMPLE_DELAY_LINE - 1u);
         buff[sample] =
             (Sint16) ((double) buff[sample] - (((double) depth / 100.0) * (double) delay_line[ind]));
+    }
+
+    free_osc(lfo);
+
+    return 0;
+}
+
+int lfo_filter(Audio_Buffer buff, Uint16 buffer_length, Uint32 sample_rate, Filter_type filter_type, Uint16 filter_freq, double lfo_freq, double resonance, Waveform wave, Uint8 duty, Uint16 filter_excursion)
+{
+    if (buff == NULL)
+    {
+        sys_print_error("Audio buffer is NULL");
+        return -1;
+    }
+
+    if (lfo_freq < 0)
+    {
+        sys_print_error("Parameter is out of range");
+        return -1;
+    }
+
+    static Uint64 lfo_phase;
+    static sf_biquad_state_st filter_state;
+    Filter_param filter_param;
+    sf_sample_st st_buff[buffer_length];
+
+    filter_param.filter_type = filter_type;
+    filter_param.resonance = resonance;
+
+    Oscillator *lfo = alloc_osc(buffer_length);
+    if (lfo == NULL)
+    {
+        sys_print_error("Osc is NULL");
+        return -1;
+    }
+
+    lfo->wave = wave;
+    lfo->duty = duty;
+    lfo->detune = 0;
+    lfo->amp = filter_excursion;
+    lfo->onoff = ON;
+    lfo->freq = lfo_freq;
+
+    if (osc_fill_buffer(lfo, buffer_length, sample_rate, lfo_phase))return -1;
+    lfo_phase = (lfo_phase + buffer_length);
+
+    for (Uint16 sample = 0; sample < buffer_length; ++sample)
+    {
+        // Convert to float < 1 to work with the library filter code
+        st_buff[sample].L = (float) (buff[sample]) / 32768.0f;
+    }
+
+    for (Uint16 sample = 0; sample < buffer_length; sample += LFO_FILTER_SAMPLE_INCREMENT)
+    {
+        // Mod filter freq with LFO
+        filter_param.cutoff_freq = (filter_freq + lfo->buffer[sample] > 0) ? (Uint16) (filter_freq + lfo->buffer[sample]) : 0;
+
+        // Compute filter coefficients with new frequency
+        if (compute_filter_coeffs(&filter_param, sample_rate, &filter_state))return -1;
+
+        // Apply filter
+        sf_biquad_process(&filter_state, LFO_FILTER_SAMPLE_INCREMENT, &st_buff[sample], &st_buff[sample]);
+    }
+
+    for (Uint16 sample = 0; sample < buffer_length; ++sample)
+    {
+        buff[sample] = (Sint16) (st_buff[sample].L * 32767.0f); // Convert back to full range Sint16
     }
 
     free_osc(lfo);

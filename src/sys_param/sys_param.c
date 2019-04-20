@@ -100,6 +100,13 @@ Sys_param *alloc_sys_param()
         return NULL;
     }
 
+    sp->lfo_filter_param = (Lfo_filter_param *) malloc(sizeof(Lfo_filter_param));
+    if (sp->lfo_filter_param == NULL)
+    {
+        sys_print_error("Memory allocation error");
+        return NULL;
+    }
+
     return sp;
 }
 
@@ -113,6 +120,7 @@ int free_sys_param(Sys_param *sys_param_to_free)
     free(sys_param_to_free->dist_param);
     free(sys_param_to_free->filter_param);
     free(sys_param_to_free->flanger_param);
+    free(sys_param_to_free->lfo_filter_param);
     free(sys_param_to_free);
     return 0;
 }
