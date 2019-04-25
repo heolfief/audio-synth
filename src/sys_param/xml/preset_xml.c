@@ -128,6 +128,11 @@ int load_preset(const char *filename, Sys_param *sys_param)
     sys_param->filter_param->cutoff_freq = (Uint16) read_XML_param(doc->xmlfilt->xmlfiltcutofffreq);
     sys_param->filter_param->resonance = (double) read_XML_param(doc->xmlfilt->xmlfiltresonance);
 
+    // Load Delay parameters
+    sys_param->delay_param->onoff = (OnOff) read_XML_param(doc->xmldelay->xmldelayonoff);
+    sys_param->delay_param->delay = (double) read_XML_param(doc->xmldelay->xmldelaydelay);
+    sys_param->delay_param->feedback = (Uint8) read_XML_param(doc->xmldelay->xmldelayfeedback);
+
     // Load other parameters
 
     // Free xml file
@@ -148,7 +153,7 @@ int save_preset(const char *filename, Sys_param *sys_param)
     char filename_relat[30] = "../presets/";
     xmlDocPtr doc;
     xmlNodePtr root_node, node_osc1, node_osc2, node_osc3, node_env, node_filter, node_dist, node_amp_mod, node_flanger,
-        node_lfo_filter;
+        node_lfo_filter, node_delay;
 
     if (filename == NULL)
     {
@@ -224,6 +229,11 @@ int save_preset(const char *filename, Sys_param *sys_param)
     xmlNewChild(node_filter, NULL, BAD_CAST "filter_type", (xmlChar *) double_to_char(sys_param->filter_param->filter_type));
     xmlNewChild(node_filter, NULL, BAD_CAST "cutoff_freq", (xmlChar *) double_to_char(sys_param->filter_param->cutoff_freq));
     xmlNewChild(node_filter, NULL, BAD_CAST "resonance", (xmlChar *) double_to_char(sys_param->filter_param->resonance));
+
+    node_delay = xmlNewChild(root_node, NULL, BAD_CAST "delay", NULL);
+    xmlNewChild(node_delay, NULL, BAD_CAST "onoff", (xmlChar *) double_to_char(sys_param->delay_param->onoff));
+    xmlNewChild(node_delay, NULL, BAD_CAST "delay", (xmlChar *) double_to_char(sys_param->delay_param->delay));
+    xmlNewChild(node_delay, NULL, BAD_CAST "feedback", (xmlChar *) double_to_char(sys_param->delay_param->feedback));
 
     xmlSaveFormatFileEnc(filename_relat, doc, "UTF-8", 1);
 

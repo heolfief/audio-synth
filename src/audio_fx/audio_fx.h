@@ -115,6 +115,18 @@ typedef struct
 } Flanger_param;
 
 /**
+ * \struct Delay_param
+ * \brief define the delay parameters
+ *
+ */
+typedef struct
+{
+  OnOff onoff;                            /*!<master on off of the effect */
+  double delay;                           /*!<the delay time in milliseconds */
+  Uint8 feedback;                         /*!<the feedback of the effect in percent */
+} Delay_param;
+
+/**
  * \fn int distortion(Audio_Buffer buff, Uint16 buffer_length, Uint8 dist_level, Uint8 wet)
  * \brief Function to apply distortion to an audio buffer
  *
@@ -163,6 +175,20 @@ int amp_mod(Audio_Buffer buff, Uint16 buffer_length, Uint32 sample_rate, double 
  * \return 0 if everything went OK, -1 otherwise
  */
 int flanger(Audio_Buffer buff, Uint16 buffer_length, Uint32 sample_rate, double freq, double delay, Uint8 lfo_range, Uint8 depth, Waveform wave);
+
+/**
+ * \fn int delay(Audio_Buffer buff, Uint16 buffer_length, double delay, Uint8 feedback);
+ * \brief Function to apply a delay effect to an audio buffer
+ *
+ * \param buff the Audio_Buffer object to apply distortion to
+ * \param buffer_length The size of the audio buffer (number of audio samples in the buffer)
+ * \param sample_rate The sample rate of the system
+ * \param delay the delay value in milliseconds used for the effect
+ * \param feedback the feedback or effect level in percents
+ *
+ * \return 0 if everything went OK, -1 otherwise
+ */
+int delay(Audio_Buffer buff, Uint16 buffer_length, Uint32 sample_rate, double delay, Uint8 feedback);
 
 /**
  * \fn int lfo_filter(Audio_Buffer buff, Uint16 buffer_length, Uint32 sample_rate, Filter_type filter_type, Uint16 filter_freq, double lfo_freq, double resonance, Waveform wave, Uint8 duty, Uint16 filter_excursion)

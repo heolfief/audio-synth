@@ -166,6 +166,62 @@ int flanger(Audio_Buffer buff, Uint16 buffer_length, Uint32 sample_rate, double 
     return 0;
 }
 
+int delay(Audio_Buffer buff, Uint16 buffer_length, Uint32 sample_rate, double delay, Uint8 feedback)
+{
+    if (buff == NULL)
+    {
+        sys_print_error("Audio buffer is NULL");
+        return -1;
+    }
+
+    if (feedback > 100 || delay > (1000.0 * (double) MAX_SAMPLE_DELAY_LINE / (double) sample_rate))
+    {
+        sys_print_error("Parameter is out of range");
+        return -1;
+    }
+
+    Uint64 ind, actual_ind;
+    static Sint16 delay_line[MAX_SAMPLE_DELAY_LINE];
+    static Uint32 cursor;
+    double limiter_check;
+
+    for (Uint16 sample = 0; sample < buffer_length; ++sample)
+    {
+        actual_ind = cursor - buffer_length + sample;
+        ind = (actual_ind - (int) (delay * 0.001 * (double) sample_rate))
+            & (MAX_SAMPLE_DELAY_LINE - 1u);
+
+        limiter_check = ((double) buff[sample] + (((double) feedback / 100.0) * (double) delay_line[ind]));
+        if (limiter_check > INT16_MAX)
+        {
+            // If overflow apply limiter
+            buff[sample] = INT16_MAX;
+        }
+        else
+        {
+            if (limiter_check < INT16_MIN)
+            {
+                // If overflow apply limiter
+                buff[sample] = INT16_MIN;
+            }
+            else
+            {
+                // If no overflow is possible
+                buff[sample] = (Sint16) limiter_check;
+            }
+        }
+    }
+
+    // Fill delay_line
+    for (Uint16 sample = 0; sample < buffer_length; ++sample)
+    {
+        cursor = (cursor + 1u) & (MAX_SAMPLE_DELAY_LINE - 1u);  // Increment cursor, avoid delay_line array overflow
+        delay_line[cursor] = buff[sample];
+    }
+
+    return 0;
+}
+
 int lfo_filter(Audio_Buffer buff, Uint16 buffer_length, Uint32 sample_rate, Filter_type filter_type, Uint16 filter_freq, double lfo_freq, double resonance, Waveform wave, Uint8 duty, Uint16 filter_excursion)
 {
     if (buff == NULL)
@@ -174,7 +230,7 @@ int lfo_filter(Audio_Buffer buff, Uint16 buffer_length, Uint32 sample_rate, Filt
         return -1;
     }
 
-    if (lfo_freq < 0)
+    if (lfo_freq < 0 || filter_type > NOTCH || wave > TRI )
     {
         sys_print_error("Parameter is out of range");
         return -1;

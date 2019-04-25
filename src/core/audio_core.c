@@ -110,9 +110,15 @@ int master_effects(Core *ac)
      * Apply each effect to master audio buffer
      */
 
+
     if(ac->sys_param->dist_param->onoff == ON)
     {
         if (distortion(ac->master_audio, ac->sys_param->audio_buffer_length, ac->sys_param->dist_param->dist_level, ac->sys_param->dist_param->wet))return -1;
+    }
+
+    if(ac->sys_param->delay_param->onoff == ON)
+    {
+        if (delay(ac->master_audio, ac->sys_param->audio_buffer_length, ac->sys_param->sample_rate, ac->sys_param->delay_param->delay,ac->sys_param->delay_param->feedback))return -1;
     }
 
     if(ac->sys_param->amp_mod_param->onoff == ON)

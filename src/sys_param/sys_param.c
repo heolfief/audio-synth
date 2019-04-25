@@ -79,6 +79,13 @@ Sys_param *alloc_sys_param()
         return NULL;
     }
 
+    sp->delay_param = (Delay_param *) malloc(sizeof(Delay_param));
+    if (sp->delay_param == NULL)
+    {
+        sys_print_error("Memory allocation error");
+        return NULL;
+    }
+
     sp->dist_param = (Distortion_param *) malloc(sizeof(Distortion_param));
     if (sp->dist_param == NULL)
     {
@@ -117,6 +124,7 @@ int free_sys_param(Sys_param *sys_param_to_free)
     free_osc(sys_param_to_free->osc3);
     free(sys_param_to_free->env);
     free(sys_param_to_free->amp_mod_param);
+    free(sys_param_to_free->delay_param);
     free(sys_param_to_free->dist_param);
     free(sys_param_to_free->filter_param);
     free(sys_param_to_free->flanger_param);
