@@ -96,6 +96,15 @@
 #define xmlfiltcutofffreq children->next->next->next->next->next->xmlvalue
 #define xmlfiltresonance  children->next->next->next->next->next->next->next->xmlvalue
 
+
+
+#define xmldelay      xmlfilt->next->next
+
+// Relative to xmldelay
+#define xmldelayonoff children->next->xmlvalue
+#define xmldelaydelay children->next->next->next->xmlvalue
+#define xmldelayfeedback children->next->next->next->next->next->xmlvalue
+
 /**
  * \fn double read_XML_param(xmlChar* param)
  * \brief Reads parameter from XML preset file

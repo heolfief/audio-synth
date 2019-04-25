@@ -63,4 +63,9 @@
     <cutoff_freq>700</cutoff_freq>
     <resonance>20</resonance>
   </filter>
+  <delay>
+    <onoff>0</onoff>
+    <delay>250</delay>
+    <feedback>50</feedback>
+  </delay>
 </parameters>

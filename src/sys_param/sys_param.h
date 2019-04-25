@@ -30,6 +30,7 @@ typedef struct
   Oscillator *osc3;                              /*!<the third oscillator */
   Envelope *env;                                 /*!<the sound envelope */
   Amp_mod_param *amp_mod_param;                  /*!<the amplitude modulation parameters */
+  Delay_param *delay_param;                      /*!<the delay parameters */
   Distortion_param *dist_param;                  /*!<the distortion parameters */
   Filter_param *filter_param;                    /*!<the filter parameter */
   Flanger_param *flanger_param;                  /*!<the filter parameter */
