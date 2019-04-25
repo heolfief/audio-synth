@@ -38,6 +38,12 @@ int main(void)
             //Core tests
             cmocka_unit_test_setup_teardown(test_master_audio_fill_buffer, setup_core, teardown_core),
             cmocka_unit_test_setup_teardown(test_fx, setup_core, teardown_core),
+            cmocka_unit_test_setup_teardown(test_flanger, setup_core, teardown_core),
+            cmocka_unit_test_setup_teardown(test_distortion, setup_core, teardown_core),
+            cmocka_unit_test_setup_teardown(test_delay, setup_core, teardown_core),
+            cmocka_unit_test_setup_teardown(test_amp_mod, setup_core, teardown_core),
+            cmocka_unit_test_setup_teardown(test_filter, setup_core, teardown_core),
+            cmocka_unit_test_setup_teardown(test_lfo_filter, setup_core, teardown_core),
 
             //System parameters tests
             cmocka_unit_test_setup_teardown(test_copy_osc_sys_param_to_notes_osc, setup_sys_param, teardown_sys_param)

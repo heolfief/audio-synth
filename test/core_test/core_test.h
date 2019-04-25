@@ -44,4 +44,40 @@ void test_master_audio_fill_buffer(void **state);
  */
 void test_fx(void **state);
 
+/**
+ * \fn void test_flanger(void **state)
+ * \brief Function to test flanger effect function
+ */
+void test_flanger(void **state);
+
+/**
+ * \fn void test_distortion(void **state)
+ * \brief Function to test distortion effect function
+ */
+void test_distortion(void **state);
+
+/**
+ * \fn void test_amp_mod(void **state)
+ * \brief Function to test amp_mod effect function
+ */
+void test_amp_mod(void **state);
+
+/**
+ * \fn void test_filter(void **state)
+ * \brief Function to test filter effect function
+ */
+void test_filter(void **state);
+
+/**
+ * \fn void test_lfo_filter(void **state)
+ * \brief Function to test lfo_filter effect function
+ */
+void test_lfo_filter(void **state);
+
+/**
+ * \fn void test_delay(void **state)
+ * \brief Function to test delay effect function
+ */
+void test_delay(void **state);
+
 #endif //AUDIO_SYNTH_CORE_TEST_H
