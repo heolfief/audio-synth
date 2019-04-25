@@ -4,71 +4,67 @@
 [![pipeline status](https://gitlab.insa-rennes.fr/hfief/audio-synth/badges/master/pipeline.svg)](https://gitlab.insa-rennes.fr/hfief/audio-synth/commits/master)    [![coverage report](https://gitlab.insa-rennes.fr/hfief/audio-synth/badges/master/coverage.svg)](https://gitlab.insa-rennes.fr/hfief/audio-synth/commits/master)
 
 
-Synthétiseur audio en C (bibliothèque SDL2). Projet 3ème année EII INSA Rennes.
+Audio synthesizer coded in C (SDL2 lib). This is a 3y degree school project at INSA Rennes, France.
 
-## Dépendances
-Librairie SDL2:
+## Dependencies
+You will need the SDL2 library and the libxml2 library for the programm to work.
 ```bash
-$ sudo apt-get install libsdl2-dev
-```
-
-Librairie libxml2:
-```bash
-$ sudo apt-get install libxml2-dev
+$ sudo apt-get install libsdl2-dev libxml2-dev
 ```
 
 ## Build
-Executez le script :
+Execute the following script:
 
 ```bash
 $ ./build.sh
 ```
 
-Le projet devrait compiler.
+Project should compile.
 
 ## Run
-Compilez puis executez le script :
+Compile then run this script:
 
 ```bash
 $ ./run.sh
 ```
 
-Le projet devrait s'executer.
+Project should run.
 
 
 ## Tests
-Compilez puis executez le script :
+Compile then run this script:
 
 ```bash
 $ ./test.sh
 ```
 
-Le projet devrait executer les programme de test.
+Project should run the tests.
 
-Utilisez l'option `-V` pour passer en mode verbose et voir le détail des tests :
+Use the option `-V` to use verbose mode and lookat detailed test report:
 ```bash
 $ ./test.sh -V
 ```
 
 ## Code coverage
-Compilez puis executez le script :
+Compile then run this script:
 
 ```bash
 $ ./coverage.sh
 ```
-La couverture est accessible depuis doc/coverage/index.html
+Code coverage is accessible from doc/coverage/index.html
 
-## Générer documentation HTML
-Tapez la commande suivante.
+## Generate HTML code documentation
+Run the following command:
 ```bash
 $ doxygen doc/Doxyfile
 ```
-La documentation est accessible depuis doc/doxygen/index.html
+Documentation is accessible from doc/doxygen/index.html
 
-## Utiliser IDE : CLion
-Ouvrez la racine du projet comme projet CLion, puis recharger Cmake en cliquant sur : "file/Reload Cmake Project".
-Vous pouvez choisir dans le menu déroulant de la barre d'outil de compilation la cible entre "audio_synth" pour le projet et "audio_synth_test" pour les tests.
-Vous pouvez maintenant compiler.
+## Use CLion IDE
+- Open project root as CLion project.
+- Reload Cmake by clicking on "file/Reload Cmake Project".
+- Chose build target in the drop down menu of the upper toolbar between "audio_synth" for the project and "audio_synth_test" for the tests. The others targets are for auto memory leak testing
+- You can now build and run the project.
 
 ___
 
