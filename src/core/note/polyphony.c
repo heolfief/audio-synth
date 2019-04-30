@@ -23,6 +23,36 @@ int find_free_note(Polyphony *p)
     return -1;
 }
 
+int find_note_from_freq(Polyphony *p, double freq)
+{
+    if (p == NULL)
+    {
+        sys_print_error("Parameter p is NULL");
+        return -1;
+    }
+    for (int i = 0; i < POLYPHONY_MAX; ++i)
+    {
+        if ((int)p[i]->freq == (int)freq)return i;
+    }
+
+    return -1;
+}
+
+int find_note_from_id(Polyphony *p, Uint8 id)
+{
+    if (p == NULL)
+    {
+        sys_print_error("Parameter p is NULL");
+        return -1;
+    }
+    for (int i = 0; i < POLYPHONY_MAX; ++i)
+    {
+        if (p[i]->midi_id == id)return i;
+    }
+
+    return -1;
+}
+
 int polyphony_fill_buffer(Audio_Buffer audio_buff, Polyphony *p, Uint16 buffer_length, const Envelope *env, Uint64 sample_rate, Uint64 phase)
 {
     int nbr_active_notes = 0;

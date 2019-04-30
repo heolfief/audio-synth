@@ -28,19 +28,20 @@ typedef struct
   Oscillator *osc1;       /*!<the first oscillator */
   Oscillator *osc2;       /*!<the second oscillator */
   Oscillator *osc3;       /*!<the third oscillator */
-  Uint16 freq;       /*!<the frequency of the note*/
-  double velocity_amp;/*!<the velocity / amplitude of the note (range from 0 to 1) */
-  OnOff onoff;      /*!<the on/off value of the note (MIDI protocol wise) */
-  OnOff
-      master_onoff;/*!<the master on/off value of the note (including release time, when master_onoff is OFF, there is no sound from the note) */
-  double env_amp;    /*!<the envelope amplitude (range from 0 to 1) */
-  Uint64 lifetime;   /*!<the number of samples passed since the note is ON (used to calculate envelope) */
-  Uint64 deathtime;  /*!<the number of samples passed when note is OFF since the note was ON */
+  Uint8 midi_id;          /*!<the MIDI note ID or note number */
+  double freq;            /*!<the frequency of the note*/
+  double velocity_amp;    /*!<the velocity / amplitude of the note (range from 0 to 1) */
+  OnOff onoff;            /*!<the on/off value of the note (MIDI protocol wise) */
+  OnOff master_onoff;     /*!<the master on/off value of the note (including release time,
+                           * when master_onoff is OFF, there is no sound from the note) */
+  double env_amp;         /*!<the envelope amplitude (range from 0 to 1) */
+  Uint64 lifetime;        /*!<the number of samples passed since the note is ON (used to calculate envelope) */
+  Uint64 deathtime;       /*!<the number of samples passed when note is OFF since the note was ON */
   Note_Buffer buffer;     /*!<the audio data buffer of the note, resulting of the mix of the oscillators buffers */
 } Note;
 
 /**
- * \fn Uint16 get_freq_from_note_nbr(Sint8 note_nbr, Uint16 ref_freq)
+ * \fn double get_freq_from_note_nbr(Sint8 note_nbr, double ref_freq)
  * \brief Function to calculate actual frequency of a note based on the number (ID) of a note, relative to a reference note
  *
  * \param note_nbr The number of the note
@@ -48,7 +49,7 @@ typedef struct
  *
  * \return The frequency of the note
  */
-Uint16 get_freq_from_note_nbr(Sint8 note_nbr, Uint16 ref_freq);
+double get_freq_from_note_nbr(Sint8 note_nbr, double ref_freq);
 
 /**
  * \fn int note_on(Note *n)

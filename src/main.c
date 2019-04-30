@@ -7,6 +7,10 @@
 #include <SDL2/SDL.h>
 #include <math.h>
 #include <stdio.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <errno.h>
 
 #include "sys_param/sys_param.h"
 #include "core/note/polyphony.h"
@@ -14,16 +18,27 @@
 #include "audio/audio.h"
 #include "system/error_handler.h"
 #include "sys_param/xml/preset_xml.h"
+#include "midi/midi.h"
 
 // JUST A TEST
-Uint16 test_freq[20] =   {87, 87, 87, 87, 87, 87, 87, 87, 87, 175, 175, 175, 175, 175, 175};
+Uint16 test_freq[20] = {87, 87, 87, 87, 87, 87, 87, 87, 87, 175, 175, 175, 175, 175, 175};
 Uint16 test_length[20] = {150, 150, 150, 150, 150, 150, 150, 150, 150, 100, 100, 100, 100, 100, 100};
-Uint16 test_delay[20] =  {200, 200, 200, 200, 200, 200, 200, 200, 200, 100, 100, 100, 100, 100, 100};
+Uint16 test_delay[20] = {200, 200, 200, 200, 200, 200, 200, 200, 200, 100, 100, 100, 100, 100, 100};
 
 int main(int argc, char *argv[])
 {
     SDL_AudioSpec as;
-    Core* audio_core;
+    Core *audio_core;
+    int fork_pid;
+    int fork_status;
+    int exit_flag = 0;
+
+    MIDI_PERIPHERAL *midi_peripheral = alloc_midi_peripheral();
+    if (midi_peripheral == NULL)
+    {
+        sys_print_error("Failed allocating memory for MIDI peripheral");
+        exit(EXIT_FAILURE);
+    }
 
     // Default parameters. If buffer_len changed, core memory allocation needs to be redone
     int sample_rate = 48000;
@@ -70,24 +85,19 @@ int main(int argc, char *argv[])
     // Each time a filter parameter is changed, this function needs to be called
     if (compute_filter_coeffs(audio_core->sys_param->filter_param, audio_core->sys_param->sample_rate, audio_core->effect_core->filter_state))return -1;
 
-    // Hard coded note data, will be changed by reading MIDI files in the future
-    audio_core->note_array[0]->freq = 440;
-    audio_core->note_array[0]->onoff = OFF;
-    audio_core->note_array[0]->velocity_amp = 1;
-    audio_core->note_array[0]->master_onoff = OFF;
+    midi_peripheral = open_midi_peripheral();
+    if (midi_peripheral == NULL)
+    {
+        sys_print_error("Failed opening MIDI device. Aborting.");
+        exit(EXIT_FAILURE);
+    }
 
     SDL_PauseAudio(0);                      // Play audio (pause = off)
 
-    for (int i = 0; i < 15*5; ++i)
+    while (1)        // temporary --> while should exit on GUI window closeup
     {
-        audio_core->note_array[0]->freq = test_freq[i%15];
-        note_on(audio_core->note_array[0]);
-        SDL_Delay((int)((double)test_length[i%15]/1.5));
-        note_off(audio_core->note_array[0]);
-        SDL_Delay(test_delay[i%15]);
+        if (process_midi_input(midi_peripheral, audio_core))exit(EXIT_FAILURE);
     }
-
-    SDL_Delay(2000);
 
     SDL_CloseAudio();
     SDL_Quit();
@@ -96,6 +106,7 @@ int main(int argc, char *argv[])
 
     // Free all the data
     free_core(audio_core);
+    free_midi_peripheral(midi_peripheral);
 
     return 0;
 }
