@@ -21,7 +21,7 @@ set(SOURCE_FILES main.c
         audio_fx/ext_effects/mem.c audio_fx/ext_effects/mem.h
         audio_fx/ext_effects/biquad.c audio_fx/ext_effects/biquad.h
         audio_fx/ext_effects/mem.c audio_fx/ext_effects/mem.h
-        )
+        midi/midi.c midi/midi.h)
 
 add_executable(audio_synth ${SOURCE_FILES})
 add_executable(audio_synth_valgrind ${SOURCE_FILES})
