@@ -8,12 +8,12 @@
 
 #include "note.h"
 
-Uint16 get_freq_from_note_nbr(Sint8 note_nbr, Uint16 ref_freq)
+double get_freq_from_note_nbr(Sint8 note_nbr, double ref_freq)
 {
     static const double chromatic_ratio = 1.059463094359295264562;
 
     // Calculate actual frequency based on note number, from reference frequency
-    return (Uint16) (ref_freq * pow(chromatic_ratio, note_nbr));
+    return (double) (ref_freq * pow(chromatic_ratio, (double)note_nbr));
 }
 
 int note_on(Note *n)
@@ -41,6 +41,7 @@ int note_off(Note *n)
     }
 
     n->onoff = OFF;
+    n->midi_id = 0;
     n->deathtime = n->lifetime;
 
     return 0;
