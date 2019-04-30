@@ -29,6 +29,28 @@ typedef Sint16 *Audio_Buffer;
 int find_free_note(Polyphony *p);
 
 /**
+ * \fn int find_note_from_freq(Polyphony *p, double freq)
+ * \brief Function to find a note which it's frequency is set to parameter "freq"
+ *
+ * \param p The Polyphony array
+ * \param freq the searched frequency
+ *
+ * \return The index of the note in the Polyphony array if found, -1 otherwise
+ */
+int find_note_from_freq(Polyphony *p, double freq);
+
+/**
+ * \fn int find_note_from_id(Polyphony *p, Uint8 id)
+ * \brief Function to find a note which from it's MIDI ID
+ *
+ * \param p The Polyphony array
+ * \param id the MIDI ID or note number
+ *
+ * \return The index of the note in the Polyphony array if found, -1 otherwise
+ */
+int find_note_from_id(Polyphony *p, Uint8 id);
+
+/**
  * \fn int polyphony_fill_buffer(Polyphony *p, Uint16 buffer_length, const Envelope *env, Uint64 sample_rate, Uint64 phase)
  * \brief Function to fill Polyphony array audio buffer with all the notes buffers.
  *
