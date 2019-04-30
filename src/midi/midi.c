@@ -125,7 +125,7 @@ int midi_note_OFF(Core *ac, Uint8 id)
 
     if (note_to_kill == -1)
     {
-        sys_print_error("No note found to set to OFF");
+        sys_print_error("No note to set to OFF found");
         return -1;
     }
 

@@ -94,10 +94,13 @@ int main(int argc, char *argv[])
 
     SDL_PauseAudio(0);                      // Play audio (pause = off)
 
-    while (1)        // temporary --> while should exit on GUI window closeup
+    int i =0;
+    while (i < 100)        // temporary --> wait for 100 MIDI events then exit program
     {
         if (process_midi_input(midi_peripheral, audio_core))exit(EXIT_FAILURE);
+        i++;
     }
+
 
     SDL_CloseAudio();
     SDL_Quit();
