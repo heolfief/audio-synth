@@ -25,6 +25,12 @@ Core *alloc_core(Uint16 buffer_length)
     ac->note_array = alloc_polyphony(buffer_length);
     if (ac->note_array == NULL) return NULL;
 
+    for (int i = 0; i < POLYPHONY_MAX; ++i)
+    {
+        ac->note_array[i]->onoff = OFF;
+        ac->note_array[i]->master_onoff = OFF;
+    }
+
     ac->master_audio = alloc_audio_buffer(buffer_length);
     if (ac->master_audio == NULL) return NULL;
 
@@ -111,32 +117,32 @@ int master_effects(Core *ac)
      */
 
 
-    if(ac->sys_param->dist_param->onoff == ON)
+    if (ac->sys_param->dist_param->onoff == ON)
     {
         if (distortion(ac->master_audio, ac->sys_param->audio_buffer_length, ac->sys_param->dist_param->dist_level, ac->sys_param->dist_param->wet))return -1;
     }
 
-    if(ac->sys_param->delay_param->onoff == ON)
+    if (ac->sys_param->delay_param->onoff == ON)
     {
-        if (delay(ac->master_audio, ac->sys_param->audio_buffer_length, ac->sys_param->sample_rate, ac->sys_param->delay_param->delay,ac->sys_param->delay_param->feedback))return -1;
+        if (delay(ac->master_audio, ac->sys_param->audio_buffer_length, ac->sys_param->sample_rate, ac->sys_param->delay_param->delay, ac->sys_param->delay_param->feedback))return -1;
     }
 
-    if(ac->sys_param->amp_mod_param->onoff == ON)
+    if (ac->sys_param->amp_mod_param->onoff == ON)
     {
         if (amp_mod(ac->master_audio, ac->sys_param->audio_buffer_length, ac->sys_param->sample_rate, ac->sys_param->amp_mod_param->freq, ac->sys_param->amp_mod_param->wave, ac->sys_param->amp_mod_param->duty, ac->sys_param->amp_mod_param->mod_level))return -1;
     }
 
-    if(ac->sys_param->flanger_param->onoff == ON)
+    if (ac->sys_param->flanger_param->onoff == ON)
     {
         if (flanger(ac->master_audio, ac->sys_param->audio_buffer_length, ac->sys_param->sample_rate, ac->sys_param->flanger_param->lfo_freq, ac->sys_param->flanger_param->delay, ac->sys_param->flanger_param->lfo_range, ac->sys_param->flanger_param->depth, ac->sys_param->flanger_param->lfo_wave))return -1;
     }
 
-    if(ac->sys_param->lfo_filter_param->onoff == ON)
+    if (ac->sys_param->lfo_filter_param->onoff == ON)
     {
         if (lfo_filter(ac->master_audio, ac->sys_param->audio_buffer_length, ac->sys_param->sample_rate, ac->sys_param->lfo_filter_param->filter_type, ac->sys_param->lfo_filter_param->filter_freq, ac->sys_param->lfo_filter_param->lfo_freq, ac->sys_param->lfo_filter_param->resonance, ac->sys_param->lfo_filter_param->wave, ac->sys_param->lfo_filter_param->duty, ac->sys_param->lfo_filter_param->filter_excursion))return -1;
     }
 
-    if(ac->sys_param->filter_param->onoff == ON)
+    if (ac->sys_param->filter_param->onoff == ON)
     {
         if (biquad(ac->master_audio, ac->sys_param->audio_buffer_length, ac->effect_core->filter_state))return -1;
     }
