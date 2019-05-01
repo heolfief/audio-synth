@@ -8,21 +8,21 @@
     <wave>1</wave>
   </osc1>
   <osc2>
-    <onoff>1</onoff>
+    <onoff>0</onoff>
     <amp>32767</amp>
     <detune>0</detune>
     <duty>50</duty>
     <wave>0</wave>
   </osc2>
   <osc3>
-    <onoff>1</onoff>
+    <onoff>0</onoff>
     <amp>32767</amp>
     <detune>12</detune>
     <duty>10</duty>
     <wave>2</wave>
   </osc3>
   <env>
-    <attack>0.001</attack>
+    <attack>0.01</attack>
     <decay>0.01</decay>
     <sustain>0.5</sustain>
     <release>0.2</release>
@@ -43,12 +43,12 @@
     <duty>50</duty>
   </amp_mod>
   <distortion>
-    <onoff>1</onoff>
+    <onoff>0</onoff>
     <dist_level>100</dist_level>
     <wet>50</wet>
   </distortion>
   <lfo_filter>
-    <onoff>1</onoff>
+    <onoff>0</onoff>
     <filter_type>0</filter_type>
     <filter_freq>1000</filter_freq>
     <lfo_freq>5</lfo_freq>

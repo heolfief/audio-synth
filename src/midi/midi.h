@@ -21,7 +21,7 @@
 #define MIDI_NOTE_0_FREQ 8.1757989156
 #define MAX_MIDI_NOTE_VELOCITY 127.0
 
-typedef FILE MIDI_PERIPHERAL;
+typedef FILE MIDI_Peripheral;
 
 /**
  * \fn MIDI_PERIPHERAL* open_midi_peripheral()
@@ -31,7 +31,7 @@ typedef FILE MIDI_PERIPHERAL;
  *
  * \return the FILE pointer to the midi peripheral file, or NULL if not found
  */
-MIDI_PERIPHERAL *open_midi_peripheral();
+MIDI_Peripheral *open_midi_peripheral();
 
 /**
  * \fn int process_midi_input(MIDI_PERIPHERAL* mp, Core* ac)
@@ -42,7 +42,7 @@ MIDI_PERIPHERAL *open_midi_peripheral();
  *
  * \return 0 if everything went OK, -1 otherwise
  */
-int process_midi_input(MIDI_PERIPHERAL *mp, Core *ac);
+int process_midi_input(MIDI_Peripheral *mp, Core *ac);
 
 /**
  * \fn int midi_note_ON(Core *ac, Uint8 id, Uint8 velo)
@@ -73,7 +73,7 @@ int midi_note_OFF(Core *ac, Uint8 id);
  *
  * \return The allocated MIDI peripheral
  */
-MIDI_PERIPHERAL *alloc_midi_peripheral();
+MIDI_Peripheral *alloc_midi_peripheral();
 
 /**
  * \fn int free_midi_peripheral(MIDI_PERIPHERAL *mp)
@@ -83,6 +83,6 @@ MIDI_PERIPHERAL *alloc_midi_peripheral();
  *
  * \return 0
  */
-int free_midi_peripheral(MIDI_PERIPHERAL *mp);
+int free_midi_peripheral(MIDI_Peripheral *mp);
 
 #endif //AUDIO_SYNTH_SRC_MIDI_MIDI_H_

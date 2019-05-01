@@ -11,9 +11,9 @@
 const char *list_of_common_midi_dev[NUMBER_OF_KNOWN_MIDI_DEV] =
     {"admmidi0", "admmidi1", "amidi", "amidi0", "amidi1", "dmmidi0", "dmmidi1", "dmmidi2", "midi", "midi1", "midi2"};
 
-MIDI_PERIPHERAL *open_midi_peripheral()
+MIDI_Peripheral *open_midi_peripheral()
 {
-    MIDI_PERIPHERAL *f = NULL;
+    MIDI_Peripheral *f = NULL;
     char path[20] = "";
 
     for (int i = 0; i < NUMBER_OF_KNOWN_MIDI_DEV; ++i)
@@ -37,7 +37,7 @@ MIDI_PERIPHERAL *open_midi_peripheral()
     return NULL;
 }
 
-int process_midi_input(MIDI_PERIPHERAL *mp, Core *ac)
+int process_midi_input(MIDI_Peripheral *mp, Core *ac)
 {
     Uint8 midi_data[3]; // 0 is status, 1 is note id, 2 is note velocity
     Uint8 midi_status;
@@ -134,9 +134,9 @@ int midi_note_OFF(Core *ac, Uint8 id)
     return 0;
 }
 
-MIDI_PERIPHERAL *alloc_midi_peripheral()
+MIDI_Peripheral *alloc_midi_peripheral()
 {
-    MIDI_PERIPHERAL *mp = (MIDI_PERIPHERAL *) malloc(sizeof(MIDI_PERIPHERAL));
+    MIDI_Peripheral *mp = (MIDI_Peripheral *) malloc(sizeof(MIDI_Peripheral));
     if (mp == NULL)
     {
         sys_print_error("Memory allocation error");
@@ -146,7 +146,7 @@ MIDI_PERIPHERAL *alloc_midi_peripheral()
     return mp;
 }
 
-int free_midi_peripheral(MIDI_PERIPHERAL *mp)
+int free_midi_peripheral(MIDI_Peripheral *mp)
 {
     free(mp);
     return 0;

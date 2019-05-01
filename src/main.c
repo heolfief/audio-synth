@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
     int fork_status;
     int exit_flag = 0;
 
-    MIDI_PERIPHERAL *midi_peripheral = alloc_midi_peripheral();
+    MIDI_Peripheral *midi_peripheral = alloc_midi_peripheral();
     if (midi_peripheral == NULL)
     {
         sys_print_error("Failed allocating memory for MIDI peripheral");

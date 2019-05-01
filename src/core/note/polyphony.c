@@ -32,7 +32,7 @@ int find_note_from_freq(Polyphony *p, double freq)
     }
     for (int i = 0; i < POLYPHONY_MAX; ++i)
     {
-        if ((int)p[i]->freq == (int)freq)return i;
+        if ((int) p[i]->freq == (int) freq)return i;
     }
 
     return -1;
@@ -93,7 +93,15 @@ int polyphony_fill_buffer(Audio_Buffer audio_buff, Polyphony *p, Uint16 buffer_l
         // Get amplitude back within data range
         if (nbr_active_notes != 0)
         {
-            audio_buff[sample] = (Sint16) ((double) temp_mix / (double) nbr_active_notes);
+            if ((Sint16) temp_mix > INT16_MAX)
+            {
+                temp_mix = INT16_MAX;
+            }
+            else if ((Sint16) temp_mix < INT16_MIN)
+            {
+                temp_mix = INT16_MIN;
+            }
+            audio_buff[sample] = (Sint16) temp_mix;
         }
         else
         {
