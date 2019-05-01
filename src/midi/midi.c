@@ -11,9 +11,9 @@
 const char *list_of_common_midi_dev[NUMBER_OF_KNOWN_MIDI_DEV] =
     {"admmidi0", "admmidi1", "amidi", "amidi0", "amidi1", "dmmidi0", "dmmidi1", "dmmidi2", "midi", "midi1", "midi2"};
 
-MIDI_Peripheral *open_midi_peripheral()
+MIDI_Peripheral_fd open_midi_peripheral()
 {
-    MIDI_Peripheral *f = NULL;
+    MIDI_Peripheral_fd fd;
     char path[20] = "";
     char fflushcmd[50] = "";
 
@@ -22,9 +22,11 @@ MIDI_Peripheral *open_midi_peripheral()
         strcpy(path, "/dev/");
         strcat(path, list_of_common_midi_dev[i]);
 
-        f = fopen(path, "r");
-        if (f != NULL)
+        fd = open(path, O_RDONLY);
+        if (fd != -1)
         {
+            fcntl(fd, F_SETFL, O_NONBLOCK);
+
             fprintf(stdout, "MIDI device %s found. CONNECTED.\n", path);
 
             // Following lines are used to delete any pending MIDI data in the peripheral
@@ -32,7 +34,7 @@ MIDI_Peripheral *open_midi_peripheral()
             strcpy(fflushcmd, "cat /dev/null > ");
             strcat(fflushcmd, path);
             system(fflushcmd);
-            return f;
+            return fd;
         }
         else
         {
@@ -40,21 +42,18 @@ MIDI_Peripheral *open_midi_peripheral()
         }
     }
 
-//    while (fread_unlocked(&temp, 1, 1, f) != 0);
-    //fseek(f, 0, SEEK_END);      // Ignore pending MIDI events on opening
-
     sys_print_error("No MIDI devices found");
-    return NULL;
+    return -1;
 }
 
-int process_midi_input(MIDI_Peripheral *mp, Core *ac)
+int process_midi_input(MIDI_Peripheral_fd mp, Core *ac)
 {
     Uint8 midi_data[3]; // 0 is status, 1 is note id, 2 is note velocity
     Uint8 midi_status;
 
-    if (mp == NULL)
+    if (mp == -1)
     {
-        sys_print_error("MIDI peripheral is NULL");
+        sys_print_error("MIDI peripheral file descriptor is unknown");
         return -1;
     }
 
@@ -64,7 +63,7 @@ int process_midi_input(MIDI_Peripheral *mp, Core *ac)
         return -1;
     }
 
-    fread(&midi_data, 1, 3, mp);    // use fread_unlocked for non blocking alternative
+    read(mp,&midi_data,3);
 
     midi_status = midi_data[0] >> 4u;
 
@@ -144,8 +143,8 @@ int midi_note_OFF(Core *ac, Uint8 id)
     return 0;
 }
 
-int close_midi_peripheral(MIDI_Peripheral *mp)
+int close_midi_peripheral(MIDI_Peripheral_fd fd)
 {
-    fclose(mp);
+    close(fd);
     return 0;
 }
