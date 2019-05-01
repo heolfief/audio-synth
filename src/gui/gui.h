@@ -11,8 +11,8 @@
 
 #define APPLICATION_NAME "Meilleur synthé du monde"
 
-#define APPLICATION_WINDOW_WIDTH 1114
-#define APPLICATION_WINDOW_HEIGHT 694
+#define APPLICATION_WINDOW_WIDTH 1300
+#define APPLICATION_WINDOW_HEIGHT 810
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_stdinc.h>
@@ -21,22 +21,43 @@
 #include "../core/audio_core.h"
 #include "../sys_param/sys_param.h"
 #include "../system/error_handler.h"
+#include "SDL_Button.h"
 
 /**
  * \struct Switch
  * \brief define a graphical switch
  *
- * A Potentiometer is defined with : it's x and y position on the screen, the percentages set of the potentiometer,
- * the image of the potentiometer, the parameter it controls, and the min and max value of ths parameter
+ * A Switch is defined with : it's x and y position on the screen,
+ * the image of the Switch and the parameter it controls
  */
 typedef struct
 {
-  Uint16 posX;        /*!<the X position on the screen (in pixels) */
-  Uint16 posY;        /*!<the Y position on the screen (in pixels) */
+  Uint16 posX;       /*!<the X position on the screen (in pixels) */
+  Uint16 posY;       /*!<the Y position on the screen (in pixels) */
   char *img;         /*!<the image of the switch */
-  OnOff onoff;       /*!<the percentage set by the user of the switch */
+  OnOff onoff;       /*!<the state of the switch */
   void *param;       /*!<the parameter set by the switch */
 } Switch;
+
+/**
+ * \struct Button
+ * \brief define a graphical Button
+ *
+ * A Button is defined with : it's x and y position on the screen,
+ * the image of the Button and the parameter it controls
+ */
+typedef struct
+{
+  SDL_Button_t *sdl_button;   /*!<the SDL related objects for the button */
+  Uint16 posX;                /*!<the X position on the screen (in pixels) */
+  Uint16 posY;                /*!<the Y position on the screen (in pixels) */
+  Uint16 width;               /*!<the width (in pixels) */
+  Uint16 height;              /*!<the height (in pixels) */
+  char *imgon;                /*!<the image of the ON button */
+  char *imgoff;               /*!<the image of the OFF button */
+  OnOff onoff;                /*!<the percentage set by the user of the switch */
+  void *param;                /*!<the parameter set by the switch */
+} Button;
 
 /**
  * \struct Potentiometer
@@ -57,6 +78,19 @@ typedef struct
 } Potentiometer;
 
 /**
+ * \struct Mouse_position
+ * \brief define a Gui_SDL_objects structure
+ *
+ * This structure contains all the SDL GUI data for the application's GUI.
+ *
+ */
+typedef struct
+{
+  int x;        /*!<the X position of the mouse on the window (in pixels) */
+  int y;        /*!<the Y position on the mouse on the window (in pixels) */
+} Mouse_position;
+
+/**
  * \struct Gui_SDL_objects
  * \brief define a Gui_SDL_objects structure
  *
@@ -68,9 +102,11 @@ typedef struct
   SDL_Window *window;
   SDL_Renderer *renderer;
   SDL_Texture *texture;
-  SDL_Rect dst;
+  SDL_Rect rect;
   SDL_Event event;
   Uint8 application_quit;
+  Mouse_position *mouse_position;
+  Button *test_button;
 } Gui_SDL_objects;
 
 /**
@@ -110,5 +146,13 @@ Gui_SDL_objects *alloc_gui_sdl_objects();
  * \return 0
  */
 int free_gui_sdl_objects(Gui_SDL_objects *gui);
+
+int gui_set_button_image(SDL_Button_t *button, SDL_Renderer *renderer, char *path_to_image);
+
+SDL_Button_t *gui_create_and_show_button(SDL_Renderer *renderer, int x_location, int y_location, int button_width, int button_height, char *path_to_image);
+
+Button *alloc_button();
+
+int free_button(Button *bt);
 
 #endif //AUDIO_SYNTH_GUI_H
