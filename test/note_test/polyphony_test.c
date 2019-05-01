@@ -66,6 +66,26 @@ void test_find_free_note(void **state)
     assert_int_equal(find_free_note(note_array), -1);
 }
 
+void test_find_note_from_id(void **state)
+{
+    Polyphony *note_array = *state;
+
+    //Test error handling
+    assert_int_equal(find_note_from_id(NULL,40), -1);
+
+    for (int i = 0; i < POLYPHONY_MAX; ++i)
+    {
+        note_array[i]->midi_id = 0;
+    }
+
+    assert_int_equal(find_note_from_id(note_array,56), -1);
+
+    note_array[5]->midi_id = 56;
+
+    assert_int_equal(find_note_from_id(note_array,56), 5);
+    assert_int_equal(find_note_from_id(note_array,12), -1);
+}
+
 void test_polyphony_fill_buffer(void **state)
 {
     Polyphony *note_array = *state;

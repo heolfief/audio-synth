@@ -33,6 +33,7 @@ int main(void)
 
             //Polyphony tests
             cmocka_unit_test_setup_teardown(test_find_free_note, setup_polyphony, teardown_polyphony),
+            cmocka_unit_test_setup_teardown(test_find_note_from_id, setup_polyphony, teardown_polyphony),
             cmocka_unit_test_setup_teardown(test_polyphony_fill_buffer, setup_polyphony, teardown_polyphony),
 
             //Core tests

@@ -38,6 +38,12 @@ int teardown_polyphony(void **state);
 void test_find_free_note(void **state);
 
 /**
+ * \fn void test_find_note_from_id(void **state)
+ * \brief Function to test find_note_from_id function
+ */
+void test_find_note_from_id(void **state);
+
+/**
  * \fn test_polyphony_fill_buffer(void **state)
  * \brief Function to test polyphony_fill_buffer function
  */

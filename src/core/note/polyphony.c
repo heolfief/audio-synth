@@ -23,21 +23,6 @@ int find_free_note(Polyphony *p)
     return -1;
 }
 
-int find_note_from_freq(Polyphony *p, double freq)
-{
-    if (p == NULL)
-    {
-        sys_print_error("Parameter p is NULL");
-        return -1;
-    }
-    for (int i = 0; i < POLYPHONY_MAX; ++i)
-    {
-        if ((int) p[i]->freq == (int) freq)return i;
-    }
-
-    return -1;
-}
-
 int find_note_from_id(Polyphony *p, Uint8 id)
 {
     if (p == NULL)
