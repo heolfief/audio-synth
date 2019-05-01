@@ -15,6 +15,7 @@ MIDI_Peripheral *open_midi_peripheral()
 {
     MIDI_Peripheral *f = NULL;
     char path[20] = "";
+    char fflushcmd[50] = "";
 
     for (int i = 0; i < NUMBER_OF_KNOWN_MIDI_DEV; ++i)
     {
@@ -24,7 +25,13 @@ MIDI_Peripheral *open_midi_peripheral()
         f = fopen(path, "r");
         if (f != NULL)
         {
-            fprintf(stdout, "MIDI device %s found. SUCCESS.\n", path);
+            fprintf(stdout, "MIDI device %s found. CONNECTED.\n", path);
+
+            // Following lines are used to delete any pending MIDI data in the peripheral
+            // to avoid playing note on startup
+            strcpy(fflushcmd, "cat /dev/null > ");
+            strcat(fflushcmd, path);
+            system(fflushcmd);
             return f;
         }
         else
@@ -32,6 +39,9 @@ MIDI_Peripheral *open_midi_peripheral()
             // fprintf(stdout, "MIDI device %s not found. Trying another.\n", path);
         }
     }
+
+//    while (fread_unlocked(&temp, 1, 1, f) != 0);
+    //fseek(f, 0, SEEK_END);      // Ignore pending MIDI events on opening
 
     sys_print_error("No MIDI devices found");
     return NULL;
@@ -54,7 +64,7 @@ int process_midi_input(MIDI_Peripheral *mp, Core *ac)
         return -1;
     }
 
-    fread(&midi_data, 1, 3, mp);
+    fread(&midi_data, 1, 3, mp);    // use fread_unlocked for non blocking alternative
 
     midi_status = midi_data[0] >> 4u;
 
@@ -148,6 +158,7 @@ MIDI_Peripheral *alloc_midi_peripheral()
 
 int free_midi_peripheral(MIDI_Peripheral *mp)
 {
+    fclose(mp);
     free(mp);
     return 0;
 }

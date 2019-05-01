@@ -29,6 +29,12 @@ Core *alloc_core(Uint16 buffer_length)
     {
         ac->note_array[i]->onoff = OFF;
         ac->note_array[i]->master_onoff = OFF;
+        ac->note_array[i]->midi_id = 0;
+        ac->note_array[i]->freq = 0;
+        ac->note_array[i]->velocity_amp = 0;
+        ac->note_array[i]->env_amp = 0;
+        ac->note_array[i]->deathtime = 0;
+        ac->note_array[i]->lifetime = 0;
     }
 
     ac->master_audio = alloc_audio_buffer(buffer_length);
