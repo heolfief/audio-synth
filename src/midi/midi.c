@@ -144,21 +144,8 @@ int midi_note_OFF(Core *ac, Uint8 id)
     return 0;
 }
 
-MIDI_Peripheral *alloc_midi_peripheral()
-{
-    MIDI_Peripheral *mp = (MIDI_Peripheral *) malloc(sizeof(MIDI_Peripheral));
-    if (mp == NULL)
-    {
-        sys_print_error("Memory allocation error");
-        return NULL;
-    }
-
-    return mp;
-}
-
-int free_midi_peripheral(MIDI_Peripheral *mp)
+int close_midi_peripheral(MIDI_Peripheral *mp)
 {
     fclose(mp);
-    free(mp);
     return 0;
 }

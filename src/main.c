@@ -24,13 +24,7 @@ int main(int argc, char *argv[])
 {
     SDL_AudioSpec as;
     Core *audio_core;
-
-    MIDI_Peripheral *midi_peripheral = alloc_midi_peripheral();
-    if (midi_peripheral == NULL)
-    {
-        sys_print_error("Failed allocating memory for MIDI peripheral");
-        exit(EXIT_FAILURE);
-    }
+    MIDI_Peripheral *midi_peripheral;
 
     // Default parameters. If buffer_len changed, core memory allocation needs to be redone
     int sample_rate = 48000;
@@ -45,6 +39,13 @@ int main(int argc, char *argv[])
     }
 
     audio_core->sys_param->sample_rate = sample_rate;
+
+    midi_peripheral = open_midi_peripheral();
+    if (midi_peripheral == NULL)
+    {
+        sys_print_error("Failed opening MIDI device. Aborting.");
+        exit(EXIT_FAILURE);
+    }
 
     if (load_preset("default.prst", audio_core->sys_param))
     {
@@ -77,13 +78,6 @@ int main(int argc, char *argv[])
     // Each time a filter parameter is changed, this function needs to be called
     if (compute_filter_coeffs(audio_core->sys_param->filter_param, audio_core->sys_param->sample_rate, audio_core->effect_core->filter_state))return -1;
 
-    midi_peripheral = open_midi_peripheral();
-    if (midi_peripheral == NULL)
-    {
-        sys_print_error("Failed opening MIDI device. Aborting.");
-        exit(EXIT_FAILURE);
-    }
-
     SDL_PauseAudio(0);                      // Play audio (pause = off)
 
     int i =0;
@@ -99,9 +93,11 @@ int main(int argc, char *argv[])
 
 #endif
 
+
+    close_midi_peripheral(midi_peripheral);
+
     // Free all the data
     free_core(audio_core);
-    free_midi_peripheral(midi_peripheral);
 
     return 0;
 }

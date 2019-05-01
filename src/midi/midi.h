@@ -68,21 +68,13 @@ int midi_note_ON(Core *ac, Uint8 id, Uint8 velo);
 int midi_note_OFF(Core *ac, Uint8 id);
 
 /**
- * \fn MIDI_PERIPHERAL *alloc_midi_peripheral()
- * \brief Function to allocate memory for a MIDI peripheral
+ * \fn int close_midi_peripheral(MIDI_PERIPHERAL *mp)
+ * \brief Function to close  a MIDI peripheral
  *
- * \return The allocated MIDI peripheral
- */
-MIDI_Peripheral *alloc_midi_peripheral();
-
-/**
- * \fn int free_midi_peripheral(MIDI_PERIPHERAL *mp)
- * \brief Function to free memory of a MIDI peripheral
- *
- * \param mp The MIDI peripheral to free
+ * \param mp The MIDI peripheral to close
  *
  * \return 0
  */
-int free_midi_peripheral(MIDI_Peripheral *mp);
+int close_midi_peripheral(MIDI_Peripheral *mp);
 
 #endif //AUDIO_SYNTH_SRC_MIDI_MIDI_H_
