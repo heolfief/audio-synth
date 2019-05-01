@@ -8,31 +8,21 @@
 
 #include "gui.h"
 
-int testGUI()
+int init_gui(Gui_SDL_objects *gui)
 {
-    SDL_Window *window = NULL;
-    SDL_Renderer *renderer = NULL;
-    SDL_Texture *texture = NULL;
-    int statut = EXIT_FAILURE;
-    SDL_Rect rect = {100, 100, 100, 100}, dst = {0, 0, 0, 0};
-    SDL_Color rouge = {255, 0, 0, 255}, bleu = {0, 0, 255, 255};
-
-//    if (0 != SDL_Init(SDL_INIT_VIDEO))
-//    {
-//        fprintf(stderr, "Erreur SDL_Init : %s", SDL_GetError());
-//        goto Quit;
-//    }
-    if (0 != SDL_CreateWindowAndRenderer(1114, 694, SDL_WINDOW_SHOWN, &window, &renderer))
+    if (SDL_CreateWindowAndRenderer(APPLICATION_WINDOW_WIDTH, APPLICATION_WINDOW_HEIGHT, SDL_WINDOW_SHOWN, &gui->window, &gui->renderer)
+        != 0)
     {
-        fprintf(stderr, "Erreur SDL_CreateWindowAndRenderer : %s", SDL_GetError());
-        goto Quit;
+        sys_print_SDL_error("ERROR in creating window and renderer");
+        return -1;
     }
-    texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888,
-                                SDL_TEXTUREACCESS_TARGET, 1114, 694);
-    if (NULL == texture)
+
+    gui->texture =
+        SDL_CreateTexture(gui->renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, APPLICATION_WINDOW_WIDTH, APPLICATION_WINDOW_HEIGHT);
+    if (NULL == gui->texture)
     {
-        fprintf(stderr, "Erreur SDL_CreateTexture : %s", SDL_GetError());
-        goto Quit;
+        sys_print_SDL_error("ERROR creating texture");
+        return -1;
     }
 
     SDL_Surface *tmp = NULL;
@@ -40,69 +30,68 @@ int testGUI()
     tmp = SDL_LoadBMP("../src/gui/Figs/bg_fix_3.BMP"); //Loading the image onto the tmp surface
     if (NULL == tmp)
     {
-        fprintf(stderr, "Erreur SDL_LoadBMP : %s", SDL_GetError());
-        goto Quit;
+        sys_print_SDL_error("ERROR loading image");
+        return -1;
     }
-    texture = SDL_CreateTextureFromSurface(renderer, tmp);
-    SDL_FreeSurface(tmp); /* On libère la surface, on n’en a plus besoin */
-    if (NULL == texture)
+
+    gui->texture = SDL_CreateTextureFromSurface(gui->renderer, tmp);
+    if (NULL == gui->texture)
     {
-        fprintf(stderr, "Erreur SDL_CreateTextureFromSurface : %s", SDL_GetError());
-        goto Quit;
+        sys_print_SDL_error("ERROR creating texture from surface");
+        return -1;
     }
 
-    /* SDL_SetRenderTarget(renderer, texture);
-    La texture est la cible de rendu, maintenant, on dessine sur la texture. */
-    /*SDL_SetRenderDrawColor(renderer, bleu.r, bleu.g, bleu.b, bleu.a);
-    SDL_RenderClear(renderer);
-    SDL_SetRenderDrawColor(renderer, rouge.r, rouge.g, rouge.b, rouge.a);
-    SDL_RenderFillRect(renderer, &rect); /* On dessine un rectangle rouge sur la texture. */
+    SDL_FreeSurface(tmp); // Free the surface, not needed anymore
 
-    SDL_SetRenderTarget(renderer, NULL); /* Le renderer est la cible de rendu. */
+    SDL_SetRenderTarget(gui->renderer, NULL);
 
-    /* On récupère les dimensions de la texture, on la copie sur le renderer
-       et on met à jour l’écran. */
-    SDL_QueryTexture(texture, NULL, NULL, &dst.w, &dst.h);
-    SDL_RenderCopy(renderer, texture, NULL, &dst);
-    SDL_SetWindowTitle(window, "meilleur Synthé du monde");
-    SDL_RenderPresent(renderer);
-    SDL_Event event;
-    SDL_bool quit = SDL_FALSE;
-    while (!quit)
+    // We get the texture dimensions, copy it on the rendered and update the screen
+    if(SDL_QueryTexture(gui->texture, NULL, NULL, &gui->dst.w, &gui->dst.h))
     {
-        SDL_PollEvent(&event);
-        if (event.type == SDL_QUIT)
-        {
-            quit = SDL_TRUE;
-        }
-        else if (event.type == SDL_KEYDOWN)
-        {
-            printf("key down\n");
-        }
-        else if (event.type == SDL_MOUSEBUTTONDOWN)
-        {
-
-            printf("Mouseclic on %d %d\n", event.button.x, event.button.y);
-        }
-        SDL_Delay(20);
+        sys_print_SDL_error("Query texture failed");
+        return -1;
     }
-
-    goto Quit;
-
-    Quit:
-    if (NULL != texture)
+    if(SDL_RenderCopy(gui->renderer, gui->texture, NULL, &gui->dst))
     {
-        SDL_DestroyTexture(texture);
+        sys_print_SDL_error("Render Copy failed");
+        return -1;
     }
-    if (NULL != renderer)
+    SDL_SetWindowTitle(gui->window, APPLICATION_NAME);
+    SDL_RenderPresent(gui->renderer);
+
+    return 0;
+}
+
+void exit_gui(Gui_SDL_objects *gui)
+{
+    if (NULL != gui->texture)
     {
-        SDL_DestroyRenderer(renderer);
+        SDL_DestroyTexture(gui->texture);
     }
-    if (NULL != window)
+    if (NULL != gui->renderer)
     {
-        SDL_DestroyWindow(window);
+        SDL_DestroyRenderer(gui->renderer);
     }
-    //SDL_Quit();
-    return statut;
+    if (NULL != gui->window)
+    {
+        SDL_DestroyWindow(gui->window);
+    }
+}
+
+Gui_SDL_objects *alloc_gui_sdl_objects()
+{
+    Gui_SDL_objects *gui = (Gui_SDL_objects *) malloc(sizeof(Gui_SDL_objects));
+    if (gui == NULL)
+    {
+        sys_print_error("Memory allocation error");
+        return NULL;
+    }
+    return gui;
+}
+
+int free_gui_sdl_objects(Gui_SDL_objects *gui)
+{
+    free(gui);
+    return 0;
 }
 

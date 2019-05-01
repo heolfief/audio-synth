@@ -24,7 +24,8 @@ int main(int argc, char *argv[])
 {
     SDL_AudioSpec as;
     Core *audio_core;
-    MIDI_Peripheral *midi_peripheral;
+    MIDI_Peripheral_fd midi_peripheral;
+    Gui_SDL_objects *gui;
 
     // Default parameters. If buffer_len changed, core memory allocation needs to be redone
     int sample_rate = 48000;
@@ -40,6 +41,13 @@ int main(int argc, char *argv[])
 
     audio_core->sys_param->sample_rate = sample_rate;
 
+    gui = alloc_gui_sdl_objects();
+    if (gui == NULL)
+    {
+        sys_print_error("Failed allocating memory to gui");
+        exit(EXIT_FAILURE);
+    }
+
     if (load_preset("default.prst", audio_core->sys_param))
     {
         sys_print_error("Failed loading preset");
@@ -51,7 +59,7 @@ int main(int argc, char *argv[])
 #ifndef VALGRIND
 
     midi_peripheral = open_midi_peripheral();
-    if (midi_peripheral == NULL)
+    if (midi_peripheral == -1)
     {
         sys_print_error("Failed opening MIDI device. Aborting.");
         exit(EXIT_FAILURE);
@@ -65,6 +73,8 @@ int main(int argc, char *argv[])
         sys_print_error("Failed initializing SDL");
         exit(EXIT_FAILURE);
     }
+
+    init_gui(gui);
 
     if (SDL_OpenAudio(&as, NULL) != 0)
     {
@@ -80,13 +90,32 @@ int main(int argc, char *argv[])
 
     SDL_PauseAudio(0);                      // Play audio (pause = off)
 
-    int i =0;
-    while (i < 100)        // temporary --> wait for 100 MIDI events then exit program
+    while (!gui->application_quit)
     {
         if (process_midi_input(midi_peripheral, audio_core))exit(EXIT_FAILURE);
-        i++;
+
+        SDL_PollEvent(&gui->event);
+
+        switch (gui->event.type)
+        {
+            case SDL_QUIT:
+                gui->application_quit = SDL_TRUE;
+                break;
+
+            case SDL_KEYDOWN:
+                printf("Key down\n");
+                break;
+
+            case SDL_KEYUP:
+                printf("Key up\n");
+                break;
+
+            case SDL_MOUSEBUTTONDOWN:printf("Mouse clic on x=%d, y=%d\n", gui->event.button.x, gui->event.button.y);
+                break;
+        }
     }
 
+    exit_gui(gui);
 
     SDL_CloseAudio();
     SDL_Quit();
@@ -96,6 +125,7 @@ int main(int argc, char *argv[])
 #endif
 
     // Free all the data
+    free_gui_sdl_objects(gui);
     free_core(audio_core);
 
     return 0;

@@ -9,6 +9,11 @@
 #ifndef AUDIO_SYNTH_GUI_H
 #define AUDIO_SYNTH_GUI_H
 
+#define APPLICATION_NAME "Meilleur synthé du monde"
+
+#define APPLICATION_WINDOW_WIDTH 1114
+#define APPLICATION_WINDOW_HEIGHT 694
+
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_stdinc.h>
 #include <stdio.h>
@@ -51,6 +56,59 @@ typedef struct
   Sint64 paramMIN;    /*!<the min value of the parameter set by the potentiometer, when percent is 0% */
 } Potentiometer;
 
-int testGUI();
+/**
+ * \struct Gui_SDL_objects
+ * \brief define a Gui_SDL_objects structure
+ *
+ * This structure contains all the SDL GUI data for the application's GUI.
+ *
+ */
+typedef struct
+{
+  SDL_Window *window;
+  SDL_Renderer *renderer;
+  SDL_Texture *texture;
+  SDL_Rect dst;
+  SDL_Event event;
+  Uint8 application_quit;
+} Gui_SDL_objects;
+
+/**
+ * \fn int init_gui(Gui_SDL_objects *gui)
+ * \brief Function to initialize GUI (open application window)
+ *
+ * \param gui The Gui_SDL_objects to init
+ *
+ * \return 0
+ */
+int init_gui(Gui_SDL_objects *gui);
+
+/**
+ * \fn void exit_gui(Gui_SDL_objects *gui)
+ * \brief Function to exit GUI (close application window)
+ *
+ * \param gui The Gui_SDL_objects to exit
+ *
+ * \return 0
+ */
+void exit_gui(Gui_SDL_objects *gui);
+
+/**
+ * \fn Gui_SDL_objects *alloc_gui_sdl_objects()
+ * \brief Function to allocate memory for a Gui_SDL_objects
+ *
+ * \return the allocated Gui_SDL_objects
+ */
+Gui_SDL_objects *alloc_gui_sdl_objects();
+
+/**
+ * \fn int free_gui_sdl_objects(Gui_SDL_objects *gui)
+ * \brief Function to free memory of an Gui_SDL_objects
+ *
+ * \param gui The Gui_SDL_objects to free
+ *
+ * \return 0
+ */
+int free_gui_sdl_objects(Gui_SDL_objects *gui);
 
 #endif //AUDIO_SYNTH_GUI_H
