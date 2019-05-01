@@ -20,18 +20,10 @@
 #include "sys_param/xml/preset_xml.h"
 #include "midi/midi.h"
 
-// JUST A TEST
-Uint16 test_freq[20] = {87, 87, 87, 87, 87, 87, 87, 87, 87, 175, 175, 175, 175, 175, 175};
-Uint16 test_length[20] = {150, 150, 150, 150, 150, 150, 150, 150, 150, 100, 100, 100, 100, 100, 100};
-Uint16 test_delay[20] = {200, 200, 200, 200, 200, 200, 200, 200, 200, 100, 100, 100, 100, 100, 100};
-
 int main(int argc, char *argv[])
 {
     SDL_AudioSpec as;
     Core *audio_core;
-    int fork_pid;
-    int fork_status;
-    int exit_flag = 0;
 
     MIDI_Peripheral *midi_peripheral = alloc_midi_peripheral();
     if (midi_peripheral == NULL)
