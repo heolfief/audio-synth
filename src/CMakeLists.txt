@@ -12,6 +12,7 @@ set(SOURCE_FILES main.c
         core/note/adsr.h
         core/note/polyphony.c core/note/polyphony.h
         gui/gui.c gui/gui.h
+        gui/SDL_Button.c gui/SDL_Button.h
         sys_param/sys_param.c sys_param/sys_param.h
         audio/audio.c audio/audio.h
         system/error_handler.h
