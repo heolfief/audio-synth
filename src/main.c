@@ -172,6 +172,8 @@ int main(int argc, char *argv[])
         }
     }
 
+    free_button(gui->test_button);
+
     exit_gui(gui);
 
     SDL_CloseAudio();

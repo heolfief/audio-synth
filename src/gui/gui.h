@@ -115,7 +115,7 @@ typedef struct
  *
  * \param gui The Gui_SDL_objects to init
  *
- * \return 0
+ * \return 0 if everything went OK, -1 otherwise
  */
 int init_gui(Gui_SDL_objects *gui);
 
@@ -124,8 +124,6 @@ int init_gui(Gui_SDL_objects *gui);
  * \brief Function to exit GUI (close application window)
  *
  * \param gui The Gui_SDL_objects to exit
- *
- * \return 0
  */
 void exit_gui(Gui_SDL_objects *gui);
 
@@ -147,12 +145,49 @@ Gui_SDL_objects *alloc_gui_sdl_objects();
  */
 int free_gui_sdl_objects(Gui_SDL_objects *gui);
 
+/**
+ * \fn int gui_set_button_image(SDL_Button_t *button, SDL_Renderer *renderer, char *path_to_image)
+ * \brief Function to modify the SDL_Button_t image and update the GUI display
+ *
+ * \param button The SDL_Button_t button
+ * \param renderer The SDL renderer
+ * \param path_to_image The path to the new button image
+ *
+ * \return 0 if everything went OK, -1 otherwise
+ */
 int gui_set_button_image(SDL_Button_t *button, SDL_Renderer *renderer, char *path_to_image);
 
+/**
+ * \fn SDL_Button_t *gui_create_and_show_button(SDL_Renderer *renderer, int x_location, int y_location, int button_width, int button_height, char *path_to_image)
+ * \brief Function to create (allocate) a SDL_Button_t and display it on the GUI
+ *
+ * \param renderer The SDL renderer
+ * \param x_location The x location of the button
+ * \param y_location The y location of the button
+ * \param button_width The width of the button
+ * \param button_height The height of the button
+ * \param path_to_image The path to the new button image
+ *
+ * \return 0 if everything went OK, -1 otherwise
+ */
 SDL_Button_t *gui_create_and_show_button(SDL_Renderer *renderer, int x_location, int y_location, int button_width, int button_height, char *path_to_image);
 
+/**
+ * \fn Button *alloc_button()
+ * \brief Function to allocate memory for a Button
+ *
+ * \return the allocated Button
+ */
 Button *alloc_button();
 
+/**
+ * \fn int free_button(Button *bt)
+ * \brief Function to free memory of an Button
+ *
+ * \param bt The Button to free
+ *
+ * \return 0
+ */
 int free_button(Button *bt);
 
 #endif //AUDIO_SYNTH_GUI_H
