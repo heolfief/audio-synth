@@ -8,18 +8,6 @@
 
 #include "gui.h"
 
-// Global parameters defined in main.c and audio_core.c
-extern Sys_param *sys_param;
-extern Polyphony *note_array;
-
-
-
-// functions ...
-
-#include <SDL2/SDL.h>
-#include <stdio.h>
-#include <stdlib.h>
-
 int testGUI()
 {
     SDL_Window *window = NULL;
@@ -29,18 +17,18 @@ int testGUI()
     SDL_Rect rect = {100, 100, 100, 100}, dst = {0, 0, 0, 0};
     SDL_Color rouge = {255, 0, 0, 255}, bleu = {0, 0, 255, 255};
 
-    if (0 != SDL_Init(SDL_INIT_VIDEO))
-    {
-        fprintf(stderr, "Erreur SDL_Init : %s", SDL_GetError());
-        goto Quit;
-    }
-    if (0 != SDL_CreateWindowAndRenderer(1280, 800, SDL_WINDOW_SHOWN, &window, &renderer))
+//    if (0 != SDL_Init(SDL_INIT_VIDEO))
+//    {
+//        fprintf(stderr, "Erreur SDL_Init : %s", SDL_GetError());
+//        goto Quit;
+//    }
+    if (0 != SDL_CreateWindowAndRenderer(1114, 694, SDL_WINDOW_SHOWN, &window, &renderer))
     {
         fprintf(stderr, "Erreur SDL_CreateWindowAndRenderer : %s", SDL_GetError());
         goto Quit;
     }
     texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888,
-                                SDL_TEXTUREACCESS_TARGET, 1280, 800);
+                                SDL_TEXTUREACCESS_TARGET, 1114, 694);
     if (NULL == texture)
     {
         fprintf(stderr, "Erreur SDL_CreateTexture : %s", SDL_GetError());
@@ -80,32 +68,41 @@ int testGUI()
     SDL_RenderPresent(renderer);
     SDL_Event event;
     SDL_bool quit = SDL_FALSE;
-    while(!quit)
+    while (!quit)
     {
         SDL_PollEvent(&event);
-        if(event.type == SDL_QUIT)
-            quit = SDL_TRUE;
-        else if(event.type == SDL_KEYDOWN)
+        if (event.type == SDL_QUIT)
         {
-                printf("keysym A\n");
+            quit = SDL_TRUE;
         }
-        else if(event.type == SDL_MOUSEBUTTONDOWN){
+        else if (event.type == SDL_KEYDOWN)
+        {
+            printf("key down\n");
+        }
+        else if (event.type == SDL_MOUSEBUTTONDOWN)
+        {
 
-            printf ("%d %d", event.button.x, event.button.y);
+            printf("Mouseclic on %d %d\n", event.button.x, event.button.y);
         }
         SDL_Delay(20);
     }
 
     goto Quit;
 
-        Quit:
-            if (NULL != texture)
-                SDL_DestroyTexture(texture);
-            if (NULL != renderer)
-                SDL_DestroyRenderer(renderer);
-            if (NULL != window)
-                SDL_DestroyWindow(window);
-            SDL_Quit();
-            return statut;
+    Quit:
+    if (NULL != texture)
+    {
+        SDL_DestroyTexture(texture);
+    }
+    if (NULL != renderer)
+    {
+        SDL_DestroyRenderer(renderer);
+    }
+    if (NULL != window)
+    {
+        SDL_DestroyWindow(window);
+    }
+    //SDL_Quit();
+    return statut;
 }
 

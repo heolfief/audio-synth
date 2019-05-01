@@ -9,7 +9,10 @@
 #ifndef AUDIO_SYNTH_GUI_H
 #define AUDIO_SYNTH_GUI_H
 
+#include <SDL2/SDL.h>
 #include <SDL2/SDL_stdinc.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include "../core/audio_core.h"
 #include "../sys_param/sys_param.h"
 #include "../system/error_handler.h"
