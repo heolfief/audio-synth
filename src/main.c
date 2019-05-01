@@ -40,13 +40,6 @@ int main(int argc, char *argv[])
 
     audio_core->sys_param->sample_rate = sample_rate;
 
-    midi_peripheral = open_midi_peripheral();
-    if (midi_peripheral == NULL)
-    {
-        sys_print_error("Failed opening MIDI device. Aborting.");
-        exit(EXIT_FAILURE);
-    }
-
     if (load_preset("default.prst", audio_core->sys_param))
     {
         sys_print_error("Failed loading preset");
@@ -56,6 +49,13 @@ int main(int argc, char *argv[])
     save_preset("save_test.prst", audio_core->sys_param);
 
 #ifndef VALGRIND
+
+    midi_peripheral = open_midi_peripheral();
+    if (midi_peripheral == NULL)
+    {
+        sys_print_error("Failed opening MIDI device. Aborting.");
+        exit(EXIT_FAILURE);
+    }
 
     set_audio_spec(&as, audio_core);
 
@@ -91,10 +91,9 @@ int main(int argc, char *argv[])
     SDL_CloseAudio();
     SDL_Quit();
 
-#endif
-
-
     close_midi_peripheral(midi_peripheral);
+
+#endif
 
     // Free all the data
     free_core(audio_core);
