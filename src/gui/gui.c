@@ -102,6 +102,7 @@ Gui_SDL_objects *alloc_gui_sdl_objects()
 
 int free_gui_sdl_objects(Gui_SDL_objects *gui)
 {
+    free(gui->mouse_position);
     free(gui);
     return 0;
 }
