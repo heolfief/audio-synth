@@ -90,28 +90,85 @@ int main(int argc, char *argv[])
 
     SDL_PauseAudio(0);                      // Play audio (pause = off)
 
+
+    /*
+     * Test Button --> Temporary
+     */
+    gui->test_button = alloc_button();
+    if(gui->test_button == NULL)
+    {
+        sys_print_error("Failed allocating memory to button");
+        exit(EXIT_FAILURE);
+    }
+
+    gui->test_button->onoff = OFF;
+    gui->test_button->param = &audio_core->sys_param->delay_param->onoff;
+    gui->test_button->imgoff = "../src/gui/Figs/large_button_off.BMP";
+    gui->test_button->imgon = "../src/gui/Figs/large_button_on.BMP";
+    gui->test_button->posX = 291;
+    gui->test_button->posY = 360;
+    gui->test_button->width = 36;
+    gui->test_button->height = 14;
+    gui->test_button->sdl_button =
+        gui_create_and_show_button(gui->renderer, gui->test_button->posX, gui->test_button->posY, gui->test_button->width, gui->test_button->height, gui->test_button->imgoff);
+    /*
+     *
+     */
+
     while (!gui->application_quit)
     {
         if (process_midi_input(midi_peripheral, audio_core))exit(EXIT_FAILURE);
 
-        SDL_PollEvent(&gui->event);
-
-        switch (gui->event.type)
+        while (SDL_PollEvent(&gui->event))
         {
-            case SDL_QUIT:
-                gui->application_quit = SDL_TRUE;
-                break;
+            if (SDL_Button_mouse_down(gui->test_button->sdl_button, &gui->event))
+            {
+                if (gui->test_button->onoff)    // If ON
+                {
+                    if (gui_set_button_image(gui->test_button->sdl_button, gui->renderer, gui->test_button->imgoff))return -1;
+                    gui->test_button->onoff = !gui->test_button->onoff;
 
-            case SDL_KEYDOWN:
-                printf("Key down\n");
-                break;
+                    OnOff *param = gui->test_button->param;
+                     *param = 0;
+                }
+                else
+                {
+                    if (gui_set_button_image(gui->test_button->sdl_button, gui->renderer, gui->test_button->imgon))return -1;
+                    gui->test_button->onoff = !gui->test_button->onoff;
 
-            case SDL_KEYUP:
-                printf("Key up\n");
-                break;
+                    OnOff *param = gui->test_button->param;
+                    *param = 1;
+                }
+            }
+            switch (gui->event.type)
+            {
+                case SDL_QUIT:
 
-            case SDL_MOUSEBUTTONDOWN:printf("Mouse clic on x=%d, y=%d\n", gui->event.button.x, gui->event.button.y);
-                break;
+                    gui->application_quit = SDL_TRUE;
+                    break;
+
+                case SDL_KEYDOWN:
+
+                    printf("Key down\n");
+                    break;
+
+                case SDL_KEYUP:
+
+                    printf("Key up\n");
+                    break;
+
+                case SDL_MOUSEBUTTONDOWN:
+
+                    printf("Mouse clic on x=%d, y=%d\n", gui->event.button.x, gui->event.button.y);
+                    break;
+
+                case SDL_MOUSEWHEEL:
+
+                    SDL_GetMouseState(&gui->mouse_position->x, &gui->mouse_position->y);
+                    printf("Mouse is on x=%d, y=%d\n", gui->mouse_position->x, gui->mouse_position->y);
+                    printf("Mouse wheel direction %d\n", gui->event.wheel.y);
+                    break;
+            }
         }
     }
 
