@@ -8,7 +8,7 @@
 #include "midi.h"
 
 // The following list contains known names for midi peripherals in /dev/
-const char *list_of_common_midi_dev[NUMBER_OF_KNOWN_MIDI_DEV] =
+static const char *list_of_common_midi_dev[NUMBER_OF_KNOWN_MIDI_DEV] =
     {"admmidi0", "admmidi1", "amidi", "amidi0", "amidi1", "dmmidi0", "dmmidi1", "dmmidi2", "midi", "midi1", "midi2"};
 
 MIDI_Peripheral_fd open_midi_peripheral()
@@ -134,8 +134,8 @@ int midi_note_OFF(Core *ac, Uint8 id)
 
     if (note_to_kill == -1)
     {
-        sys_print_error("No note to set to OFF found");
-        return -1;
+        //sys_print_error("No note to set to OFF found");
+        return 0;       // Application exit if we return -1. Ignore MIDI message instead (could be when app is started with a midi note already pressed, then released)
     }
 
     note_off(ac->note_array[note_to_kill]);
