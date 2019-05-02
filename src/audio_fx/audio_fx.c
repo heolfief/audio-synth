@@ -46,8 +46,8 @@ int distortion(Audio_Buffer buff, Uint16 buffer_length, Uint8 dist_level, Uint8 
                              / (double) INT16_MAX));
 
         // Clipper
-        if (temp_sample > INT16_MAX)temp_sample = INT16_MAX;
-        if (temp_sample < INT16_MIN) temp_sample = INT16_MIN;
+        if (temp_sample * (double) INT16_MAX > (double) INT16_MAX) temp_sample = (double) INT16_MAX - 1.0;
+        if (temp_sample * (double) INT16_MAX < (double) INT16_MIN) temp_sample = (double) INT16_MIN + 1.0;
 
         buff[sample] = (Sint16) ((double) buff[sample] * (1.0 - (double) wet / 100.0)
             + ((double) wet / 100.0) * temp_sample * (double) INT16_MAX);
@@ -230,7 +230,7 @@ int lfo_filter(Audio_Buffer buff, Uint16 buffer_length, Uint32 sample_rate, Filt
         return -1;
     }
 
-    if (lfo_freq < 0 || filter_type > NOTCH || wave > TRI )
+    if (lfo_freq < 0 || filter_type > NOTCH || wave > TRI)
     {
         sys_print_error("Parameter is out of range");
         return -1;
