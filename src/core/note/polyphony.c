@@ -54,7 +54,7 @@ int polyphony_fill_buffer(Audio_Buffer audio_buff, Polyphony *p, Uint16 buffer_l
         if (note_fill_buffer(p[i], buffer_length, env, sample_rate, phase))return -1;
     }
 
-    // Mix all the note buffers based on number of active notes
+    // Mix all the note buffers
     for (Uint16 sample = 0; sample < buffer_length; ++sample)
     {
         temp_mix = 0;
@@ -68,13 +68,13 @@ int polyphony_fill_buffer(Audio_Buffer audio_buff, Polyphony *p, Uint16 buffer_l
             }
         }
         // Get amplitude back within data range
-        if (temp_mix > (double) INT16_MAX)
+        if (temp_mix > INT16_MAX)
         {
-            temp_mix = temp_mix * (double) INT16_MAX / temp_mix - 1;
+            temp_mix = INT16_MAX - 1.0;
         }
-        else if (temp_mix < (double) INT16_MIN)
+        else if (temp_mix < INT16_MIN)
         {
-            temp_mix = temp_mix * (-(double) INT16_MIN) / temp_mix + 1;
+            temp_mix = INT16_MIN + 1.0;
         }
         audio_buff[sample] = (Sint16) temp_mix;
     }
