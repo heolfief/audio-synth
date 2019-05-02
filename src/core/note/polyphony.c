@@ -40,7 +40,6 @@ int find_note_from_id(Polyphony *p, Uint8 id)
 
 int polyphony_fill_buffer(Audio_Buffer audio_buff, Polyphony *p, Uint16 buffer_length, const Envelope *env, Uint64 sample_rate, Uint64 phase)
 {
-    int nbr_active_notes = 0;
     double temp_mix = 0;
 
     if (p == NULL)
@@ -53,12 +52,6 @@ int polyphony_fill_buffer(Audio_Buffer audio_buff, Polyphony *p, Uint16 buffer_l
     {
         // Fill all the note buffers
         if (note_fill_buffer(p[i], buffer_length, env, sample_rate, phase))return -1;
-
-        // Count number of active notes
-        if (p[i]->master_onoff == ON)
-        {
-            nbr_active_notes++;
-        }
     }
 
     // Mix all the note buffers based on number of active notes
@@ -74,24 +67,16 @@ int polyphony_fill_buffer(Audio_Buffer audio_buff, Polyphony *p, Uint16 buffer_l
                 temp_mix += (double) p[i]->buffer[sample];
             }
         }
-
         // Get amplitude back within data range
-        if (nbr_active_notes != 0)
+        if (temp_mix > (double) INT16_MAX)
         {
-            if ((Sint16) temp_mix > INT16_MAX)
-            {
-                temp_mix = INT16_MAX;
-            }
-            else if ((Sint16) temp_mix < INT16_MIN)
-            {
-                temp_mix = INT16_MIN;
-            }
-            audio_buff[sample] = (Sint16) temp_mix;
+            temp_mix = temp_mix * (double) INT16_MAX / temp_mix - 1;
         }
-        else
+        else if (temp_mix < (double) INT16_MIN)
         {
-            audio_buff[sample] = 0;
+            temp_mix = temp_mix * (-(double) INT16_MIN) / temp_mix + 1;
         }
+        audio_buff[sample] = (Sint16) temp_mix;
     }
 
     return 0;
