@@ -9,12 +9,22 @@
 #ifndef AUDIO_SYNTH_GUI_H
 #define AUDIO_SYNTH_GUI_H
 
-#define APPLICATION_NAME "Meilleur synthé du monde"
+#define APPLICATION_NAME "audio_synth"
+
+#define APPLICATION_IMAGE_BACKGROUND "../src/gui/Figs/bg_fix_3.BMP"
+
+#define APPLICATION_IMAGE_SWITCH_ON "../src/gui/Figs/toggle_on.png"
+#define APPLICATION_IMAGE_SWITCH_OFF "../src/gui/Figs/toggle_off.png"
+#define APPLICATION_IMAGE_SWITCH_WIDTH 38
+#define APPLICATION_IMAGE_SWITCH_HEIGHT 19
+
+#define NUMBER_OF_SWITCHES 9
 
 #define APPLICATION_WINDOW_WIDTH 1300
 #define APPLICATION_WINDOW_HEIGHT 810
 
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 #include <SDL2/SDL_stdinc.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -25,26 +35,7 @@
 
 /**
  * \struct Switch
- * \brief define a graphical switch
- *
- * A Switch is defined with : it's x and y position on the screen,
- * the image of the Switch and the parameter it controls
- */
-typedef struct
-{
-  Uint16 posX;       /*!<the X position on the screen (in pixels) */
-  Uint16 posY;       /*!<the Y position on the screen (in pixels) */
-  char *img;         /*!<the image of the switch */
-  OnOff onoff;       /*!<the state of the switch */
-  void *param;       /*!<the parameter set by the switch */
-} Switch;
-
-/**
- * \struct Button
- * \brief define a graphical Button
- *
- * A Button is defined with : it's x and y position on the screen,
- * the image of the Button and the parameter it controls
+ * \brief define a graphical Switch
  */
 typedef struct
 {
@@ -57,7 +48,7 @@ typedef struct
   char *imgoff;               /*!<the image of the OFF button */
   OnOff onoff;                /*!<the percentage set by the user of the switch */
   void *param;                /*!<the parameter set by the switch */
-} Button;
+} Switch;
 
 /**
  * \struct Potentiometer
@@ -102,11 +93,11 @@ typedef struct
   SDL_Window *window;
   SDL_Renderer *renderer;
   SDL_Texture *texture;
-  SDL_Rect rect;
+  SDL_Rect background;
   SDL_Event event;
   Uint8 application_quit;
   Mouse_position *mouse_position;
-  Button *test_button;
+  Switch *switches;
 } Gui_SDL_objects;
 
 /**
@@ -146,22 +137,30 @@ Gui_SDL_objects *alloc_gui_sdl_objects();
 int free_gui_sdl_objects(Gui_SDL_objects *gui);
 
 /**
- * \fn int gui_set_button_image(SDL_Button_t *button, SDL_Renderer *renderer, char *path_to_image)
- * \brief Function to modify the SDL_Button_t image and update the GUI display
+ * \fn int gui_update(Gui_SDL_objects *gui)
+ * \brief Function to update the display of the GUI
+ *
+ * \param gui The Gui_SDL_objects to display
+ *
+ * \return 0 if everything went OK, -1 otherwise
+ */
+int gui_update(Gui_SDL_objects *gui);
+
+/**
+ * \fn int gui_set_button_image(SDL_Button_t *button, char *path_to_image)
+ * \brief Function to modify the SDL_Button_t image
  *
  * \param button The SDL_Button_t button
- * \param renderer The SDL renderer
  * \param path_to_image The path to the new button image
  *
  * \return 0 if everything went OK, -1 otherwise
  */
-int gui_set_button_image(SDL_Button_t *button, SDL_Renderer *renderer, char *path_to_image);
+int gui_set_switch_image(SDL_Button_t *button, char *path_to_image);
 
 /**
- * \fn SDL_Button_t *gui_create_and_show_button(SDL_Renderer *renderer, int x_location, int y_location, int button_width, int button_height, char *path_to_image)
- * \brief Function to create (allocate) a SDL_Button_t and display it on the GUI
+ * \fn SDL_Button_t *gui_create_button(int x_location, int y_location, int button_width, int button_height, char *path_to_image)
+ * \brief Function to create (allocate) a SDL_Button_t
  *
- * \param renderer The SDL renderer
  * \param x_location The x location of the button
  * \param y_location The y location of the button
  * \param button_width The width of the button
@@ -170,24 +169,38 @@ int gui_set_button_image(SDL_Button_t *button, SDL_Renderer *renderer, char *pat
  *
  * \return 0 if everything went OK, -1 otherwise
  */
-SDL_Button_t *gui_create_and_show_button(SDL_Renderer *renderer, int x_location, int y_location, int button_width, int button_height, char *path_to_image);
+SDL_Button_t *gui_create_button(int x_location, int y_location, int button_width, int button_height, char *path_to_image);
 
 /**
- * \fn Button *alloc_button()
- * \brief Function to allocate memory for a Button
+ * \fn int create_switches_map(Gui_SDL_objects *gui, Sys_param *sys_param)
+ * \brief Function to place and initialize GUI switches
  *
- * \return the allocated Button
+ * \param gui The Gui_SDL_objects
+ * \param sys_param The system parameters
+ *
+ * \return 0 if everything went OK, -1 otherwise
  */
-Button *alloc_button();
+int create_switches_map(Gui_SDL_objects *gui, Sys_param *sys_param);
 
 /**
- * \fn int free_button(Button *bt)
+ * \fn int process_buttons(Gui_SDL_objects *gui)
+ * \brief Function to check buttons status, change parameter accordingly and update button image
+ *
+ * \param gui The Gui_SDL_objects
+ * \param audio_core The system's audio core
+ *
+ * \return 0 if everything went OK, -1 otherwise
+ */
+int process_switches(Gui_SDL_objects *gui, Core *audio_core);
+
+/**
+ * \fn int free_button(Switch *bt)
  * \brief Function to free memory of an Button
  *
  * \param bt The Button to free
  *
  * \return 0
  */
-int free_button(Button *bt);
+int free_switch(Switch *bt);
 
 #endif //AUDIO_SYNTH_GUI_H

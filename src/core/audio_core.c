@@ -153,8 +153,6 @@ int master_effects(Core *ac)
         if (biquad(ac->master_audio, ac->sys_param->audio_buffer_length, ac->effect_core->filter_state))return -1;
     }
 
-    // Other future effects
-
     return 0;
 }
 

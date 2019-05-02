@@ -74,7 +74,8 @@ int main(int argc, char *argv[])
         exit(EXIT_FAILURE);
     }
 
-    init_gui(gui);
+    if(init_gui(gui))exit(EXIT_FAILURE);
+    if(create_switches_map(gui, audio_core->sys_param))exit(EXIT_FAILURE);
 
     if (SDL_OpenAudio(&as, NULL) != 0)
     {
@@ -90,56 +91,14 @@ int main(int argc, char *argv[])
 
     SDL_PauseAudio(0);                      // Play audio (pause = off)
 
-
-    /*
-     * Test Button --> Temporary
-     */
-    gui->test_button = alloc_button();
-    if(gui->test_button == NULL)
-    {
-        sys_print_error("Failed allocating memory to button");
-        exit(EXIT_FAILURE);
-    }
-
-    gui->test_button->onoff = OFF;
-    gui->test_button->param = &audio_core->sys_param->delay_param->onoff;
-    gui->test_button->imgoff = "../src/gui/Figs/large_button_off.BMP";
-    gui->test_button->imgon = "../src/gui/Figs/large_button_on.BMP";
-    gui->test_button->posX = 291;
-    gui->test_button->posY = 360;
-    gui->test_button->width = 36;
-    gui->test_button->height = 14;
-    gui->test_button->sdl_button =
-        gui_create_and_show_button(gui->renderer, gui->test_button->posX, gui->test_button->posY, gui->test_button->width, gui->test_button->height, gui->test_button->imgoff);
-    /*
-     *
-     */
-
     while (!gui->application_quit)
     {
         if (process_midi_input(midi_peripheral, audio_core))exit(EXIT_FAILURE);
 
         while (SDL_PollEvent(&gui->event))
         {
-            if (SDL_Button_mouse_down(gui->test_button->sdl_button, &gui->event))
-            {
-                if (gui->test_button->onoff)    // If ON
-                {
-                    if (gui_set_button_image(gui->test_button->sdl_button, gui->renderer, gui->test_button->imgoff))return -1;
-                    gui->test_button->onoff = !gui->test_button->onoff;
+            if (process_switches(gui, audio_core))exit(EXIT_FAILURE);
 
-                    OnOff *param = gui->test_button->param;
-                     *param = 0;
-                }
-                else
-                {
-                    if (gui_set_button_image(gui->test_button->sdl_button, gui->renderer, gui->test_button->imgon))return -1;
-                    gui->test_button->onoff = !gui->test_button->onoff;
-
-                    OnOff *param = gui->test_button->param;
-                    *param = 1;
-                }
-            }
             switch (gui->event.type)
             {
                 case SDL_QUIT:
@@ -171,8 +130,6 @@ int main(int argc, char *argv[])
             }
         }
     }
-
-    free_button(gui->test_button);
 
     exit_gui(gui);
 

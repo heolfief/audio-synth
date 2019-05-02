@@ -57,7 +57,6 @@ bool SDL_Button_mouse_up(SDL_Button_t *button, SDL_Event *e)
         return (mouse_on_button(button->location_and_size, x, y));
     }
     return false;
-    return false;
 
 }
 
