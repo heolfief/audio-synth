@@ -123,6 +123,7 @@ int flanger(Audio_Buffer buff, Uint16 buffer_length, Uint32 sample_rate, double 
     static Uint64 lfo_phase;
     static Sint16 delay_line[MAX_SAMPLE_DELAY_LINE];
     static Uint32 cursor;
+    double temp_sample = 0;
 
     Oscillator *lfo = alloc_osc(buffer_length);
     if (lfo == NULL)
@@ -154,11 +155,19 @@ int flanger(Audio_Buffer buff, Uint16 buffer_length, Uint32 sample_rate, double 
 
     for (Uint16 sample = 0; sample < buffer_length; ++sample)
     {
+        temp_sample = 0;
+
         actual_ind = cursor - buffer_length + sample;
         ind = (actual_ind - (lfo->buffer[sample] + lfo->amp + (int) (delay * 0.001 * (double) sample_rate)))
             & (MAX_SAMPLE_DELAY_LINE - 1u);
-        buff[sample] =
-            (Sint16) ((double) buff[sample] - (((double) depth / 100.0) * (double) delay_line[ind]));
+
+        temp_sample = ((double) buff[sample] - (((double) depth / 100.0) * (double) delay_line[ind]));
+
+        // Clipper
+        if (temp_sample > (double) INT16_MAX) temp_sample = (double) INT16_MAX - 1.0;
+        if (temp_sample < (double) INT16_MIN) temp_sample = (double) INT16_MIN + 1.0;
+
+        buff[sample] = (Sint16) temp_sample;
     }
 
     free_osc(lfo);

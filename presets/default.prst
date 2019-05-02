@@ -2,21 +2,21 @@
 <parameters>
   <osc1>
     <onoff>1</onoff>
-    <amp>32767</amp>
+    <amp>32000</amp>
     <detune>0</detune>
     <duty>50</duty>
     <wave>1</wave>
   </osc1>
   <osc2>
     <onoff>0</onoff>
-    <amp>32767</amp>
+    <amp>32000</amp>
     <detune>0</detune>
     <duty>50</duty>
     <wave>0</wave>
   </osc2>
   <osc3>
     <onoff>0</onoff>
-    <amp>32767</amp>
+    <amp>32000</amp>
     <detune>12</detune>
     <duty>10</duty>
     <wave>2</wave>
@@ -44,7 +44,7 @@
   </amp_mod>
   <distortion>
     <onoff>0</onoff>
-    <dist_level>100</dist_level>
+    <dist_level>50</dist_level>
     <wet>50</wet>
   </distortion>
   <lfo_filter>
