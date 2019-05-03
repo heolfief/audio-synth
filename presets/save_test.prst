@@ -44,7 +44,7 @@
   </amp_mod>
   <distortion>
     <onoff>0</onoff>
-    <dist_level>100</dist_level>
+    <dist_level>50</dist_level>
     <wet>50</wet>
   </distortion>
   <lfo_filter>
