@@ -74,8 +74,9 @@ int main(int argc, char *argv[])
         exit(EXIT_FAILURE);
     }
 
-    if(init_gui(gui))exit(EXIT_FAILURE);
-    if(create_switches_map(gui, audio_core->sys_param))exit(EXIT_FAILURE);
+    if (init_gui(gui))exit(EXIT_FAILURE);
+    if (create_switches_map(gui, audio_core->sys_param))exit(EXIT_FAILURE);
+    if (create_pots_map(gui, audio_core->sys_param))exit(EXIT_FAILURE);
 
     if (SDL_OpenAudio(&as, NULL) != 0)
     {
@@ -98,6 +99,7 @@ int main(int argc, char *argv[])
         while (SDL_PollEvent(&gui->event))
         {
             if (process_switches(gui, audio_core))exit(EXIT_FAILURE);
+            if (process_pots(gui, audio_core))exit(EXIT_FAILURE);
 
             switch (gui->event.type)
             {
@@ -108,12 +110,12 @@ int main(int argc, char *argv[])
 
                 case SDL_KEYDOWN:
 
-                    printf("Key down\n");
+//                    printf("Key down\n");
                     break;
 
                 case SDL_KEYUP:
 
-                    printf("Key up\n");
+//                    printf("Key up\n");
                     break;
 
                 case SDL_MOUSEBUTTONDOWN:
@@ -123,9 +125,9 @@ int main(int argc, char *argv[])
 
                 case SDL_MOUSEWHEEL:
 
-                    SDL_GetMouseState(&gui->mouse_position->x, &gui->mouse_position->y);
-                    printf("Mouse is on x=%d, y=%d\n", gui->mouse_position->x, gui->mouse_position->y);
-                    printf("Mouse wheel direction %d\n", gui->event.wheel.y);
+//                    SDL_GetMouseState(&gui->mouse_position->x, &gui->mouse_position->y);
+//                    printf("Mouse is on x=%d, y=%d\n", gui->mouse_position->x, gui->mouse_position->y);
+//                    printf("Mouse wheel direction %d\n", gui->event.wheel.y);
                     break;
             }
         }
