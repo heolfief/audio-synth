@@ -62,13 +62,12 @@ bool SDL_Button_mouse_up(SDL_Button_t *button, SDL_Event *e)
 
 bool SDL_Button_mouse_over(SDL_Button_t *button, SDL_Event *e)
 {
-    if (e->type == SDL_MOUSEMOTION)
-    {
-        int x = e->motion.x;
-        int y = e->motion.y;
-        return (mouse_on_button(button->location_and_size, x, y));
-    }
-    return false;
+    int x = e->motion.x;
+    int y = e->motion.y;
+
+    SDL_GetMouseState(&x, &y);
+
+    return (mouse_on_button(button->location_and_size, x, y));
 }
 
 bool SDL_Button_mouse_out(SDL_Button_t *button, SDL_Event *e)
