@@ -14,7 +14,7 @@
 #include "../core/note/polyphony.h"
 #include "ext_effects/biquad.h"
 
-#define MAX_SAMPLE_DELAY_LINE 16384
+#define MAX_SAMPLE_DELAY_LINE 32768
 #define LFO_FILTER_SAMPLE_INCREMENT 64  // Needs to be power of two, this is the equivalent to the refresh rate in samples of the filter LFO
 #define DIST_ATTENUATOR 8.0
 
@@ -50,7 +50,7 @@ typedef struct
  */
 typedef struct
 {
-  OnOff onoff;                            /*!<master on off of the effect */
+  OnOff onoff;                                   /*!<master on off of the effect */
   Filter_type filter_type;                       /*!<the type of the filter */
   Uint16 cutoff_freq;                            /*!<the frequency cutoff of the filter */
   double resonance;                              /*!<the resonance of the filter */
