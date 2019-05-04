@@ -325,7 +325,7 @@ int biquad(Audio_Buffer buff, Uint16 buffer_length, sf_biquad_state_st *state)
     for (Uint16 sample = 0; sample < buffer_length; ++sample)
     {
         // Convert to float < 1 to work with the library filter code
-        st_buff[sample].L = (float) (buff[sample]) / 32768.0f;
+        st_buff[sample].L = (float) (buff[sample]) / (32768.0f * 1.4f);
         st_buff[sample].R = 0;
     }
 
