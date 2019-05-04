@@ -108,18 +108,17 @@ int main(int argc, char *argv[])
             {
                 case SDL_QUIT:
 
+                    printf("Quit asked. Closing...\n");
                     gui->application_quit = SDL_TRUE;
                     break;
 
                 case SDL_KEYDOWN:
 
-                    if (gui->event.key.keysym.sym == SDLK_ESCAPE) gui->application_quit = SDL_TRUE;
-//                    printf("Key down\n");
-                    break;
-
-                case SDL_KEYUP:
-
-//                    printf("Key up\n");
+                    if (gui->event.key.keysym.sym == SDLK_ESCAPE)
+                    {
+                        printf("Quit asked. Closing...\n");
+                        gui->application_quit = SDL_TRUE;
+                    }
                     break;
 
                 case SDL_MOUSEBUTTONDOWN:
@@ -131,13 +130,6 @@ int main(int argc, char *argv[])
                 case SDL_MOUSEBUTTONUP:
 
                     mouse_is_down = 0;
-                    break;
-
-                case SDL_MOUSEWHEEL:
-
-//                    SDL_GetMouseState(&gui->mouse_position->x, &gui->mouse_position->y);
-//                    printf("Mouse is on x=%d, y=%d\n", gui->mouse_position->x, gui->mouse_position->y);
-//                    printf("Mouse wheel direction %d\n", gui->event.wheel.y);
                     break;
             }
         }
