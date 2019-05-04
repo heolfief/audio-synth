@@ -46,8 +46,8 @@ int distortion(Audio_Buffer buff, Uint16 buffer_length, Uint8 dist_level, Uint8 
                              / (double) INT16_MAX));
 
         // Clipper
-        if (temp_sample > INT16_MAX)temp_sample = INT16_MAX;
-        if (temp_sample < INT16_MIN) temp_sample = INT16_MIN;
+        if (temp_sample * (double) INT16_MAX > (double) INT16_MAX) temp_sample = (double) INT16_MAX - 1.0;
+        if (temp_sample * (double) INT16_MAX < (double) INT16_MIN) temp_sample = (double) INT16_MIN + 1.0;
 
         buff[sample] = (Sint16) ((double) buff[sample] * (1.0 - (double) wet / 100.0)
             + ((double) wet / 100.0) * temp_sample * (double) INT16_MAX);
@@ -123,6 +123,7 @@ int flanger(Audio_Buffer buff, Uint16 buffer_length, Uint32 sample_rate, double 
     static Uint64 lfo_phase;
     static Sint16 delay_line[MAX_SAMPLE_DELAY_LINE];
     static Uint32 cursor;
+    double temp_sample = 0;
 
     Oscillator *lfo = alloc_osc(buffer_length);
     if (lfo == NULL)
@@ -154,11 +155,19 @@ int flanger(Audio_Buffer buff, Uint16 buffer_length, Uint32 sample_rate, double 
 
     for (Uint16 sample = 0; sample < buffer_length; ++sample)
     {
+        temp_sample = 0;
+
         actual_ind = cursor - buffer_length + sample;
         ind = (actual_ind - (lfo->buffer[sample] + lfo->amp + (int) (delay * 0.001 * (double) sample_rate)))
             & (MAX_SAMPLE_DELAY_LINE - 1u);
-        buff[sample] =
-            (Sint16) ((double) buff[sample] - (((double) depth / 100.0) * (double) delay_line[ind]));
+
+        temp_sample = ((double) buff[sample] - (((double) depth / 100.0) * (double) delay_line[ind]));
+
+        // Clipper
+        if (temp_sample > (double) INT16_MAX) temp_sample = (double) INT16_MAX - 1.0;
+        if (temp_sample < (double) INT16_MIN) temp_sample = (double) INT16_MIN + 1.0;
+
+        buff[sample] = (Sint16) temp_sample;
     }
 
     free_osc(lfo);
@@ -230,7 +239,7 @@ int lfo_filter(Audio_Buffer buff, Uint16 buffer_length, Uint32 sample_rate, Filt
         return -1;
     }
 
-    if (lfo_freq < 0 || filter_type > NOTCH || wave > TRI )
+    if (lfo_freq < 0 || filter_type > NOTCH || wave > TRI)
     {
         sys_print_error("Parameter is out of range");
         return -1;
@@ -316,7 +325,7 @@ int biquad(Audio_Buffer buff, Uint16 buffer_length, sf_biquad_state_st *state)
     for (Uint16 sample = 0; sample < buffer_length; ++sample)
     {
         // Convert to float < 1 to work with the library filter code
-        st_buff[sample].L = (float) (buff[sample]) / 32768.0f;
+        st_buff[sample].L = (float) (buff[sample]) / (32768.0f * 1.4f);
         st_buff[sample].R = 0;
     }
 

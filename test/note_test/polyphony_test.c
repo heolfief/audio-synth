@@ -71,26 +71,25 @@ void test_find_note_from_id(void **state)
     Polyphony *note_array = *state;
 
     //Test error handling
-    assert_int_equal(find_note_from_id(NULL,40), -1);
+    assert_int_equal(find_note_from_id(NULL, 40), -1);
 
     for (int i = 0; i < POLYPHONY_MAX; ++i)
     {
         note_array[i]->midi_id = 0;
     }
 
-    assert_int_equal(find_note_from_id(note_array,56), -1);
+    assert_int_equal(find_note_from_id(note_array, 56), -1);
 
     note_array[5]->midi_id = 56;
 
-    assert_int_equal(find_note_from_id(note_array,56), 5);
-    assert_int_equal(find_note_from_id(note_array,12), -1);
+    assert_int_equal(find_note_from_id(note_array, 56), 5);
+    assert_int_equal(find_note_from_id(note_array, 12), -1);
 }
 
 void test_polyphony_fill_buffer(void **state)
 {
     Polyphony *note_array = *state;
-    Envelope env = {.attack = 0, .decay =0, .sustain =1, .release =0};
-    int return_value = 1, temp_mix, nbr_active_notes;
+    Envelope env = {.attack = 0, .decay = 0, .sustain = 1, .release = 0};
 
     Audio_Buffer audio_buff = NULL;
     audio_buff = alloc_audio_buffer(TEST_AUDIO_BUFF_SIZE);
@@ -105,8 +104,7 @@ void test_polyphony_fill_buffer(void **state)
     }
 
     //Test error handling
-    return_value = polyphony_fill_buffer(audio_buff, NULL, TEST_AUDIO_BUFF_SIZE, &env, TEST_SAMPLE_RATE, 0);
-    assert_int_equal(return_value, -1);
+    assert_int_equal(polyphony_fill_buffer(audio_buff, NULL, TEST_AUDIO_BUFF_SIZE, &env, TEST_SAMPLE_RATE, 0), -1);
 
     for (int i = 0; i < POLYPHONY_MAX; ++i)
     {
@@ -114,10 +112,14 @@ void test_polyphony_fill_buffer(void **state)
         note_array[i]->onoff = OFF;
         note_array[i]->lifetime = 0;
         note_array[i]->deathtime = 0;
+
+        for (int sample = 0; sample < TEST_AUDIO_BUFF_SIZE; ++sample)
+        {
+            note_array[i]->buffer[sample] = 0;
+        }
     }
 
-    return_value = polyphony_fill_buffer(audio_buff, note_array, TEST_AUDIO_BUFF_SIZE, &env, TEST_SAMPLE_RATE, 0);
-    assert_int_equal(return_value, 0);
+    assert_int_equal(polyphony_fill_buffer(audio_buff, note_array, TEST_AUDIO_BUFF_SIZE, &env, TEST_SAMPLE_RATE, 0), 0);
 
     for (Uint16 sample = 0; sample < TEST_AUDIO_BUFF_SIZE; ++sample)
     {
@@ -131,8 +133,7 @@ void test_polyphony_fill_buffer(void **state)
     note_array[5]->onoff = ON;
     note_array[4]->onoff = ON;
 
-    return_value = polyphony_fill_buffer(audio_buff, note_array, TEST_AUDIO_BUFF_SIZE, &env, TEST_SAMPLE_RATE, 0);
-    assert_int_equal(return_value, 0);
+    //assert_int_equal(polyphony_fill_buffer(audio_buff, note_array, TEST_AUDIO_BUFF_SIZE, &env, TEST_SAMPLE_RATE, 0), 0);
 
     free_audio_buffer(audio_buff);
 }

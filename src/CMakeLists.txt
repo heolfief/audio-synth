@@ -1,9 +1,10 @@
 cmake_minimum_required(VERSION 3.2)
 
 find_package(SDL2 REQUIRED)
+find_package(SDL2_image REQUIRED)
 find_package(LibXml2 REQUIRED)
 
-include_directories(${SDL2_INCLUDE_DIRS} ${LIBXML2_INCLUDE_DIR})
+include_directories(${SDL2_INCLUDE_DIRS} ${SDL2IMAGE_INCLUDE_DIRS} ${LIBXML2_INCLUDE_DIR})
 
 set(SOURCE_FILES main.c
         core/audio_core.c core/audio_core.h
@@ -12,6 +13,7 @@ set(SOURCE_FILES main.c
         core/note/adsr.h
         core/note/polyphony.c core/note/polyphony.h
         gui/gui.c gui/gui.h
+        gui/SDL_Button.c gui/SDL_Button.h
         sys_param/sys_param.c sys_param/sys_param.h
         audio/audio.c audio/audio.h
         system/error_handler.h
@@ -28,11 +30,9 @@ add_executable(audio_synth_valgrind ${SOURCE_FILES})
 
 target_compile_definitions(audio_synth_valgrind PRIVATE VALGRIND)
 
-target_link_libraries(audio_synth ${SDL2_LIBRARIES} ${LIBXML2_LIBRARIES})
-target_link_libraries(audio_synth m)
+target_link_libraries(audio_synth ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES} ${LIBXML2_LIBRARIES} m)
 
-target_link_libraries(audio_synth_valgrind ${SDL2_LIBRARIES} ${LIBXML2_LIBRARIES})
-target_link_libraries(audio_synth_valgrind m)
+target_link_libraries(audio_synth_valgrind ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES} ${LIBXML2_LIBRARIES} m)
 
 
 install(TARGETS audio_synth

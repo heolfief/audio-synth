@@ -26,6 +26,7 @@ int main(int argc, char *argv[])
     Core *audio_core;
     MIDI_Peripheral_fd midi_peripheral;
     Gui_SDL_objects *gui;
+    Uint8 mouse_is_down = 0;
 
     // Default parameters. If buffer_len changed, core memory allocation needs to be redone
     int sample_rate = 48000;
@@ -74,7 +75,11 @@ int main(int argc, char *argv[])
         exit(EXIT_FAILURE);
     }
 
-    init_gui(gui);
+    if (init_gui(gui))exit(EXIT_FAILURE);
+    if (create_switches_map(gui, audio_core->sys_param))exit(EXIT_FAILURE);
+    if (create_pots_map(gui, audio_core->sys_param))exit(EXIT_FAILURE);
+    if (load_sys_param_to_gui(gui, audio_core->sys_param))exit((EXIT_FAILURE));
+    if (gui_update(gui))exit(EXIT_FAILURE);
 
     if (SDL_OpenAudio(&as, NULL) != 0)
     {
@@ -94,24 +99,39 @@ int main(int argc, char *argv[])
     {
         if (process_midi_input(midi_peripheral, audio_core))exit(EXIT_FAILURE);
 
-        SDL_PollEvent(&gui->event);
-
-        switch (gui->event.type)
+        while (SDL_PollEvent(&gui->event))
         {
-            case SDL_QUIT:
-                gui->application_quit = SDL_TRUE;
-                break;
+            if (process_switches(gui, audio_core))exit(EXIT_FAILURE);
+            if (process_pots(gui, audio_core, mouse_is_down))exit(EXIT_FAILURE);
 
-            case SDL_KEYDOWN:
-                printf("Key down\n");
-                break;
+            switch (gui->event.type)
+            {
+                case SDL_QUIT:
 
-            case SDL_KEYUP:
-                printf("Key up\n");
-                break;
+                    printf("Quit asked. Closing...\n");
+                    gui->application_quit = SDL_TRUE;
+                    break;
 
-            case SDL_MOUSEBUTTONDOWN:printf("Mouse clic on x=%d, y=%d\n", gui->event.button.x, gui->event.button.y);
-                break;
+                case SDL_KEYDOWN:
+
+                    if (gui->event.key.keysym.sym == SDLK_ESCAPE)
+                    {
+                        printf("Quit asked. Closing...\n");
+                        gui->application_quit = SDL_TRUE;
+                    }
+                    break;
+
+                case SDL_MOUSEBUTTONDOWN:
+
+                    mouse_is_down = 1;
+                    printf("Mouse clic on x=%d, y=%d\n", gui->event.button.x, gui->event.button.y);
+                    break;
+
+                case SDL_MOUSEBUTTONUP:
+
+                    mouse_is_down = 0;
+                    break;
+            }
         }
     }
 
