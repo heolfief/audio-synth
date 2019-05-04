@@ -22,10 +22,10 @@
 #define APPLICATION_IMAGE_POT_WIDTH 45
 #define APPLICATION_IMAGE_POT_HEIGHT 45
 
-#define POT_INCREMENT 2
+#define POT_INCREMENT 3
 
-#define NUMBER_OF_SWITCHES 9
-#define NUMBER_OF_POTS 1
+#define NUMBER_OF_SWITCHES 11
+#define NUMBER_OF_POTS 32
 
 #define APPLICATION_WINDOW_WIDTH 1300
 #define APPLICATION_WINDOW_HEIGHT 810
@@ -65,6 +65,7 @@ typedef struct
 typedef struct
 {
   SDL_Button_t *sdl_pot;      /*!<the SDL related objects for the potentiometer */
+  SDL_Texture *texture;       /*!<the SDL texture of the potentiometer */
   Uint16 posX;                /*!<the X position on the screen (in pixels) */
   Uint16 posY;                /*!<the Y position on the screen (in pixels) */
   Uint16 width;               /*!<the width (in pixels) */
@@ -223,5 +224,18 @@ int process_switches(Gui_SDL_objects *gui, Core *audio_core);
  * \return 0 if everything went OK, -1 otherwise
  */
 int process_pots(Gui_SDL_objects *gui, Core *audio_core);
+
+int change_pot_percent(Gui_SDL_objects *gui, int potnbr);
+
+/**
+ * \fn int load_sys_param_to_gui(Gui_SDL_objects *gui, Sys_param *sys_param)
+ * \brief Function to load all the system parameters to the GUI (set pots and switches rotation/status accordingly)
+ *
+ * \param gui The Gui_SDL_objects
+ * \param audio_core The system's audio core
+ *
+ * \return 0 if everything went OK, -1 otherwise
+ */
+int load_sys_param_to_gui(Gui_SDL_objects *gui, Sys_param *sys_param);
 
 #endif //AUDIO_SYNTH_GUI_H

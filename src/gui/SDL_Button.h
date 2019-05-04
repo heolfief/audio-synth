@@ -17,6 +17,8 @@ SDL_Button_t *SDL_Button(SDL_Surface *surface, int x_location, int y_location, i
 // Free a button and its members
 void SDL_Button_free(SDL_Button_t *button);
 
+bool mouse_on_button(SDL_Rect *button_rect, int mouse_x, int mouse_y);
+
 // Returns true if the left mouse button is pressed on the button
 bool SDL_Button_mouse_down(SDL_Button_t *button, SDL_Event *e);
 
