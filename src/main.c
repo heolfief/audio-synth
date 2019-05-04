@@ -77,6 +77,8 @@ int main(int argc, char *argv[])
     if (init_gui(gui))exit(EXIT_FAILURE);
     if (create_switches_map(gui, audio_core->sys_param))exit(EXIT_FAILURE);
     if (create_pots_map(gui, audio_core->sys_param))exit(EXIT_FAILURE);
+    if (load_sys_param_to_gui(gui, audio_core->sys_param))exit((EXIT_FAILURE));
+    if (gui_update(gui))exit(EXIT_FAILURE);
 
     if (SDL_OpenAudio(&as, NULL) != 0)
     {
