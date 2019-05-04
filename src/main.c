@@ -26,6 +26,7 @@ int main(int argc, char *argv[])
     Core *audio_core;
     MIDI_Peripheral_fd midi_peripheral;
     Gui_SDL_objects *gui;
+    Uint8 mouse_is_down = 0;
 
     // Default parameters. If buffer_len changed, core memory allocation needs to be redone
     int sample_rate = 48000;
@@ -101,7 +102,7 @@ int main(int argc, char *argv[])
         while (SDL_PollEvent(&gui->event))
         {
             if (process_switches(gui, audio_core))exit(EXIT_FAILURE);
-            if (process_pots(gui, audio_core))exit(EXIT_FAILURE);
+            if (process_pots(gui, audio_core, mouse_is_down))exit(EXIT_FAILURE);
 
             switch (gui->event.type)
             {
@@ -112,6 +113,7 @@ int main(int argc, char *argv[])
 
                 case SDL_KEYDOWN:
 
+                    if (gui->event.key.keysym.sym == SDLK_ESCAPE) gui->application_quit = SDL_TRUE;
 //                    printf("Key down\n");
                     break;
 
@@ -122,7 +124,13 @@ int main(int argc, char *argv[])
 
                 case SDL_MOUSEBUTTONDOWN:
 
+                    mouse_is_down = 1;
                     printf("Mouse clic on x=%d, y=%d\n", gui->event.button.x, gui->event.button.y);
+                    break;
+
+                case SDL_MOUSEBUTTONUP:
+
+                    mouse_is_down = 0;
                     break;
 
                 case SDL_MOUSEWHEEL:

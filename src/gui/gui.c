@@ -8,6 +8,8 @@
 
 #include "gui.h"
 
+Sint8 param_is_being_mouse_changed = -1;
+
 static const int switches_location[NUMBER_OF_SWITCHES][2] = {
     {105, 52},        // Switch osc1 OnOff
     {337, 52},        // Switch osc2 OnOff
@@ -476,7 +478,7 @@ int process_switches(Gui_SDL_objects *gui, Core *audio_core)
     return 0;
 }
 
-int process_pots(Gui_SDL_objects *gui, Core *audio_core)
+int process_pots(Gui_SDL_objects *gui, Core *audio_core, Uint8 mouse_is_down)
 {
     double *double_param = NULL;
     Uint8 *uint8_param = NULL;
@@ -492,247 +494,281 @@ int process_pots(Gui_SDL_objects *gui, Core *audio_core)
         return -1;
     }
 
-    if (gui->event.type == SDL_MOUSEWHEEL || gui->event.type == SDL_MOUSEBUTTONDOWN)
+    if (gui->event.type == SDL_MOUSEWHEEL || gui->event.type == SDL_MOUSEMOTION)
     {
         SDL_GetMouseState(&mouseX, &mouseY);
 
-        // OSC1
-        if (mouse_on_button(gui->pots[0].sdl_pot->location_and_size, mouseX, mouseY))
+        if (param_is_being_mouse_changed != -1)  // If a parameter is being changed by the mouse
         {
-            change_pot_percent(gui, 0);
-            uint16_param = gui->pots[0].param;
-            *uint16_param = (Uint16) map(gui->pots[0].percent, 0, 100, gui->pots[0].paramMIN, gui->pots[0].paramMAX);
+            if (!mouse_is_down) param_is_being_mouse_changed = -1;
+            change_pot_percent(gui, param_is_being_mouse_changed, mouse_is_down);
             param_changed = 1;
         }
-        if (mouse_on_button(gui->pots[1].sdl_pot->location_and_size, mouseX, mouseY))
+        else
         {
-            change_pot_percent(gui, 1);
-            uint8_param = gui->pots[1].param;
-            *uint8_param = (Uint8) map(gui->pots[1].percent, 0, 100, gui->pots[1].paramMIN, gui->pots[1].paramMAX);
-            param_changed = 1;
-        }
-        if (mouse_on_button(gui->pots[2].sdl_pot->location_and_size, mouseX, mouseY))
-        {
-            change_pot_percent(gui, 2);
-            sint8_param = gui->pots[2].param;
-            *sint8_param = (Sint8) map(gui->pots[2].percent, 0, 100, gui->pots[2].paramMIN, gui->pots[2].paramMAX);
-            param_changed = 1;
-        }
-        // OSC 2
-        if (mouse_on_button(gui->pots[3].sdl_pot->location_and_size, mouseX, mouseY))
-        {
-            change_pot_percent(gui, 3);
-            uint16_param = gui->pots[3].param;
-            *uint16_param = (Uint16) map(gui->pots[3].percent, 0, 100, gui->pots[3].paramMIN, gui->pots[3].paramMAX);
-            param_changed = 1;
-        }
-        if (mouse_on_button(gui->pots[4].sdl_pot->location_and_size, mouseX, mouseY))
-        {
-            change_pot_percent(gui, 4);
-            uint8_param = gui->pots[4].param;
-            *uint8_param = (Uint8) map(gui->pots[4].percent, 0, 100, gui->pots[4].paramMIN, gui->pots[4].paramMAX);
-            param_changed = 1;
-        }
-        if (mouse_on_button(gui->pots[5].sdl_pot->location_and_size, mouseX, mouseY))
-        {
-            change_pot_percent(gui, 5);
-            sint8_param = gui->pots[5].param;
-            *sint8_param = (Sint8) map(gui->pots[5].percent, 0, 100, gui->pots[5].paramMIN, gui->pots[5].paramMAX);
-            param_changed = 1;
-        }
-        // OSC 3
-        if (mouse_on_button(gui->pots[6].sdl_pot->location_and_size, mouseX, mouseY))
-        {
-            change_pot_percent(gui, 6);
-            uint16_param = gui->pots[6].param;
-            *uint16_param = (Uint16) map(gui->pots[6].percent, 0, 100, gui->pots[6].paramMIN, gui->pots[6].paramMAX);
-            param_changed = 1;
-        }
-        if (mouse_on_button(gui->pots[7].sdl_pot->location_and_size, mouseX, mouseY))
-        {
-            change_pot_percent(gui, 7);
-            uint8_param = gui->pots[7].param;
-            *uint8_param = (Uint8) map(gui->pots[7].percent, 0, 100, gui->pots[7].paramMIN, gui->pots[7].paramMAX);
-            param_changed = 1;
-        }
-        if (mouse_on_button(gui->pots[8].sdl_pot->location_and_size, mouseX, mouseY))
-        {
-            change_pot_percent(gui, 8);
-            sint8_param = gui->pots[8].param;
-            *sint8_param = (Sint8) map(gui->pots[8].percent, 0, 100, gui->pots[8].paramMIN, gui->pots[8].paramMAX);
-            param_changed = 1;
-        }
-        // Envelope
-        if (mouse_on_button(gui->pots[9].sdl_pot->location_and_size, mouseX, mouseY))
-        {
-            change_pot_percent(gui, 9);
-            uint16_param = gui->pots[9].param;
-            *uint16_param = (Uint16) map(gui->pots[9].percent, 0, 100, gui->pots[9].paramMIN, gui->pots[9].paramMAX);
-            param_changed = 1;
-        }
-        if (mouse_on_button(gui->pots[10].sdl_pot->location_and_size, mouseX, mouseY))
-        {
-            change_pot_percent(gui, 10);
-            uint8_param = gui->pots[10].param;
-            *uint8_param = (Uint8) map(gui->pots[10].percent, 0, 100, gui->pots[10].paramMIN, gui->pots[10].paramMAX);
-            param_changed = 1;
-        }
-        if (mouse_on_button(gui->pots[11].sdl_pot->location_and_size, mouseX, mouseY))
-        {
-            change_pot_percent(gui, 11);
-            sint8_param = gui->pots[11].param;
-            *sint8_param = (Sint8) map(gui->pots[11].percent, 0, 100, gui->pots[11].paramMIN, gui->pots[11].paramMAX);
-            param_changed = 1;
-        }
-        if (mouse_on_button(gui->pots[12].sdl_pot->location_and_size, mouseX, mouseY))
-        {
-            change_pot_percent(gui, 12);
-            uint16_param = gui->pots[12].param;
-            *uint16_param = (Uint16) map(gui->pots[12].percent, 0, 100, gui->pots[12].paramMIN, gui->pots[12].paramMAX);
-            param_changed = 1;
-        }
-        // MASTER VOLUME
-        if (mouse_on_button(gui->pots[13].sdl_pot->location_and_size, mouseX, mouseY))
-        {
-            change_pot_percent(gui, 13);
-            uint8_param = gui->pots[13].param;
-            *uint8_param = (Uint8) map(gui->pots[13].percent, 0, 100, gui->pots[13].paramMIN, gui->pots[13].paramMAX);
-            param_changed = 1;
-        }
-        // Distortion
-        if (mouse_on_button(gui->pots[14].sdl_pot->location_and_size, mouseX, mouseY))
-        {
-            change_pot_percent(gui, 14);
-            uint8_param = gui->pots[14].param;
-            *uint8_param = (Uint8) map(gui->pots[14].percent, 0, 100, gui->pots[14].paramMIN, gui->pots[14].paramMAX);
-            param_changed = 1;
-        }
-        if (mouse_on_button(gui->pots[15].sdl_pot->location_and_size, mouseX, mouseY))
-        {
-            change_pot_percent(gui, 15);
-            uint8_param = gui->pots[15].param;
-            *uint8_param = (Uint8) map(gui->pots[15].percent, 0, 100, gui->pots[15].paramMIN, gui->pots[15].paramMAX);
-            param_changed = 1;
-        }
-        // Delay
-        if (mouse_on_button(gui->pots[16].sdl_pot->location_and_size, mouseX, mouseY))
-        {
-            change_pot_percent(gui, 16);
-            double_param = gui->pots[16].param;
-            *double_param = (double) map(gui->pots[16].percent, 0, 100, gui->pots[16].paramMIN, gui->pots[16].paramMAX);
-            param_changed = 1;
-        }
-        if (mouse_on_button(gui->pots[17].sdl_pot->location_and_size, mouseX, mouseY))
-        {
-            change_pot_percent(gui, 17);
-            uint8_param = gui->pots[17].param;
-            *uint8_param = (Uint8) map(gui->pots[17].percent, 0, 100, gui->pots[17].paramMIN, gui->pots[17].paramMAX);
-            param_changed = 1;
-        }
-        // Amp mod
-        if (mouse_on_button(gui->pots[18].sdl_pot->location_and_size, mouseX, mouseY))
-        {
-            change_pot_percent(gui, 18);
-            double_param = gui->pots[18].param;
-            *double_param = (double) map(gui->pots[18].percent, 0, 100, gui->pots[18].paramMIN, gui->pots[18].paramMAX);
-            param_changed = 1;
-        }
-        if (mouse_on_button(gui->pots[19].sdl_pot->location_and_size, mouseX, mouseY))
-        {
-            change_pot_percent(gui, 19);
-            uint8_param = gui->pots[19].param;
-            *uint8_param = (Uint8) map(gui->pots[19].percent, 0, 100, gui->pots[19].paramMIN, gui->pots[19].paramMAX);
-            param_changed = 1;
-        }
-        if (mouse_on_button(gui->pots[20].sdl_pot->location_and_size, mouseX, mouseY))
-        {
-            change_pot_percent(gui, 20);
-            uint8_param = gui->pots[20].param;
-            *uint8_param = (Uint8) map(gui->pots[20].percent, 0, 100, gui->pots[20].paramMIN, gui->pots[20].paramMAX);
-            param_changed = 1;
-        }
-        // Flanger
-        if (mouse_on_button(gui->pots[21].sdl_pot->location_and_size, mouseX, mouseY))
-        {
-            change_pot_percent(gui, 21);
-            double_param = gui->pots[21].param;
-            *double_param = (double) map(gui->pots[21].percent, 0, 100, gui->pots[21].paramMIN, gui->pots[21].paramMAX);
-            param_changed = 1;
-        }
-        if (mouse_on_button(gui->pots[22].sdl_pot->location_and_size, mouseX, mouseY))
-        {
-            change_pot_percent(gui, 22);
-            double_param = gui->pots[22].param;
-            *double_param = (double) map(gui->pots[22].percent, 0, 100, gui->pots[22].paramMIN, gui->pots[22].paramMAX);
-            param_changed = 1;
-        }
-        if (mouse_on_button(gui->pots[23].sdl_pot->location_and_size, mouseX, mouseY))
-        {
-            change_pot_percent(gui, 23);
-            uint8_param = gui->pots[23].param;
-            *uint8_param = (Uint8) map(gui->pots[23].percent, 0, 100, gui->pots[23].paramMIN, gui->pots[23].paramMAX);
-            param_changed = 1;
-        }
-        if (mouse_on_button(gui->pots[24].sdl_pot->location_and_size, mouseX, mouseY))
-        {
-            change_pot_percent(gui, 24);
-            uint8_param = gui->pots[24].param;
-            *uint8_param = (Uint8) map(gui->pots[24].percent, 0, 100, gui->pots[24].paramMIN, gui->pots[24].paramMAX);
-            param_changed = 1;
-        }
-        // LFO filter
-        if (mouse_on_button(gui->pots[25].sdl_pot->location_and_size, mouseX, mouseY))
-        {
-            change_pot_percent(gui, 25);
-            uint16_param = gui->pots[25].param;
-            *uint16_param = (Uint16) map(gui->pots[25].percent, 0, 100, gui->pots[25].paramMIN, gui->pots[25].paramMAX);
-            param_changed = 1;
-        }
-        if (mouse_on_button(gui->pots[26].sdl_pot->location_and_size, mouseX, mouseY))
-        {
-            change_pot_percent(gui, 26);
-            uint16_param = gui->pots[26].param;
-            *uint16_param = (Uint16) map(gui->pots[26].percent, 0, 100, gui->pots[26].paramMIN, gui->pots[26].paramMAX);
-            param_changed = 1;
-        }
-        if (mouse_on_button(gui->pots[27].sdl_pot->location_and_size, mouseX, mouseY))
-        {
-            change_pot_percent(gui, 27);
-            double_param = gui->pots[27].param;
-            *double_param = (double) map(gui->pots[27].percent, 0, 100, gui->pots[27].paramMIN, gui->pots[27].paramMAX);
-            param_changed = 1;
-        }
-        if (mouse_on_button(gui->pots[28].sdl_pot->location_and_size, mouseX, mouseY))
-        {
-            change_pot_percent(gui, 28);
-            uint8_param = gui->pots[28].param;
-            *uint8_param = (Uint8) map(gui->pots[28].percent, 0, 100, gui->pots[28].paramMIN, gui->pots[28].paramMAX);
-            param_changed = 1;
-        }
-        if (mouse_on_button(gui->pots[29].sdl_pot->location_and_size, mouseX, mouseY))
-        {
-            change_pot_percent(gui, 29);
-            double_param = gui->pots[29].param;
-            *double_param = (double) map(gui->pots[29].percent, 0, 100, gui->pots[29].paramMIN, gui->pots[29].paramMAX);
-            param_changed = 1;
-        }
-        // Filter
-        if (mouse_on_button(gui->pots[30].sdl_pot->location_and_size, mouseX, mouseY))
-        {
-            change_pot_percent(gui, 30);
-            uint16_param = gui->pots[30].param;
-            *uint16_param = (Uint16) map(gui->pots[30].percent, 0, 100, gui->pots[30].paramMIN, gui->pots[30].paramMAX);
-            param_changed = 1;
-        }
-        if (mouse_on_button(gui->pots[31].sdl_pot->location_and_size, mouseX, mouseY))
-        {
-            change_pot_percent(gui, 31);
-            double_param = gui->pots[31].param;
-            *double_param = (double) map(gui->pots[31].percent, 0, 100, gui->pots[31].paramMIN, gui->pots[31].paramMAX);
-            param_changed = 1;
+            // OSC1
+            if (mouse_on_button(gui->pots[0].sdl_pot->location_and_size, mouseX, mouseY))
+            {
+                change_pot_percent(gui, 0, mouse_is_down);
+                uint16_param = gui->pots[0].param;
+                *uint16_param =
+                    (Uint16) map(gui->pots[0].percent, 0, 100, gui->pots[0].paramMIN, gui->pots[0].paramMAX);
+                param_changed = 1;
+            }
+            if (mouse_on_button(gui->pots[1].sdl_pot->location_and_size, mouseX, mouseY))
+            {
+                change_pot_percent(gui, 1, mouse_is_down);
+                uint8_param = gui->pots[1].param;
+                *uint8_param = (Uint8) map(gui->pots[1].percent, 0, 100, gui->pots[1].paramMIN, gui->pots[1].paramMAX);
+                param_changed = 1;
+            }
+            if (mouse_on_button(gui->pots[2].sdl_pot->location_and_size, mouseX, mouseY))
+            {
+                change_pot_percent(gui, 2, mouse_is_down);
+                sint8_param = gui->pots[2].param;
+                *sint8_param = (Sint8) map(gui->pots[2].percent, 0, 100, gui->pots[2].paramMIN, gui->pots[2].paramMAX);
+                param_changed = 1;
+            }
+            // OSC 2
+            if (mouse_on_button(gui->pots[3].sdl_pot->location_and_size, mouseX, mouseY))
+            {
+                change_pot_percent(gui, 3, mouse_is_down);
+                uint16_param = gui->pots[3].param;
+                *uint16_param =
+                    (Uint16) map(gui->pots[3].percent, 0, 100, gui->pots[3].paramMIN, gui->pots[3].paramMAX);
+                param_changed = 1;
+            }
+            if (mouse_on_button(gui->pots[4].sdl_pot->location_and_size, mouseX, mouseY))
+            {
+                change_pot_percent(gui, 4, mouse_is_down);
+                uint8_param = gui->pots[4].param;
+                *uint8_param = (Uint8) map(gui->pots[4].percent, 0, 100, gui->pots[4].paramMIN, gui->pots[4].paramMAX);
+                param_changed = 1;
+            }
+            if (mouse_on_button(gui->pots[5].sdl_pot->location_and_size, mouseX, mouseY))
+            {
+                change_pot_percent(gui, 5, mouse_is_down);
+                sint8_param = gui->pots[5].param;
+                *sint8_param = (Sint8) map(gui->pots[5].percent, 0, 100, gui->pots[5].paramMIN, gui->pots[5].paramMAX);
+                param_changed = 1;
+            }
+            // OSC 3
+            if (mouse_on_button(gui->pots[6].sdl_pot->location_and_size, mouseX, mouseY))
+            {
+                change_pot_percent(gui, 6, mouse_is_down);
+                uint16_param = gui->pots[6].param;
+                *uint16_param =
+                    (Uint16) map(gui->pots[6].percent, 0, 100, gui->pots[6].paramMIN, gui->pots[6].paramMAX);
+                param_changed = 1;
+            }
+            if (mouse_on_button(gui->pots[7].sdl_pot->location_and_size, mouseX, mouseY))
+            {
+                change_pot_percent(gui, 7, mouse_is_down);
+                uint8_param = gui->pots[7].param;
+                *uint8_param = (Uint8) map(gui->pots[7].percent, 0, 100, gui->pots[7].paramMIN, gui->pots[7].paramMAX);
+                param_changed = 1;
+            }
+            if (mouse_on_button(gui->pots[8].sdl_pot->location_and_size, mouseX, mouseY))
+            {
+                change_pot_percent(gui, 8, mouse_is_down);
+                sint8_param = gui->pots[8].param;
+                *sint8_param = (Sint8) map(gui->pots[8].percent, 0, 100, gui->pots[8].paramMIN, gui->pots[8].paramMAX);
+                param_changed = 1;
+            }
+            // Envelope
+            if (mouse_on_button(gui->pots[9].sdl_pot->location_and_size, mouseX, mouseY))
+            {
+                change_pot_percent(gui, 9, mouse_is_down);
+                uint16_param = gui->pots[9].param;
+                *uint16_param =
+                    (Uint16) map(gui->pots[9].percent, 0, 100, gui->pots[9].paramMIN, gui->pots[9].paramMAX);
+                param_changed = 1;
+            }
+            if (mouse_on_button(gui->pots[10].sdl_pot->location_and_size, mouseX, mouseY))
+            {
+                change_pot_percent(gui, 10, mouse_is_down);
+                uint8_param = gui->pots[10].param;
+                *uint8_param =
+                    (Uint8) map(gui->pots[10].percent, 0, 100, gui->pots[10].paramMIN, gui->pots[10].paramMAX);
+                param_changed = 1;
+            }
+            if (mouse_on_button(gui->pots[11].sdl_pot->location_and_size, mouseX, mouseY))
+            {
+                change_pot_percent(gui, 11, mouse_is_down);
+                sint8_param = gui->pots[11].param;
+                *sint8_param =
+                    (Sint8) map(gui->pots[11].percent, 0, 100, gui->pots[11].paramMIN, gui->pots[11].paramMAX);
+                param_changed = 1;
+            }
+            if (mouse_on_button(gui->pots[12].sdl_pot->location_and_size, mouseX, mouseY))
+            {
+                change_pot_percent(gui, 12, mouse_is_down);
+                uint16_param = gui->pots[12].param;
+                *uint16_param =
+                    (Uint16) map(gui->pots[12].percent, 0, 100, gui->pots[12].paramMIN, gui->pots[12].paramMAX);
+                param_changed = 1;
+            }
+            // MASTER VOLUME
+            if (mouse_on_button(gui->pots[13].sdl_pot->location_and_size, mouseX, mouseY))
+            {
+                change_pot_percent(gui, 13, mouse_is_down);
+                uint8_param = gui->pots[13].param;
+                *uint8_param =
+                    (Uint8) map(gui->pots[13].percent, 0, 100, gui->pots[13].paramMIN, gui->pots[13].paramMAX);
+                param_changed = 1;
+            }
+            // Distortion
+            if (mouse_on_button(gui->pots[14].sdl_pot->location_and_size, mouseX, mouseY))
+            {
+                change_pot_percent(gui, 14, mouse_is_down);
+                uint8_param = gui->pots[14].param;
+                *uint8_param =
+                    (Uint8) map(gui->pots[14].percent, 0, 100, gui->pots[14].paramMIN, gui->pots[14].paramMAX);
+                param_changed = 1;
+            }
+            if (mouse_on_button(gui->pots[15].sdl_pot->location_and_size, mouseX, mouseY))
+            {
+                change_pot_percent(gui, 15, mouse_is_down);
+                uint8_param = gui->pots[15].param;
+                *uint8_param =
+                    (Uint8) map(gui->pots[15].percent, 0, 100, gui->pots[15].paramMIN, gui->pots[15].paramMAX);
+                param_changed = 1;
+            }
+            // Delay
+            if (mouse_on_button(gui->pots[16].sdl_pot->location_and_size, mouseX, mouseY))
+            {
+                change_pot_percent(gui, 16, mouse_is_down);
+                double_param = gui->pots[16].param;
+                *double_param =
+                    (double) map(gui->pots[16].percent, 0, 100, gui->pots[16].paramMIN, gui->pots[16].paramMAX);
+                param_changed = 1;
+            }
+            if (mouse_on_button(gui->pots[17].sdl_pot->location_and_size, mouseX, mouseY))
+            {
+                change_pot_percent(gui, 17, mouse_is_down);
+                uint8_param = gui->pots[17].param;
+                *uint8_param =
+                    (Uint8) map(gui->pots[17].percent, 0, 100, gui->pots[17].paramMIN, gui->pots[17].paramMAX);
+                param_changed = 1;
+            }
+            // Amp mod
+            if (mouse_on_button(gui->pots[18].sdl_pot->location_and_size, mouseX, mouseY))
+            {
+                change_pot_percent(gui, 18, mouse_is_down);
+                double_param = gui->pots[18].param;
+                *double_param =
+                    (double) map(gui->pots[18].percent, 0, 100, gui->pots[18].paramMIN, gui->pots[18].paramMAX);
+                param_changed = 1;
+            }
+            if (mouse_on_button(gui->pots[19].sdl_pot->location_and_size, mouseX, mouseY))
+            {
+                change_pot_percent(gui, 19, mouse_is_down);
+                uint8_param = gui->pots[19].param;
+                *uint8_param =
+                    (Uint8) map(gui->pots[19].percent, 0, 100, gui->pots[19].paramMIN, gui->pots[19].paramMAX);
+                param_changed = 1;
+            }
+            if (mouse_on_button(gui->pots[20].sdl_pot->location_and_size, mouseX, mouseY))
+            {
+                change_pot_percent(gui, 20, mouse_is_down);
+                uint8_param = gui->pots[20].param;
+                *uint8_param =
+                    (Uint8) map(gui->pots[20].percent, 0, 100, gui->pots[20].paramMIN, gui->pots[20].paramMAX);
+                param_changed = 1;
+            }
+            // Flanger
+            if (mouse_on_button(gui->pots[21].sdl_pot->location_and_size, mouseX, mouseY))
+            {
+                change_pot_percent(gui, 21, mouse_is_down);
+                double_param = gui->pots[21].param;
+                *double_param =
+                    (double) map(gui->pots[21].percent, 0, 100, gui->pots[21].paramMIN, gui->pots[21].paramMAX);
+                param_changed = 1;
+            }
+            if (mouse_on_button(gui->pots[22].sdl_pot->location_and_size, mouseX, mouseY))
+            {
+                change_pot_percent(gui, 22, mouse_is_down);
+                double_param = gui->pots[22].param;
+                *double_param =
+                    (double) map(gui->pots[22].percent, 0, 100, gui->pots[22].paramMIN, gui->pots[22].paramMAX);
+                param_changed = 1;
+            }
+            if (mouse_on_button(gui->pots[23].sdl_pot->location_and_size, mouseX, mouseY))
+            {
+                change_pot_percent(gui, 23, mouse_is_down);
+                uint8_param = gui->pots[23].param;
+                *uint8_param =
+                    (Uint8) map(gui->pots[23].percent, 0, 100, gui->pots[23].paramMIN, gui->pots[23].paramMAX);
+                param_changed = 1;
+            }
+            if (mouse_on_button(gui->pots[24].sdl_pot->location_and_size, mouseX, mouseY))
+            {
+                change_pot_percent(gui, 24, mouse_is_down);
+                uint8_param = gui->pots[24].param;
+                *uint8_param =
+                    (Uint8) map(gui->pots[24].percent, 0, 100, gui->pots[24].paramMIN, gui->pots[24].paramMAX);
+                param_changed = 1;
+            }
+            // LFO filter
+            if (mouse_on_button(gui->pots[25].sdl_pot->location_and_size, mouseX, mouseY))
+            {
+                change_pot_percent(gui, 25, mouse_is_down);
+                uint16_param = gui->pots[25].param;
+                *uint16_param =
+                    (Uint16) map(gui->pots[25].percent, 0, 100, gui->pots[25].paramMIN, gui->pots[25].paramMAX);
+                param_changed = 1;
+            }
+            if (mouse_on_button(gui->pots[26].sdl_pot->location_and_size, mouseX, mouseY))
+            {
+                change_pot_percent(gui, 26, mouse_is_down);
+                uint16_param = gui->pots[26].param;
+                *uint16_param =
+                    (Uint16) map(gui->pots[26].percent, 0, 100, gui->pots[26].paramMIN, gui->pots[26].paramMAX);
+                param_changed = 1;
+            }
+            if (mouse_on_button(gui->pots[27].sdl_pot->location_and_size, mouseX, mouseY))
+            {
+                change_pot_percent(gui, 27, mouse_is_down);
+                double_param = gui->pots[27].param;
+                *double_param =
+                    (double) map(gui->pots[27].percent, 0, 100, gui->pots[27].paramMIN, gui->pots[27].paramMAX);
+                param_changed = 1;
+            }
+            if (mouse_on_button(gui->pots[28].sdl_pot->location_and_size, mouseX, mouseY))
+            {
+                change_pot_percent(gui, 28, mouse_is_down);
+                uint8_param = gui->pots[28].param;
+                *uint8_param =
+                    (Uint8) map(gui->pots[28].percent, 0, 100, gui->pots[28].paramMIN, gui->pots[28].paramMAX);
+                param_changed = 1;
+            }
+            if (mouse_on_button(gui->pots[29].sdl_pot->location_and_size, mouseX, mouseY))
+            {
+                change_pot_percent(gui, 29, mouse_is_down);
+                double_param = gui->pots[29].param;
+                *double_param =
+                    (double) map(gui->pots[29].percent, 0, 100, gui->pots[29].paramMIN, gui->pots[29].paramMAX);
+                param_changed = 1;
+            }
+            // Filter
+            if (mouse_on_button(gui->pots[30].sdl_pot->location_and_size, mouseX, mouseY))
+            {
+                change_pot_percent(gui, 30, mouse_is_down);
+                uint16_param = gui->pots[30].param;
+                *uint16_param =
+                    (Uint16) map(gui->pots[30].percent, 0, 100, gui->pots[30].paramMIN, gui->pots[30].paramMAX);
+                param_changed = 1;
+            }
+            if (mouse_on_button(gui->pots[31].sdl_pot->location_and_size, mouseX, mouseY))
+            {
+                change_pot_percent(gui, 31, mouse_is_down);
+                double_param = gui->pots[31].param;
+                *double_param =
+                    (double) map(gui->pots[31].percent, 0, 100, gui->pots[31].paramMIN, gui->pots[31].paramMAX);
+                param_changed = 1;
+            }
         }
     }
-
     if (param_changed)
     {
         // Each time oscillator parameters changed, this function needs to be called
@@ -747,7 +783,7 @@ int process_pots(Gui_SDL_objects *gui, Core *audio_core)
     return 0;
 }
 
-int change_pot_percent(Gui_SDL_objects *gui, int potnbr)
+int change_pot_percent(Gui_SDL_objects *gui, int potnbr, Uint8 mouse_is_down)
 {
     if (gui->event.type == SDL_MOUSEWHEEL)
     {
@@ -764,19 +800,20 @@ int change_pot_percent(Gui_SDL_objects *gui, int potnbr)
             gui->pots[potnbr].percent += gui->event.wheel.y * POT_INCREMENT;
         }
     }
-    else if (gui->event.type == SDL_MOUSEMOTION)
+    else if (gui->event.type == SDL_MOUSEMOTION && mouse_is_down)
     {
-        if (((double) gui->pots[potnbr].percent + (double) gui->event.motion.yrel * (double) POT_INCREMENT) > 100)
+        param_is_being_mouse_changed = potnbr;
+        if (((double) gui->pots[potnbr].percent - (double) gui->event.motion.yrel) > 100)
         {
             gui->pots[potnbr].percent = 100;
         }
-        else if (((double) gui->pots[potnbr].percent + (double) gui->event.motion.yrel * (double) POT_INCREMENT) < 0)
+        else if (((double) gui->pots[potnbr].percent - (double) gui->event.motion.yrel) < 0)
         {
             gui->pots[potnbr].percent = 0;
         }
         else
         {
-            gui->pots[potnbr].percent += gui->event.motion.yrel * POT_INCREMENT;
+            gui->pots[potnbr].percent -= gui->event.motion.yrel;
         }
     }
 }
@@ -809,7 +846,7 @@ int load_sys_param_to_gui(Gui_SDL_objects *gui, Sys_param *sys_param)
         }
     }
 
-    for (int i = 0; i < 1000 / 3; ++i)
+    for (int i = 0; i < 500 / 3; ++i)
     {
         // OSC 1
         uint16_param = gui->pots[0].param;

@@ -220,12 +220,13 @@ int process_switches(Gui_SDL_objects *gui, Core *audio_core);
  *
  * \param gui The Gui_SDL_objects
  * \param audio_core The system's audio core
+ * \param mouse_is_down Flag for mouse button pressed down
  *
  * \return 0 if everything went OK, -1 otherwise
  */
-int process_pots(Gui_SDL_objects *gui, Core *audio_core);
+int process_pots(Gui_SDL_objects *gui, Core *audio_core, Uint8 mouse_is_down);
 
-int change_pot_percent(Gui_SDL_objects *gui, int potnbr);
+int change_pot_percent(Gui_SDL_objects *gui, int potnbr, Uint8 mouse_is_down);
 
 /**
  * \fn int load_sys_param_to_gui(Gui_SDL_objects *gui, Sys_param *sys_param)
