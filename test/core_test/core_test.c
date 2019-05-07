@@ -253,7 +253,6 @@ void test_delay(void **state)
 
     // Error behaviour test
     assert_int_equal(delay(NULL, TEST_AUDIO_BUFF_SIZE, TEST_SAMPLE_RATE, 100, 50), -1);
-    assert_int_equal(delay(ac->master_audio, TEST_AUDIO_BUFF_SIZE, TEST_SAMPLE_RATE, 500000, 50), -1);
     assert_int_equal(delay(ac->master_audio, TEST_AUDIO_BUFF_SIZE, TEST_SAMPLE_RATE, 100, 101), -1);
 
     // Normal behaviour test
