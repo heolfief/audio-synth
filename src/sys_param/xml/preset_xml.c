@@ -48,7 +48,7 @@ int load_preset(const char *filename, Sys_param *sys_param, int absolute_mode)
     strcat(filename_relat, filename);
 
     // Parse XML file
-    if (absolute_mode)
+    if (absolute_mode == ABSOLUTE_PATH_MODE)
     {
         doc = xmlParseFile(filename);
     }
@@ -242,7 +242,7 @@ int save_preset(const char *filename, Sys_param *sys_param, int absolute_mode)
     xmlNewChild(node_delay, NULL, BAD_CAST "delay", (xmlChar *) double_to_char(sys_param->delay_param->delay));
     xmlNewChild(node_delay, NULL, BAD_CAST "feedback", (xmlChar *) double_to_char(sys_param->delay_param->feedback));
 
-    if (absolute_mode)
+    if (absolute_mode == ABSOLUTE_PATH_MODE)
     {
         xmlSaveFormatFileEnc(filename, doc, "UTF-8", 1);
     }
