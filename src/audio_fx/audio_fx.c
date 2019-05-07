@@ -183,7 +183,7 @@ int delay(Audio_Buffer buff, Uint16 buffer_length, Uint32 sample_rate, double de
         return -1;
     }
 
-    if (feedback > 100 || delay > (1000.0 * (double) MAX_SAMPLE_DELAY_LINE / (double) sample_rate))
+    if (feedback > 100/* || delay > (1000.0 * (double) MAX_SAMPLE_DELAY_LINE / (double) sample_rate)*/)
     {
         sys_print_error("Parameter is out of range");
         return -1;

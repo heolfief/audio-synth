@@ -49,13 +49,13 @@ int main(int argc, char *argv[])
         exit(EXIT_FAILURE);
     }
 
-    if (load_preset("default.prst", audio_core->sys_param))
+    if (load_preset("default.prst", audio_core->sys_param, 0))
     {
         sys_print_error("Failed loading preset");
         exit(EXIT_FAILURE);
     }
 
-    save_preset("save_test.prst", audio_core->sys_param);
+    save_preset("save_test.prst", audio_core->sys_param, 0);
 
 #ifndef VALGRIND
 
@@ -63,7 +63,7 @@ int main(int argc, char *argv[])
     if (midi_peripheral == -1)
     {
         sys_print_error("Failed opening MIDI device. Aborting.");
-        exit(EXIT_FAILURE);
+//        exit(EXIT_FAILURE);
     }
 
     set_audio_spec(&as, audio_core);
@@ -78,6 +78,7 @@ int main(int argc, char *argv[])
     if (init_gui(gui))exit(EXIT_FAILURE);
     if (create_switches_map(gui, audio_core->sys_param))exit(EXIT_FAILURE);
     if (create_pots_map(gui, audio_core->sys_param))exit(EXIT_FAILURE);
+    if (create_buttons_map(gui))exit(EXIT_FAILURE);
     if (load_sys_param_to_gui(gui, audio_core->sys_param))exit((EXIT_FAILURE));
     if (gui_update(gui))exit(EXIT_FAILURE);
 
@@ -97,12 +98,13 @@ int main(int argc, char *argv[])
 
     while (!gui->application_quit)
     {
-        if (process_midi_input(midi_peripheral, audio_core))exit(EXIT_FAILURE);
+//        if (process_midi_input(midi_peripheral, audio_core))exit(EXIT_FAILURE);
 
         while (SDL_PollEvent(&gui->event))
         {
             if (process_switches(gui, audio_core))exit(EXIT_FAILURE);
             if (process_pots(gui, audio_core, mouse_is_down))exit(EXIT_FAILURE);
+            if (process_buttons(gui, audio_core))exit(EXIT_FAILURE);
 
             switch (gui->event.type)
             {

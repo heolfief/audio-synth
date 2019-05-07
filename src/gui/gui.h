@@ -22,10 +22,20 @@
 #define APPLICATION_IMAGE_POT_WIDTH 45
 #define APPLICATION_IMAGE_POT_HEIGHT 45
 
+#define APPLICATION_IMAGE_BUTTON_WIDTH 38
+#define APPLICATION_IMAGE_BUTTON_HEIGHT 19
+
+#define APPLICATION_IMAGE_BUTTON_LOAD_PRESSED "../src/gui/Figs/bt_load_p.png"
+#define APPLICATION_IMAGE_BUTTON_LOAD_UNPRESSED "../src/gui/Figs/bt_load_r.png"
+
+#define APPLICATION_IMAGE_BUTTON_SAVE_PRESSED "../src/gui/Figs/bt_save_p.png"
+#define APPLICATION_IMAGE_BUTTON_SAVE_UNPRESSED "../src/gui/Figs/bt_save_r.png"
+
 #define POT_INCREMENT 1
 
 #define NUMBER_OF_SWITCHES 11
 #define NUMBER_OF_POTS 32
+#define NUMBER_OF_BUTTONS 2
 
 #define APPLICATION_WINDOW_WIDTH 1300
 #define APPLICATION_WINDOW_HEIGHT 810
@@ -39,6 +49,8 @@
 #include "../sys_param/sys_param.h"
 #include "../system/error_handler.h"
 #include "SDL_Button.h"
+#include "tinyfiledialogs.h"
+#include "../sys_param/xml/preset_xml.h"
 
 /**
  * \struct Switch
@@ -53,9 +65,24 @@ typedef struct
   Uint16 height;              /*!<the height (in pixels) */
   char *imgon;                /*!<the image of the ON button */
   char *imgoff;               /*!<the image of the OFF button */
-  OnOff onoff;                /*!<the percentage set by the user of the switch */
+  OnOff onoff;                /*!<the on/off value of the switch */
   void *param;                /*!<the parameter set by the switch */
 } Switch;
+
+/**
+ * \struct Button
+ * \brief define a graphical Button
+ */
+typedef struct
+{
+  SDL_Button_t *sdl_button;   /*!<the SDL related objects for the button */
+  Uint16 posX;                /*!<the X position on the screen (in pixels) */
+  Uint16 posY;                /*!<the Y position on the screen (in pixels) */
+  Uint16 width;               /*!<the width (in pixels) */
+  Uint16 height;              /*!<the height (in pixels) */
+  char *imgon;                /*!<the image of the ON button */
+  char *imgoff;               /*!<the image of the OFF button */
+} Button;
 
 /**
  * \struct Potentiometer
@@ -108,6 +135,7 @@ typedef struct
   Mouse_position *mouse_position;
   Switch *switches;
   Potentiometer *pots;
+  Button *buttons;
 } Gui_SDL_objects;
 
 /**
@@ -193,6 +221,16 @@ int gui_set_switch_image(SDL_Button_t *button, char *path_to_image);
 int create_switches_map(Gui_SDL_objects *gui, Sys_param *sys_param);
 
 /**
+ * \fn int create_buttons_map(Gui_SDL_objects *gui)
+ * \brief Function to place and initialize GUI buttons
+ *
+ * \param gui The Gui_SDL_objects
+ *
+ * \return 0 if everything went OK, -1 otherwise
+ */
+int create_buttons_map(Gui_SDL_objects *gui);
+
+/**
  * \fn int create_pots_map(Gui_SDL_objects *gui, Sys_param *sys_param)
  * \brief Function to place and initialize GUI potentiometers
  *
@@ -205,7 +243,7 @@ int create_pots_map(Gui_SDL_objects *gui, Sys_param *sys_param);
 
 /**
  * \fn int process_buttons(Gui_SDL_objects *gui)
- * \brief Function to check buttons status, change parameter accordingly and update button image
+ * \brief Function to check switches status, change parameter accordingly and update switch image
  *
  * \param gui The Gui_SDL_objects
  * \param audio_core The system's audio core
@@ -213,6 +251,17 @@ int create_pots_map(Gui_SDL_objects *gui, Sys_param *sys_param);
  * \return 0 if everything went OK, -1 otherwise
  */
 int process_switches(Gui_SDL_objects *gui, Core *audio_core);
+
+/**
+ * \fn int process_buttons(Gui_SDL_objects *gui, Core *audio_core)
+ * \brief Function to check buttons status, change parameter accordingly and update button image
+ *
+ * \param gui The Gui_SDL_objects
+ * \param audio_core The system's audio core
+ *
+ * \return 0 if everything went OK, -1 otherwise
+ */
+int process_buttons(Gui_SDL_objects *gui, Core *audio_core);
 
 /**
  * \fn int process_pots(Gui_SDL_objects *gui)
@@ -226,6 +275,16 @@ int process_switches(Gui_SDL_objects *gui, Core *audio_core);
  */
 int process_pots(Gui_SDL_objects *gui, Core *audio_core, Uint8 mouse_is_down);
 
+/**
+ * \fn int change_pot_percent(Gui_SDL_objects *gui, int potnbr, Uint8 mouse_is_down)
+ * \brief Function to check change pot percent according to mouse movement or mousewheel
+ *
+ * \param gui The Gui_SDL_objects
+ * \param potnbr the number of the pot being processed
+ * \param mouse_is_down flag if mouse button is pressed
+ *
+ * \return 0 if everything went OK, -1 otherwise
+ */
 int change_pot_percent(Gui_SDL_objects *gui, int potnbr, Uint8 mouse_is_down);
 
 /**
