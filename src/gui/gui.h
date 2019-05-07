@@ -31,11 +31,16 @@
 #define APPLICATION_IMAGE_BUTTON_SAVE_PRESSED "../src/gui/Figs/bt_save_p.png"
 #define APPLICATION_IMAGE_BUTTON_SAVE_UNPRESSED "../src/gui/Figs/bt_save_r.png"
 
+#define APPLICATION_IMAGE_BUTTON_MIDI_STANDBY "../src/gui/Figs/bt_midi_standby.png"
+#define APPLICATION_IMAGE_BUTTON_MIDI_CONNECTED "../src/gui/Figs/bt_midi_connected.png"
+#define APPLICATION_IMAGE_BUTTON_MIDI_WIDTH 66
+#define APPLICATION_IMAGE_BUTTON_MIDI_HEIGHT 30
+
 #define POT_INCREMENT 1
 
 #define NUMBER_OF_SWITCHES 11
 #define NUMBER_OF_POTS 32
-#define NUMBER_OF_BUTTONS 2
+#define NUMBER_OF_BUTTONS 3
 
 #define APPLICATION_WINDOW_WIDTH 1300
 #define APPLICATION_WINDOW_HEIGHT 810
@@ -51,6 +56,7 @@
 #include "SDL_Button.h"
 #include "tinyfiledialogs.h"
 #include "../sys_param/xml/preset_xml.h"
+#include "../midi/midi.h"
 
 /**
  * \struct Switch
@@ -82,6 +88,7 @@ typedef struct
   Uint16 height;              /*!<the height (in pixels) */
   char *imgon;                /*!<the image of the ON button */
   char *imgoff;               /*!<the image of the OFF button */
+  OnOff pressed;              /*!<whether is the button is pressed or not */
 } Button;
 
 /**
@@ -253,15 +260,16 @@ int create_pots_map(Gui_SDL_objects *gui, Sys_param *sys_param);
 int process_switches(Gui_SDL_objects *gui, Core *audio_core);
 
 /**
- * \fn int process_buttons(Gui_SDL_objects *gui, Core *audio_core)
+ * \fn int process_buttons(Gui_SDL_objects *gui, Core *audio_core, MIDI_Peripheral_fd* midi_peripheral)
  * \brief Function to check buttons status, change parameter accordingly and update button image
  *
  * \param gui The Gui_SDL_objects
  * \param audio_core The system's audio core
+ * \param midi_peripheral the MIDI peripheral file descriptor address
  *
  * \return 0 if everything went OK, -1 otherwise
  */
-int process_buttons(Gui_SDL_objects *gui, Core *audio_core);
+int process_buttons(Gui_SDL_objects *gui, Core *audio_core, MIDI_Peripheral_fd* midi_peripheral);
 
 /**
  * \fn int process_pots(Gui_SDL_objects *gui)

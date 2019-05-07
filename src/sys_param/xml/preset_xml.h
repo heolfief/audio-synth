@@ -16,6 +16,17 @@
 #include "../../system/error_handler.h"
 #include "../../core/audio_core.h"
 
+/**
+ * \enum Path_mode
+ * \brief relative or absolute path mode
+ *
+ */
+typedef enum
+{
+  RELATIVE_PATH_MODE,                 /*!< Relative path mode (to the exec folder) */
+  ABSOLUTE_PATH_MODE,                 /*!< Absolute path mode */
+} Path_mode;
+
 #define xmlvalue    children->content
 
 // In XML file, each tab is considered as a child. Therefore there is a "next->" statement in between each pair of "next" statements.

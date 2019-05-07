@@ -24,8 +24,8 @@ int main(int argc, char *argv[])
 {
     SDL_AudioSpec as;
     Core *audio_core;
-    MIDI_Peripheral_fd midi_peripheral;
     Gui_SDL_objects *gui;
+    MIDI_Peripheral_fd midi_peripheral = -1;
     Uint8 mouse_is_down = 0;
 
     // Default parameters. If buffer_len changed, core memory allocation needs to be redone
@@ -49,22 +49,15 @@ int main(int argc, char *argv[])
         exit(EXIT_FAILURE);
     }
 
-    if (load_preset("default.prst", audio_core->sys_param, 0))
+    if (load_preset("default.prst", audio_core->sys_param, RELATIVE_PATH_MODE))
     {
         sys_print_error("Failed loading preset");
         exit(EXIT_FAILURE);
     }
 
-    save_preset("save_test.prst", audio_core->sys_param, 0);
+    save_preset("save_test.prst", audio_core->sys_param, RELATIVE_PATH_MODE);
 
 #ifndef VALGRIND
-
-    midi_peripheral = open_midi_peripheral();
-    if (midi_peripheral == -1)
-    {
-        sys_print_error("Failed opening MIDI device. Aborting.");
-//        exit(EXIT_FAILURE);
-    }
 
     set_audio_spec(&as, audio_core);
 
@@ -98,13 +91,25 @@ int main(int argc, char *argv[])
 
     while (!gui->application_quit)
     {
-//        if (process_midi_input(midi_peripheral, audio_core))exit(EXIT_FAILURE);
+        if (midi_peripheral != -1)
+        {
+            if (process_midi_input(&midi_peripheral, audio_core))exit(EXIT_FAILURE);
+
+            if (midi_peripheral == -2)
+            {
+                midi_peripheral = -1;
+                gui->buttons[2].pressed = 0;
+                if (gui_set_switch_image(gui->buttons[2].sdl_button, gui->buttons[2].imgoff))return -1;
+                if (gui_update(gui))return -1;
+                tinyfd_messageBox(NULL, "MIDI device disconnected", "ok", "info", 1);
+            }
+        }
 
         while (SDL_PollEvent(&gui->event))
         {
             if (process_switches(gui, audio_core))exit(EXIT_FAILURE);
             if (process_pots(gui, audio_core, mouse_is_down))exit(EXIT_FAILURE);
-            if (process_buttons(gui, audio_core))exit(EXIT_FAILURE);
+            if (process_buttons(gui, audio_core, &midi_peripheral))exit(EXIT_FAILURE);
 
             switch (gui->event.type)
             {

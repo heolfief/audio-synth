@@ -61,7 +61,8 @@ static const int pots_location[NUMBER_OF_POTS][2] = {
 
 static const int buttons_location[NUMBER_OF_BUTTONS][2] = {
     {103, 585},
-    {103, 610}
+    {103, 610},
+    {100, 660}
 };
 
 static double map(double x, double in_min, double in_max, double out_min, double out_max)
@@ -315,16 +316,24 @@ int create_buttons_map(Gui_SDL_objects *gui)
 
     gui->buttons[0].imgon = APPLICATION_IMAGE_BUTTON_LOAD_PRESSED;
     gui->buttons[0].imgoff = APPLICATION_IMAGE_BUTTON_LOAD_UNPRESSED;
+    gui->buttons[0].width = APPLICATION_IMAGE_BUTTON_WIDTH;
+    gui->buttons[0].height = APPLICATION_IMAGE_BUTTON_HEIGHT;
 
     gui->buttons[1].imgon = APPLICATION_IMAGE_BUTTON_SAVE_PRESSED;
     gui->buttons[1].imgoff = APPLICATION_IMAGE_BUTTON_SAVE_UNPRESSED;
+    gui->buttons[1].width = APPLICATION_IMAGE_BUTTON_WIDTH;
+    gui->buttons[1].height = APPLICATION_IMAGE_BUTTON_HEIGHT;
+
+    gui->buttons[2].imgon = APPLICATION_IMAGE_BUTTON_MIDI_CONNECTED;
+    gui->buttons[2].imgoff = APPLICATION_IMAGE_BUTTON_MIDI_STANDBY;
+    gui->buttons[2].width = APPLICATION_IMAGE_BUTTON_MIDI_WIDTH;
+    gui->buttons[2].height = APPLICATION_IMAGE_BUTTON_MIDI_HEIGHT;
 
     for (int bt = 0; bt < NUMBER_OF_BUTTONS; ++bt)
     {
+        gui->buttons[bt].pressed = 0;
         gui->buttons[bt].posX = buttons_location[bt][0];
         gui->buttons[bt].posY = buttons_location[bt][1];
-        gui->buttons[bt].width = APPLICATION_IMAGE_BUTTON_WIDTH;
-        gui->buttons[bt].height = APPLICATION_IMAGE_BUTTON_HEIGHT;
         gui->buttons[bt].sdl_button =
             gui_create_button(gui->buttons[bt].posX, gui->buttons[bt].posY, gui->buttons[bt].width, gui->buttons[bt].height, gui->buttons[bt].imgoff);
     }
@@ -537,7 +546,7 @@ int process_switches(Gui_SDL_objects *gui, Core *audio_core)
     return 0;
 }
 
-int process_buttons(Gui_SDL_objects *gui, Core *audio_core)
+int process_buttons(Gui_SDL_objects *gui, Core *audio_core, MIDI_Peripheral_fd *midi_peripheral)
 {
     int param_changed = 0;
     int reload_param = 0;
@@ -556,9 +565,9 @@ int process_buttons(Gui_SDL_objects *gui, Core *audio_core)
         if (gui_set_switch_image(gui->buttons[0].sdl_button, gui->buttons[0].imgon))return -1;
         if (gui_update(gui))return -1;
 
-        lTheSaveFileName = tinyfd_openFileDialog("Load a preset", "../presets/.prst", 1, lFilterPatterns, NULL, 0);
+        lTheSaveFileName = tinyfd_openFileDialog("Load a preset", "../presets", 1, lFilterPatterns, NULL, 0);
         if (!lTheSaveFileName) return 0;
-        if (load_preset(lTheSaveFileName, audio_core->sys_param, 1))return -1;
+        if (load_preset(lTheSaveFileName, audio_core->sys_param, ABSOLUTE_PATH_MODE))return -1;
 
         if (gui_set_switch_image(gui->buttons[0].sdl_button, gui->buttons[0].imgoff))return -1;
         param_changed = 1;
@@ -573,10 +582,29 @@ int process_buttons(Gui_SDL_objects *gui, Core *audio_core)
 
         lTheSaveFileName = tinyfd_saveFileDialog("Load a preset", "../presets/.prst", 1, lFilterPatterns, NULL);
         if (!lTheSaveFileName) return 0;
-        if (save_preset(lTheSaveFileName, audio_core->sys_param, 1))return -1;
+        if (save_preset(lTheSaveFileName, audio_core->sys_param, ABSOLUTE_PATH_MODE))return -1;
 
         if (gui_set_switch_image(gui->buttons[1].sdl_button, gui->buttons[1].imgoff))return -1;
         param_changed = 1;
+    }
+
+    // Button MIDI connect
+    if (SDL_Button_mouse_down(gui->buttons[2].sdl_button, &gui->event))
+    {
+        if (gui->buttons[2].pressed == 0)
+        {
+            *midi_peripheral = open_midi_peripheral();
+            if (*midi_peripheral == -1)
+            {
+                sys_print_error("Failed opening MIDI device.");
+                tinyfd_messageBox("Error", "No MIDI device found.", "ok", "error", 1);
+                return 0;
+            }
+
+            gui->buttons[2].pressed = 1;
+            if (gui_set_switch_image(gui->buttons[2].sdl_button, gui->buttons[2].imgon))return -1;
+            if (gui_update(gui))return -1;
+        }
     }
 
     if (param_changed)

@@ -13,6 +13,8 @@
 #include <string.h>
 #include <SDL2/SDL_stdinc.h>
 #include <fcntl.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 #include <unistd.h>
 #include "../system/error_handler.h"
 #include "../core/audio_core.h"
@@ -39,12 +41,12 @@ MIDI_Peripheral_fd open_midi_peripheral();
  * \fn int process_midi_input(MIDI_PERIPHERAL* mp, Core* ac)
  * \brief Function to process MIDI input from the opened MIDI peripheral and set the audio core to create notes associated with MIDI input
  *
- * \param mp The midi peripheral file descriptor
+ * \param mp The midi peripheral file descriptor address
  * \param ac The audio core structure of the system
  *
  * \return 0 if everything went OK, -1 otherwise
  */
-int process_midi_input(MIDI_Peripheral_fd mp, Core *ac);
+int process_midi_input(MIDI_Peripheral_fd* mp, Core *ac);
 
 /**
  * \fn int midi_note_ON(Core *ac, Uint8 id, Uint8 velo)

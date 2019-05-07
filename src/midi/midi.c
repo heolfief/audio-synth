@@ -46,15 +46,16 @@ MIDI_Peripheral_fd open_midi_peripheral()
     return -1;
 }
 
-int process_midi_input(MIDI_Peripheral_fd mp, Core *ac)
+int process_midi_input(MIDI_Peripheral_fd* mp, Core *ac)
 {
     Uint8 midi_data[3]; // 0 is status, 1 is note id, 2 is note velocity
     Uint8 midi_status;
+    struct stat s;
 
-    if (mp == -1)
+    // If MIDI device disconnected, do nothing
+    if (*mp == -1 || *mp == -2)
     {
-        sys_print_error("MIDI peripheral file descriptor is unknown");
-        return -1;
+        return 0;
     }
 
     if (ac == NULL)
@@ -63,7 +64,16 @@ int process_midi_input(MIDI_Peripheral_fd mp, Core *ac)
         return -1;
     }
 
-    read(mp,&midi_data,3);
+    fstat(*mp, &s);
+
+    if( s.st_nlink < 1 )
+    {
+        close_midi_peripheral(*mp);
+        *mp = -2;
+        return 0;
+    }
+
+    read(*mp,&midi_data,3);
 
     midi_status = midi_data[0] >> 4u;
 
