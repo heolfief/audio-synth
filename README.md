@@ -73,6 +73,6 @@ LICENSING
 DSP part of filters in this project are taken from https://github.com/voidqk/sndfilter,
 and are designed by Sean Connelly (@voidqk) who used the chromium code source. His work is licensed under MIT license.
 
-SDL_Button library is from author : Tim Smith (tim14smith@gmail.com). (No license provided for now, author have been contacted)
+SDL_Button library is licensed under the MIT License and is from author : Tim Smith (tim14smith@gmail.com).  Source : https://github.com/tim14smith/SDL_Button
 
 Tiny file dialogs library is licensed with zlib licence. Copyright (c) 2014 - 2018 Guillaume Vareille http://ysengrin.com . Source : http://tinyfiledialogs.sourceforge.net
