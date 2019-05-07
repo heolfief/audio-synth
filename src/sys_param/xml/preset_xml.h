@@ -130,12 +130,13 @@ int write_XML_param(xmlChar *param, double value);
  * \fn int load_preset(const char* filename)
  * \brief Load system parameters from an XML preset file
  *
- * \param filename the name of the preset file (relative to project's root folder)
+ * \param filename the name of the preset file
  * \param sys_param the system parameters
+ * \param absolute_mode if path is absolute (filename is the full path)
  *
  * \return 0 if everything went OK, -1 otherwise
  */
-int load_preset(const char *filename, Sys_param *sysParam);
+int load_preset(const char *filename, Sys_param *sysParam, int absolute_mode);
 
 /**
  * \fn int save_preset(const char* filename)
@@ -143,9 +144,10 @@ int load_preset(const char *filename, Sys_param *sysParam);
  *
  * \param filename the name of the preset file (relative to project's root folder)
  * \param sys_param the system parameters
+ * \param absolute_mode if path is absolute (filename is the full path)
  *
  * \return 0 if everything went OK, -1 otherwise
  */
-int save_preset(const char *filename, Sys_param *sysParam);
+int save_preset(const char *filename, Sys_param *sysParam, int absolute_mode);
 
 #endif //AUDIO_SYNTH_PRESET_XML_H

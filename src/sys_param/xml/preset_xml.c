@@ -33,11 +33,11 @@ int write_XML_param(xmlChar *param, double value)
     return 0;
 }
 
-int load_preset(const char *filename, Sys_param *sys_param)
+int load_preset(const char *filename, Sys_param *sys_param, int absolute_mode)
 {
     xmlDocPtr doc = NULL;
-    char filename_relat[30] = "../presets/";
-    char filename_relat_alternate[30] = "presets/";
+    char filename_relat[100] = "../presets/";
+    char filename_relat_alternate[100] = "presets/";
 
     if (filename == NULL)
     {
@@ -48,7 +48,14 @@ int load_preset(const char *filename, Sys_param *sys_param)
     strcat(filename_relat, filename);
 
     // Parse XML file
-    doc = xmlParseFile(filename_relat);
+    if (absolute_mode)
+    {
+        doc = xmlParseFile(filename);
+    }
+    else
+    {
+        doc = xmlParseFile(filename_relat);
+    }
     if (doc == NULL)
     {
         printf("Retying with alternate path : \n");
@@ -148,9 +155,9 @@ static char *double_to_char(double value)
     return buff;
 }
 
-int save_preset(const char *filename, Sys_param *sys_param)
+int save_preset(const char *filename, Sys_param *sys_param, int absolute_mode)
 {
-    char filename_relat[30] = "../presets/";
+    char filename_relat[100] = "../presets/";
     xmlDocPtr doc;
     xmlNodePtr root_node, node_osc1, node_osc2, node_osc3, node_env, node_filter, node_dist, node_amp_mod, node_flanger,
         node_lfo_filter, node_delay;
@@ -235,7 +242,14 @@ int save_preset(const char *filename, Sys_param *sys_param)
     xmlNewChild(node_delay, NULL, BAD_CAST "delay", (xmlChar *) double_to_char(sys_param->delay_param->delay));
     xmlNewChild(node_delay, NULL, BAD_CAST "feedback", (xmlChar *) double_to_char(sys_param->delay_param->feedback));
 
-    xmlSaveFormatFileEnc(filename_relat, doc, "UTF-8", 1);
+    if (absolute_mode)
+    {
+        xmlSaveFormatFileEnc(filename, doc, "UTF-8", 1);
+    }
+    else
+    {
+        xmlSaveFormatFileEnc(filename_relat, doc, "UTF-8", 1);
+    }
 
     xmlFreeDoc(doc);
 
