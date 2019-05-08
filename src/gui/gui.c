@@ -65,6 +65,41 @@ static const int buttons_location[NUMBER_OF_BUTTONS][2] = {
     {100, 660}
 };
 
+static const int pot_min_max[NUMBER_OF_POTS][2] = {
+    {0, 32000},
+    {0,100},
+    {-24,24},   
+    {0, 32000},
+    {0,100},
+    {-24,24},
+    {0, 32000},
+    {0,100},
+    {-24,24},
+    {0,1},
+    {0,2},
+    {0,1},
+    {0,2},
+    {0,100},
+    {0,100},
+    {0,100},
+    {1,500},
+    {0,100},
+    {0,30},
+    {0,100},
+    {0,100},
+    {0,20},
+    {0,20},
+    {0,100},
+    {0,100},
+    {0,15000},
+    {0,5000},
+    {0,20},
+    {0,30},
+    {0,20},
+    {0,20000},
+    {0,20}
+};
+
 static double map(double x, double in_min, double in_max, double out_min, double out_max)
 {
     return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
@@ -354,6 +389,8 @@ int create_pots_map(Gui_SDL_objects *gui, Sys_param *sys_param)
         gui->pots[pot].img = APPLICATION_IMAGE_POT;
         gui->pots[pot].posX = pots_location[pot][0];
         gui->pots[pot].posY = pots_location[pot][1];
+        gui->pots[pot].paramMIN = pot_min_max[pot][0];
+        gui->pots[pot].paramMAX = pot_min_max[pot][1];
         gui->pots[pot].width = APPLICATION_IMAGE_POT_WIDTH;
         gui->pots[pot].height = APPLICATION_IMAGE_POT_HEIGHT;
         gui->pots[pot].sdl_pot =
@@ -367,132 +404,37 @@ int create_pots_map(Gui_SDL_objects *gui, Sys_param *sys_param)
     }
 
     gui->pots[0].param = &sys_param->osc1->amp;
-    gui->pots[0].paramMIN = 0;
-    gui->pots[0].paramMAX = 32000;
-
     gui->pots[1].param = &sys_param->osc1->duty;
-    gui->pots[1].paramMIN = 0;
-    gui->pots[1].paramMAX = 100;
-
     gui->pots[2].param = &sys_param->osc1->detune;
-    gui->pots[2].paramMIN = -12;
-    gui->pots[2].paramMAX = 12;
-
     gui->pots[3].param = &sys_param->osc2->amp;
-    gui->pots[3].paramMIN = 0;
-    gui->pots[3].paramMAX = 32000;
-
     gui->pots[4].param = &sys_param->osc2->duty;
-    gui->pots[4].paramMIN = 0;
-    gui->pots[4].paramMAX = 100;
-
     gui->pots[5].param = &sys_param->osc2->detune;
-    gui->pots[5].paramMIN = -12;
-    gui->pots[5].paramMAX = 12;
-
     gui->pots[6].param = &sys_param->osc3->amp;
-    gui->pots[6].paramMIN = 0;
-    gui->pots[6].paramMAX = 32000;
-
     gui->pots[7].param = &sys_param->osc3->duty;
-    gui->pots[7].paramMIN = 0;
-    gui->pots[7].paramMAX = 100;
-
     gui->pots[8].param = &sys_param->osc3->detune;
-    gui->pots[8].paramMIN = -12;
-    gui->pots[8].paramMAX = 12;
-
     gui->pots[9].param = &sys_param->env->attack;
-    gui->pots[9].paramMIN = 0;
-    gui->pots[9].paramMAX = 1;
-
     gui->pots[10].param = &sys_param->env->decay;
-    gui->pots[10].paramMIN = 0;
-    gui->pots[10].paramMAX = 2;
-
     gui->pots[11].param = &sys_param->env->sustain;
-    gui->pots[11].paramMIN = 0;
-    gui->pots[11].paramMAX = 1;
-
     gui->pots[12].param = &sys_param->env->release;
-    gui->pots[12].paramMIN = 0;
-    gui->pots[12].paramMAX = 2;
-
     gui->pots[13].param = &sys_param->master_volume;
-    gui->pots[13].paramMIN = 0;
-    gui->pots[13].paramMAX = 100;
-
     gui->pots[14].param = &sys_param->dist_param->dist_level;
-    gui->pots[14].paramMIN = 0;
-    gui->pots[14].paramMAX = 100;
-
     gui->pots[15].param = &sys_param->dist_param->wet;
-    gui->pots[15].paramMIN = 0;
-    gui->pots[15].paramMAX = 100;
-
     gui->pots[16].param = &sys_param->delay_param->delay;
-    gui->pots[16].paramMIN = 0;
-    gui->pots[16].paramMAX = 500;
-
     gui->pots[17].param = &sys_param->delay_param->feedback;
-    gui->pots[17].paramMIN = 2;
-    gui->pots[17].paramMAX = 100;
-
     gui->pots[18].param = &sys_param->amp_mod_param->freq;
-    gui->pots[18].paramMIN = 0;
-    gui->pots[18].paramMAX = 30;
-
     gui->pots[19].param = &sys_param->amp_mod_param->duty;
-    gui->pots[19].paramMIN = 0;
-    gui->pots[19].paramMAX = 100;
-
     gui->pots[20].param = &sys_param->amp_mod_param->mod_level;
-    gui->pots[20].paramMIN = 0;
-    gui->pots[20].paramMAX = 100;
-
     gui->pots[21].param = &sys_param->flanger_param->lfo_freq;
-    gui->pots[21].paramMIN = 0;
-    gui->pots[21].paramMAX = 20;
-
     gui->pots[22].param = &sys_param->flanger_param->delay;
-    gui->pots[22].paramMIN = 0;
-    gui->pots[22].paramMAX = 20;
-
     gui->pots[23].param = &sys_param->flanger_param->lfo_range;
-    gui->pots[23].paramMIN = 0;
-    gui->pots[23].paramMAX = 100;
-
     gui->pots[24].param = &sys_param->flanger_param->depth;
-    gui->pots[24].paramMIN = 0;
-    gui->pots[24].paramMAX = 100;
-
     gui->pots[25].param = &sys_param->lfo_filter_param->filter_freq;
-    gui->pots[25].paramMIN = 0;
-    gui->pots[25].paramMAX = 15000;
-
     gui->pots[26].param = &sys_param->lfo_filter_param->filter_excursion;
-    gui->pots[26].paramMIN = 0;
-    gui->pots[26].paramMAX = 10000;
-
     gui->pots[27].param = &sys_param->lfo_filter_param->lfo_freq;
-    gui->pots[27].paramMIN = 0;
-    gui->pots[27].paramMAX = 20;
-
     gui->pots[28].param = &sys_param->lfo_filter_param->duty;
-    gui->pots[28].paramMIN = 0;
-    gui->pots[28].paramMAX = 30;
-
     gui->pots[29].param = &sys_param->lfo_filter_param->resonance;
-    gui->pots[29].paramMIN = 0;
-    gui->pots[29].paramMAX = 20;
-
     gui->pots[30].param = &sys_param->filter_param->cutoff_freq;
-    gui->pots[30].paramMIN = 0;
-    gui->pots[30].paramMAX = 20000;
-
     gui->pots[31].param = &sys_param->filter_param->resonance;
-    gui->pots[31].paramMIN = 0;
-    gui->pots[31].paramMAX = 20;
 
     return 0;
 }
@@ -1064,266 +1006,202 @@ int load_sys_param_to_gui(Gui_SDL_objects *gui, Sys_param *sys_param)
         // OSC 1
         uint16_param = gui->pots[0].param;
         if (gui->pots[0].percent < (Uint16) map(*uint16_param, gui->pots[0].paramMIN, gui->pots[0].paramMAX, 0, 100))
-        {
-            gui->pots[0].percent++;
-        }
+        { gui->pots[0].percent++; }
         else
         { gui->pots[0].percent--; }
 
         uint8_param = gui->pots[1].param;
         if (gui->pots[1].percent < (Uint8) map(*uint8_param, gui->pots[1].paramMIN, gui->pots[1].paramMAX, 0, 100))
-        {
-            gui->pots[1].percent++;
-        }
+        { gui->pots[1].percent++; }
         else
         { gui->pots[1].percent--; }
 
         sint8_param = gui->pots[2].param;
         if (gui->pots[2].percent < (Uint8) map(*sint8_param, gui->pots[2].paramMIN, gui->pots[2].paramMAX, 0, 100))
-        {
-            gui->pots[2].percent++;
-        }
+        { gui->pots[2].percent++; }
         else
         { gui->pots[2].percent--; }
 
         // OSC 2
         uint16_param = gui->pots[3].param;
         if (gui->pots[3].percent < (Uint16) map(*uint16_param, gui->pots[3].paramMIN, gui->pots[3].paramMAX, 0, 100))
-        {
-            gui->pots[3].percent++;
-        }
+        { gui->pots[3].percent++; }
         else
         { gui->pots[3].percent--; }
 
         uint8_param = gui->pots[4].param;
         if (gui->pots[4].percent < (Uint8) map(*uint8_param, gui->pots[4].paramMIN, gui->pots[4].paramMAX, 0, 100))
-        {
-            gui->pots[4].percent++;
-        }
+        { gui->pots[4].percent++; }
         else
         { gui->pots[4].percent--; }
 
         sint8_param = gui->pots[5].param;
         if (gui->pots[5].percent < (Uint8) map(*sint8_param, gui->pots[5].paramMIN, gui->pots[5].paramMAX, 0, 100))
-        {
-            gui->pots[5].percent++;
-        }
+        { gui->pots[5].percent++; }
         else
         { gui->pots[5].percent--; }
 
         // OSC 3
         uint16_param = gui->pots[6].param;
         if (gui->pots[6].percent < (Uint16) map(*uint16_param, gui->pots[6].paramMIN, gui->pots[6].paramMAX, 0, 100))
-        {
-            gui->pots[6].percent++;
-        }
+        { gui->pots[6].percent++; }
         else
         { gui->pots[6].percent--; }
 
         uint8_param = gui->pots[1].param;
         if (gui->pots[7].percent < (Uint8) map(*uint8_param, gui->pots[7].paramMIN, gui->pots[7].paramMAX, 0, 100))
-        {
-            gui->pots[7].percent++;
-        }
+        { gui->pots[7].percent++; }
         else
         { gui->pots[7].percent--; }
 
         sint8_param = gui->pots[8].param;
         if (gui->pots[8].percent < (Uint8) map(*sint8_param, gui->pots[8].paramMIN, gui->pots[8].paramMAX, 0, 100))
-        {
-            gui->pots[8].percent++;
-        }
+        { gui->pots[8].percent++; }
         else
         { gui->pots[8].percent--; }
 
         // Envelope
         double_param = gui->pots[9].param;
         if (gui->pots[9].percent < (Uint8) map(*double_param, gui->pots[9].paramMIN, gui->pots[9].paramMAX, 0, 100))
-        {
-            gui->pots[9].percent++;
-        }
+        { gui->pots[9].percent++; }
         else
         { gui->pots[9].percent--; }
 
         double_param = gui->pots[10].param;
         if (gui->pots[10].percent < (Uint8) map(*double_param, gui->pots[10].paramMIN, gui->pots[10].paramMAX, 0, 100))
-        {
-            gui->pots[10].percent++;
-        }
+        { gui->pots[10].percent++; }
         else
         { gui->pots[10].percent--; }
 
         double_param = gui->pots[11].param;
         if (gui->pots[11].percent < (Uint8) map(*double_param, gui->pots[11].paramMIN, gui->pots[11].paramMAX, 0, 100))
-        {
-            gui->pots[11].percent++;
-        }
+        { gui->pots[11].percent++; }
         else
         { gui->pots[11].percent--; }
 
         double_param = gui->pots[12].param;
         if (gui->pots[12].percent < (Uint8) map(*double_param, gui->pots[12].paramMIN, gui->pots[12].paramMAX, 0, 100))
-        {
-            gui->pots[12].percent++;
-        }
+        { gui->pots[12].percent++; }
         else
         { gui->pots[12].percent--; }
 
         // Master volume
         uint8_param = gui->pots[13].param;
         if (gui->pots[13].percent < (Uint8) map(*uint8_param, gui->pots[13].paramMIN, gui->pots[13].paramMAX, 0, 100))
-        {
-            gui->pots[13].percent++;
-        }
+        { gui->pots[13].percent++; }
         else
         { gui->pots[13].percent--; }
 
         // Distortion
         uint8_param = gui->pots[14].param;
         if (gui->pots[14].percent < (Uint8) map(*uint8_param, gui->pots[14].paramMIN, gui->pots[14].paramMAX, 0, 100))
-        {
-            gui->pots[14].percent++;
-        }
+        { gui->pots[14].percent++; }
         else
         { gui->pots[14].percent--; }
 
         uint8_param = gui->pots[15].param;
         if (gui->pots[15].percent < (Uint8) map(*uint8_param, gui->pots[15].paramMIN, gui->pots[15].paramMAX, 0, 100))
-        {
-            gui->pots[15].percent++;
-        }
+        { gui->pots[15].percent++; }
         else
         { gui->pots[15].percent--; }
 
         // Delay
         double_param = gui->pots[16].param;
         if (gui->pots[16].percent < (Uint8) map(*double_param, gui->pots[16].paramMIN, gui->pots[16].paramMAX, 0, 100))
-        {
-            gui->pots[16].percent++;
-        }
+        { gui->pots[16].percent++; }
         else
         { gui->pots[16].percent--; }
 
         uint8_param = gui->pots[17].param;
         if (gui->pots[17].percent < (Uint8) map(*uint8_param, gui->pots[17].paramMIN, gui->pots[17].paramMAX, 0, 100))
-        {
-            gui->pots[17].percent++;
-        }
+        { gui->pots[17].percent++; }
         else
         { gui->pots[17].percent--; }
 
         // Amp mod
         double_param = gui->pots[18].param;
         if (gui->pots[18].percent < (Uint8) map(*double_param, gui->pots[18].paramMIN, gui->pots[18].paramMAX, 0, 100))
-        {
-            gui->pots[18].percent++;
-        }
+        { gui->pots[18].percent++; }
         else
         { gui->pots[18].percent--; }
 
         uint8_param = gui->pots[19].param;
         if (gui->pots[19].percent < (Uint8) map(*uint8_param, gui->pots[19].paramMIN, gui->pots[19].paramMAX, 0, 100))
-        {
-            gui->pots[19].percent++;
-        }
+        { gui->pots[19].percent++; }
         else
         { gui->pots[19].percent--; }
 
         uint8_param = gui->pots[20].param;
         if (gui->pots[20].percent < (Uint8) map(*uint8_param, gui->pots[20].paramMIN, gui->pots[20].paramMAX, 0, 100))
-        {
-            gui->pots[20].percent++;
-        }
+        { gui->pots[20].percent++; }
         else
         { gui->pots[20].percent--; }
 
         // Flanger
         double_param = gui->pots[21].param;
         if (gui->pots[21].percent < (Uint8) map(*double_param, gui->pots[21].paramMIN, gui->pots[21].paramMAX, 0, 100))
-        {
-            gui->pots[21].percent++;
-        }
+        { gui->pots[21].percent++; }
         else
         { gui->pots[21].percent--; }
 
         double_param = gui->pots[22].param;
         if (gui->pots[22].percent < (Uint8) map(*double_param, gui->pots[22].paramMIN, gui->pots[22].paramMAX, 0, 100))
-        {
-            gui->pots[22].percent++;
-        }
+        { gui->pots[22].percent++; }
         else
         { gui->pots[22].percent--; }
 
         uint8_param = gui->pots[23].param;
         if (gui->pots[23].percent < (Uint8) map(*uint8_param, gui->pots[23].paramMIN, gui->pots[23].paramMAX, 0, 100))
-        {
-            gui->pots[23].percent++;
-        }
+        { gui->pots[23].percent++; }
         else
         { gui->pots[23].percent--; }
 
         uint8_param = gui->pots[24].param;
         if (gui->pots[24].percent < (Uint8) map(*uint8_param, gui->pots[24].paramMIN, gui->pots[24].paramMAX, 0, 100))
-        {
-            gui->pots[24].percent++;
-        }
+        { gui->pots[24].percent++; }
         else
         { gui->pots[24].percent--; }
 
         // LFO filter
         uint16_param = gui->pots[25].param;
         if (gui->pots[25].percent < (Uint16) map(*uint16_param, gui->pots[25].paramMIN, gui->pots[25].paramMAX, 0, 100))
-        {
-            gui->pots[25].percent++;
-        }
+        { gui->pots[25].percent++; }
         else
         { gui->pots[25].percent--; }
 
         uint16_param = gui->pots[26].param;
         if (gui->pots[26].percent < (Uint16) map(*uint16_param, gui->pots[26].paramMIN, gui->pots[26].paramMAX, 0, 100))
-        {
-            gui->pots[26].percent++;
-        }
+        { gui->pots[26].percent++; }
         else
         { gui->pots[26].percent--; }
 
         double_param = gui->pots[27].param;
         if (gui->pots[27].percent < (Uint8) map(*double_param, gui->pots[27].paramMIN, gui->pots[27].paramMAX, 0, 100))
-        {
-            gui->pots[27].percent++;
-        }
+        { gui->pots[27].percent++; }
         else
         { gui->pots[27].percent--; }
 
         uint8_param = gui->pots[28].param;
         if (gui->pots[28].percent < (Uint8) map(*uint8_param, gui->pots[28].paramMIN, gui->pots[28].paramMAX, 0, 100))
-        {
-            gui->pots[28].percent++;
-        }
+        { gui->pots[28].percent++; }
         else
         { gui->pots[28].percent--; }
 
         double_param = gui->pots[29].param;
         if (gui->pots[29].percent < (Uint8) map(*double_param, gui->pots[29].paramMIN, gui->pots[29].paramMAX, 0, 100))
-        {
-            gui->pots[29].percent++;
-        }
+        { gui->pots[29].percent++; }
         else
         { gui->pots[29].percent--; }
 
         uint16_param = gui->pots[30].param;
         if (gui->pots[30].percent < (Uint16) map(*uint16_param, gui->pots[30].paramMIN, gui->pots[30].paramMAX, 0, 100))
-        {
-            gui->pots[30].percent++;
-        }
+        { gui->pots[30].percent++; }
         else
         { gui->pots[30].percent--; }
 
         double_param = gui->pots[31].param;
         if (gui->pots[31].percent < (Uint8) map(*double_param, gui->pots[31].paramMIN, gui->pots[31].paramMAX, 0, 100))
-        {
-            gui->pots[31].percent++;
-        }
+        { gui->pots[31].percent++; }
         else
         { gui->pots[31].percent--; }
 
