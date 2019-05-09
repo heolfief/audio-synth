@@ -61,7 +61,9 @@
 #define IMAGE_MS_SWITCH_MAX_STATES      4
 #define POT_INCREMENT                   1
 
-
+#define IMAGE_LED_GREEN                 "../src/gui/Figs/green_jauge.png"
+#define IMAGE_LED_ORANGE                "../src/gui/Figs/orange_jauge.png"
+#define IMAGE_LED_RED                   "../src/gui/Figs/red_jauge.png"
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
