@@ -10,46 +10,49 @@
 #define AUDIO_SYNTH_GUI_H
 
 #define NAME_APPLICATION "audio_synth"
-#define IMAGE_APPLICATION_BACKGROUND    "../src/gui/Figs/bg_fix_3.BMP"
+#define IMAGE_APPLICATION_BACKGROUND    "../src/gui/Figs/background.png"
 #define WIDTH_APPLICATION_WINDOW        1300
-#define HEIGHT_APPLICATION_WINDOW       810
+#define HEIGHT_APPLICATION_WINDOW       816
 
 #define NUMBER_OF_SWITCHES 11
 #define NUMBER_OF_MS_SWITCHES 8
 #define NUMBER_OF_POTS 32
+#define NUMBER_OF_BIG_POTS 5
+
+
 #define NUMBER_OF_BUTTONS 3
 
-#define IMAGE_SWITCH_ON                 "../src/gui/Figs/toggle_on.png"
-#define IMAGE_SWITCH_OFF                "../src/gui/Figs/toggle_off.png"
-#define WIDTH_SWITCH                    38
-#define HEIGHT_SWITCH                   19
+#define IMAGE_SWITCH_ON                 "../src/gui/Figs/switch_on.png"
+#define IMAGE_SWITCH_OFF                "../src/gui/Figs/switch_off.png"
+#define WIDTH_SWITCH                    40
+#define HEIGHT_SWITCH                   20
 
-#define IMAGE_MS_SWITCH_WAVE_SIN        "../src/gui/Figs/toggle_on.png"
-#define IMAGE_MS_SWITCH_WAVE_SQR        "../src/gui/Figs/toggle_off.png"
-#define IMAGE_MS_SWITCH_WAVE_TRI        "../src/gui/Figs/bt_load_p.png"
-#define IMAGE_MS_SWITCH_TYPE_LP         "../src/gui/Figs/toggle_on.png"
-#define IMAGE_MS_SWITCH_TYPE_HP         "../src/gui/Figs/toggle_off.png"
-#define IMAGE_MS_SWITCH_TYPE_BP         "../src/gui/Figs/bt_load_p.png"
-#define IMAGE_MS_SWITCH_TYPE_NOTCH      "../src/gui/Figs/bt_load_r.png"
+#define IMAGE_MS_SWITCH_WAVE_SIN        "../src/gui/Figs/sinus.png"
+#define IMAGE_MS_SWITCH_WAVE_SQR        "../src/gui/Figs/square.png"
+#define IMAGE_MS_SWITCH_WAVE_TRI        "../src/gui/Figs/triangle.png"
+#define IMAGE_MS_SWITCH_TYPE_LP         "../src/gui/Figs/lowpass.png"
+#define IMAGE_MS_SWITCH_TYPE_HP         "../src/gui/Figs/highpass.png"
+#define IMAGE_MS_SWITCH_TYPE_BP         "../src/gui/Figs/bandpass.png"
+#define IMAGE_MS_SWITCH_TYPE_NOTCH      "../src/gui/Figs/notch.png"
 #define WIDTH_MS_SWITCH_WIDTH           60
-#define HEIGHT_MS_SWITCH                30
+#define HEIGHT_MS_SWITCH                28
 
-#define IMAGE_POT_SMALL                 "../src/gui/Figs/pot.png"
+#define IMAGE_POT_SMALL                 "../src/gui/Figs/small_pot.png"
 #define WIDTH_POT_SMALL                 45
-#define HEIGHT_POT_SMALL                45
+#define HEIGHT_POT_SMALL                46
 
-#define IMAGE_POT_LARGE                 "../src/gui/Figs/pot.png"
-#define WIDTH_POT_LARGE                 65
-#define HEIGHT_POT_LARGE                65
+#define IMAGE_POT_BIG                 "../src/gui/Figs/big_pot.png"
+#define WIDTH_POT_BIG                 65
+#define HEIGHT_POT_BIG                65
 
-#define IMAGE_BUTTON_LOAD_PRESSED       "../src/gui/Figs/bt_load_p.png"
-#define IMAGE_BUTTON_LOAD_UNPRESSED     "../src/gui/Figs/bt_load_r.png"
-#define WIDTH_BUTTON_LOAD               38
+#define IMAGE_BUTTON_LOAD_PRESSED       "../src/gui/Figs/load_clicked.png"
+#define IMAGE_BUTTON_LOAD_UNPRESSED     "../src/gui/Figs/load.png"
+#define WIDTH_BUTTON_LOAD               60
 #define HEIGHT_BUTTON_LOAD              19
 
-#define IMAGE_BUTTON_SAVE_PRESSED       "../src/gui/Figs/bt_save_p.png"
-#define IMAGE_BUTTON_SAVE_UNPRESSED     "../src/gui/Figs/bt_save_r.png"
-#define WIDTH_BUTTON_SAVE               38
+#define IMAGE_BUTTON_SAVE_PRESSED       "../src/gui/Figs/save_clicked.png"
+#define IMAGE_BUTTON_SAVE_UNPRESSED     "../src/gui/Figs/save.png"
+#define WIDTH_BUTTON_SAVE               60
 #define HEIGHT_BUTTON_SAVE              19
 
 #define IMAGE_BUTTON_MIDI_STANDBY       "../src/gui/Figs/bt_midi_standby.png"
@@ -131,7 +134,8 @@ typedef struct
 typedef struct
 {
   SDL_Button_t *sdl_pot;      /*!<the SDL related objects for the potentiometer */
-  SDL_Texture *texture;       /*!<the SDL texture of the potentiometer */
+  SDL_Texture *texture;/*!<the SDL texture of the potentiometer */
+  Uint8 size;                  /*!<the size of the pot. Can be small (0) or big (1) */
   Uint16 posX;                /*!<the X position on the screen (in pixels) */
   Uint16 posY;                /*!<the Y position on the screen (in pixels) */
   Uint16 width;               /*!<the width (in pixels) */
