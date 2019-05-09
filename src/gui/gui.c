@@ -350,6 +350,24 @@ int gui_update(Gui_SDL_objects *gui)
         SDL_DestroyTexture(tmp);
     }
 
+    // For each led
+    for (int i = 0; i < NUMBER_OF_LEDS; ++i)
+    {
+        SDL_Texture
+            *tmp = SDL_CreateTextureFromSurface(gui->renderer, gui->Leds[i].sdl_Led->internal_surface);
+        if (tmp == NULL)
+        {
+            sys_print_SDL_error("Failed creating texture");
+            return -1;
+        }
+        if (SDL_RenderCopyEx(gui->renderer, tmp, NULL, gui->Leds[i].sdl_Led->location_and_size, 0, NULL, SDL_FLIP_NONE))
+        {
+            sys_print_SDL_error("Failed RenderCopy");
+            return -1;
+        }
+        SDL_DestroyTexture(tmp);
+    }
+
     // For each multi state switch
     for (int i = 0; i < NUMBER_OF_MS_SWITCHES; ++i)
     {
@@ -1658,30 +1676,30 @@ int load_sys_param_to_gui(Gui_SDL_objects *gui, Sys_param *sys_param)
 
     }
 
-    short int levelVUMeter(Audio_Buffer average_audio_level)
-    {
-        double LnScaledAudioLevel;
-        short int LEDResult;
-
-        //The level is between 0 and 2¹⁶, so between 0 and 1 the Ln value will be set to 1.
-
-        if (average_audio_level[0] <= 1)
-        { LnScaledAudioLevel = 1; }
-        else
-        { LnScaledAudioLevel = log((double) average_audio_level[0]); }
-
-        /*It should return a number between 1 and 11.09, but we only have 8 LEDs on our synth. I am therefore
-         making the choice to set the thresholds accordingly.
-         */
-        if (LnScaledAudioLevel < 6) LEDResult = (int) LnScaledAudioLevel;
-        if (LnScaledAudioLevel >= 6 && LnScaledAudioLevel < 8) LEDResult = 6;
-        if (LnScaledAudioLevel >= 8 && LnScaledAudioLevel < 9.5) LEDResult = 7;
-        if (LnScaledAudioLevel >= 9.5) LEDResult = 8;
-
-        return LEDResult;
 
     }
+short int levelVUMeter(Audio_Buffer average_audio_level)
+{
+    double LnScaledAudioLevel;
+    short int LEDResult;
 
-    return 0;
+    //The level is between 0 and 2¹⁶, so between 0 and 1 the Ln value will be set to 1.
+
+    if (average_audio_level[0] <= 1)
+    { LnScaledAudioLevel = 1; }
+    else
+    { LnScaledAudioLevel = log((double) average_audio_level[0]); }
+
+    /*It should return a number between 1 and 11.09, but we only have 8 LEDs on our synth. I am therefore
+     making the choice to set the thresholds accordingly.
+     */
+    if (LnScaledAudioLevel < 6) LEDResult = (int) LnScaledAudioLevel;
+    if (LnScaledAudioLevel >= 6 && LnScaledAudioLevel < 8) LEDResult = 6;
+    if (LnScaledAudioLevel >= 8 && LnScaledAudioLevel < 9.5) LEDResult = 7;
+    if (LnScaledAudioLevel >= 9.5) LEDResult = 8;
+
+    return LEDResult;
 }
+
+
 
