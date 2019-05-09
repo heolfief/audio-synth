@@ -11,7 +11,7 @@
 Sint8 param_is_being_mouse_changed = -1;
 
 static const int switches_location[NUMBER_OF_SWITCHES][2] = {
-    {105, 52},        // Switch osc1 OnOff
+    {77, 52},        // Switch osc1 OnOff
     {337, 52},        // Switch osc2 OnOff
     {595, 52},        // Switch osc3 OnOff
     {1074, 209},      // Switch master OnOff
@@ -20,36 +20,36 @@ static const int switches_location[NUMBER_OF_SWITCHES][2] = {
     {291, 360},       // Switch effect OnOff
     {497, 360},       // Switch effect OnOff
     {698, 360},       // Switch effect OnOff
-    {904, 360},       // Switch effect OnOff
-    {1106, 360}       // Switch effect OnOff
+    {894, 360},       // Switch effect OnOff
+    {1131, 360}       // Switch effect OnOff
 };
 
 static const int ms_switches_location[NUMBER_OF_MS_SWITCHES][2] = {
-    {90, 120},        // Osc1 wave
-    {338, 115},       // Osc2 wave
-    {599, 114},       // Osc3 wave
-    {497, 405},       // Tremolo wave
-    {696, 411},       // Flanger wave
-    {895, 399},       // LFO filter type
-    {895, 438},       // LFO filter wave
-    {1107, 414},      // Filter type
+    {134, 99},        // Osc1 wave
+    {391, 99},       // Osc2 wave
+    {654, 99},       // Osc3 wave
+    {482, 400},       // Tremolo wave
+    {680, 400},       // Flanger wave
+    {866, 413},       // LFO filter type
+    {866, 473},       // LFO filter wave
+    {1112, 418},      // Filter type
 };
 
 static const int pots_location[NUMBER_OF_POTS][2] = {
     // OSC1
-    {83, 181},
-    {158, 181},
-    {232, 181},
+    {72, 164},
+    {148, 164},
+    {225, 164},
 
     // OSC 2
-    {346, 181},
-    {415, 181},
-    {480, 181},
+    {327, 164},
+    {403, 164},
+    {482, 164},
 
     //OSC3
-    {593, 181},
-    {663, 181},
-    {730, 181},
+    {584, 164},
+    {659, 164},
+    {736, 164},
 
     // Envelope
     {832, 40},
@@ -61,40 +61,40 @@ static const int pots_location[NUMBER_OF_POTS][2] = {
     {1069, 56},
 
     // Distortion
-    {85, 451},
-    {170, 451},
+    {73, 433},
+    {166, 433},
 
     // Delay
-    {285, 425},
-    {374, 425},
+    {282, 434},
+    {378, 434},
 
     // Tremolo
-    {593, 402},
-    {496, 477},
-    {591, 469},
+    {475, 449},
+    {535, 447},
+    {595, 447},
 
     // Flanger
-    {813, 403},
-    {695, 470},
-    {752, 470},
-    {803, 470},
+    {795, 377},
+    {676, 460},
+    {735, 460},
+    {795, 460},
 
     // LFO filter
-    {966, 404},
-    {1022, 404},
-    {915, 470},
-    {966, 470},
-    {1014, 470},
+    {972, 377},
+    {1031, 377},
+    {937, 461},
+    {987, 460},
+    {1037, 460},
 
     // Filter
-    {1207, 415},
-    {1162, 470}
+    {1224, 395},
+    {1169, 460}
 };
 
 static const int buttons_location[NUMBER_OF_BUTTONS][2] = {
-    {103, 585},
-    {103, 610},
-    {100, 660}
+    {103, 605},
+    {103, 630},
+    {100, 670}
 };
 
 static const int pot_min_max[NUMBER_OF_POTS][2] = {
