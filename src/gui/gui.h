@@ -61,6 +61,8 @@
 #define IMAGE_MS_SWITCH_MAX_STATES      4
 #define POT_INCREMENT                   1
 
+
+
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_stdinc.h>
@@ -350,6 +352,6 @@ int load_sys_param_to_gui(Gui_SDL_objects *gui, Sys_param *sys_param);
  *
  * \return returns an int between 1 and 8, to know which LED to light up and -1 if something goes wrong
  */
-int levelVUMeter(Audio_Buffer *average_level_audio);
+short int levelVUMeter(Audio_Buffer *average_level_audio);
 
 #endif //AUDIO_SYNTH_GUI_H

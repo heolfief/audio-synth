@@ -1439,10 +1439,29 @@ int load_sys_param_to_gui(Gui_SDL_objects *gui, Sys_param *sys_param)
 
 
     }
-    int levelVUMeter(Audio_Buffer *average_level_audio){
 
+    short int levelVUMeter(Audio_Buffer *average_level_audio){
+        double LnScaledAudioLevel ;
+        short int LEDResult;
+
+        //The level is between 0 and 2¹⁶, so between 0 and 1 the Ln value will be set to 1.
+
+        if(average_level_audio[0]<=1)LnScaledAudioLevel = 1;
+        else LnScaledAudioLevel = log( (double) average_level_audio[0]);
+
+        /*It should return a number between 1 and 11.09, but we only have 8 LEDs on our synth. I am therefore
+         making the choice to set the thresholds accordingly.
+         */
+        if(LnScaledAudioLevel < 6) LEDResult = (int) LnScaledAudioLevel;
+        if(LnScaledAudioLevel >= 6 && LnScaledAudioLevel < 8) LEDResult = 6 ;
+        if(LnScaledAudioLevel >= 8 && LnScaledAudioLevel <9.5) LEDResult = 7;
+        if(LnScaledAudioLevel >= 9.5) LEDResult = 8;
+
+        return LEDResult;
 
     }
+
+
 
 
 
