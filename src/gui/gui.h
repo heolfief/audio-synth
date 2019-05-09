@@ -38,9 +38,11 @@
 #define WIDTH_POT_SMALL                 45
 #define HEIGHT_POT_SMALL                46
 
-#define IMAGE_POT_BIG                 "../src/gui/Figs/big_pot.png"
-#define WIDTH_POT_BIG                 65
-#define HEIGHT_POT_BIG                65
+#define IMAGE_POT_BIG                   "../src/gui/Figs/big_pot.png"
+#define WIDTH_POT_BIG                   65
+#define HEIGHT_POT_BIG                  65
+#define BIG_POT                         1
+#define SMALL_POT                       0
 
 #define IMAGE_BUTTON_LOAD_PRESSED       "../src/gui/Figs/load_clicked.png"
 #define IMAGE_BUTTON_LOAD_UNPRESSED     "../src/gui/Figs/load.png"

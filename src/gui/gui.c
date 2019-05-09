@@ -36,60 +36,60 @@ static const int ms_switches_location[NUMBER_OF_MS_SWITCHES][2] = {
     {1112, 418},      // Filter type
 };
 
-static const int pots_location[NUMBER_OF_POTS][3] = {
+static const int pots_location_and_size[NUMBER_OF_POTS][3] = {
     // OSC1
-    {72, 164, 0},
-    {148, 164, 0},
-    {225, 164, 0},
+    {72, 164, SMALL_POT},
+    {148, 164, SMALL_POT},
+    {225, 164, SMALL_POT},
 
     // OSC 2
-    {327, 164, 0},
-    {403, 164, 0},
-    {482, 164, 0},
+    {327, 164, SMALL_POT},
+    {403, 164, SMALL_POT},
+    {482, 164, SMALL_POT},
 
     //OSC3
-    {584, 164, 0},
-    {659, 164, 0},
-    {736, 164, 0},
+    {584, 164, SMALL_POT},
+    {659, 164, SMALL_POT},
+    {736, 164, SMALL_POT},
 
     // Envelope
-    {834, 41, 1},
-    {935, 41, 1},
-    {836, 148, 1},
-    {935, 147, 1},
+    {834, 41, BIG_POT},
+    {935, 41, BIG_POT},
+    {836, 148, BIG_POT},
+    {935, 147, BIG_POT},
 
     // Master
-    {1071, 41, 1},
+    {1071, 41, BIG_POT},
 
     // Distortion
-    {73, 433, 0},
-    {166, 433, 0},
+    {73, 433, SMALL_POT},
+    {166, 433, SMALL_POT},
 
     // Delay
-    {282, 434, 0},
-    {378, 434, 0},
+    {282, 434, SMALL_POT},
+    {378, 434, SMALL_POT},
 
     // Tremolo
-    {475, 449, 0},
-    {535, 447, 0},
-    {595, 447, 0},
+    {475, 449, SMALL_POT},
+    {535, 447, SMALL_POT},
+    {595, 447, SMALL_POT},
 
     // Flanger
-    {795, 377, 0},
-    {676, 460, 0},
-    {735, 460, 0},
-    {795, 460, 0},
+    {795, 377, SMALL_POT},
+    {676, 460, SMALL_POT},
+    {735, 460, SMALL_POT},
+    {795, 460, SMALL_POT},
 
     // LFO filter
-    {972, 377, 0},
-    {1031, 377, 0},
-    {937, 461, 0},
-    {987, 460, 0},
-    {1037, 460, 0},
+    {972, 377, SMALL_POT},
+    {1031, 377, SMALL_POT},
+    {937, 461, SMALL_POT},
+    {987, 460, SMALL_POT},
+    {1037, 460, SMALL_POT},
 
     // Filter
-    {1224, 395, 0},
-    {1169, 460, 0}
+    {1224, 395, SMALL_POT},
+    {1169, 460, SMALL_POT}
 };
 
 static const int buttons_location[NUMBER_OF_BUTTONS][2] = {
@@ -625,14 +625,14 @@ int create_pots_map(Gui_SDL_objects *gui, Sys_param *sys_param)
     }
     for (int pot = 0; pot < NUMBER_OF_POTS; ++pot)
     {
-        gui->pots[pot].size = pots_location[pot][2];
+        gui->pots[pot].size = pots_location_and_size[pot][2];
 
-        if (gui->pots[pot].size == 0)
+        if (gui->pots[pot].size == SMALL_POT)
         {
             gui->pots[pot].percent = 0;
             gui->pots[pot].img = IMAGE_POT_SMALL;
-            gui->pots[pot].posX = pots_location[pot][0];
-            gui->pots[pot].posY = pots_location[pot][1];
+            gui->pots[pot].posX = pots_location_and_size[pot][0];
+            gui->pots[pot].posY = pots_location_and_size[pot][1];
             gui->pots[pot].paramMIN = pot_min_max[pot][0];
             gui->pots[pot].paramMAX = pot_min_max[pot][1];
             gui->pots[pot].width = WIDTH_POT_SMALL;
@@ -648,12 +648,12 @@ int create_pots_map(Gui_SDL_objects *gui, Sys_param *sys_param)
             }
 
         }
-        if (gui->pots[pot].size == 1)
+        if (gui->pots[pot].size == BIG_POT)
         {
             gui->pots[pot].percent = 0;
             gui->pots[pot].img = IMAGE_POT_BIG;
-            gui->pots[pot].posX = pots_location[pot][0];
-            gui->pots[pot].posY = pots_location[pot][1];
+            gui->pots[pot].posX = pots_location_and_size[pot][0];
+            gui->pots[pot].posY = pots_location_and_size[pot][1];
             gui->pots[pot].paramMIN = pot_min_max[pot][0];
             gui->pots[pot].paramMAX = pot_min_max[pot][1];
             gui->pots[pot].width = WIDTH_POT_BIG;
