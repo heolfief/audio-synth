@@ -66,10 +66,17 @@ int main(int argc, char *argv[])
         exit(EXIT_FAILURE);
     }
 
+    if (TTF_Init() < 0)
+    {
+        sys_print_error("Failed initializing SDL TTF");
+        exit(EXIT_FAILURE);
+    }
+
     if (init_gui(gui))exit(EXIT_FAILURE);
     if (create_switches_map(gui, audio_core->sys_param))exit(EXIT_FAILURE);
     if (create_pots_map(gui, audio_core->sys_param))exit(EXIT_FAILURE);
     if (create_buttons_map(gui))exit(EXIT_FAILURE);
+    if (create_Text_map(gui))exit(EXIT_FAILURE);
     if (load_sys_param_to_gui(gui, audio_core->sys_param))exit((EXIT_FAILURE));
     if (gui_update(gui))exit(EXIT_FAILURE);
 
@@ -148,6 +155,7 @@ int main(int argc, char *argv[])
 
     exit_gui(gui);
 
+    TTF_Quit();
     SDL_CloseAudio();
     SDL_Quit();
 

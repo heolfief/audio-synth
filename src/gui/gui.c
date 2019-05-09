@@ -9,6 +9,7 @@
 #include "gui.h"
 
 Sint8 param_is_being_mouse_changed = -1;
+char preset_name[100] = {"default"};
 
 static const int switches_location[NUMBER_OF_SWITCHES][2] = {
     {77, 52},        // Switch osc1 OnOff
@@ -158,6 +159,58 @@ static double map(double x, double in_min, double in_max, double out_min, double
     return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
 
+static int getSubString(const char *source, char *target, int from, int to)
+{
+    int length = 0;
+    int i = 0, j = 0;
+
+    //get length
+    while (source[i++] != '\0')
+    {
+        length++;
+    }
+
+    if (from < 0 || from > length)
+    {
+        sys_print_error("Invalid \'from\' index");
+        return 1;
+    }
+    if (to > length)
+    {
+        sys_print_error("Invalid \'to\' index");
+        return 1;
+    }
+
+    for (i = from, j = 0; i <= to; i++, j++)
+    {
+        target[j] = source[i];
+    }
+
+    //assign NULL at the end of string
+    target[j] = '\0';
+
+    return 0;
+}
+
+static int extract_file_name_from_path(const char *path, char *out, int extension_lenght)
+{
+    int i = 0;
+    int pos_of_last_slash = -1;
+
+    while (path[i] != '\0')
+    {
+        if (path[i] == '/') pos_of_last_slash = i;
+        ++i;
+    }
+    if (pos_of_last_slash == -1)
+    {
+        sys_print_error("/ Not found in path");
+        return -1;
+    }
+
+    return getSubString(path, out, pos_of_last_slash + 1, strlen(path) - extension_lenght - 2);
+}
+
 int init_gui(Gui_SDL_objects *gui)
 {
     if (SDL_CreateWindowAndRenderer(WIDTH_APPLICATION_WINDOW, HEIGHT_APPLICATION_WINDOW, SDL_WINDOW_SHOWN, &gui->window, &gui->renderer)
@@ -272,6 +325,14 @@ Gui_SDL_objects *alloc_gui_sdl_objects()
     }
     gui->buttons = bt;
 
+    Text *txt = (Text *) malloc(sizeof(Text));
+    if (txt == NULL)
+    {
+        sys_print_error("Memory allocation error");
+        return NULL;
+    }
+    gui->preset_name = txt;
+
     return gui;
 }
 
@@ -282,6 +343,7 @@ int free_gui_sdl_objects(Gui_SDL_objects *gui)
     free(gui->ms_switches);
     free(gui->pots);
     free(gui->buttons);
+    free(gui->preset_name);
     free(gui);
     return 0;
 }
@@ -360,6 +422,20 @@ int gui_update(Gui_SDL_objects *gui)
         SDL_DestroyTexture(tmp);
     }
 
+    SDL_Texture
+        *tmp = SDL_CreateTextureFromSurface(gui->renderer, gui->preset_name->text_surface);
+    if (tmp == NULL)
+    {
+        sys_print_SDL_error("Failed creating texture");
+        return -1;
+    }
+    if (SDL_RenderCopyEx(gui->renderer, tmp, NULL, &gui->preset_name->rect, 0, NULL, SDL_FLIP_NONE))
+    {
+        sys_print_SDL_error("Failed RenderCopy");
+        return -1;
+    }
+    SDL_DestroyTexture(tmp);
+
     SDL_RenderPresent(gui->renderer);
 }
 
@@ -383,6 +459,29 @@ int gui_set_switch_image(SDL_Button_t *button, char *path_to_image)
         sys_print_SDL_error("Failed loading image");
         return -1;
     }
+    return 0;
+}
+
+int create_Text_map(Gui_SDL_objects *gui)
+{
+    if (gui == NULL)
+    {
+        sys_print_error("Parameter is NULL");
+        return -1;
+    }
+
+    gui->preset_name->font = TTF_OpenFont(FONT_PRESET_NAME, SIZE_FONT_PRESET_NAME);
+    gui->preset_name->color.r = COLOR_R_FONT_PRESET_NAME;
+    gui->preset_name->color.g = COLOR_G_FONT_PRESET_NAME;
+    gui->preset_name->color.b = COLOR_B_FONT_PRESET_NAME;
+    gui->preset_name->color.a = 0;
+    gui->preset_name->text_surface =
+        TTF_RenderText_Blended(gui->preset_name->font, preset_name, gui->preset_name->color);
+    gui->preset_name->rect.x = LOCATION_X_PRESET_NAME - gui->preset_name->text_surface->w / 2;
+    gui->preset_name->rect.y = LOCATION_Y_PRESET_NAME;
+    gui->preset_name->rect.w = gui->preset_name->text_surface->w;
+    gui->preset_name->rect.h = gui->preset_name->text_surface->h;
+
     return 0;
 }
 
@@ -744,7 +843,7 @@ int process_buttons(Gui_SDL_objects *gui, Core *audio_core, MIDI_Peripheral_fd *
 {
     int param_changed = 0;
     int reload_param = 0;
-    char const *lTheSaveFileName;
+    char const *path;
     char const *lFilterPatterns[1] = {"*.prst"};
 
     if (gui == NULL || audio_core == NULL)
@@ -759,10 +858,13 @@ int process_buttons(Gui_SDL_objects *gui, Core *audio_core, MIDI_Peripheral_fd *
         if (gui_set_switch_image(gui->buttons[0].sdl_button, gui->buttons[0].imgon))return -1;
         if (gui_update(gui))return -1;
 
-        lTheSaveFileName = tinyfd_openFileDialog("Load a preset", "../presets", 1, lFilterPatterns, NULL, 0);
-        if (lTheSaveFileName)
+        path = tinyfd_openFileDialog("Load a preset", "../presets", 1, lFilterPatterns, NULL, 0);
+        if (path)
         {
-            if (load_preset(lTheSaveFileName, audio_core->sys_param, ABSOLUTE_PATH_MODE))return -1;
+            if (load_preset(path, audio_core->sys_param, ABSOLUTE_PATH_MODE))return -1;
+            extract_file_name_from_path(path, preset_name, 4);
+            gui->preset_name->text_surface =
+                TTF_RenderText_Blended(gui->preset_name->font, preset_name, gui->preset_name->color);
         }
         if (gui_set_switch_image(gui->buttons[0].sdl_button, gui->buttons[0].imgoff))return -1;
         param_changed = 1;
@@ -775,10 +877,13 @@ int process_buttons(Gui_SDL_objects *gui, Core *audio_core, MIDI_Peripheral_fd *
         if (gui_set_switch_image(gui->buttons[1].sdl_button, gui->buttons[1].imgon))return -1;
         if (gui_update(gui))return -1;
 
-        lTheSaveFileName = tinyfd_saveFileDialog("Load a preset", "../presets/.prst", 1, lFilterPatterns, NULL);
-        if (lTheSaveFileName)
+        path = tinyfd_saveFileDialog("Load a preset", "../presets/.prst", 1, lFilterPatterns, NULL);
+        if (path)
         {
-            if (save_preset(lTheSaveFileName, audio_core->sys_param, ABSOLUTE_PATH_MODE))return -1;
+            if (save_preset(path, audio_core->sys_param, ABSOLUTE_PATH_MODE))return -1;
+            extract_file_name_from_path(path, preset_name, 4);
+            gui->preset_name->text_surface =
+                TTF_RenderText_Blended(gui->preset_name->font, preset_name, gui->preset_name->color);
         }
         if (gui_set_switch_image(gui->buttons[1].sdl_button, gui->buttons[1].imgoff))return -1;
         param_changed = 1;

@@ -14,13 +14,10 @@
 #define WIDTH_APPLICATION_WINDOW        1300
 #define HEIGHT_APPLICATION_WINDOW       816
 
-#define NUMBER_OF_SWITCHES 11
-#define NUMBER_OF_MS_SWITCHES 8
-#define NUMBER_OF_POTS 32
-#define NUMBER_OF_BIG_POTS 5
-
-
-#define NUMBER_OF_BUTTONS 3
+#define NUMBER_OF_SWITCHES              11
+#define NUMBER_OF_MS_SWITCHES           8
+#define NUMBER_OF_POTS                  32
+#define NUMBER_OF_BUTTONS               3
 
 #define IMAGE_SWITCH_ON                 "../src/gui/Figs/switch_on.png"
 #define IMAGE_SWITCH_OFF                "../src/gui/Figs/switch_off.png"
@@ -60,11 +57,20 @@
 #define WIDTH_BUTTON_MIDI               66
 #define HEIGHT_BUTTON_MIDI              30
 
+#define FONT_PRESET_NAME                "../src/gui/Figs/Minion_Pro_Bold.ttf"
+#define SIZE_FONT_PRESET_NAME           17
+#define COLOR_R_FONT_PRESET_NAME        151
+#define COLOR_G_FONT_PRESET_NAME        187
+#define COLOR_B_FONT_PRESET_NAME        186
+#define LOCATION_X_PRESET_NAME          119
+#define LOCATION_Y_PRESET_NAME          705
+
 #define IMAGE_MS_SWITCH_MAX_STATES      4
 #define POT_INCREMENT                   1
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_stdinc.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -148,6 +154,19 @@ typedef struct
 } Potentiometer;
 
 /**
+ * \struct Text
+ * \brief define an SDL text
+ *
+ */
+typedef struct
+{
+  TTF_Font *font;             /*!<the text font */
+  SDL_Color color;            /*!<the text color */
+  SDL_Surface *text_surface;  /*!<the SDL surface of the text */
+  SDL_Rect rect;              /*!<the SDL rectangle associated with the text */
+} Text;
+
+/**
  * \struct Mouse_position
  * \brief define a Gui_SDL_objects structure
  *
@@ -180,6 +199,7 @@ typedef struct
   Multi_state_Switch *ms_switches;
   Potentiometer *pots;
   Button *buttons;
+  Text *preset_name;
 } Gui_SDL_objects;
 
 /**
@@ -252,6 +272,16 @@ SDL_Button_t *gui_create_button(int x_location, int y_location, int button_width
  * \return 0 if everything went OK, -1 otherwise
  */
 int gui_set_switch_image(SDL_Button_t *button, char *path_to_image);
+
+/**
+ * \fn int create_Text_map(Gui_SDL_objects *gui)
+ * \brief Function to place and initialize text
+ *
+ * \param gui The Gui_SDL_objects
+ *
+ * \return 0 if everything went OK, -1 otherwise
+ */
+int create_Text_map(Gui_SDL_objects *gui);
 
 /**
  * \fn int create_switches_map(Gui_SDL_objects *gui, Sys_param *sys_param)
