@@ -521,6 +521,47 @@ int create_switches_map(Gui_SDL_objects *gui, Sys_param *sys_param)
     return 0;
 }
 
+int create_Leds_map(Gui_SDL_objects *gui, Sys_param *sys_param)
+{
+    if (gui == NULL || sys_param == NULL)
+    {
+        sys_print_error("Parameter is NULL");
+        return -1;
+    }
+    for (int nbLeds = 0; nbLeds < NUMBER_OF_LEDS-3; ++nbLeds)
+    {
+        gui->Leds[nbLeds].img_led_green = IMAGE_LED_GREEN;
+        gui->Leds[nbLeds].posX = leds_location[nbLeds][0];
+        gui->Leds[nbLeds].posY = leds_location[nbLeds][1];
+        gui->Leds[nbLeds].width = WIDTH_LED;
+        gui->Leds[nbLeds].height = HEIGHT_LED;
+        gui->Leds[nbLeds].sdl_Led =
+            gui_create_button(gui->Leds[nbLeds].posX, gui->Leds[nbLeds].posY, gui->Leds[nbLeds].width, gui->Leds[nbLeds].height, gui->Leds[nbLeds].img_led_green);
+    }
+
+    for (int nbLeds = NUMBER_OF_LEDS-3; nbLeds < NUMBER_OF_LEDS-1; ++nbLeds)
+    {
+        gui->Leds[nbLeds].img_led_orange = IMAGE_LED_ORANGE;
+        gui->Leds[nbLeds].posX = leds_location[nbLeds][0];
+        gui->Leds[nbLeds].posY = leds_location[nbLeds][1];
+        gui->Leds[nbLeds].width = WIDTH_LED;
+        gui->Leds[nbLeds].height = HEIGHT_LED;
+        gui->Leds[nbLeds].sdl_Led =
+            gui_create_button(gui->Leds[nbLeds].posX, gui->Leds[nbLeds].posY, gui->Leds[nbLeds].width, gui->Leds[nbLeds].height, gui->Leds[nbLeds].img_led_orange);
+    }
+    for (int nbLeds = NUMBER_OF_LEDS-1; nbLeds < NUMBER_OF_LEDS; ++nbLeds)
+    {
+        gui->Leds[nbLeds].img_led_red = IMAGE_LED_RED;
+        gui->Leds[nbLeds].posX = leds_location[nbLeds][0];
+        gui->Leds[nbLeds].posY = leds_location[nbLeds][1];
+        gui->Leds[nbLeds].width = WIDTH_LED;
+        gui->Leds[nbLeds].height = HEIGHT_LED;
+        gui->Leds[nbLeds].sdl_Led =
+            gui_create_button(gui->Leds[nbLeds].posX, gui->Leds[nbLeds].posY, gui->Leds[nbLeds].width, gui->Leds[nbLeds].height, gui->Leds[nbLeds].img_led_red);
+    }
+
+
+}
 int create_buttons_map(Gui_SDL_objects *gui)
 {
     if (gui == NULL)

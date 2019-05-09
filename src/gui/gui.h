@@ -65,6 +65,8 @@
 #define IMAGE_LED_GREEN                 "../src/gui/Figs/green_jauge.png"
 #define IMAGE_LED_ORANGE                "../src/gui/Figs/orange_jauge.png"
 #define IMAGE_LED_RED                   "../src/gui/Figs/red_jauge.png"
+#define WIDTH_LED                       13
+#define HEIGHT_LED                      13
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
@@ -285,6 +287,18 @@ int gui_set_switch_image(SDL_Button_t *button, char *path_to_image);
  * \return 0 if everything went OK, -1 otherwise
  */
 int create_switches_map(Gui_SDL_objects *gui, Sys_param *sys_param);
+
+/**
+ * \fn int create_leds_map(Gui_SDL_objects *gui, Sys_param *sys_param)
+ * \brief Function to place and initialize GUI leds
+ *
+ * \param gui The Gui_SDL_objects
+ * \param sys_param The system parameters
+ *
+ * \return 0 if everything went OK, -1 otherwise
+ */
+int create_Leds_map(Gui_SDL_objects *gui, Sys_param *sys_param);
+
 
 /**
  * \fn int create_buttons_map(Gui_SDL_objects *gui)
