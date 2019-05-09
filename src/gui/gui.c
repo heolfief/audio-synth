@@ -92,9 +92,9 @@ static const int pots_location[NUMBER_OF_POTS][3] = {
 };
 
 static const int buttons_location[NUMBER_OF_BUTTONS][2] = {
-    {103, 605},
-    {103, 630},
-    {100, 670}
+    {88, 635},
+    {88, 670},
+    {290, 620}
 };
 
 static const int pot_min_max[NUMBER_OF_POTS][2] = {
