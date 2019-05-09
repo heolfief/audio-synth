@@ -1209,6 +1209,8 @@ int load_sys_param_to_gui(Gui_SDL_objects *gui, Sys_param *sys_param)
     Uint8 *uint8_param = NULL;
     Uint16 *uint16_param = NULL;
     Sint8 *sint8_param = NULL;
+    Waveform *wave_param = NULL;
+    Filter_type *type_param = NULL;
 
     for (int sw = 0; sw < NUMBER_OF_SWITCHES; ++sw)
     {
@@ -1216,12 +1218,41 @@ int load_sys_param_to_gui(Gui_SDL_objects *gui, Sys_param *sys_param)
         gui->switches[sw].onoff = *onoff_param;
         if (gui->switches[sw].onoff == ON)
         {
-            gui_set_switch_image(gui->switches[sw].sdl_button, gui->switches[sw].imgon);
+            if (gui_set_switch_image(gui->switches[sw].sdl_button, gui->switches[sw].imgon))return -1;
         }
         else
         {
-            gui_set_switch_image(gui->switches[sw].sdl_button, gui->switches[sw].imgoff);
+            if (gui_set_switch_image(gui->switches[sw].sdl_button, gui->switches[sw].imgoff))return -1;
         }
+    }
+
+    wave_param = gui->ms_switches[0].param;
+    gui->ms_switches[0].curr_state = *wave_param;
+
+    wave_param = gui->ms_switches[1].param;
+    gui->ms_switches[1].curr_state = *wave_param;
+
+    wave_param = gui->ms_switches[2].param;
+    gui->ms_switches[2].curr_state = *wave_param;
+
+    wave_param = gui->ms_switches[3].param;
+    gui->ms_switches[3].curr_state = *wave_param;
+
+    wave_param = gui->ms_switches[4].param;
+    gui->ms_switches[4].curr_state = *wave_param;
+
+    type_param = gui->ms_switches[5].param;
+    gui->ms_switches[5].curr_state = *type_param;
+
+    wave_param = gui->ms_switches[6].param;
+    gui->ms_switches[6].curr_state = *wave_param;
+
+    type_param = gui->ms_switches[7].param;
+    gui->ms_switches[7].curr_state = *type_param;
+
+    for (int mssw = 0; mssw < NUMBER_OF_MS_SWITCHES; ++mssw)
+    {
+        if (gui_set_switch_image(gui->ms_switches[mssw].sdl_button, gui->ms_switches[mssw].img[gui->ms_switches[mssw].curr_state]))return -1;
     }
 
     for (int i = 0; i < 500 / 3; ++i)
