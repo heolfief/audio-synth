@@ -19,6 +19,7 @@
 #include "system/error_handler.h"
 #include "sys_param/xml/preset_xml.h"
 #include "midi/midi.h"
+#include "gui/keypad.h"
 
 int main(int argc, char *argv[])
 {
@@ -123,6 +124,9 @@ int main(int argc, char *argv[])
                     {
                         printf("Quit asked. Closing...\n");
                         gui->application_quit = SDL_TRUE;
+                    }
+                    else{
+                    keypress (&gui->event.key);
                     }
                     break;
 
