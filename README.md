@@ -70,6 +70,8 @@ ___
 
 LICENSING
 
+Licence for this project is available in the LICENSE file.
+
 DSP part of filters in this project are taken from https://github.com/voidqk/sndfilter,
 and are designed by Sean Connelly (@voidqk) who used the chromium code source. His work is licensed under MIT license.
 
