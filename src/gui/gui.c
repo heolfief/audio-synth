@@ -1432,7 +1432,16 @@ int load_sys_param_to_gui(Gui_SDL_objects *gui, Sys_param *sys_param)
         SDL_Delay(3);
     }
 
+    int levelVUMeter(Audio_Buffer *average_level_audio){
+        
+
+
+
+
+    }
+
     if (gui_update(gui))return -1;
 
     return 0;
 }
+

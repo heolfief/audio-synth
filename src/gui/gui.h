@@ -340,4 +340,16 @@ int change_pot_percent(Gui_SDL_objects *gui, int potnbr, Uint8 mouse_is_down);
  */
 int load_sys_param_to_gui(Gui_SDL_objects *gui, Sys_param *sys_param);
 
+/**
+ * \fn int levelVUMeter(Audio_Buffer *average_level_audio)
+
+ * \brief Function to compute the average audio level in order to adapt it to our number of "LEDs" forming our VUMeter.
+ *
+ *
+ * \param Audio_Buffer The average_level_audio
+ *
+ * \return returns an int between 1 and 8, to know which LED to light up and -1 if something goes wrong
+ */
+int levelVUMeter(Audio_Buffer *average_level_audio);
+
 #endif //AUDIO_SYNTH_GUI_H
