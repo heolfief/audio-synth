@@ -343,4 +343,12 @@ int change_pot_percent(Gui_SDL_objects *gui, int potnbr, Uint8 mouse_is_down);
  */
 int load_sys_param_to_gui(Gui_SDL_objects *gui, Sys_param *sys_param);
 
+/**
+ * \fn int prompt_quit()
+ * \brief Function to prompt the user with exit message
+ *
+ * \return 1 if yes, 0 if no
+ */
+int prompt_quit();
+
 #endif //AUDIO_SYNTH_GUI_H

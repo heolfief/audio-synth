@@ -113,16 +113,22 @@ int main(int argc, char *argv[])
             {
                 case SDL_QUIT:
 
-                    printf("Quit asked. Closing...\n");
-                    gui->application_quit = SDL_TRUE;
+                    if (prompt_quit())
+                    {
+                        printf("Quit asked. Closing...\n");
+                        gui->application_quit = SDL_TRUE;
+                    }
                     break;
 
                 case SDL_KEYDOWN:
 
                     if (gui->event.key.keysym.sym == SDLK_ESCAPE)
                     {
-                        printf("Quit asked. Closing...\n");
-                        gui->application_quit = SDL_TRUE;
+                        if (prompt_quit())
+                        {
+                            printf("Quit asked. Closing...\n");
+                            gui->application_quit = SDL_TRUE;
+                        }
                     }
                     break;
 

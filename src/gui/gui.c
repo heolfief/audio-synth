@@ -526,28 +526,31 @@ int create_pots_map(Gui_SDL_objects *gui, Sys_param *sys_param)
     }
     for (int pot = 0; pot < NUMBER_OF_POTS; ++pot)
     {
-        gui->pots[pot].size=pots_location[pot][2];
+        gui->pots[pot].size = pots_location[pot][2];
 
-        if (gui->pots[pot].size == 0){
-            gui->pots[pot].percent = 0;
-        gui->pots[pot].img = IMAGE_POT_SMALL;
-        gui->pots[pot].posX = pots_location[pot][0];
-        gui->pots[pot].posY = pots_location[pot][1];
-        gui->pots[pot].paramMIN = pot_min_max[pot][0];
-        gui->pots[pot].paramMAX = pot_min_max[pot][1];
-        gui->pots[pot].width = WIDTH_POT_SMALL;
-        gui->pots[pot].height = HEIGHT_POT_SMALL;
-        gui->pots[pot].sdl_pot =
-            gui_create_button(gui->pots[pot].posX, gui->pots[pot].posY, gui->pots[pot].width, gui->pots[pot].height, gui->pots[pot].img);
-        gui->pots[pot].texture = SDL_CreateTextureFromSurface(gui->renderer, gui->pots[pot].sdl_pot->internal_surface);
-        if (gui->pots[pot].texture == NULL)
+        if (gui->pots[pot].size == 0)
         {
-            sys_print_SDL_error("Failed creating texture");
-            return -1;
-        }
+            gui->pots[pot].percent = 0;
+            gui->pots[pot].img = IMAGE_POT_SMALL;
+            gui->pots[pot].posX = pots_location[pot][0];
+            gui->pots[pot].posY = pots_location[pot][1];
+            gui->pots[pot].paramMIN = pot_min_max[pot][0];
+            gui->pots[pot].paramMAX = pot_min_max[pot][1];
+            gui->pots[pot].width = WIDTH_POT_SMALL;
+            gui->pots[pot].height = HEIGHT_POT_SMALL;
+            gui->pots[pot].sdl_pot =
+                gui_create_button(gui->pots[pot].posX, gui->pots[pot].posY, gui->pots[pot].width, gui->pots[pot].height, gui->pots[pot].img);
+            gui->pots[pot].texture =
+                SDL_CreateTextureFromSurface(gui->renderer, gui->pots[pot].sdl_pot->internal_surface);
+            if (gui->pots[pot].texture == NULL)
+            {
+                sys_print_SDL_error("Failed creating texture");
+                return -1;
+            }
 
         }
-        if (gui->pots[pot].size==1){
+        if (gui->pots[pot].size == 1)
+        {
             gui->pots[pot].percent = 0;
             gui->pots[pot].img = IMAGE_POT_BIG;
             gui->pots[pot].posX = pots_location[pot][0];
@@ -558,7 +561,8 @@ int create_pots_map(Gui_SDL_objects *gui, Sys_param *sys_param)
             gui->pots[pot].height = HEIGHT_POT_BIG;
             gui->pots[pot].sdl_pot =
                 gui_create_button(gui->pots[pot].posX, gui->pots[pot].posY, gui->pots[pot].width, gui->pots[pot].height, gui->pots[pot].img);
-            gui->pots[pot].texture = SDL_CreateTextureFromSurface(gui->renderer, gui->pots[pot].sdl_pot->internal_surface);
+            gui->pots[pot].texture =
+                SDL_CreateTextureFromSurface(gui->renderer, gui->pots[pot].sdl_pot->internal_surface);
             if (gui->pots[pot].texture == NULL)
             {
                 sys_print_SDL_error("Failed creating texture");
@@ -756,9 +760,10 @@ int process_buttons(Gui_SDL_objects *gui, Core *audio_core, MIDI_Peripheral_fd *
         if (gui_update(gui))return -1;
 
         lTheSaveFileName = tinyfd_openFileDialog("Load a preset", "../presets", 1, lFilterPatterns, NULL, 0);
-        if (!lTheSaveFileName) return 0;
-        if (load_preset(lTheSaveFileName, audio_core->sys_param, ABSOLUTE_PATH_MODE))return -1;
-
+        if (lTheSaveFileName)
+        {
+            if (load_preset(lTheSaveFileName, audio_core->sys_param, ABSOLUTE_PATH_MODE))return -1;
+        }
         if (gui_set_switch_image(gui->buttons[0].sdl_button, gui->buttons[0].imgoff))return -1;
         param_changed = 1;
         reload_param = 1;
@@ -771,9 +776,10 @@ int process_buttons(Gui_SDL_objects *gui, Core *audio_core, MIDI_Peripheral_fd *
         if (gui_update(gui))return -1;
 
         lTheSaveFileName = tinyfd_saveFileDialog("Load a preset", "../presets/.prst", 1, lFilterPatterns, NULL);
-        if (!lTheSaveFileName) return 0;
-        if (save_preset(lTheSaveFileName, audio_core->sys_param, ABSOLUTE_PATH_MODE))return -1;
-
+        if (lTheSaveFileName)
+        {
+            if (save_preset(lTheSaveFileName, audio_core->sys_param, ABSOLUTE_PATH_MODE))return -1;
+        }
         if (gui_set_switch_image(gui->buttons[1].sdl_button, gui->buttons[1].imgoff))return -1;
         param_changed = 1;
     }
@@ -1490,4 +1496,9 @@ int load_sys_param_to_gui(Gui_SDL_objects *gui, Sys_param *sys_param)
     if (gui_update(gui))return -1;
 
     return 0;
+}
+
+int prompt_quit()
+{
+    return tinyfd_messageBox(NULL, "Exit application ?", "yesno", "question", 0);
 }
