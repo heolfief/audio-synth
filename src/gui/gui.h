@@ -9,41 +9,56 @@
 #ifndef AUDIO_SYNTH_GUI_H
 #define AUDIO_SYNTH_GUI_H
 
-#define APPLICATION_NAME "audio_synth"
-
-#define APPLICATION_IMAGE_BACKGROUND "../src/gui/Figs/bg_fix_3.BMP"
-
-#define APPLICATION_IMAGE_SWITCH_ON "../src/gui/Figs/toggle_on.png"
-#define APPLICATION_IMAGE_SWITCH_OFF "../src/gui/Figs/toggle_off.png"
-#define APPLICATION_IMAGE_SWITCH_WIDTH 38
-#define APPLICATION_IMAGE_SWITCH_HEIGHT 19
-
-#define APPLICATION_IMAGE_POT "../src/gui/Figs/pot.png"
-#define APPLICATION_IMAGE_POT_WIDTH 45
-#define APPLICATION_IMAGE_POT_HEIGHT 45
-
-#define APPLICATION_IMAGE_BUTTON_WIDTH 38
-#define APPLICATION_IMAGE_BUTTON_HEIGHT 19
-
-#define APPLICATION_IMAGE_BUTTON_LOAD_PRESSED "../src/gui/Figs/bt_load_p.png"
-#define APPLICATION_IMAGE_BUTTON_LOAD_UNPRESSED "../src/gui/Figs/bt_load_r.png"
-
-#define APPLICATION_IMAGE_BUTTON_SAVE_PRESSED "../src/gui/Figs/bt_save_p.png"
-#define APPLICATION_IMAGE_BUTTON_SAVE_UNPRESSED "../src/gui/Figs/bt_save_r.png"
-
-#define APPLICATION_IMAGE_BUTTON_MIDI_STANDBY "../src/gui/Figs/bt_midi_standby.png"
-#define APPLICATION_IMAGE_BUTTON_MIDI_CONNECTED "../src/gui/Figs/bt_midi_connected.png"
-#define APPLICATION_IMAGE_BUTTON_MIDI_WIDTH 66
-#define APPLICATION_IMAGE_BUTTON_MIDI_HEIGHT 30
-
-#define POT_INCREMENT 1
+#define NAME_APPLICATION "audio_synth"
+#define IMAGE_APPLICATION_BACKGROUND    "../src/gui/Figs/bg_fix_3.BMP"
+#define WIDTH_APPLICATION_WINDOW        1300
+#define HEIGHT_APPLICATION_WINDOW       810
 
 #define NUMBER_OF_SWITCHES 11
+#define NUMBER_OF_MS_SWITCHES 8
 #define NUMBER_OF_POTS 32
 #define NUMBER_OF_BUTTONS 3
 
-#define APPLICATION_WINDOW_WIDTH 1300
-#define APPLICATION_WINDOW_HEIGHT 810
+#define IMAGE_SWITCH_ON                 "../src/gui/Figs/toggle_on.png"
+#define IMAGE_SWITCH_OFF                "../src/gui/Figs/toggle_off.png"
+#define WIDTH_SWITCH                    38
+#define HEIGHT_SWITCH                   19
+
+#define IMAGE_MS_SWITCH_WAVE_SIN        "../src/gui/Figs/toggle_on.png"
+#define IMAGE_MS_SWITCH_WAVE_SQR        "../src/gui/Figs/toggle_off.png"
+#define IMAGE_MS_SWITCH_WAVE_TRI        "../src/gui/Figs/bt_load_p.png"
+#define IMAGE_MS_SWITCH_TYPE_LP         "../src/gui/Figs/toggle_on.png"
+#define IMAGE_MS_SWITCH_TYPE_HP         "../src/gui/Figs/toggle_off.png"
+#define IMAGE_MS_SWITCH_TYPE_BP         "../src/gui/Figs/bt_load_p.png"
+#define IMAGE_MS_SWITCH_TYPE_NOTCH      "../src/gui/Figs/bt_load_r.png"
+#define WIDTH_MS_SWITCH_WIDTH           60
+#define HEIGHT_MS_SWITCH                30
+
+#define IMAGE_POT_SMALL                 "../src/gui/Figs/pot.png"
+#define WIDTH_POT_SMALL                 45
+#define HEIGHT_POT_SMALL                45
+
+#define IMAGE_POT_LARGE                 "../src/gui/Figs/pot.png"
+#define WIDTH_POT_LARGE                 65
+#define HEIGHT_POT_LARGE                65
+
+#define IMAGE_BUTTON_LOAD_PRESSED       "../src/gui/Figs/bt_load_p.png"
+#define IMAGE_BUTTON_LOAD_UNPRESSED     "../src/gui/Figs/bt_load_r.png"
+#define WIDTH_BUTTON_LOAD               38
+#define HEIGHT_BUTTON_LOAD              19
+
+#define IMAGE_BUTTON_SAVE_PRESSED       "../src/gui/Figs/bt_save_p.png"
+#define IMAGE_BUTTON_SAVE_UNPRESSED     "../src/gui/Figs/bt_save_r.png"
+#define WIDTH_BUTTON_SAVE               38
+#define HEIGHT_BUTTON_SAVE              19
+
+#define IMAGE_BUTTON_MIDI_STANDBY       "../src/gui/Figs/bt_midi_standby.png"
+#define IMAGE_BUTTON_MIDI_CONNECTED     "../src/gui/Figs/bt_midi_connected.png"
+#define WIDTH_BUTTON_MIDI               66
+#define HEIGHT_BUTTON_MIDI              30
+
+#define IMAGE_MS_SWITCH_MAX_STATES      4
+#define POT_INCREMENT                   1
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
@@ -74,6 +89,23 @@ typedef struct
   OnOff onoff;                /*!<the on/off value of the switch */
   void *param;                /*!<the parameter set by the switch */
 } Switch;
+
+/**
+ * \struct Multi_state_Switch
+ * \brief define a graphical Multi state switch
+ */
+typedef struct
+{
+  SDL_Button_t *sdl_button;   /*!<the SDL related objects for the button */
+  Uint16 posX;                /*!<the X position on the screen (in pixels) */
+  Uint16 posY;                /*!<the Y position on the screen (in pixels) */
+  Uint16 width;               /*!<the width (in pixels) */
+  Uint16 height;              /*!<the height (in pixels) */
+  Uint8 number_of_states;     /*!<the number of different possible states */
+  Uint8 curr_state;           /*!<the current state value of the switch */
+  void *param;                /*!<the parameter set by the switch */
+  char *img[IMAGE_MS_SWITCH_MAX_STATES]; /*!<the images of the different states */
+} Multi_state_Switch;
 
 /**
  * \struct Button
@@ -107,8 +139,8 @@ typedef struct
   char *img;                  /*!<the image of the potentiometer */
   Uint8 percent;              /*!<the percentage set by the user of the potentiometer */
   void *param;                /*!<the parameter set by the potentiometer */
-  Sint64 paramMAX;            /*!<the max value of the parameter set by the potentiometer, when percent is 100% */
-  Sint64 paramMIN;            /*!<the min value of the parameter set by the potentiometer, when percent is 0% */
+  double paramMAX;            /*!<the max value of the parameter set by the potentiometer, when percent is 100% */
+  double paramMIN;            /*!<the min value of the parameter set by the potentiometer, when percent is 0% */
 } Potentiometer;
 
 /**
@@ -141,6 +173,7 @@ typedef struct
   Uint8 application_quit;
   Mouse_position *mouse_position;
   Switch *switches;
+  Multi_state_Switch *ms_switches;
   Potentiometer *pots;
   Button *buttons;
 } Gui_SDL_objects;
@@ -269,7 +302,7 @@ int process_switches(Gui_SDL_objects *gui, Core *audio_core);
  *
  * \return 0 if everything went OK, -1 otherwise
  */
-int process_buttons(Gui_SDL_objects *gui, Core *audio_core, MIDI_Peripheral_fd* midi_peripheral);
+int process_buttons(Gui_SDL_objects *gui, Core *audio_core, MIDI_Peripheral_fd *midi_peripheral);
 
 /**
  * \fn int process_pots(Gui_SDL_objects *gui)

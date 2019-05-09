@@ -24,37 +24,69 @@ static const int switches_location[NUMBER_OF_SWITCHES][2] = {
     {1106, 360}       // Switch effect OnOff
 };
 
+static const int ms_switches_location[NUMBER_OF_MS_SWITCHES][2] = {
+    {90, 120},        // Osc1 wave
+    {338, 115},       // Osc2 wave
+    {599, 114},       // Osc3 wave
+    {497, 405},       // Tremolo wave
+    {696, 411},       // Flanger wave
+    {895, 399},       // LFO filter type
+    {895, 438},       // LFO filter wave
+    {1107, 414},      // Filter type
+};
+
 static const int pots_location[NUMBER_OF_POTS][2] = {
+    // OSC1
     {83, 181},
     {158, 181},
     {232, 181},
+
+    // OSC 2
     {346, 181},
     {415, 181},
     {480, 181},
+
+    //OSC3
     {593, 181},
     {663, 181},
     {730, 181},
+
+    // Envelope
     {832, 40},
     {930, 40},
     {832, 153},
     {930, 153},
+
+    // Master
     {1069, 56},
+
+    // Distortion
     {85, 451},
     {170, 451},
+
+    // Delay
     {285, 425},
     {374, 425},
+
+    // Tremolo
     {593, 402},
     {496, 477},
     {591, 469},
+
+    // Flanger
     {813, 403},
     {695, 470},
     {752, 470},
     {803, 470},
+
+    // LFO filter
     {966, 404},
     {1022, 404},
     {915, 470},
     {966, 470},
     {1014, 470},
+
+    // Filter
     {1207, 415},
     {1162, 470}
 };
@@ -66,38 +98,59 @@ static const int buttons_location[NUMBER_OF_BUTTONS][2] = {
 };
 
 static const int pot_min_max[NUMBER_OF_POTS][2] = {
+    // OSC1
     {0, 32000},
-    {0,100},
-    {-24,24},   
+    {0, 100},
+    {-24, 24},
+
+    // OSC2
     {0, 32000},
-    {0,100},
-    {-24,24},
+    {0, 100},
+    {-24, 24},
+
+    // OSC3
     {0, 32000},
-    {0,100},
-    {-24,24},
-    {0,1},
-    {0,2},
-    {0,1},
-    {0,2},
-    {0,100},
-    {0,100},
-    {0,100},
-    {1,500},
-    {0,100},
-    {0,30},
-    {0,100},
-    {0,100},
-    {0,20},
-    {0,20},
-    {0,100},
-    {0,100},
-    {0,15000},
-    {0,5000},
-    {0,20},
-    {0,30},
-    {0,20},
-    {0,20000},
-    {0,20}
+    {0, 100},
+    {-24, 24},
+
+    // Envelope
+    {0, 2},
+    {0, 2},
+    {0, 1},
+    {0, 2},
+
+    // Master
+    {0, 100},
+
+    // Distortion
+    {0, 100},
+    {0, 100},
+
+    // Delay
+    {1, 500},
+    {0, 100},
+
+    // Tremolo
+    {0, 20},
+    {0, 100},
+    {0, 100},
+
+    // Flanger
+    {0, 20},
+    {0, 20},
+    {0, 100},
+    {0, 100},
+
+    // LFO filter
+    {0, 15000},
+    {0, 5000},
+    {0, 20},
+    {0, 30},
+    {0, 20},
+
+    // Filter
+    {0, 20000},
+    {0, 20}
 };
 
 static double map(double x, double in_min, double in_max, double out_min, double out_max)
@@ -107,7 +160,7 @@ static double map(double x, double in_min, double in_max, double out_min, double
 
 int init_gui(Gui_SDL_objects *gui)
 {
-    if (SDL_CreateWindowAndRenderer(APPLICATION_WINDOW_WIDTH, APPLICATION_WINDOW_HEIGHT, SDL_WINDOW_SHOWN, &gui->window, &gui->renderer)
+    if (SDL_CreateWindowAndRenderer(WIDTH_APPLICATION_WINDOW, HEIGHT_APPLICATION_WINDOW, SDL_WINDOW_SHOWN, &gui->window, &gui->renderer)
         != 0)
     {
         sys_print_SDL_error("ERROR in creating window and renderer");
@@ -115,14 +168,14 @@ int init_gui(Gui_SDL_objects *gui)
     }
 
     gui->texture =
-        SDL_CreateTexture(gui->renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, APPLICATION_WINDOW_WIDTH, APPLICATION_WINDOW_HEIGHT);
+        SDL_CreateTexture(gui->renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, WIDTH_APPLICATION_WINDOW, HEIGHT_APPLICATION_WINDOW);
     if (NULL == gui->texture)
     {
         sys_print_SDL_error("ERROR creating texture");
         return -1;
     }
 
-    SDL_Surface *tmp = IMG_Load(APPLICATION_IMAGE_BACKGROUND); //Loading the image onto the tmp surface
+    SDL_Surface *tmp = IMG_Load(IMAGE_APPLICATION_BACKGROUND); //Loading the image onto the tmp surface
     if (NULL == tmp)
     {
         sys_print_SDL_error("ERROR loading image");
@@ -140,15 +193,15 @@ int init_gui(Gui_SDL_objects *gui)
 
     SDL_SetRenderTarget(gui->renderer, NULL);
 
-    gui->background.w = APPLICATION_WINDOW_WIDTH;
-    gui->background.h = APPLICATION_WINDOW_HEIGHT;
+    gui->background.w = WIDTH_APPLICATION_WINDOW;
+    gui->background.h = HEIGHT_APPLICATION_WINDOW;
 
     if (SDL_RenderCopy(gui->renderer, gui->texture, NULL, &gui->background))
     {
         sys_print_SDL_error("Render Copy failed");
         return -1;
     }
-    SDL_SetWindowTitle(gui->window, APPLICATION_NAME);
+    SDL_SetWindowTitle(gui->window, NAME_APPLICATION);
     SDL_RenderPresent(gui->renderer);
 
     return 0;
@@ -195,6 +248,14 @@ Gui_SDL_objects *alloc_gui_sdl_objects()
     }
     gui->switches = sw;
 
+    Multi_state_Switch *mssw = (Multi_state_Switch *) calloc(NUMBER_OF_MS_SWITCHES, sizeof(Multi_state_Switch));
+    if (mssw == NULL)
+    {
+        sys_print_error("Memory allocation error");
+        return NULL;
+    }
+    gui->ms_switches = mssw;
+
     Potentiometer *pot = (Potentiometer *) calloc(NUMBER_OF_POTS, sizeof(Potentiometer));
     if (pot == NULL)
     {
@@ -218,6 +279,7 @@ int free_gui_sdl_objects(Gui_SDL_objects *gui)
 {
     free(gui->mouse_position);
     free(gui->switches);
+    free(gui->ms_switches);
     free(gui->pots);
     free(gui->buttons);
     free(gui);
@@ -233,7 +295,7 @@ int gui_update(Gui_SDL_objects *gui)
         return -1;
     }
 
-    // For each button
+    // For each switch
     for (int i = 0; i < NUMBER_OF_SWITCHES; ++i)
     {
         SDL_Texture
@@ -244,6 +306,24 @@ int gui_update(Gui_SDL_objects *gui)
             return -1;
         }
         if (SDL_RenderCopyEx(gui->renderer, tmp, NULL, gui->switches[i].sdl_button->location_and_size, 0, NULL, SDL_FLIP_NONE))
+        {
+            sys_print_SDL_error("Failed RenderCopy");
+            return -1;
+        }
+        SDL_DestroyTexture(tmp);
+    }
+
+    // For each multi state switch
+    for (int i = 0; i < NUMBER_OF_MS_SWITCHES; ++i)
+    {
+        SDL_Texture
+            *tmp = SDL_CreateTextureFromSurface(gui->renderer, gui->ms_switches[i].sdl_button->internal_surface);
+        if (tmp == NULL)
+        {
+            sys_print_SDL_error("Failed creating texture");
+            return -1;
+        }
+        if (SDL_RenderCopyEx(gui->renderer, tmp, NULL, gui->ms_switches[i].sdl_button->location_and_size, 0, NULL, SDL_FLIP_NONE))
         {
             sys_print_SDL_error("Failed RenderCopy");
             return -1;
@@ -316,12 +396,12 @@ int create_switches_map(Gui_SDL_objects *gui, Sys_param *sys_param)
     for (int sw = 0; sw < NUMBER_OF_SWITCHES; ++sw)
     {
         gui->switches[sw].onoff = OFF;
-        gui->switches[sw].imgoff = APPLICATION_IMAGE_SWITCH_OFF;
-        gui->switches[sw].imgon = APPLICATION_IMAGE_SWITCH_ON;
+        gui->switches[sw].imgoff = IMAGE_SWITCH_OFF;
+        gui->switches[sw].imgon = IMAGE_SWITCH_ON;
         gui->switches[sw].posX = switches_location[sw][0];
         gui->switches[sw].posY = switches_location[sw][1];
-        gui->switches[sw].width = APPLICATION_IMAGE_SWITCH_WIDTH;
-        gui->switches[sw].height = APPLICATION_IMAGE_SWITCH_HEIGHT;
+        gui->switches[sw].width = WIDTH_SWITCH;
+        gui->switches[sw].height = HEIGHT_SWITCH;
         gui->switches[sw].sdl_button =
             gui_create_button(gui->switches[sw].posX, gui->switches[sw].posY, gui->switches[sw].width, gui->switches[sw].height, gui->switches[sw].imgoff);
     }
@@ -329,7 +409,7 @@ int create_switches_map(Gui_SDL_objects *gui, Sys_param *sys_param)
     gui->switches[0].param = &sys_param->osc1->onoff;
     gui->switches[1].param = &sys_param->osc2->onoff;
     gui->switches[2].param = &sys_param->osc3->onoff;
-    gui->switches[3].param = &sys_param->master_volume;
+    gui->switches[3].param = &sys_param->master_onoff;
     gui->switches[4].param = &sys_param->master_FX_onoff;
     gui->switches[5].param = &sys_param->dist_param->onoff;
     gui->switches[6].param = &sys_param->delay_param->onoff;
@@ -337,6 +417,67 @@ int create_switches_map(Gui_SDL_objects *gui, Sys_param *sys_param)
     gui->switches[8].param = &sys_param->flanger_param->onoff;
     gui->switches[9].param = &sys_param->lfo_filter_param->onoff;
     gui->switches[10].param = &sys_param->filter_param->onoff;
+
+    gui->ms_switches[0].img[0] = IMAGE_MS_SWITCH_WAVE_SIN;
+    gui->ms_switches[0].img[1] = IMAGE_MS_SWITCH_WAVE_SQR;
+    gui->ms_switches[0].img[2] = IMAGE_MS_SWITCH_WAVE_TRI;
+    gui->ms_switches[0].param = &sys_param->osc1->wave;
+    gui->ms_switches[0].number_of_states = 3;
+
+    gui->ms_switches[1].img[0] = IMAGE_MS_SWITCH_WAVE_SIN;
+    gui->ms_switches[1].img[1] = IMAGE_MS_SWITCH_WAVE_SQR;
+    gui->ms_switches[1].img[2] = IMAGE_MS_SWITCH_WAVE_TRI;
+    gui->ms_switches[1].param = &sys_param->osc2->wave;
+    gui->ms_switches[1].number_of_states = 3;
+
+    gui->ms_switches[2].img[0] = IMAGE_MS_SWITCH_WAVE_SIN;
+    gui->ms_switches[2].img[1] = IMAGE_MS_SWITCH_WAVE_SQR;
+    gui->ms_switches[2].img[2] = IMAGE_MS_SWITCH_WAVE_TRI;
+    gui->ms_switches[2].param = &sys_param->osc3->wave;
+    gui->ms_switches[2].number_of_states = 3;
+
+    gui->ms_switches[3].img[0] = IMAGE_MS_SWITCH_WAVE_SIN;
+    gui->ms_switches[3].img[1] = IMAGE_MS_SWITCH_WAVE_SQR;
+    gui->ms_switches[3].img[2] = IMAGE_MS_SWITCH_WAVE_TRI;
+    gui->ms_switches[3].param = &sys_param->amp_mod_param->wave;
+    gui->ms_switches[3].number_of_states = 3;
+
+    gui->ms_switches[4].img[0] = IMAGE_MS_SWITCH_WAVE_SIN;
+    gui->ms_switches[4].img[1] = IMAGE_MS_SWITCH_WAVE_SQR;
+    gui->ms_switches[4].img[2] = IMAGE_MS_SWITCH_WAVE_TRI;
+    gui->ms_switches[4].param = &sys_param->flanger_param->lfo_wave;
+    gui->ms_switches[4].number_of_states = 3;
+
+    gui->ms_switches[5].img[0] = IMAGE_MS_SWITCH_TYPE_LP;
+    gui->ms_switches[5].img[1] = IMAGE_MS_SWITCH_TYPE_HP;
+    gui->ms_switches[5].img[2] = IMAGE_MS_SWITCH_TYPE_BP;
+    gui->ms_switches[5].img[3] = IMAGE_MS_SWITCH_TYPE_NOTCH;
+    gui->ms_switches[5].param = &sys_param->lfo_filter_param->filter_type;
+    gui->ms_switches[5].number_of_states = 4;
+
+    gui->ms_switches[6].img[0] = IMAGE_MS_SWITCH_WAVE_SIN;
+    gui->ms_switches[6].img[1] = IMAGE_MS_SWITCH_WAVE_SQR;
+    gui->ms_switches[6].img[2] = IMAGE_MS_SWITCH_WAVE_TRI;
+    gui->ms_switches[6].param = &sys_param->lfo_filter_param->wave;
+    gui->ms_switches[6].number_of_states = 3;
+
+    gui->ms_switches[7].img[0] = IMAGE_MS_SWITCH_TYPE_LP;
+    gui->ms_switches[7].img[1] = IMAGE_MS_SWITCH_TYPE_HP;
+    gui->ms_switches[7].img[2] = IMAGE_MS_SWITCH_TYPE_BP;
+    gui->ms_switches[7].img[3] = IMAGE_MS_SWITCH_TYPE_NOTCH;
+    gui->ms_switches[7].param = &sys_param->filter_param->filter_type;
+    gui->ms_switches[7].number_of_states = 4;
+
+    for (int mssw = 0; mssw < NUMBER_OF_MS_SWITCHES; ++mssw)
+    {
+        gui->ms_switches[mssw].curr_state = 0;
+        gui->ms_switches[mssw].posX = ms_switches_location[mssw][0];
+        gui->ms_switches[mssw].posY = ms_switches_location[mssw][1];
+        gui->ms_switches[mssw].width = WIDTH_MS_SWITCH_WIDTH;
+        gui->ms_switches[mssw].height = HEIGHT_MS_SWITCH;
+        gui->ms_switches[mssw].sdl_button =
+            gui_create_button(gui->ms_switches[mssw].posX, gui->ms_switches[mssw].posY, gui->ms_switches[mssw].width, gui->ms_switches[mssw].height, gui->ms_switches[mssw].img[gui->ms_switches[mssw].curr_state]);
+    }
 
     return 0;
 }
@@ -349,20 +490,20 @@ int create_buttons_map(Gui_SDL_objects *gui)
         return -1;
     }
 
-    gui->buttons[0].imgon = APPLICATION_IMAGE_BUTTON_LOAD_PRESSED;
-    gui->buttons[0].imgoff = APPLICATION_IMAGE_BUTTON_LOAD_UNPRESSED;
-    gui->buttons[0].width = APPLICATION_IMAGE_BUTTON_WIDTH;
-    gui->buttons[0].height = APPLICATION_IMAGE_BUTTON_HEIGHT;
+    gui->buttons[0].imgon = IMAGE_BUTTON_LOAD_PRESSED;
+    gui->buttons[0].imgoff = IMAGE_BUTTON_LOAD_UNPRESSED;
+    gui->buttons[0].width = WIDTH_BUTTON_SAVE;
+    gui->buttons[0].height = HEIGHT_BUTTON_SAVE;
 
-    gui->buttons[1].imgon = APPLICATION_IMAGE_BUTTON_SAVE_PRESSED;
-    gui->buttons[1].imgoff = APPLICATION_IMAGE_BUTTON_SAVE_UNPRESSED;
-    gui->buttons[1].width = APPLICATION_IMAGE_BUTTON_WIDTH;
-    gui->buttons[1].height = APPLICATION_IMAGE_BUTTON_HEIGHT;
+    gui->buttons[1].imgon = IMAGE_BUTTON_SAVE_PRESSED;
+    gui->buttons[1].imgoff = IMAGE_BUTTON_SAVE_UNPRESSED;
+    gui->buttons[1].width = WIDTH_BUTTON_LOAD;
+    gui->buttons[1].height = HEIGHT_BUTTON_LOAD;
 
-    gui->buttons[2].imgon = APPLICATION_IMAGE_BUTTON_MIDI_CONNECTED;
-    gui->buttons[2].imgoff = APPLICATION_IMAGE_BUTTON_MIDI_STANDBY;
-    gui->buttons[2].width = APPLICATION_IMAGE_BUTTON_MIDI_WIDTH;
-    gui->buttons[2].height = APPLICATION_IMAGE_BUTTON_MIDI_HEIGHT;
+    gui->buttons[2].imgon = IMAGE_BUTTON_MIDI_CONNECTED;
+    gui->buttons[2].imgoff = IMAGE_BUTTON_MIDI_STANDBY;
+    gui->buttons[2].width = WIDTH_BUTTON_MIDI;
+    gui->buttons[2].height = HEIGHT_BUTTON_MIDI;
 
     for (int bt = 0; bt < NUMBER_OF_BUTTONS; ++bt)
     {
@@ -386,13 +527,13 @@ int create_pots_map(Gui_SDL_objects *gui, Sys_param *sys_param)
     for (int pot = 0; pot < NUMBER_OF_POTS; ++pot)
     {
         gui->pots[pot].percent = 0;
-        gui->pots[pot].img = APPLICATION_IMAGE_POT;
+        gui->pots[pot].img = IMAGE_POT_SMALL;
         gui->pots[pot].posX = pots_location[pot][0];
         gui->pots[pot].posY = pots_location[pot][1];
         gui->pots[pot].paramMIN = pot_min_max[pot][0];
         gui->pots[pot].paramMAX = pot_min_max[pot][1];
-        gui->pots[pot].width = APPLICATION_IMAGE_POT_WIDTH;
-        gui->pots[pot].height = APPLICATION_IMAGE_POT_HEIGHT;
+        gui->pots[pot].width = WIDTH_POT_SMALL;
+        gui->pots[pot].height = HEIGHT_POT_SMALL;
         gui->pots[pot].sdl_pot =
             gui_create_button(gui->pots[pot].posX, gui->pots[pot].posY, gui->pots[pot].width, gui->pots[pot].height, gui->pots[pot].img);
         gui->pots[pot].texture = SDL_CreateTextureFromSurface(gui->renderer, gui->pots[pot].sdl_pot->internal_surface);
@@ -441,7 +582,9 @@ int create_pots_map(Gui_SDL_objects *gui, Sys_param *sys_param)
 
 int process_switches(Gui_SDL_objects *gui, Core *audio_core)
 {
-    OnOff *param = NULL;
+    OnOff *onoff_param = NULL;
+    Waveform *wave_param = NULL;
+    Filter_type *type_param = NULL;
     int param_changed = 0;
 
     if (gui == NULL || audio_core == NULL)
@@ -459,19 +602,100 @@ int process_switches(Gui_SDL_objects *gui, Core *audio_core)
                 if (gui_set_switch_image(gui->switches[sw].sdl_button, gui->switches[sw].imgoff))return -1;
                 gui->switches[sw].onoff = OFF;
 
-                param = gui->switches[sw].param;
-                *param = OFF;
+                onoff_param = gui->switches[sw].param;
+                *onoff_param = OFF;
             }
             else
             {
                 if (gui_set_switch_image(gui->switches[sw].sdl_button, gui->switches[sw].imgon))return -1;
                 gui->switches[sw].onoff = ON;
 
-                param = gui->switches[sw].param;
-                *param = ON;
+                onoff_param = gui->switches[sw].param;
+                *onoff_param = ON;
             }
             param_changed = 1;
         }
+    }
+
+    if (SDL_Button_mouse_down(gui->ms_switches[0].sdl_button, &gui->event))
+    {
+        gui->ms_switches[0].curr_state =
+            (gui->ms_switches[0].curr_state + 1) % gui->ms_switches[0].number_of_states;
+        if (gui_set_switch_image(gui->ms_switches[0].sdl_button, gui->ms_switches[0].img[gui->ms_switches[0].curr_state]))return -1;
+        wave_param = gui->ms_switches[0].param;
+        *wave_param = gui->ms_switches[0].curr_state;
+
+        param_changed = 1;
+    }
+    else if (SDL_Button_mouse_down(gui->ms_switches[1].sdl_button, &gui->event))
+    {
+        gui->ms_switches[1].curr_state =
+            (gui->ms_switches[1].curr_state + 1) % gui->ms_switches[1].number_of_states;
+        if (gui_set_switch_image(gui->ms_switches[1].sdl_button, gui->ms_switches[1].img[gui->ms_switches[1].curr_state]))return -1;
+        wave_param = gui->ms_switches[1].param;
+        *wave_param = gui->ms_switches[1].curr_state;
+
+        param_changed = 1;
+    }
+    else if (SDL_Button_mouse_down(gui->ms_switches[2].sdl_button, &gui->event))
+    {
+        gui->ms_switches[2].curr_state =
+            (gui->ms_switches[2].curr_state + 1) % gui->ms_switches[2].number_of_states;
+        if (gui_set_switch_image(gui->ms_switches[2].sdl_button, gui->ms_switches[2].img[gui->ms_switches[2].curr_state]))return -1;
+        wave_param = gui->ms_switches[2].param;
+        *wave_param = gui->ms_switches[2].curr_state;
+
+        param_changed = 1;
+    }
+    else if (SDL_Button_mouse_down(gui->ms_switches[3].sdl_button, &gui->event))
+    {
+        gui->ms_switches[3].curr_state =
+            (gui->ms_switches[3].curr_state + 1) % gui->ms_switches[3].number_of_states;
+        if (gui_set_switch_image(gui->ms_switches[3].sdl_button, gui->ms_switches[3].img[gui->ms_switches[3].curr_state]))return -1;
+        wave_param = gui->ms_switches[3].param;
+        *wave_param = gui->ms_switches[3].curr_state;
+
+        param_changed = 1;
+    }
+    else if (SDL_Button_mouse_down(gui->ms_switches[4].sdl_button, &gui->event))
+    {
+        gui->ms_switches[4].curr_state =
+            (gui->ms_switches[4].curr_state + 1) % gui->ms_switches[4].number_of_states;
+        if (gui_set_switch_image(gui->ms_switches[4].sdl_button, gui->ms_switches[4].img[gui->ms_switches[4].curr_state]))return -1;
+        wave_param = gui->ms_switches[4].param;
+        *wave_param = gui->ms_switches[4].curr_state;
+
+        param_changed = 1;
+    }
+    else if (SDL_Button_mouse_down(gui->ms_switches[5].sdl_button, &gui->event))
+    {
+        gui->ms_switches[5].curr_state =
+            (gui->ms_switches[5].curr_state + 1) % gui->ms_switches[5].number_of_states;
+        if (gui_set_switch_image(gui->ms_switches[5].sdl_button, gui->ms_switches[5].img[gui->ms_switches[5].curr_state]))return -1;
+        type_param = gui->ms_switches[5].param;
+        *type_param = gui->ms_switches[5].curr_state;
+
+        param_changed = 1;
+    }
+    else if (SDL_Button_mouse_down(gui->ms_switches[6].sdl_button, &gui->event))
+    {
+        gui->ms_switches[6].curr_state =
+            (gui->ms_switches[6].curr_state + 1) % gui->ms_switches[6].number_of_states;
+        if (gui_set_switch_image(gui->ms_switches[6].sdl_button, gui->ms_switches[6].img[gui->ms_switches[6].curr_state]))return -1;
+        wave_param = gui->ms_switches[6].param;
+        *wave_param = gui->ms_switches[6].curr_state;
+
+        param_changed = 1;
+    }
+    else if (SDL_Button_mouse_down(gui->ms_switches[7].sdl_button, &gui->event))
+    {
+        gui->ms_switches[7].curr_state =
+            (gui->ms_switches[7].curr_state + 1) % gui->ms_switches[7].number_of_states;
+        if (gui_set_switch_image(gui->ms_switches[7].sdl_button, gui->ms_switches[7].img[gui->ms_switches[7].curr_state]))return -1;
+        type_param = gui->ms_switches[7].param;
+        *type_param = gui->ms_switches[7].curr_state;
+
+        param_changed = 1;
     }
 
     if (param_changed)
@@ -600,7 +824,6 @@ int process_pots(Gui_SDL_objects *gui, Core *audio_core, Uint8 mouse_is_down)
             && (param_is_being_mouse_changed == -1))
             || (param_is_being_mouse_changed == 0))
         {
-            printf("%d\n", gui->pots[0].percent);
             change_pot_percent(gui, 0, mouse_is_down);
             uint16_param = gui->pots[0].param;
             *uint16_param =
@@ -1005,202 +1228,202 @@ int load_sys_param_to_gui(Gui_SDL_objects *gui, Sys_param *sys_param)
     {
         // OSC 1
         uint16_param = gui->pots[0].param;
-        if (gui->pots[0].percent < (Uint16) map(*uint16_param, gui->pots[0].paramMIN, gui->pots[0].paramMAX, 0, 100))
+        if ((double) gui->pots[0].percent < map(*uint16_param, gui->pots[0].paramMIN, gui->pots[0].paramMAX, 0, 100))
         { gui->pots[0].percent++; }
         else
         { gui->pots[0].percent--; }
 
         uint8_param = gui->pots[1].param;
-        if (gui->pots[1].percent < (Uint8) map(*uint8_param, gui->pots[1].paramMIN, gui->pots[1].paramMAX, 0, 100))
+        if ((double) gui->pots[1].percent < map(*uint8_param, gui->pots[1].paramMIN, gui->pots[1].paramMAX, 0, 100))
         { gui->pots[1].percent++; }
         else
         { gui->pots[1].percent--; }
 
         sint8_param = gui->pots[2].param;
-        if (gui->pots[2].percent < (Uint8) map(*sint8_param, gui->pots[2].paramMIN, gui->pots[2].paramMAX, 0, 100))
+        if ((double) gui->pots[2].percent < map(*sint8_param, gui->pots[2].paramMIN, gui->pots[2].paramMAX, 0, 100))
         { gui->pots[2].percent++; }
         else
         { gui->pots[2].percent--; }
 
         // OSC 2
         uint16_param = gui->pots[3].param;
-        if (gui->pots[3].percent < (Uint16) map(*uint16_param, gui->pots[3].paramMIN, gui->pots[3].paramMAX, 0, 100))
+        if ((double) gui->pots[3].percent < map(*uint16_param, gui->pots[3].paramMIN, gui->pots[3].paramMAX, 0, 100))
         { gui->pots[3].percent++; }
         else
         { gui->pots[3].percent--; }
 
         uint8_param = gui->pots[4].param;
-        if (gui->pots[4].percent < (Uint8) map(*uint8_param, gui->pots[4].paramMIN, gui->pots[4].paramMAX, 0, 100))
+        if ((double) gui->pots[4].percent < map(*uint8_param, gui->pots[4].paramMIN, gui->pots[4].paramMAX, 0, 100))
         { gui->pots[4].percent++; }
         else
         { gui->pots[4].percent--; }
 
         sint8_param = gui->pots[5].param;
-        if (gui->pots[5].percent < (Uint8) map(*sint8_param, gui->pots[5].paramMIN, gui->pots[5].paramMAX, 0, 100))
+        if ((double) gui->pots[5].percent < map(*sint8_param, gui->pots[5].paramMIN, gui->pots[5].paramMAX, 0, 100))
         { gui->pots[5].percent++; }
         else
         { gui->pots[5].percent--; }
 
         // OSC 3
         uint16_param = gui->pots[6].param;
-        if (gui->pots[6].percent < (Uint16) map(*uint16_param, gui->pots[6].paramMIN, gui->pots[6].paramMAX, 0, 100))
+        if ((double) gui->pots[6].percent < map(*uint16_param, gui->pots[6].paramMIN, gui->pots[6].paramMAX, 0, 100))
         { gui->pots[6].percent++; }
         else
         { gui->pots[6].percent--; }
 
         uint8_param = gui->pots[1].param;
-        if (gui->pots[7].percent < (Uint8) map(*uint8_param, gui->pots[7].paramMIN, gui->pots[7].paramMAX, 0, 100))
+        if ((double) gui->pots[7].percent < map(*uint8_param, gui->pots[7].paramMIN, gui->pots[7].paramMAX, 0, 100))
         { gui->pots[7].percent++; }
         else
         { gui->pots[7].percent--; }
 
         sint8_param = gui->pots[8].param;
-        if (gui->pots[8].percent < (Uint8) map(*sint8_param, gui->pots[8].paramMIN, gui->pots[8].paramMAX, 0, 100))
+        if ((double) gui->pots[8].percent < map(*sint8_param, gui->pots[8].paramMIN, gui->pots[8].paramMAX, 0, 100))
         { gui->pots[8].percent++; }
         else
         { gui->pots[8].percent--; }
 
         // Envelope
         double_param = gui->pots[9].param;
-        if (gui->pots[9].percent < (Uint8) map(*double_param, gui->pots[9].paramMIN, gui->pots[9].paramMAX, 0, 100))
+        if ((double) gui->pots[9].percent < map(*double_param, gui->pots[9].paramMIN, gui->pots[9].paramMAX, 0, 100))
         { gui->pots[9].percent++; }
         else
         { gui->pots[9].percent--; }
 
         double_param = gui->pots[10].param;
-        if (gui->pots[10].percent < (Uint8) map(*double_param, gui->pots[10].paramMIN, gui->pots[10].paramMAX, 0, 100))
+        if ((double) gui->pots[10].percent < map(*double_param, gui->pots[10].paramMIN, gui->pots[10].paramMAX, 0, 100))
         { gui->pots[10].percent++; }
         else
         { gui->pots[10].percent--; }
 
         double_param = gui->pots[11].param;
-        if (gui->pots[11].percent < (Uint8) map(*double_param, gui->pots[11].paramMIN, gui->pots[11].paramMAX, 0, 100))
+        if ((double) gui->pots[11].percent < map(*double_param, gui->pots[11].paramMIN, gui->pots[11].paramMAX, 0, 100))
         { gui->pots[11].percent++; }
         else
         { gui->pots[11].percent--; }
 
         double_param = gui->pots[12].param;
-        if (gui->pots[12].percent < (Uint8) map(*double_param, gui->pots[12].paramMIN, gui->pots[12].paramMAX, 0, 100))
+        if ((double) gui->pots[12].percent < map(*double_param, gui->pots[12].paramMIN, gui->pots[12].paramMAX, 0, 100))
         { gui->pots[12].percent++; }
         else
         { gui->pots[12].percent--; }
 
         // Master volume
         uint8_param = gui->pots[13].param;
-        if (gui->pots[13].percent < (Uint8) map(*uint8_param, gui->pots[13].paramMIN, gui->pots[13].paramMAX, 0, 100))
+        if ((double) gui->pots[13].percent < map(*uint8_param, gui->pots[13].paramMIN, gui->pots[13].paramMAX, 0, 100))
         { gui->pots[13].percent++; }
         else
         { gui->pots[13].percent--; }
 
         // Distortion
         uint8_param = gui->pots[14].param;
-        if (gui->pots[14].percent < (Uint8) map(*uint8_param, gui->pots[14].paramMIN, gui->pots[14].paramMAX, 0, 100))
+        if ((double) gui->pots[14].percent < map(*uint8_param, gui->pots[14].paramMIN, gui->pots[14].paramMAX, 0, 100))
         { gui->pots[14].percent++; }
         else
         { gui->pots[14].percent--; }
 
         uint8_param = gui->pots[15].param;
-        if (gui->pots[15].percent < (Uint8) map(*uint8_param, gui->pots[15].paramMIN, gui->pots[15].paramMAX, 0, 100))
+        if ((double) gui->pots[15].percent < map(*uint8_param, gui->pots[15].paramMIN, gui->pots[15].paramMAX, 0, 100))
         { gui->pots[15].percent++; }
         else
         { gui->pots[15].percent--; }
 
         // Delay
         double_param = gui->pots[16].param;
-        if (gui->pots[16].percent < (Uint8) map(*double_param, gui->pots[16].paramMIN, gui->pots[16].paramMAX, 0, 100))
+        if ((double) gui->pots[16].percent < map(*double_param, gui->pots[16].paramMIN, gui->pots[16].paramMAX, 0, 100))
         { gui->pots[16].percent++; }
         else
         { gui->pots[16].percent--; }
 
         uint8_param = gui->pots[17].param;
-        if (gui->pots[17].percent < (Uint8) map(*uint8_param, gui->pots[17].paramMIN, gui->pots[17].paramMAX, 0, 100))
+        if ((double) gui->pots[17].percent < map(*uint8_param, gui->pots[17].paramMIN, gui->pots[17].paramMAX, 0, 100))
         { gui->pots[17].percent++; }
         else
         { gui->pots[17].percent--; }
 
         // Amp mod
         double_param = gui->pots[18].param;
-        if (gui->pots[18].percent < (Uint8) map(*double_param, gui->pots[18].paramMIN, gui->pots[18].paramMAX, 0, 100))
+        if ((double) gui->pots[18].percent < map(*double_param, gui->pots[18].paramMIN, gui->pots[18].paramMAX, 0, 100))
         { gui->pots[18].percent++; }
         else
         { gui->pots[18].percent--; }
 
         uint8_param = gui->pots[19].param;
-        if (gui->pots[19].percent < (Uint8) map(*uint8_param, gui->pots[19].paramMIN, gui->pots[19].paramMAX, 0, 100))
+        if ((double) gui->pots[19].percent < map(*uint8_param, gui->pots[19].paramMIN, gui->pots[19].paramMAX, 0, 100))
         { gui->pots[19].percent++; }
         else
         { gui->pots[19].percent--; }
 
         uint8_param = gui->pots[20].param;
-        if (gui->pots[20].percent < (Uint8) map(*uint8_param, gui->pots[20].paramMIN, gui->pots[20].paramMAX, 0, 100))
+        if ((double) gui->pots[20].percent < map(*uint8_param, gui->pots[20].paramMIN, gui->pots[20].paramMAX, 0, 100))
         { gui->pots[20].percent++; }
         else
         { gui->pots[20].percent--; }
 
         // Flanger
         double_param = gui->pots[21].param;
-        if (gui->pots[21].percent < (Uint8) map(*double_param, gui->pots[21].paramMIN, gui->pots[21].paramMAX, 0, 100))
+        if ((double) gui->pots[21].percent < map(*double_param, gui->pots[21].paramMIN, gui->pots[21].paramMAX, 0, 100))
         { gui->pots[21].percent++; }
         else
         { gui->pots[21].percent--; }
 
         double_param = gui->pots[22].param;
-        if (gui->pots[22].percent < (Uint8) map(*double_param, gui->pots[22].paramMIN, gui->pots[22].paramMAX, 0, 100))
+        if ((double) gui->pots[22].percent < map(*double_param, gui->pots[22].paramMIN, gui->pots[22].paramMAX, 0, 100))
         { gui->pots[22].percent++; }
         else
         { gui->pots[22].percent--; }
 
         uint8_param = gui->pots[23].param;
-        if (gui->pots[23].percent < (Uint8) map(*uint8_param, gui->pots[23].paramMIN, gui->pots[23].paramMAX, 0, 100))
+        if ((double) gui->pots[23].percent < map(*uint8_param, gui->pots[23].paramMIN, gui->pots[23].paramMAX, 0, 100))
         { gui->pots[23].percent++; }
         else
         { gui->pots[23].percent--; }
 
         uint8_param = gui->pots[24].param;
-        if (gui->pots[24].percent < (Uint8) map(*uint8_param, gui->pots[24].paramMIN, gui->pots[24].paramMAX, 0, 100))
+        if ((double) gui->pots[24].percent < map(*uint8_param, gui->pots[24].paramMIN, gui->pots[24].paramMAX, 0, 100))
         { gui->pots[24].percent++; }
         else
         { gui->pots[24].percent--; }
 
         // LFO filter
         uint16_param = gui->pots[25].param;
-        if (gui->pots[25].percent < (Uint16) map(*uint16_param, gui->pots[25].paramMIN, gui->pots[25].paramMAX, 0, 100))
+        if ((double) gui->pots[25].percent < map(*uint16_param, gui->pots[25].paramMIN, gui->pots[25].paramMAX, 0, 100))
         { gui->pots[25].percent++; }
         else
         { gui->pots[25].percent--; }
 
         uint16_param = gui->pots[26].param;
-        if (gui->pots[26].percent < (Uint16) map(*uint16_param, gui->pots[26].paramMIN, gui->pots[26].paramMAX, 0, 100))
+        if ((double) gui->pots[26].percent < map(*uint16_param, gui->pots[26].paramMIN, gui->pots[26].paramMAX, 0, 100))
         { gui->pots[26].percent++; }
         else
         { gui->pots[26].percent--; }
 
         double_param = gui->pots[27].param;
-        if (gui->pots[27].percent < (Uint8) map(*double_param, gui->pots[27].paramMIN, gui->pots[27].paramMAX, 0, 100))
+        if ((double) gui->pots[27].percent < map(*double_param, gui->pots[27].paramMIN, gui->pots[27].paramMAX, 0, 100))
         { gui->pots[27].percent++; }
         else
         { gui->pots[27].percent--; }
 
         uint8_param = gui->pots[28].param;
-        if (gui->pots[28].percent < (Uint8) map(*uint8_param, gui->pots[28].paramMIN, gui->pots[28].paramMAX, 0, 100))
+        if ((double) gui->pots[28].percent < map(*uint8_param, gui->pots[28].paramMIN, gui->pots[28].paramMAX, 0, 100))
         { gui->pots[28].percent++; }
         else
         { gui->pots[28].percent--; }
 
         double_param = gui->pots[29].param;
-        if (gui->pots[29].percent < (Uint8) map(*double_param, gui->pots[29].paramMIN, gui->pots[29].paramMAX, 0, 100))
+        if ((double) gui->pots[29].percent < map(*double_param, gui->pots[29].paramMIN, gui->pots[29].paramMAX, 0, 100))
         { gui->pots[29].percent++; }
         else
         { gui->pots[29].percent--; }
 
         uint16_param = gui->pots[30].param;
-        if (gui->pots[30].percent < (Uint16) map(*uint16_param, gui->pots[30].paramMIN, gui->pots[30].paramMAX, 0, 100))
+        if ((double) gui->pots[30].percent < map(*uint16_param, gui->pots[30].paramMIN, gui->pots[30].paramMAX, 0, 100))
         { gui->pots[30].percent++; }
         else
         { gui->pots[30].percent--; }
 
         double_param = gui->pots[31].param;
-        if (gui->pots[31].percent < (Uint8) map(*double_param, gui->pots[31].paramMIN, gui->pots[31].paramMAX, 0, 100))
+        if ((double) gui->pots[31].percent < map(*double_param, gui->pots[31].paramMIN, gui->pots[31].paramMAX, 0, 100))
         { gui->pots[31].percent++; }
         else
         { gui->pots[31].percent--; }

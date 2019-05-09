@@ -55,8 +55,6 @@ int main(int argc, char *argv[])
         exit(EXIT_FAILURE);
     }
 
-    save_preset("save_test.prst", audio_core->sys_param, RELATIVE_PATH_MODE);
-
 #ifndef VALGRIND
 
     set_audio_spec(&as, audio_core);

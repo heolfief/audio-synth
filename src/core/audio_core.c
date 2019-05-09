@@ -23,6 +23,7 @@ Core *alloc_core(Uint16 buffer_length)
     ac->sys_param->audio_buffer_length = buffer_length;
     ac->sys_param->master_volume = 100;
     ac->sys_param->master_FX_onoff = ON;
+    ac->sys_param->master_onoff = ON;
 
     ac->note_array = alloc_polyphony(buffer_length);
     if (ac->note_array == NULL) return NULL;
@@ -108,8 +109,15 @@ int master_audio_fill_buffer(Core *ac)
     // Apply master volume
     for (Uint16 sample = 0; sample < ac->sys_param->audio_buffer_length; ++sample)
     {
-        ac->master_audio[sample] =
-            (Sint16) ((double) ac->master_audio[sample] * ((double) ac->sys_param->master_volume / 100.0));
+        if (ac->sys_param->master_onoff == ON)
+        {
+            ac->master_audio[sample] =
+                (Sint16) ((double) ac->master_audio[sample] * ((double) ac->sys_param->master_volume / 100.0));
+        }
+        else
+        {
+            ac->master_audio[sample] = 0;
+        }
     }
 
     return 0;

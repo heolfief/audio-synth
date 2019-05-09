@@ -26,7 +26,7 @@ typedef struct
   Uint16 sample_rate;                            /*!<the sample rate of the audio system */
   Uint16 audio_buffer_length;                    /*!<the length of the audio buffer of the audio system */
   Uint8 master_volume;                           /*!<the master audio_volume */
-  OnOff master_onoff;                         /*!<the master onoff  */
+  OnOff master_onoff;                            /*!<the master onoff  */
   OnOff master_FX_onoff;                         /*!<the master FX onoff */
   Oscillator *osc1;                              /*!<the first oscillator */
   Oscillator *osc2;                              /*!<the second oscillator */
