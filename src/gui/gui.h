@@ -17,6 +17,7 @@
 #define NUMBER_OF_SWITCHES 11
 #define NUMBER_OF_MS_SWITCHES 8
 #define NUMBER_OF_POTS 32
+#define NUMBER_OF_LEDS 8
 
 #define NUMBER_OF_BUTTONS 3
 
@@ -149,52 +150,23 @@ typedef struct
 } Potentiometer;
 
 /**
-* \struct GreenLed
-* \brief define a graphical Green LED
+* \struct Led
+* \brief define a graphical LED
 *
 */
 typedef struct
 {
-  SDL_Button_t *sdl_GreenLed;      /*!<the SDL related objects for the Green Led */
-  SDL_Texture *texture;       /*!<the SDL texture of the Green Led */
+  SDL_Button_t *sdl_Led;      /*!<the SDL related objects for the Led */
+  SDL_Texture *texture;       /*!<the SDL texture of the Led */
   Uint16 posX;                /*!<the X position on the screen (in pixels) */
   Uint16 posY;                /*!<the Y position on the screen (in pixels) */
   Uint16 width;               /*!<the width (in pixels) */
   Uint16 height;              /*!<the height (in pixels) */
-  char *img;                  /*!<the image of the Green Led */
-} GreenLed;
+  char *img_led_green;        /*!<the image of the Green Led */
+  char *img_led_orange;       /*!<the image of the Orange Led */
+  char *img_led_red;          /*!<the image of the Red Led */
+} LED;
 
-/**
-* \struct OrangeLed
-* \brief define a graphical Orange LED
-*
-*/
-typedef struct
-{
-  SDL_Button_t *sdl_OrangeLed; /*!<the SDL related objects for the Orange Led */
-  SDL_Texture *texture;       /*!<the SDL texture of the Orange Led */
-  Uint16 posX;                /*!<the X position on the screen (in pixels) */
-  Uint16 posY;                /*!<the Y position on the screen (in pixels) */
-  Uint16 width;               /*!<the width (in pixels) */
-  Uint16 height;              /*!<the height (in pixels) */
-  char *img;                  /*!<the image of the Orange Led */
-} OrangeLed;
-
-/**
-* \struct RedLed
-* \brief define a graphical Red LED
-*
-*/
-typedef struct
-{
-  SDL_Button_t *sdl_RedLed; /*!<the SDL related objects for the Red Led */
-  SDL_Texture *texture;       /*!<the SDL texture of the Red Led */
-  Uint16 posX;                /*!<the X position on the screen (in pixels) */
-  Uint16 posY;                /*!<the Y position on the screen (in pixels) */
-  Uint16 width;               /*!<the width (in pixels) */
-  Uint16 height;              /*!<the height (in pixels) */
-  char *img;                  /*!<the image of the Red Led */
-} RedLed;
 
 /**
  * \struct Mouse_position
@@ -229,6 +201,7 @@ typedef struct
   Multi_state_Switch *ms_switches;
   Potentiometer *pots;
   Button *buttons;
+  LED *Leds;
 } Gui_SDL_objects;
 
 /**

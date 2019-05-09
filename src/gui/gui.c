@@ -12,7 +12,7 @@
 Sint8 param_is_being_mouse_changed = -1;
 
 static const int switches_location[NUMBER_OF_SWITCHES][2] = {
-    {77, 52},        // Switch osc1 OnOff
+    {77, 52},         // Switch osc1 OnOff
     {337, 52},        // Switch osc2 OnOff
     {595, 52},        // Switch osc3 OnOff
     {1074, 209},      // Switch master OnOff
@@ -154,6 +154,34 @@ static const int pot_min_max[NUMBER_OF_POTS][2] = {
     {0, 20}
 };
 
+static const int leds_location[NUMBER_OF_LEDS][2] = {
+    //first green Led
+    {1222, 173},
+
+    //Second Green Led
+    {1222, 153},
+
+    //Third Green Led
+    {1222, 134},
+
+    //4th Green Led
+    {1222, 115},
+
+    //5th Green Led
+    {1222, 94},
+
+    //First Orange Led
+    {1222, 75},
+
+    //Second Orange Led
+    {1222, 55},
+
+    //ONLY RED LED
+    {1222, 35}
+
+};
+
+
 static double map(double x, double in_min, double in_max, double out_min, double out_max)
 {
     return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
@@ -273,6 +301,15 @@ Gui_SDL_objects *alloc_gui_sdl_objects()
     }
     gui->buttons = bt;
 
+    LED *Led = (LED *)calloc(NUMBER_OF_LEDS, sizeof(LED));
+    if (Led == NULL)
+    {
+        sys_print_error("Memory Allocation error");
+        return NULL;
+    }
+    gui->Leds = Led;
+
+
     return gui;
 }
 
@@ -283,6 +320,7 @@ int free_gui_sdl_objects(Gui_SDL_objects *gui)
     free(gui->ms_switches);
     free(gui->pots);
     free(gui->buttons);
+    free(gui->Leds);
     free(gui);
     return 0;
 }
