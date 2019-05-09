@@ -343,7 +343,7 @@ int load_sys_param_to_gui(Gui_SDL_objects *gui, Sys_param *sys_param);
 /**
  * \fn int levelVUMeter(Audio_Buffer *average_level_audio)
 
- * \brief Function to compute the average audio level in order to adapt it to our number of "LEDs" forming our VUMeter.
+ * \brief Function to compute with the "ln" function the average audio level in order to adapt it to our number of "LEDs" forming our VUMeter.
  *
  *
  * \param Audio_Buffer The average_level_audio

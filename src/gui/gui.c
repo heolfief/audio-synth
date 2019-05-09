@@ -7,6 +7,7 @@
  */
 
 #include "gui.h"
+#include "math.h"
 
 Sint8 param_is_being_mouse_changed = -1;
 
@@ -1433,7 +1434,7 @@ int load_sys_param_to_gui(Gui_SDL_objects *gui, Sys_param *sys_param)
     }
 
     int levelVUMeter(Audio_Buffer *average_level_audio){
-        
+
 
 
 
