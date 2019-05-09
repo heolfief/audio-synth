@@ -17,6 +17,8 @@
 #define NUMBER_OF_SWITCHES 11
 #define NUMBER_OF_MS_SWITCHES 8
 #define NUMBER_OF_POTS 32
+#define NUMBER_OF_BIG_POTS 5
+
 
 #define NUMBER_OF_BUTTONS 3
 
@@ -39,9 +41,9 @@
 #define WIDTH_POT_SMALL                 45
 #define HEIGHT_POT_SMALL                46
 
-#define IMAGE_POT_LARGE                 "../src/gui/Figs/big_pot.png"
-#define WIDTH_POT_LARGE                 65
-#define HEIGHT_POT_LARGE                65
+#define IMAGE_POT_BIG                 "../src/gui/Figs/big_pot.png"
+#define WIDTH_POT_BIG                 65
+#define HEIGHT_POT_BIG                65
 
 #define IMAGE_BUTTON_LOAD_PRESSED       "../src/gui/Figs/load_clicked.png"
 #define IMAGE_BUTTON_LOAD_UNPRESSED     "../src/gui/Figs/load.png"
@@ -132,7 +134,8 @@ typedef struct
 typedef struct
 {
   SDL_Button_t *sdl_pot;      /*!<the SDL related objects for the potentiometer */
-  SDL_Texture *texture;       /*!<the SDL texture of the potentiometer */
+  SDL_Texture *texture;/*!<the SDL texture of the potentiometer */
+  Uint8 size;                  /*!<the size of the pot. Can be small (0) or big (1) */
   Uint16 posX;                /*!<the X position on the screen (in pixels) */
   Uint16 posY;                /*!<the Y position on the screen (in pixels) */
   Uint16 width;               /*!<the width (in pixels) */

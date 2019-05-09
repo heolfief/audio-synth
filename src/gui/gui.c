@@ -35,60 +35,60 @@ static const int ms_switches_location[NUMBER_OF_MS_SWITCHES][2] = {
     {1112, 418},      // Filter type
 };
 
-static const int pots_location[NUMBER_OF_POTS][2] = {
+static const int pots_location[NUMBER_OF_POTS][3] = {
     // OSC1
-    {72, 164},
-    {148, 164},
-    {225, 164},
+    {72, 164, 0},
+    {148, 164, 0},
+    {225, 164, 0},
 
     // OSC 2
-    {327, 164},
-    {403, 164},
-    {482, 164},
+    {327, 164, 0},
+    {403, 164, 0},
+    {482, 164, 0},
 
     //OSC3
-    {584, 164},
-    {659, 164},
-    {736, 164},
+    {584, 164, 0},
+    {659, 164, 0},
+    {736, 164, 0},
 
     // Envelope
-    {832, 40},
-    {930, 40},
-    {832, 153},
-    {930, 153},
+    {834, 41, 1},
+    {935, 41, 1},
+    {836, 148, 1},
+    {935, 147, 1},
 
     // Master
-    {1069, 56},
+    {1071, 41, 1},
 
     // Distortion
-    {73, 433},
-    {166, 433},
+    {73, 433, 0},
+    {166, 433, 0},
 
     // Delay
-    {282, 434},
-    {378, 434},
+    {282, 434, 0},
+    {378, 434, 0},
 
     // Tremolo
-    {475, 449},
-    {535, 447},
-    {595, 447},
+    {475, 449, 0},
+    {535, 447, 0},
+    {595, 447, 0},
 
     // Flanger
-    {795, 377},
-    {676, 460},
-    {735, 460},
-    {795, 460},
+    {795, 377, 0},
+    {676, 460, 0},
+    {735, 460, 0},
+    {795, 460, 0},
 
     // LFO filter
-    {972, 377},
-    {1031, 377},
-    {937, 461},
-    {987, 460},
-    {1037, 460},
+    {972, 377, 0},
+    {1031, 377, 0},
+    {937, 461, 0},
+    {987, 460, 0},
+    {1037, 460, 0},
 
     // Filter
-    {1224, 395},
-    {1169, 460}
+    {1224, 395, 0},
+    {1169, 460, 0}
 };
 
 static const int buttons_location[NUMBER_OF_BUTTONS][2] = {
@@ -526,7 +526,10 @@ int create_pots_map(Gui_SDL_objects *gui, Sys_param *sys_param)
     }
     for (int pot = 0; pot < NUMBER_OF_POTS; ++pot)
     {
-        gui->pots[pot].percent = 0;
+        gui->pots[pot].size=pots_location[pot][2];
+
+        if (gui->pots[pot].size == 0){
+            gui->pots[pot].percent = 0;
         gui->pots[pot].img = IMAGE_POT_SMALL;
         gui->pots[pot].posX = pots_location[pot][0];
         gui->pots[pot].posY = pots_location[pot][1];
@@ -542,6 +545,27 @@ int create_pots_map(Gui_SDL_objects *gui, Sys_param *sys_param)
             sys_print_SDL_error("Failed creating texture");
             return -1;
         }
+
+        }
+        if (gui->pots[pot].size==1){
+            gui->pots[pot].percent = 0;
+            gui->pots[pot].img = IMAGE_POT_BIG;
+            gui->pots[pot].posX = pots_location[pot][0];
+            gui->pots[pot].posY = pots_location[pot][1];
+            gui->pots[pot].paramMIN = pot_min_max[pot][0];
+            gui->pots[pot].paramMAX = pot_min_max[pot][1];
+            gui->pots[pot].width = WIDTH_POT_BIG;
+            gui->pots[pot].height = HEIGHT_POT_BIG;
+            gui->pots[pot].sdl_pot =
+                gui_create_button(gui->pots[pot].posX, gui->pots[pot].posY, gui->pots[pot].width, gui->pots[pot].height, gui->pots[pot].img);
+            gui->pots[pot].texture = SDL_CreateTextureFromSurface(gui->renderer, gui->pots[pot].sdl_pot->internal_surface);
+            if (gui->pots[pot].texture == NULL)
+            {
+                sys_print_SDL_error("Failed creating texture");
+                return -1;
+            }
+        }
+
     }
 
     gui->pots[0].param = &sys_param->osc1->amp;
