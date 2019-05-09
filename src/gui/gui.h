@@ -158,6 +158,7 @@ typedef struct
 */
 typedef struct
 {
+  OnOff OnOffLed;              /*!<the parameter of the led to know if it's on or not*/
   SDL_Button_t *sdl_Led;      /*!<the SDL related objects for the Led */
   SDL_Texture *texture;       /*!<the SDL texture of the Led */
   Uint16 posX;                /*!<the X position on the screen (in pixels) */
@@ -356,6 +357,20 @@ int process_buttons(Gui_SDL_objects *gui, Core *audio_core, MIDI_Peripheral_fd *
  */
 int process_pots(Gui_SDL_objects *gui, Core *audio_core, Uint8 mouse_is_down);
 
+
+
+/**
+ * \fn int process_leds(Gui_SDL_objects *gui)
+ * \brief Function to check leds status, change image accordingly and free the sdl and texture of the led if not on
+ *
+ * \param gui The Gui_SDL_objects
+ * \param audio_core The system's audio core
+ *
+ * \return 0 if everything went OK, -1 otherwise
+ */
+int process_leds(Gui_SDL_objects *gui, Core *audio_core);
+
+
 /**
  * \fn int change_pot_percent(Gui_SDL_objects *gui, int potnbr, Uint8 mouse_is_down)
  * \brief Function to check change pot percent according to mouse movement or mousewheel
@@ -366,7 +381,7 @@ int process_pots(Gui_SDL_objects *gui, Core *audio_core, Uint8 mouse_is_down);
  *
  * \return 0 if everything went OK, -1 otherwise
  */
-int change_pot_percent(Gui_SDL_objects *gui, int potnbr, Uint8 mouse_is_down);
+ int change_pot_percent(Gui_SDL_objects *gui, int potnbr, Uint8 mouse_is_down);
 
 /**
  * \fn int load_sys_param_to_gui(Gui_SDL_objects *gui, Sys_param *sys_param)
@@ -390,5 +405,7 @@ int load_sys_param_to_gui(Gui_SDL_objects *gui, Sys_param *sys_param);
  * \return returns an int between 1 and 8, to know which LED to light up and -1 if something goes wrong
  */
 short int levelVUMeter(Audio_Buffer *average_level_audio);
+
+
 
 #endif //AUDIO_SYNTH_GUI_H

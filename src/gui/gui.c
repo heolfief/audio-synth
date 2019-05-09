@@ -181,7 +181,6 @@ static const int leds_location[NUMBER_OF_LEDS][2] = {
 
 };
 
-
 static double map(double x, double in_min, double in_max, double out_min, double out_max)
 {
     return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
@@ -301,14 +300,13 @@ Gui_SDL_objects *alloc_gui_sdl_objects()
     }
     gui->buttons = bt;
 
-    LED *Led = (LED *)calloc(NUMBER_OF_LEDS, sizeof(LED));
+    LED *Led = (LED *) calloc(NUMBER_OF_LEDS, sizeof(LED));
     if (Led == NULL)
     {
         sys_print_error("Memory Allocation error");
         return NULL;
     }
     gui->Leds = Led;
-
 
     return gui;
 }
@@ -528,7 +526,7 @@ int create_Leds_map(Gui_SDL_objects *gui, Sys_param *sys_param)
         sys_print_error("Parameter is NULL");
         return -1;
     }
-    for (int nbLeds = 0; nbLeds < NUMBER_OF_LEDS-3; ++nbLeds)
+    for (int nbLeds = 0; nbLeds < NUMBER_OF_LEDS - 3; ++nbLeds)
     {
         gui->Leds[nbLeds].img_led_green = IMAGE_LED_GREEN;
         gui->Leds[nbLeds].posX = leds_location[nbLeds][0];
@@ -539,7 +537,7 @@ int create_Leds_map(Gui_SDL_objects *gui, Sys_param *sys_param)
             gui_create_button(gui->Leds[nbLeds].posX, gui->Leds[nbLeds].posY, gui->Leds[nbLeds].width, gui->Leds[nbLeds].height, gui->Leds[nbLeds].img_led_green);
     }
 
-    for (int nbLeds = NUMBER_OF_LEDS-3; nbLeds < NUMBER_OF_LEDS-1; ++nbLeds)
+    for (int nbLeds = NUMBER_OF_LEDS - 3; nbLeds < NUMBER_OF_LEDS - 1; ++nbLeds)
     {
         gui->Leds[nbLeds].img_led_orange = IMAGE_LED_ORANGE;
         gui->Leds[nbLeds].posX = leds_location[nbLeds][0];
@@ -549,7 +547,7 @@ int create_Leds_map(Gui_SDL_objects *gui, Sys_param *sys_param)
         gui->Leds[nbLeds].sdl_Led =
             gui_create_button(gui->Leds[nbLeds].posX, gui->Leds[nbLeds].posY, gui->Leds[nbLeds].width, gui->Leds[nbLeds].height, gui->Leds[nbLeds].img_led_orange);
     }
-    for (int nbLeds = NUMBER_OF_LEDS-1; nbLeds < NUMBER_OF_LEDS; ++nbLeds)
+    for (int nbLeds = NUMBER_OF_LEDS - 1; nbLeds < NUMBER_OF_LEDS; ++nbLeds)
     {
         gui->Leds[nbLeds].img_led_red = IMAGE_LED_RED;
         gui->Leds[nbLeds].posX = leds_location[nbLeds][0];
@@ -559,7 +557,6 @@ int create_Leds_map(Gui_SDL_objects *gui, Sys_param *sys_param)
         gui->Leds[nbLeds].sdl_Led =
             gui_create_button(gui->Leds[nbLeds].posX, gui->Leds[nbLeds].posY, gui->Leds[nbLeds].width, gui->Leds[nbLeds].height, gui->Leds[nbLeds].img_led_red);
     }
-
 
 }
 int create_buttons_map(Gui_SDL_objects *gui)
@@ -1240,6 +1237,152 @@ int process_pots(Gui_SDL_objects *gui, Core *audio_core, Uint8 mouse_is_down)
     return 0;
 }
 
+int process_leds(Gui_SDL_objects *gui, Core *audio_core)
+{
+
+    if (gui == NULL || audio_core == NULL)
+    {
+        sys_print_error("Parameter is NULL");
+        return -1;
+    }
+    short int ledsResults;
+    ledsResults = levelVUMeter(&audio_core->average_audio_level);
+
+    if (ledsResults == 1)
+    {
+        gui->Leds[0].OnOffLed = ON;
+        gui->Leds[1].OnOffLed = OFF;
+        gui->Leds[2].OnOffLed = OFF;
+        gui->Leds[3].OnOffLed = OFF;
+        gui->Leds[4].OnOffLed = OFF;
+        gui->Leds[5].OnOffLed = OFF;
+        gui->Leds[6].OnOffLed = OFF;
+        gui->Leds[7].OnOffLed = OFF;
+    }
+
+    if (ledsResults == 2)
+    {
+
+        gui->Leds[0].OnOffLed = ON;
+        gui->Leds[1].OnOffLed = ON;
+        gui->Leds[2].OnOffLed = OFF;
+        gui->Leds[3].OnOffLed = OFF;
+        gui->Leds[4].OnOffLed = OFF;
+        gui->Leds[5].OnOffLed = OFF;
+        gui->Leds[6].OnOffLed = OFF;
+        gui->Leds[7].OnOffLed = OFF;
+    }
+    if (ledsResults == 3)
+    {
+
+        gui->Leds[0].OnOffLed = ON;
+        gui->Leds[1].OnOffLed = ON;
+        gui->Leds[2].OnOffLed = ON;
+        gui->Leds[3].OnOffLed = OFF;
+        gui->Leds[4].OnOffLed = OFF;
+        gui->Leds[5].OnOffLed = OFF;
+        gui->Leds[6].OnOffLed = OFF;
+        gui->Leds[7].OnOffLed = OFF;
+    }
+
+    if (ledsResults == 4)
+    {
+
+        gui->Leds[0].OnOffLed = ON;
+        gui->Leds[1].OnOffLed = ON;
+        gui->Leds[2].OnOffLed = ON;
+        gui->Leds[3].OnOffLed = ON;
+        gui->Leds[4].OnOffLed = OFF;
+        gui->Leds[5].OnOffLed = OFF;
+        gui->Leds[6].OnOffLed = OFF;
+        gui->Leds[7].OnOffLed = OFF;
+    }
+
+    if (ledsResults == 5)
+    {
+
+        gui->Leds[0].OnOffLed = ON;
+        gui->Leds[1].OnOffLed = ON;
+        gui->Leds[2].OnOffLed = ON;
+        gui->Leds[3].OnOffLed = ON;
+        gui->Leds[4].OnOffLed = ON;
+        gui->Leds[5].OnOffLed = OFF;
+        gui->Leds[6].OnOffLed = OFF;
+        gui->Leds[7].OnOffLed = OFF;
+    }
+
+    if (ledsResults == 6)
+    {
+
+        gui->Leds[0].OnOffLed = ON;
+        gui->Leds[1].OnOffLed = ON;
+        gui->Leds[2].OnOffLed = ON;
+        gui->Leds[3].OnOffLed = ON;
+        gui->Leds[4].OnOffLed = ON;
+        gui->Leds[5].OnOffLed = ON;
+        gui->Leds[6].OnOffLed = OFF;
+        gui->Leds[7].OnOffLed = OFF;
+    }
+
+    if (ledsResults == 7)
+    {
+
+        gui->Leds[0].OnOffLed = ON;
+        gui->Leds[1].OnOffLed = ON;
+        gui->Leds[2].OnOffLed = ON;
+        gui->Leds[3].OnOffLed = ON;
+        gui->Leds[4].OnOffLed = ON;
+        gui->Leds[5].OnOffLed = ON;
+        gui->Leds[6].OnOffLed = ON;
+        gui->Leds[7].OnOffLed = OFF;
+    }
+
+    if (ledsResults == 8)
+    {
+
+        gui->Leds[0].OnOffLed = ON;
+        gui->Leds[1].OnOffLed = ON;
+        gui->Leds[2].OnOffLed = ON;
+        gui->Leds[3].OnOffLed = ON;
+        gui->Leds[4].OnOffLed = ON;
+        gui->Leds[5].OnOffLed = ON;
+        gui->Leds[6].OnOffLed = ON;
+        gui->Leds[7].OnOffLed = ON;
+    }
+
+    for (int nbLeds = 0; nbLeds < NUMBER_OF_LEDS; ++nbLeds)
+    {
+
+        if (gui->Leds[nbLeds].OnOffLed)    // If ON
+        {
+            if (nbLeds < NUMBER_OF_LEDS - 3)
+            {
+                if (gui_set_switch_image(gui->Leds[nbLeds].sdl_Led, gui->Leds[nbLeds].img_led_green))return -1;
+                sys_print_error("wrong image to load");
+            }
+            if (nbLeds < NUMBER_OF_LEDS - 1 && nbLeds > NUMBER_OF_LEDS - 3)
+            {
+                if (gui_set_switch_image(gui->Leds[nbLeds].sdl_Led, gui->Leds[nbLeds].img_led_orange))return -1;
+                sys_print_error("wrong image to load");
+
+            }
+            if (nbLeds < NUMBER_OF_LEDS && nbLeds > NUMBER_OF_LEDS - 1)
+            {
+                if (gui_set_switch_image(gui->Leds[nbLeds].sdl_Led, gui->Leds[nbLeds].img_led_red))return -1;
+                sys_print_error("wrong image to load");
+
+            }
+
+        }
+        else{
+            free(gui->Leds[nbLeds].sdl_Led);
+            free(gui->Leds[nbLeds].texture);
+        }
+
+    }
+
+}
+
 int change_pot_percent(Gui_SDL_objects *gui, int potnbr, Uint8 mouse_is_down)
 {
     if (gui->event.type == SDL_MOUSEWHEEL)
@@ -1522,10 +1665,10 @@ int load_sys_param_to_gui(Gui_SDL_objects *gui, Sys_param *sys_param)
 
         //The level is between 0 and 2¹⁶, so between 0 and 1 the Ln value will be set to 1.
 
-        if(average_audio_level[0] <= 1)
+        if (average_audio_level[0] <= 1)
         { LnScaledAudioLevel = 1; }
         else
-        { LnScaledAudioLevel = log( (double)average_audio_level[0]); }
+        { LnScaledAudioLevel = log((double) average_audio_level[0]); }
 
         /*It should return a number between 1 and 11.09, but we only have 8 LEDs on our synth. I am therefore
          making the choice to set the thresholds accordingly.
