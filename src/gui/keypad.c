@@ -20,6 +20,10 @@ int octave =0;
             switch(event->key.keysym.sym)
             {
                 case OCTAVE_R:
+                    for (int i = 20; i < 110; ++i)
+                    {
+                        midi_note_OFF(ac, i);
+                    }
                     if (octave>=OCTAVE_MAX){
                         sys_print_error("Octave max atteinte");
                         return -1;
@@ -28,6 +32,10 @@ int octave =0;
                     break;
 
                    case OCTAVE_L:
+                       for (int i = 20; i < 110; ++i)
+                       {
+                           midi_note_OFF(ac, i);
+                       }
                     if (octave<=OCTAVE_MIN) {
                         sys_print_error("Octave min atteinte");
                         return -1;

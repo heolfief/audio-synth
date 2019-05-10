@@ -138,11 +138,6 @@ int main(int argc, char *argv[])
 
                 case SDL_KEYDOWN:
 
-                    if(gui->event.key.keysym.sym==SDLK_g)
-                    {
-                        midi_note_ON(audio_core,60,120);
-                    }
-
                     if (gui->event.key.keysym.sym == SDLK_ESCAPE)
                     {
                         if (prompt_quit())
@@ -154,18 +149,12 @@ int main(int argc, char *argv[])
                     else{
                     keypress (&gui->event, audio_core);
                     }
-                    break;/*
+                    break;
                 case SDL_KEYUP:
                     keyrelease(&gui->event, audio_core);
 
-                break;*/
-               case SDL_KEYUP:
+                break;
 
-                    if(gui->event.key.keysym.sym==SDLK_g)
-                    {
-                        midi_note_OFF(audio_core, 60);
-                    }
-                    break;
 
                 case SDL_MOUSEBUTTONDOWN:
 
