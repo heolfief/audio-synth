@@ -83,7 +83,7 @@ int synthesis_fill_buffer(Core *ac)
 
     for (int sample = 0; sample < ac->sys_param->audio_buffer_length; ++sample)
     {
-        ac->average_audio_level[sample] = moving_average(ac->master_audio[sample]);
+        ac->average_audio_level[sample] = moving_average((Sint16) ((double) ac->master_audio[sample] * ((double) ac->sys_param->master_volume / 100.0)));
     }
 
     return 0;
@@ -113,6 +113,7 @@ int master_audio_fill_buffer(Core *ac)
         {
             ac->master_audio[sample] =
                 (Sint16) ((double) ac->master_audio[sample] * ((double) ac->sys_param->master_volume / 100.0));
+
         }
         else
         {

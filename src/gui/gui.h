@@ -14,10 +14,19 @@
 #define WIDTH_APPLICATION_WINDOW        1300
 #define HEIGHT_APPLICATION_WINDOW       816
 
+<<<<<<< HEAD
 #define NUMBER_OF_SWITCHES              11
 #define NUMBER_OF_MS_SWITCHES           8
 #define NUMBER_OF_POTS                  32
 #define NUMBER_OF_BUTTONS               3
+=======
+#define NUMBER_OF_SWITCHES 11
+#define NUMBER_OF_MS_SWITCHES 8
+#define NUMBER_OF_POTS 32
+#define NUMBER_OF_LEDS 8
+
+#define NUMBER_OF_BUTTONS 3
+>>>>>>> GUI_VUmeter
 
 #define IMAGE_SWITCH_ON                 "../src/gui/Figs/switch_on.png"
 #define IMAGE_SWITCH_OFF                "../src/gui/Figs/switch_off.png"
@@ -69,6 +78,15 @@
 
 #define IMAGE_MS_SWITCH_MAX_STATES      4
 #define POT_INCREMENT                   1
+
+#define IMAGE_LED_ON_GREEN                 "../src/gui/Figs/led_on_green.png"
+#define IMAGE_LED_ON_ORANGE                "../src/gui/Figs/led_on_orange.png"
+#define IMAGE_LED_ON_RED                   "../src/gui/Figs/led_on_red.png"
+#define IMAGE_LED_OFF_RED                   "../src/gui/Figs/led_off_red.png"
+#define IMAGE_LED_OFF_ORANGE                "../src/gui/Figs/led_off_orange.png"
+#define IMAGE_LED_OFF_GREEN                 "../src/gui/Figs/led_off_green.png"
+#define WIDTH_LED                       13
+#define HEIGHT_LED                      13
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
@@ -156,6 +174,7 @@ typedef struct
 } Potentiometer;
 
 /**
+<<<<<<< HEAD
  * \struct Text
  * \brief define an SDL text
  *
@@ -167,6 +186,27 @@ typedef struct
   SDL_Surface *text_surface;  /*!<the SDL surface of the text */
   SDL_Rect rect;              /*!<the SDL rectangle associated with the text */
 } Text;
+=======
+* \struct Led
+* \brief define a graphical LED
+*
+*/
+typedef struct
+{
+  OnOff OnOffLed;              /*!<the parameter of the led to know if it's on or not*/
+  SDL_Button_t *sdl_Led;      /*!<the SDL related objects for the Led */
+  SDL_Texture *texture;       /*!<the SDL texture of the Led */
+  Uint16 posX;                /*!<the X position on the screen (in pixels) */
+  Uint16 posY;                /*!<the Y position on the screen (in pixels) */
+  Uint16 width;               /*!<the width (in pixels) */
+  Uint16 height;              /*!<the height (in pixels) */
+  char *img_led_green;        /*!<the image of the Green Led */
+  char *img_led_orange;       /*!<the image of the Orange Led */
+  char *img_led_red;          /*!<the image of the Red Led */
+  char *img_led_off;          /*!<the image of the Led Off */
+} LED;
+
+>>>>>>> GUI_VUmeter
 
 /**
  * \struct Mouse_position
@@ -201,7 +241,11 @@ typedef struct
   Multi_state_Switch *ms_switches;
   Potentiometer *pots;
   Button *buttons;
+<<<<<<< HEAD
   Text *preset_name;
+=======
+  LED *Leds;
+>>>>>>> GUI_VUmeter
 } Gui_SDL_objects;
 
 /**
@@ -297,6 +341,18 @@ int create_Text_map(Gui_SDL_objects *gui);
 int create_switches_map(Gui_SDL_objects *gui, Sys_param *sys_param);
 
 /**
+ * \fn int create_leds_map(Gui_SDL_objects *gui, Sys_param *sys_param)
+ * \brief Function to place and initialize GUI leds
+ *
+ * \param gui The Gui_SDL_objects
+ * \param sys_param The system parameters
+ *
+ * \return 0 if everything went OK, -1 otherwise
+ */
+int create_Leds_map(Gui_SDL_objects *gui, Sys_param *sys_param);
+
+
+/**
  * \fn int create_buttons_map(Gui_SDL_objects *gui)
  * \brief Function to place and initialize GUI buttons
  *
@@ -352,6 +408,20 @@ int process_buttons(Gui_SDL_objects *gui, Core *audio_core, MIDI_Peripheral_fd *
  */
 int process_pots(Gui_SDL_objects *gui, Core *audio_core, Uint8 mouse_is_down);
 
+
+
+/**
+ * \fn int process_leds(Gui_SDL_objects *gui)
+ * \brief Function to check leds status, change image accordingly and free the sdl and texture of the led if not on
+ *
+ * \param gui The Gui_SDL_objects
+ * \param audio_core The system's audio core
+ *
+ * \return 0 if everything went OK, -1 otherwise
+ */
+int process_leds(Gui_SDL_objects *gui, Core *audio_core);
+
+
 /**
  * \fn int change_pot_percent(Gui_SDL_objects *gui, int potnbr, Uint8 mouse_is_down)
  * \brief Function to check change pot percent according to mouse movement or mousewheel
@@ -362,7 +432,7 @@ int process_pots(Gui_SDL_objects *gui, Core *audio_core, Uint8 mouse_is_down);
  *
  * \return 0 if everything went OK, -1 otherwise
  */
-int change_pot_percent(Gui_SDL_objects *gui, int potnbr, Uint8 mouse_is_down);
+ int change_pot_percent(Gui_SDL_objects *gui, int potnbr, Uint8 mouse_is_down);
 
 /**
  * \fn int load_sys_param_to_gui(Gui_SDL_objects *gui, Sys_param *sys_param)
@@ -376,11 +446,26 @@ int change_pot_percent(Gui_SDL_objects *gui, int potnbr, Uint8 mouse_is_down);
 int load_sys_param_to_gui(Gui_SDL_objects *gui, Sys_param *sys_param);
 
 /**
+<<<<<<< HEAD
  * \fn int prompt_quit()
  * \brief Function to prompt the user with exit message
  *
  * \return 1 if yes, 0 if no
  */
 int prompt_quit();
+=======
+ * \fn int levelVUMeter(Audio_Buffer *average_level_audio)
+
+ * \brief Function to compute with the "ln" function the average audio level in order to adapt it to our number of "LEDs" forming our VUMeter.
+ *
+ *
+ * \param Audio_Buffer The average_level_audio
+ *
+ * \return returns an int between 1 and 8, to know which LED to light up and -1 if something goes wrong
+ */
+short int levelVUMeter(Audio_Buffer average_audio_level);
+
+
+>>>>>>> GUI_VUmeter
 
 #endif //AUDIO_SYNTH_GUI_H

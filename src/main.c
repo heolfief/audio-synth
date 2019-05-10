@@ -19,7 +19,11 @@
 #include "system/error_handler.h"
 #include "sys_param/xml/preset_xml.h"
 #include "midi/midi.h"
+<<<<<<< HEAD
 #include "gui/keypad.h"
+=======
+#include "core/audio_core.h"
+>>>>>>> GUI_VUmeter
 
 int main(int argc, char *argv[])
 {
@@ -57,6 +61,7 @@ int main(int argc, char *argv[])
         exit(EXIT_FAILURE);
     }
 
+
 #ifndef VALGRIND
 
     set_audio_spec(&as, audio_core);
@@ -78,7 +83,11 @@ int main(int argc, char *argv[])
     if (create_switches_map(gui, audio_core->sys_param))exit(EXIT_FAILURE);
     if (create_pots_map(gui, audio_core->sys_param))exit(EXIT_FAILURE);
     if (create_buttons_map(gui))exit(EXIT_FAILURE);
+<<<<<<< HEAD
     if (create_Text_map(gui))exit(EXIT_FAILURE);
+=======
+    if (create_Leds_map(gui, audio_core->sys_param));
+>>>>>>> GUI_VUmeter
     if (load_sys_param_to_gui(gui, audio_core->sys_param))exit((EXIT_FAILURE));
     if (gui_update(gui))exit(EXIT_FAILURE);
 
@@ -95,9 +104,12 @@ int main(int argc, char *argv[])
     if (compute_filter_coeffs(audio_core->sys_param->filter_param, audio_core->sys_param->sample_rate, audio_core->effect_core->filter_state))return -1;
 
     SDL_PauseAudio(0);                      // Play audio (pause = off)
+    if (process_leds(gui, audio_core))exit(EXIT_FAILURE);
 
     while (!gui->application_quit)
     {
+        if (audio_core->buffer_is_new) process_leds(gui, audio_core);
+
         if (midi_peripheral != -1)
         {
             if (process_midi_input(&midi_peripheral, audio_core))exit(EXIT_FAILURE);
@@ -111,6 +123,7 @@ int main(int argc, char *argv[])
                 tinyfd_messageBox(NULL, "MIDI device disconnected", "ok", "info", 1);
             }
         }
+
 
         while (SDL_PollEvent(&gui->event))
         {
@@ -131,6 +144,11 @@ int main(int argc, char *argv[])
 
                 case SDL_KEYDOWN:
 
+                    if(gui->event.key.keysym.sym==SDLK_g)
+                    {
+                        midi_note_ON(audio_core,60,120);
+                    }
+
                     if (gui->event.key.keysym.sym == SDLK_ESCAPE)
                     {
                         if (prompt_quit())
@@ -146,7 +164,18 @@ int main(int argc, char *argv[])
                 case SDL_KEYUP:
                     keyrelease(&gui->event, audio_core);
 
+<<<<<<< HEAD
                 break;
+=======
+                case SDL_KEYUP:
+
+                    if(gui->event.key.keysym.sym==SDLK_g)
+                    {
+                        midi_note_OFF(audio_core, 60);
+                    }
+                    break;
+
+>>>>>>> GUI_VUmeter
                 case SDL_MOUSEBUTTONDOWN:
 
                     mouse_is_down = 1;
