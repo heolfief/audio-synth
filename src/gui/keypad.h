@@ -22,9 +22,7 @@
 #endif //AUDIO_SYNTH_SRC_GUI_KEYPAD_H_
 
 
-typedef struct
-{
 
-}key;
 
-int keypress(SDL_KeyboardEvent *key);
+int keypress(SDL_Event *event, Core *ac);
+int keyrelease(SDL_Event *event, Core *ac);

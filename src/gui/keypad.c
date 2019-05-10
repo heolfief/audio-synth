@@ -4,16 +4,16 @@
 #include "keypad.h"
 
 
-    int keypress(SDL_KeyboardEvent *key){
+    int keypress(SDL_Event *event, Core *ac){
 
         /* Is it a release or a press? */
-        if( key->type == SDL_KEYUP )
+        if( event->key.type == SDL_KEYUP )
             printf( "Release:- " );
         else
             printf( "Press:- " );
 
         /* Print the hardware scancode first */
-        printf( "Scancode: 0x%02X", key->keysym.scancode );
+        printf( "Scancode: 0x%02X", event->key.keysym.scancode );
 
         printf( "\n" );
 switch (key->keysym.scancode){

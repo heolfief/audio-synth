@@ -126,10 +126,13 @@ int main(int argc, char *argv[])
                         gui->application_quit = SDL_TRUE;
                     }
                     else{
-                    keypress (&gui->event.key);
+                    keypress (&gui->event, audio_core);
                     }
                     break;
+                case SDL_KEYUP:
+                    keyrelease(&gui->event, audio_core);
 
+                break;
                 case SDL_MOUSEBUTTONDOWN:
 
                     mouse_is_down = 1;
