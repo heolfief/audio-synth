@@ -62,10 +62,12 @@
 #define IMAGE_MS_SWITCH_MAX_STATES      4
 #define POT_INCREMENT                   1
 
-#define IMAGE_LED_GREEN                 "../src/gui/Figs/green_jauge.png"
-#define IMAGE_LED_ORANGE                "../src/gui/Figs/orange_jauge.png"
-#define IMAGE_LED_RED                   "../src/gui/Figs/red_jauge.png"
-#define IMAGE_LED_OFF                   "../src/gui/Figs/off_jauge.png"
+#define IMAGE_LED_ON_GREEN                 "../src/gui/Figs/led_on_green.png"
+#define IMAGE_LED_ON_ORANGE                "../src/gui/Figs/led_on_orange.png"
+#define IMAGE_LED_ON_RED                   "../src/gui/Figs/led_on_red.png"
+#define IMAGE_LED_OFF_RED                   "../src/gui/Figs/led_off_red"
+#define IMAGE_LED_OFF_ORANGE                "../src/gui/Figs/led_off_orange"
+#define IMAGE_LED_OFF_GREEN                 "../src/gui/Figs/led_off_green"
 #define WIDTH_LED                       13
 #define HEIGHT_LED                      13
 
