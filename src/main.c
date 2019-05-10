@@ -120,10 +120,23 @@ int main(int argc, char *argv[])
 
                 case SDL_KEYDOWN:
 
+                    if(gui->event.key.keysym.sym==SDLK_g)
+                    {
+                        midi_note_ON(audio_core, 60, 127);
+                    }
+
                     if (gui->event.key.keysym.sym == SDLK_ESCAPE)
                     {
                         printf("Quit asked. Closing...\n");
                         gui->application_quit = SDL_TRUE;
+                    }
+                    break;
+
+                case SDL_KEYUP:
+
+                    if(gui->event.key.keysym.sym==SDLK_g)
+                    {
+                        midi_note_OFF(audio_core, 60);
                     }
                     break;
 
