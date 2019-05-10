@@ -547,6 +547,7 @@ int create_Leds_map(Gui_SDL_objects *gui, Sys_param *sys_param)
     for (int nbLeds = 0; nbLeds < NUMBER_OF_LEDS - 3; ++nbLeds)
     {
         gui->Leds[nbLeds].img_led_green = IMAGE_LED_GREEN;
+        gui->Leds[nbLeds].img_led_off = IMAGE_LED_OFF;
         gui->Leds[nbLeds].posX = leds_location[nbLeds][0];
         gui->Leds[nbLeds].posY = leds_location[nbLeds][1];
         gui->Leds[nbLeds].width = WIDTH_LED;
@@ -558,6 +559,7 @@ int create_Leds_map(Gui_SDL_objects *gui, Sys_param *sys_param)
     for (int nbLeds = NUMBER_OF_LEDS - 3; nbLeds < NUMBER_OF_LEDS - 1; ++nbLeds)
     {
         gui->Leds[nbLeds].img_led_orange = IMAGE_LED_ORANGE;
+        gui->Leds[nbLeds].img_led_off = IMAGE_LED_OFF;
         gui->Leds[nbLeds].posX = leds_location[nbLeds][0];
         gui->Leds[nbLeds].posY = leds_location[nbLeds][1];
         gui->Leds[nbLeds].width = WIDTH_LED;
@@ -568,6 +570,7 @@ int create_Leds_map(Gui_SDL_objects *gui, Sys_param *sys_param)
     for (int nbLeds = NUMBER_OF_LEDS - 1; nbLeds < NUMBER_OF_LEDS; ++nbLeds)
     {
         gui->Leds[nbLeds].img_led_red = IMAGE_LED_RED;
+        gui->Leds[nbLeds].img_led_off = IMAGE_LED_OFF;
         gui->Leds[nbLeds].posX = leds_location[nbLeds][0];
         gui->Leds[nbLeds].posY = leds_location[nbLeds][1];
         gui->Leds[nbLeds].width = WIDTH_LED;
@@ -1264,7 +1267,7 @@ int process_leds(Gui_SDL_objects *gui, Core *audio_core)
         return -1;
     }
     short int ledsResults;
-    ledsResults = levelVUMeter(&audio_core->average_audio_level);
+    ledsResults = levelVUMeter(audio_core->average_audio_level);
 
     if (ledsResults == 1)
     {
@@ -1375,26 +1378,39 @@ int process_leds(Gui_SDL_objects *gui, Core *audio_core)
         {
             if (nbLeds < NUMBER_OF_LEDS - 3)
             {
-                if (gui_set_switch_image(gui->Leds[nbLeds].sdl_Led, gui->Leds[nbLeds].img_led_green))return -1;
-                sys_print_error("wrong image to load");
+                if (gui_set_switch_image(gui->Leds[nbLeds].sdl_Led, gui->Leds[nbLeds].img_led_green))
+                {
+                    return -1;
+                    sys_print_error("wrong image to load");
+                }
             }
             if (nbLeds < NUMBER_OF_LEDS - 1 && nbLeds > NUMBER_OF_LEDS - 3)
             {
-                if (gui_set_switch_image(gui->Leds[nbLeds].sdl_Led, gui->Leds[nbLeds].img_led_orange))return -1;
-                sys_print_error("wrong image to load");
+                if (gui_set_switch_image(gui->Leds[nbLeds].sdl_Led, gui->Leds[nbLeds].img_led_orange))
+                {
+                    return -1;
+                    sys_print_error("wrong image to load");
+                }
 
             }
             if (nbLeds < NUMBER_OF_LEDS && nbLeds > NUMBER_OF_LEDS - 1)
             {
-                if (gui_set_switch_image(gui->Leds[nbLeds].sdl_Led, gui->Leds[nbLeds].img_led_red))return -1;
-                sys_print_error("wrong image to load");
+                if (gui_set_switch_image(gui->Leds[nbLeds].sdl_Led, gui->Leds[nbLeds].img_led_red))
+                {
+                    return -1;
+                    sys_print_error("wrong image to load");
+                }
 
             }
 
         }
-        else{
-            free(gui->Leds[nbLeds].sdl_Led);
-            free(gui->Leds[nbLeds].texture);
+        else
+        {
+            if (gui_set_switch_image(gui->Leds[nbLeds].sdl_Led, gui->Leds[nbLeds].img_led_off))
+            {
+                return -1;
+                sys_print_error("wrong image to load");
+            }
         }
 
     }
@@ -1676,8 +1692,7 @@ int load_sys_param_to_gui(Gui_SDL_objects *gui, Sys_param *sys_param)
 
     }
 
-
-    }
+}
 short int levelVUMeter(Audio_Buffer average_audio_level)
 {
     double LnScaledAudioLevel;
