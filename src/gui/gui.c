@@ -157,28 +157,28 @@ static const int pot_min_max[NUMBER_OF_POTS][2] = {
 
 static const int leds_location[NUMBER_OF_LEDS][2] = {
     //first green Led
-    {1222, 173},
+    {1212, 173},
 
     //Second Green Led
-    {1222, 153},
+    {1212, 153},
 
     //Third Green Led
-    {1222, 134},
+    {1212, 134},
 
     //4th Green Led
-    {1222, 115},
+    {1212, 115},
 
     //5th Green Led
-    {1222, 94},
+    {1212, 94},
 
     //First Orange Led
-    {1222, 75},
+    {1212, 75},
 
     //Second Orange Led
-    {1222, 55},
+    {1212, 55},
 
     //ONLY RED LED
-    {1222, 35}
+    {1212, 35}
 
 };
 

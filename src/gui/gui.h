@@ -83,8 +83,8 @@
 #define IMAGE_LED_OFF_RED                   "../src/gui/Figs/led_off_red.png"
 #define IMAGE_LED_OFF_ORANGE                "../src/gui/Figs/led_off_orange.png"
 #define IMAGE_LED_OFF_GREEN                 "../src/gui/Figs/led_off_green.png"
-#define WIDTH_LED                       13
-#define HEIGHT_LED                      13
+#define WIDTH_LED                       25
+#define HEIGHT_LED                      25
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
