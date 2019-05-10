@@ -1427,6 +1427,8 @@ int process_leds(Gui_SDL_objects *gui, Core *audio_core)
         }
 
     }
+    gui_update(gui);
+
     return 0;
 
 }

@@ -94,7 +94,6 @@ int main(int argc, char *argv[])
     {
         if (process_leds(gui, audio_core))exit(EXIT_FAILURE);
         if (audio_core->buffer_is_new) process_leds(gui, audio_core);
-        gui_update(gui);
 
         if (midi_peripheral != -1)
         {
@@ -130,16 +129,12 @@ int main(int argc, char *argv[])
                     if(gui->event.key.keysym.sym==SDLK_g)
                     {
                         midi_note_ON(audio_core,60,120);
-                        /*process_leds(gui, audio_core);
-                        gui_update(gui);*/
                     }
 
                     if (gui->event.key.keysym.sym == SDLK_ESCAPE)
                     {
                         printf("Quit asked. Closing...\n");
                         gui->application_quit = SDL_TRUE;
-                       /* process_leds(gui, audio_core);
-                        gui_update(gui);*/
                     }
                     break;
 
@@ -148,9 +143,6 @@ int main(int argc, char *argv[])
                     if(gui->event.key.keysym.sym==SDLK_g)
                     {
                         midi_note_OFF(audio_core, 60);
-                        /*process_leds(gui,audio_core);
-                        gui_update(gui);*/
-
                     }
                     break;
 
