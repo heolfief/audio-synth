@@ -23,6 +23,7 @@
 
 int main(int argc, char *argv[])
 {
+    printf("test");
     SDL_AudioSpec as;
     Core *audio_core;
     Gui_SDL_objects *gui;

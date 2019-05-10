@@ -2,7 +2,7 @@
 // Created by robindsj on 09/05/19.
 //
 #include "keypad.h"
-
+int octave =0;
 
     int keypress(SDL_Event *event, Core *ac){
 
@@ -16,56 +16,116 @@
         printf( "Scancode: 0x%02X", event->key.keysym.scancode );
 
         printf( "\n" );
-switch (key->keysym.scancode){
 
-    case 0x33:  //SI
+            switch(event->key.keysym.sym)
+            {
+                case OCTAVE_R:
+                    if (octave<OCTAVE_MAX) octave++;
+                    break;
 
-        break;
+                   case OCTAVE_L:
+                    if (octave>OCTAVE_MIN) octave--;
+                    printf("%d",octave);
+                    break;
 
-    case 0x0F:  //LA
+                case SI_KEY:
+                midi_note_ON(ac, SI_NOTE+OCTAVE_GAP*octave, 127);
+                printf("LA");
+                    break;
 
-        break;
+                    case LA_KEY:
+                midi_note_ON(ac, LA_NOTE+OCTAVE_GAP*octave, 127);
+                    break;
 
-    case 0x0E:  //SOL
+                    case MI_KEY:
+                midi_note_ON(ac, MI_NOTE+OCTAVE_GAP*octave, 127);
+                    break;
 
-        break;
+                    case LAd_KEY:
+                midi_note_ON(ac, LAd_NOTE+OCTAVE_GAP*octave, 127);
+                    break;
 
-    case 0x0D:  //FA
+                    case SOL_KEY:
+                midi_note_ON(ac, SOL_NOTE+OCTAVE_GAP*octave, 127);
+                    break;
 
-        break;
+                    case SOLd_KEY:
+                midi_note_ON(ac, SOLd_NOTE+OCTAVE_GAP*octave, 127);
+                    break;
 
-    case 0x0B:  //MI
+                    case FA_KEY:
+                midi_note_ON(ac, FA_NOTE+OCTAVE_GAP*octave, 127);
+                    break;
 
-        break;
+                    case FAd_KEY:
+                midi_note_ON(ac, FAd_NOTE+OCTAVE_GAP*octave, 127);
+                    break;
 
-    case 0x0A:  //RE
+                    case RE_KEY:
+                midi_note_ON(ac, RE_NOTE+OCTAVE_GAP*octave, 127);
+                    break;
 
-        break;
+                    case REd_KEY:
+                midi_note_ON(ac, REd_NOTE+OCTAVE_GAP*octave, 127);
+                    break;
 
-    case 0x09:  //DO
+                    case DO_KEY:
+                midi_note_ON(ac, DO_NOTE+OCTAVE_GAP*octave, 127);
+                    break;
 
-        break;
+                    case DOd_KEY:
+                midi_note_ON(ac, DOd_NOTE+OCTAVE_GAP*octave, 127);
+                    break;
 
-    case 0x17:  //DO#
 
-        break;
 
-    case 0x1C:  //RE#
+            }
 
-        break;
 
-    case 0x0C:  //FA#
 
-        break;
-
-    case 0x12:  //SOL#
-
-        break;
-
-    case 0x13:  //LA#
-
-        break;
-}
+return 1;
     }
 
+int keyrelease(SDL_Event *event, Core *ac)
+{
+    switch (event->key.keysym.sym)
+    {
+        case SI_KEY:midi_note_OFF(ac, SI_NOTE + OCTAVE_GAP * octave);
+            break;
 
+        case LA_KEY:midi_note_OFF(ac, LA_NOTE + OCTAVE_GAP * octave);
+            break;
+
+        case MI_KEY:midi_note_OFF(ac, MI_NOTE + OCTAVE_GAP * octave);
+            break;
+
+        case LAd_KEY:midi_note_OFF(ac, LAd_NOTE + OCTAVE_GAP * octave);
+            break;
+
+        case SOL_KEY:midi_note_OFF(ac, SOL_NOTE + OCTAVE_GAP * octave);
+            break;
+
+        case SOLd_KEY:midi_note_OFF(ac, SOLd_NOTE + OCTAVE_GAP * octave);
+            break;
+
+        case FA_KEY:midi_note_OFF(ac, FA_NOTE + OCTAVE_GAP * octave);
+            break;
+
+        case FAd_KEY:midi_note_OFF(ac, FAd_NOTE + OCTAVE_GAP * octave);
+            break;
+
+        case RE_KEY:midi_note_OFF(ac, RE_NOTE + OCTAVE_GAP * octave);
+            break;
+
+        case REd_KEY:midi_note_OFF(ac, REd_NOTE + OCTAVE_GAP * octave);
+            break;
+
+        case DO_KEY:midi_note_OFF(ac, DO_NOTE + OCTAVE_GAP * octave);
+            break;
+
+        case DOd_KEY:midi_note_OFF(ac, DOd_NOTE + OCTAVE_GAP * octave);
+            break;
+
+    }
+    return 1;
+}
