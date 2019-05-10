@@ -1370,6 +1370,7 @@ int process_leds(Gui_SDL_objects *gui, Core *audio_core)
         gui->Leds[6].OnOffLed = ON;
         gui->Leds[7].OnOffLed = ON;
     }
+    audio_core->buffer_is_new = 0;
 
     for (int nbLeds = 0; nbLeds < NUMBER_OF_LEDS; ++nbLeds)
     {
