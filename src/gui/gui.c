@@ -1715,19 +1715,19 @@ short int levelVUMeter(Audio_Buffer average_audio_level)
     short int LEDResult;
 
     //The level is between 0 and 2¹⁶, so between 0 and 1 the Ln value will be set to 1.
-    if (average_audio_level[0] == 0) LEDResult = 0;
+    if (average_audio_level[0] == 0) return 0;
     if (average_audio_level[0] <= 1 && average_audio_level[0]!=0)
-    { LnScaledAudioLevel = 1; }
+    { return 1; }
     else
     { LnScaledAudioLevel = log((double) average_audio_level[0]); }
 
     /*It should return a number between 1 and 11.09, but we only have 8 LEDs on our synth. I am therefore
      making the choice to set the thresholds accordingly.
      */
-    if (LnScaledAudioLevel < 6) LEDResult = (int) LnScaledAudioLevel;
+    if (LnScaledAudioLevel < 6) LEDResult = round( (double) LnScaledAudioLevel);
     if (LnScaledAudioLevel >= 6 && LnScaledAudioLevel < 8) LEDResult = 6;
-    if (LnScaledAudioLevel >= 8 && LnScaledAudioLevel < 9.5) LEDResult = 7;
-    if (LnScaledAudioLevel >= 9.5) LEDResult = 8;
+    if (LnScaledAudioLevel >= 8 && LnScaledAudioLevel < 9) LEDResult = 7;
+    if (LnScaledAudioLevel >= 9) LEDResult = 8;
 
     return LEDResult;
 }
