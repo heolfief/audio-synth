@@ -2,8 +2,8 @@
 // Created by robindsj on 09/05/19.
 //
 
-#ifndef AUDIO_SYNTH_SRC_GUI_KEYPAD_H_
-#define AUDIO_SYNTH_SRC_GUI_KEYPAD_H_
+#ifndef AUDIO_SYNTH_SRC_GUI_KEYPAD_H
+#define AUDIO_SYNTH_SRC_GUI_KEYPAD_H
 
 #define OCTAVE_GAP      12
 
@@ -45,6 +45,7 @@
 
 #define OCTAVE_R     SDLK_d
 #define OCTAVE_L     SDLK_q
+#define RESET_KEY       SDLK_r
 
 #define OCTAVE_MAX      3
 #define OCTAVE_MIN      -3
@@ -64,10 +65,27 @@
 #include <SDL_events.h>
 
 
-#endif //AUDIO_SYNTH_SRC_GUI_KEYPAD_H_
 
 
 
-
+/**
+ * \fn int keypress(SDL_Event *event, Core *ac)
+ * \brief Function to play with keyboard, connect the key pressed with the note to play
+ *
+ * \param event The key and if is it press or release, *ac the core
+ *
+ * \return 0 if everything went OK, -1 otherwise
+ */
 int keypress(SDL_Event *event, Core *ac);
+
+/**
+ * \fn int keyrelease(SDL_Event *event, Core *ac)
+ * \brief Function to play with keyboard, connect the key release with the note to stop
+ *
+ * \param event The key and if is it press or release, *ac the core
+ *
+ * \return 0 if everything went OK, -1 otherwise
+ */
 int keyrelease(SDL_Event *event, Core *ac);
+
+#endif AUDIO_SYNTH_SRC_GUI_KEYPAD_H

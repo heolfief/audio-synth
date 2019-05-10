@@ -20,12 +20,21 @@ int octave =0;
             switch(event->key.keysym.sym)
             {
                 case OCTAVE_R:
-                    if (octave<OCTAVE_MAX) octave++;
+                    if (octave>=OCTAVE_MAX){
+                        sys_print_error("Octave max atteinte");
+                        return -1;
+}
+                        octave++;
                     break;
 
                    case OCTAVE_L:
-                    if (octave>OCTAVE_MIN) octave--;
-                    printf("%d",octave);
+                    if (octave<=OCTAVE_MIN) {
+                        sys_print_error("Octave min atteinte");
+                        return -1;
+
+                    }
+
+                        octave--;
                     break;
 
                 case SI_KEY:
@@ -76,6 +85,14 @@ int octave =0;
                     case DOd_KEY:
                 midi_note_ON(ac, DOd_NOTE+OCTAVE_GAP*octave, 127);
                     break;
+
+                case RESET_KEY:
+                    for (int i = 20; i < 110; ++i)
+                    {
+                        midi_note_OFF(ac, i);
+                    }
+                    break;
+
 
 
 
