@@ -19,6 +19,7 @@
 #include "system/error_handler.h"
 #include "sys_param/xml/preset_xml.h"
 #include "midi/midi.h"
+#include "core/audio_core.h"
 
 int main(int argc, char *argv[])
 {
@@ -54,6 +55,7 @@ int main(int argc, char *argv[])
         sys_print_error("Failed loading preset");
         exit(EXIT_FAILURE);
     }
+
 
 #ifndef VALGRIND
 
@@ -109,6 +111,9 @@ int main(int argc, char *argv[])
             if (process_switches(gui, audio_core))exit(EXIT_FAILURE);
             if (process_pots(gui, audio_core, mouse_is_down))exit(EXIT_FAILURE);
             if (process_buttons(gui, audio_core, &midi_peripheral))exit(EXIT_FAILURE);
+            short int LedsResults = levelVUMeter(audio_core->average_audio_level);
+            if (process_leds(gui, audio_core))exit(EXIT_FAILURE);
+
 
             switch (gui->event.type)
             {
@@ -122,13 +127,17 @@ int main(int argc, char *argv[])
 
                     if(gui->event.key.keysym.sym==SDLK_g)
                     {
-                        midi_note_ON(audio_core, 60, 127);
+                        midi_note_ON(audio_core,60,120);
+                        process_leds(gui, audio_core);
+                        gui_update(gui);
                     }
 
                     if (gui->event.key.keysym.sym == SDLK_ESCAPE)
                     {
                         printf("Quit asked. Closing...\n");
                         gui->application_quit = SDL_TRUE;
+                        process_leds(gui, audio_core);
+                        gui_update(gui);
                     }
                     break;
 
@@ -137,6 +146,9 @@ int main(int argc, char *argv[])
                     if(gui->event.key.keysym.sym==SDLK_g)
                     {
                         midi_note_OFF(audio_core, 60);
+                        process_leds(gui,audio_core);
+                        gui_update(gui);
+
                     }
                     break;
 

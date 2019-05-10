@@ -65,7 +65,7 @@
 #define IMAGE_LED_GREEN                 "../src/gui/Figs/green_jauge.png"
 #define IMAGE_LED_ORANGE                "../src/gui/Figs/orange_jauge.png"
 #define IMAGE_LED_RED                   "../src/gui/Figs/red_jauge.png"
-#define IMAGE_LED_OFF                   "../src/gui/Figs/red_jauge.png"
+#define IMAGE_LED_OFF                   "../src/gui/Figs/off_jauge.png"
 #define WIDTH_LED                       13
 #define HEIGHT_LED                      13
 
@@ -169,7 +169,7 @@ typedef struct
   char *img_led_green;        /*!<the image of the Green Led */
   char *img_led_orange;       /*!<the image of the Orange Led */
   char *img_led_red;          /*!<the image of the Red Led */
-  char *img_led_off           /*!<the image of the Led Off */
+  char *img_led_off;          /*!<the image of the Led Off */
 } LED;
 
 

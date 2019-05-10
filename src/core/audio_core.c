@@ -113,6 +113,7 @@ int master_audio_fill_buffer(Core *ac)
         {
             ac->master_audio[sample] =
                 (Sint16) ((double) ac->master_audio[sample] * ((double) ac->sys_param->master_volume / 100.0));
+
         }
         else
         {

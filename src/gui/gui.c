@@ -1380,16 +1380,16 @@ int process_leds(Gui_SDL_objects *gui, Core *audio_core)
             {
                 if (gui_set_switch_image(gui->Leds[nbLeds].sdl_Led, gui->Leds[nbLeds].img_led_green))
                 {
-                    return -1;
                     sys_print_error("wrong image to load");
+                    return -1;
                 }
             }
-            if (nbLeds < NUMBER_OF_LEDS - 1 && nbLeds > NUMBER_OF_LEDS - 3)
+            if (nbLeds < NUMBER_OF_LEDS - 1 && nbLeds >= NUMBER_OF_LEDS - 3)
             {
                 if (gui_set_switch_image(gui->Leds[nbLeds].sdl_Led, gui->Leds[nbLeds].img_led_orange))
                 {
-                    return -1;
                     sys_print_error("wrong image to load");
+                    return -1;
                 }
 
             }
@@ -1397,8 +1397,8 @@ int process_leds(Gui_SDL_objects *gui, Core *audio_core)
             {
                 if (gui_set_switch_image(gui->Leds[nbLeds].sdl_Led, gui->Leds[nbLeds].img_led_red))
                 {
-                    return -1;
                     sys_print_error("wrong image to load");
+                    return -1;
                 }
 
             }
@@ -1414,6 +1414,7 @@ int process_leds(Gui_SDL_objects *gui, Core *audio_core)
         }
 
     }
+    return 0;
 
 }
 

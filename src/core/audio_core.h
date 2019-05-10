@@ -30,6 +30,7 @@ typedef struct
   Uint64 phase;                      /*!<the phase of the oscillators */
   Effect_core *effect_core;          /*!<the structure containing effect related objects */
   Audio_Buffer average_audio_level;  /*!<the average instantaneous volume level that is played by the soundcard */
+  Uint8 core_is_new;                 /*!<flag if the buffer is refilled*/
 } Core;
 
 /**
