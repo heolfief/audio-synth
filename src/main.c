@@ -19,9 +19,11 @@
 #include "system/error_handler.h"
 #include "sys_param/xml/preset_xml.h"
 #include "midi/midi.h"
+#include "gui/keypad.h"
 
 int main(int argc, char *argv[])
 {
+    printf("test");
     SDL_AudioSpec as;
     Core *audio_core;
     Gui_SDL_objects *gui;
@@ -137,8 +139,14 @@ int main(int argc, char *argv[])
                             gui->application_quit = SDL_TRUE;
                         }
                     }
+                    else{
+                    keypress (&gui->event, audio_core);
+                    }
                     break;
+                case SDL_KEYUP:
+                    keyrelease(&gui->event, audio_core);
 
+                break;
                 case SDL_MOUSEBUTTONDOWN:
 
                     mouse_is_down = 1;
