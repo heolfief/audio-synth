@@ -19,11 +19,8 @@
 #include "system/error_handler.h"
 #include "sys_param/xml/preset_xml.h"
 #include "midi/midi.h"
-<<<<<<< HEAD
 #include "gui/keypad.h"
-=======
 #include "core/audio_core.h"
->>>>>>> GUI_VUmeter
 
 int main(int argc, char *argv[])
 {
@@ -83,11 +80,8 @@ int main(int argc, char *argv[])
     if (create_switches_map(gui, audio_core->sys_param))exit(EXIT_FAILURE);
     if (create_pots_map(gui, audio_core->sys_param))exit(EXIT_FAILURE);
     if (create_buttons_map(gui))exit(EXIT_FAILURE);
-<<<<<<< HEAD
     if (create_Text_map(gui))exit(EXIT_FAILURE);
-=======
     if (create_Leds_map(gui, audio_core->sys_param));
->>>>>>> GUI_VUmeter
     if (load_sys_param_to_gui(gui, audio_core->sys_param))exit((EXIT_FAILURE));
     if (gui_update(gui))exit(EXIT_FAILURE);
 
@@ -160,14 +154,12 @@ int main(int argc, char *argv[])
                     else{
                     keypress (&gui->event, audio_core);
                     }
-                    break;
+                    break;/*
                 case SDL_KEYUP:
                     keyrelease(&gui->event, audio_core);
 
-<<<<<<< HEAD
-                break;
-=======
-                case SDL_KEYUP:
+                break;*/
+               case SDL_KEYUP:
 
                     if(gui->event.key.keysym.sym==SDLK_g)
                     {
@@ -175,7 +167,6 @@ int main(int argc, char *argv[])
                     }
                     break;
 
->>>>>>> GUI_VUmeter
                 case SDL_MOUSEBUTTONDOWN:
 
                     mouse_is_down = 1;

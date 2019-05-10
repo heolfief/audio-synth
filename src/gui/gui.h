@@ -14,19 +14,17 @@
 #define WIDTH_APPLICATION_WINDOW        1300
 #define HEIGHT_APPLICATION_WINDOW       816
 
-<<<<<<< HEAD
 #define NUMBER_OF_SWITCHES              11
 #define NUMBER_OF_MS_SWITCHES           8
 #define NUMBER_OF_POTS                  32
 #define NUMBER_OF_BUTTONS               3
-=======
+
 #define NUMBER_OF_SWITCHES 11
 #define NUMBER_OF_MS_SWITCHES 8
 #define NUMBER_OF_POTS 32
 #define NUMBER_OF_LEDS 8
 
 #define NUMBER_OF_BUTTONS 3
->>>>>>> GUI_VUmeter
 
 #define IMAGE_SWITCH_ON                 "../src/gui/Figs/switch_on.png"
 #define IMAGE_SWITCH_OFF                "../src/gui/Figs/switch_off.png"
@@ -186,7 +184,8 @@ typedef struct
   SDL_Surface *text_surface;  /*!<the SDL surface of the text */
   SDL_Rect rect;              /*!<the SDL rectangle associated with the text */
 } Text;
-=======
+
+/**
 * \struct Led
 * \brief define a graphical LED
 *
@@ -205,8 +204,6 @@ typedef struct
   char *img_led_red;          /*!<the image of the Red Led */
   char *img_led_off;          /*!<the image of the Led Off */
 } LED;
-
->>>>>>> GUI_VUmeter
 
 /**
  * \struct Mouse_position
@@ -241,11 +238,8 @@ typedef struct
   Multi_state_Switch *ms_switches;
   Potentiometer *pots;
   Button *buttons;
-<<<<<<< HEAD
   Text *preset_name;
-=======
   LED *Leds;
->>>>>>> GUI_VUmeter
 } Gui_SDL_objects;
 
 /**
@@ -453,7 +447,7 @@ int load_sys_param_to_gui(Gui_SDL_objects *gui, Sys_param *sys_param);
  * \return 1 if yes, 0 if no
  */
 int prompt_quit();
-=======
+/**
  * \fn int levelVUMeter(Audio_Buffer *average_level_audio)
 
  * \brief Function to compute with the "ln" function the average audio level in order to adapt it to our number of "LEDs" forming our VUMeter.
@@ -464,8 +458,5 @@ int prompt_quit();
  * \return returns an int between 1 and 8, to know which LED to light up and -1 if something goes wrong
  */
 short int levelVUMeter(Audio_Buffer average_audio_level);
-
-
->>>>>>> GUI_VUmeter
 
 #endif //AUDIO_SYNTH_GUI_H
