@@ -1269,6 +1269,18 @@ int process_leds(Gui_SDL_objects *gui, Core *audio_core)
     short int ledsResults;
     ledsResults = levelVUMeter(audio_core->average_audio_level);
 
+    if (ledsResults == 0)
+    {
+        gui->Leds[0].OnOffLed = OFF;
+        gui->Leds[1].OnOffLed = OFF;
+        gui->Leds[2].OnOffLed = OFF;
+        gui->Leds[3].OnOffLed = OFF;
+        gui->Leds[4].OnOffLed = OFF;
+        gui->Leds[5].OnOffLed = OFF;
+        gui->Leds[6].OnOffLed = OFF;
+        gui->Leds[7].OnOffLed = OFF;
+    }
+
     if (ledsResults == 1)
     {
         gui->Leds[0].OnOffLed = ON;
@@ -1701,8 +1713,8 @@ short int levelVUMeter(Audio_Buffer average_audio_level)
     short int LEDResult;
 
     //The level is between 0 and 2¹⁶, so between 0 and 1 the Ln value will be set to 1.
-
-    if (average_audio_level[0] <= 1)
+    if (average_audio_level[0] == 0) LEDResult = 0;
+    if (average_audio_level[0] <= 1 && average_audio_level[0]!=0)
     { LnScaledAudioLevel = 1; }
     else
     { LnScaledAudioLevel = log((double) average_audio_level[0]); }
