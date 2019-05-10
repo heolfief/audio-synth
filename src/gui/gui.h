@@ -65,9 +65,9 @@
 #define IMAGE_LED_ON_GREEN                 "../src/gui/Figs/led_on_green.png"
 #define IMAGE_LED_ON_ORANGE                "../src/gui/Figs/led_on_orange.png"
 #define IMAGE_LED_ON_RED                   "../src/gui/Figs/led_on_red.png"
-#define IMAGE_LED_OFF_RED                   "../src/gui/Figs/led_off_red"
-#define IMAGE_LED_OFF_ORANGE                "../src/gui/Figs/led_off_orange"
-#define IMAGE_LED_OFF_GREEN                 "../src/gui/Figs/led_off_green"
+#define IMAGE_LED_OFF_RED                   "../src/gui/Figs/led_off_red.png"
+#define IMAGE_LED_OFF_ORANGE                "../src/gui/Figs/led_off_orange.png"
+#define IMAGE_LED_OFF_GREEN                 "../src/gui/Figs/led_off_green.png"
 #define WIDTH_LED                       13
 #define HEIGHT_LED                      13
 
