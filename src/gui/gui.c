@@ -1484,7 +1484,6 @@ int process_pots(Gui_SDL_objects *gui, Core *audio_core, Uint8 mouse_is_down)
 
 int process_touch(Gui_SDL_objects *gui,  Uint8 id, Uint8 mode)
 {
-
     if (gui == NULL )
     {
         sys_print_error("Parameter is NULL");

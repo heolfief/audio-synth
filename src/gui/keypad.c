@@ -53,11 +53,10 @@ int keypress(SDL_Event *event, Core *ac, Gui_SDL_objects *gui)
             {
                 if (midi_note_OFF(ac, i))return -1;
             }
-            if (octave >= OCTAVE_MAX)
+            if (octave < OCTAVE_MAX)
             {
                 octave++;
             }
-            octave++;
             break;
 
         case OCTAVE_L:
@@ -67,49 +66,81 @@ int keypress(SDL_Event *event, Core *ac, Gui_SDL_objects *gui)
             }
             if (octave > OCTAVE_MIN)
             {
-                sys_print_error("Octave min atteinte");
-                return -1;
-
+                octave--;
             }
 
-            octave--;
             break;
 
-        case SI_KEY:midi_note_ON(ac, SI_NOTE + OCTAVE_GAP * octave, 127);
-            printf("LA");
+        case SI_KEY:
+
+            midi_note_ON(ac, SI_NOTE + OCTAVE_GAP * octave, 127);
+            process_touch(gui, SI_NOTE, 1);
             break;
 
-        case LA_KEY:midi_note_ON(ac, LA_NOTE + OCTAVE_GAP * octave, 127);
+        case LA_KEY:
+
+            midi_note_ON(ac, LA_NOTE + OCTAVE_GAP * octave, 127);
+            process_touch(gui, LA_NOTE, 1);
             break;
 
-        case MI_KEY:midi_note_ON(ac, MI_NOTE + OCTAVE_GAP * octave, 127);
+        case MI_KEY:
+
+            midi_note_ON(ac, MI_NOTE + OCTAVE_GAP * octave, 127);
+            process_touch(gui, MI_NOTE, 1);
             break;
 
-        case LAd_KEY:midi_note_ON(ac, LAd_NOTE + OCTAVE_GAP * octave, 127);
+        case LAd_KEY:
+
+            midi_note_ON(ac, LAd_NOTE + OCTAVE_GAP * octave, 127);
+            process_touch(gui, LAd_NOTE, 1);
             break;
 
-        case SOL_KEY:midi_note_ON(ac, SOL_NOTE + OCTAVE_GAP * octave, 127);
+        case SOL_KEY:
+
+            midi_note_ON(ac, SOL_NOTE + OCTAVE_GAP * octave, 127);
+            process_touch(gui, SOL_NOTE, 1);
             break;
 
-        case SOLd_KEY:midi_note_ON(ac, SOLd_NOTE + OCTAVE_GAP * octave, 127);
+        case SOLd_KEY:
+
+            midi_note_ON(ac, SOLd_NOTE + OCTAVE_GAP * octave, 127);
+            process_touch(gui, SOLd_NOTE, 1);
             break;
 
-        case FA_KEY:midi_note_ON(ac, FA_NOTE + OCTAVE_GAP * octave, 127);
+        case FA_KEY:
+
+            midi_note_ON(ac, FA_NOTE + OCTAVE_GAP * octave, 127);
+            process_touch(gui, FA_NOTE, 1);
             break;
 
-        case FAd_KEY:midi_note_ON(ac, FAd_NOTE + OCTAVE_GAP * octave, 127);
+        case FAd_KEY:
+
+            midi_note_ON(ac, FAd_NOTE + OCTAVE_GAP * octave, 127);
+            process_touch(gui, FAd_NOTE, 1);
             break;
 
-        case RE_KEY:midi_note_ON(ac, RE_NOTE + OCTAVE_GAP * octave, 127);
+        case RE_KEY:
+
+            midi_note_ON(ac, RE_NOTE + OCTAVE_GAP * octave, 127);
+            process_touch(gui, RE_NOTE, 1);
             break;
 
-        case REd_KEY:midi_note_ON(ac, REd_NOTE + OCTAVE_GAP * octave, 127);
+        case REd_KEY:
+
+            midi_note_ON(ac, REd_NOTE + OCTAVE_GAP * octave, 127);
+            process_touch(gui, REd_NOTE, 1);
             break;
 
-        case DO_KEY:midi_note_ON(ac, DO_NOTE + OCTAVE_GAP * octave, 127);
+        case DO_KEY:
+
+            midi_note_ON(ac, DO_NOTE + OCTAVE_GAP * octave, 127);
+            process_touch(gui, DO_NOTE, 1);
             break;
 
-        case DOd_KEY:midi_note_ON(ac, DOd_NOTE + OCTAVE_GAP * octave, 127);
+        case DOd_KEY:
+
+            midi_note_ON(ac, DOd_NOTE + OCTAVE_GAP * octave, 127);
+            process_touch(gui, DOd_NOTE, 1);
             break;
 
         case RESET_KEY:
@@ -134,40 +165,76 @@ int keyrelease(SDL_Event *event, Core *ac, Gui_SDL_objects *gui)
 
     switch (event->key.keysym.sym)
     {
-        case SI_KEY:midi_note_OFF(ac, SI_NOTE + OCTAVE_GAP * octave);
+        case SI_KEY:
+
+            midi_note_OFF(ac, SI_NOTE + OCTAVE_GAP * octave);
+            process_touch(gui, SI_NOTE, 0);
             break;
 
-        case LA_KEY:midi_note_OFF(ac, LA_NOTE + OCTAVE_GAP * octave);
+        case LA_KEY:
+
+            midi_note_OFF(ac, LA_NOTE + OCTAVE_GAP * octave);
+            process_touch(gui, LA_NOTE, 0);
             break;
 
-        case MI_KEY:midi_note_OFF(ac, MI_NOTE + OCTAVE_GAP * octave);
+        case MI_KEY:
+
+            midi_note_OFF(ac, MI_NOTE + OCTAVE_GAP * octave);
+            process_touch(gui, MI_NOTE, 0);
             break;
 
-        case LAd_KEY:midi_note_OFF(ac, LAd_NOTE + OCTAVE_GAP * octave);
+        case LAd_KEY:
+
+            midi_note_OFF(ac, LAd_NOTE + OCTAVE_GAP * octave);
+            process_touch(gui, LAd_NOTE, 0);
             break;
 
-        case SOL_KEY:midi_note_OFF(ac, SOL_NOTE + OCTAVE_GAP * octave);
+        case SOL_KEY:
+
+            midi_note_OFF(ac, SOL_NOTE + OCTAVE_GAP * octave);
+            process_touch(gui, SOL_NOTE, 0);
             break;
 
-        case SOLd_KEY:midi_note_OFF(ac, SOLd_NOTE + OCTAVE_GAP * octave);
+        case SOLd_KEY:
+
+            midi_note_OFF(ac, SOLd_NOTE + OCTAVE_GAP * octave);
+            process_touch(gui, SOLd_NOTE, 0);
             break;
 
-        case FA_KEY:midi_note_OFF(ac, FA_NOTE + OCTAVE_GAP * octave);
+        case FA_KEY:
+
+            midi_note_OFF(ac, FA_NOTE + OCTAVE_GAP * octave);
+            process_touch(gui, FA_NOTE, 0);
             break;
 
-        case FAd_KEY:midi_note_OFF(ac, FAd_NOTE + OCTAVE_GAP * octave);
+        case FAd_KEY:
+
+            midi_note_OFF(ac, FAd_NOTE + OCTAVE_GAP * octave);
+            process_touch(gui, FAd_NOTE, 0);
             break;
 
-        case RE_KEY:midi_note_OFF(ac, RE_NOTE + OCTAVE_GAP * octave);
+        case RE_KEY:
+
+            midi_note_OFF(ac, RE_NOTE + OCTAVE_GAP * octave);
+            process_touch(gui, RE_NOTE, 0);
             break;
 
-        case REd_KEY:midi_note_OFF(ac, REd_NOTE + OCTAVE_GAP * octave);
+        case REd_KEY:
+
+            midi_note_OFF(ac, REd_NOTE + OCTAVE_GAP * octave);
+            process_touch(gui, REd_NOTE, 0);
             break;
 
-        case DO_KEY:midi_note_OFF(ac, DO_NOTE + OCTAVE_GAP * octave);
+        case DO_KEY:
+
+            midi_note_OFF(ac, DO_NOTE + OCTAVE_GAP * octave);
+            process_touch(gui, DO_NOTE, 0);
             break;
 
-        case DOd_KEY:midi_note_OFF(ac, DOd_NOTE + OCTAVE_GAP * octave);
+        case DOd_KEY:
+
+            midi_note_OFF(ac, DOd_NOTE + OCTAVE_GAP * octave);
+            process_touch(gui, DOd_NOTE, 0);
             break;
 
     }
