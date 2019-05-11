@@ -409,11 +409,12 @@ Gui_SDL_objects *alloc_gui_sdl_objects()
     gui->Leds = Led;
 
     TOUCH *touch = (TOUCH *) calloc(NUMBER_OF_TOUCH, sizeof(TOUCH));
-    if (touch==NULL){
+    if (touch == NULL)
+    {
         sys_print_error("Memory Allocation error");
         return NULL;
     }
-    gui->touch= touch ;
+    gui->touch = touch;
 
     return gui;
 }
@@ -1482,15 +1483,15 @@ int process_pots(Gui_SDL_objects *gui, Core *audio_core, Uint8 mouse_is_down)
     return 0;
 }
 
-int process_touch(Gui_SDL_objects *gui,  Uint8 id, Uint8 mode)
+int process_touch(Gui_SDL_objects *gui, Uint8 id, Uint8 mode)
 {
-    if (gui == NULL )
+    if (gui == NULL)
     {
         sys_print_error("Parameter is NULL");
         return -1;
     }
     short int note_played;
-    note_played = id -60;
+    note_played = id - 60;
 
     for (int nbtouch = 0; nbtouch < NUMBER_OF_TOUCH; ++nbtouch)
     {
@@ -1509,7 +1510,7 @@ int process_touch(Gui_SDL_objects *gui,  Uint8 id, Uint8 mode)
     for (int nbtouch = 0; nbtouch < NUMBER_OF_TOUCH; ++nbtouch)
     {
 
-        if (gui->touch[nbtouch].OnOffTouch==ON)    // If ON
+        if (gui->touch[nbtouch].OnOffTouch == ON)    // If ON
         {
             if (gui_set_switch_image(gui->touch[nbtouch].sdl_Touch, gui->touch[nbtouch].img_touch_on))
             {
@@ -1681,7 +1682,7 @@ int process_leds(Gui_SDL_objects *gui, Core *audio_core)
                 }
 
             }
-            if (nbLeds == NUMBER_OF_LEDS -1)
+            if (nbLeds == NUMBER_OF_LEDS - 1)
             {
                 if (gui_set_switch_image(gui->Leds[nbLeds].sdl_Led, gui->Leds[nbLeds].img_led_red))
                 {
