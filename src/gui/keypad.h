@@ -51,17 +51,11 @@
 #define OCTAVE_MIN      -3
 
 #include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
-#include <SDL2/SDL_stdinc.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include "../core/audio_core.h"
-#include "../sys_param/sys_param.h"
 #include "../system/error_handler.h"
-#include "tinyfiledialogs.h"
-#include "../sys_param/xml/preset_xml.h"
 #include "../midi/midi.h"
-#include <SDL_events.h>
 
 /**
  * \fn int keypress(SDL_Event *event, Core *ac)
@@ -83,4 +77,4 @@ int keypress(SDL_Event *event, Core *ac);
  */
 int keyrelease(SDL_Event *event, Core *ac);
 
-#endif AUDIO_SYNTH_SRC_GUI_KEYPAD_H
+#endif //AUDIO_SYNTH_SRC_GUI_KEYPAD_H
