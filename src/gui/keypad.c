@@ -4,8 +4,15 @@
 #include "keypad.h"
 int octave = 0;
 
-int keypress(SDL_Event *event, Core *ac)
+int keypress(SDL_Event *event, Core *ac, Gui_SDL_objects *gui)
 {
+    Uint8 *uint8_param;
+
+    if (event == NULL || ac == NULL || gui == NULL)
+    {
+        sys_print_error("Parameter is NULL");
+        return -1;
+    }
 
     /* Is it a release or a press? */
     if (event->key.type == SDL_KEYUP)
@@ -24,6 +31,34 @@ int keypress(SDL_Event *event, Core *ac)
 
     switch (event->key.keysym.sym)
     {
+        case SDLK_KP_PLUS:
+
+            uint8_param = gui->pots[13].param;
+            for (int i = 0; i < 10; ++i)
+            {
+                if ((*uint8_param + 1) < 100)
+                {
+                    (*uint8_param)++;
+                    gui->pots[13].percent++;
+                }
+            }
+            if (gui_update(gui))return -1;
+            break;
+
+        case SDLK_KP_MINUS:
+
+            uint8_param = gui->pots[13].param;
+            for (int i = 0; i < 10; ++i)
+            {
+                if ((*uint8_param - 1) > 0)
+                {
+                    (*uint8_param)--;
+                    gui->pots[13].percent--;
+                    if (gui_update(gui))return -1;
+                }
+            }
+            break;
+
         case OCTAVE_R:
             for (int i = 20; i < 110; ++i)
             {
@@ -98,11 +133,17 @@ int keypress(SDL_Event *event, Core *ac)
 
     }
 
-    return 1;
+    return 0;
 }
 
 int keyrelease(SDL_Event *event, Core *ac)
 {
+    if (event == NULL || ac == NULL)
+    {
+        sys_print_error("Parameter is NULL");
+        return -1;
+    }
+
     switch (event->key.keysym.sym)
     {
         case SI_KEY:midi_note_OFF(ac, SI_NOTE + OCTAVE_GAP * octave);
@@ -142,5 +183,5 @@ int keyrelease(SDL_Event *event, Core *ac)
             break;
 
     }
-    return 1;
+    return 0;
 }

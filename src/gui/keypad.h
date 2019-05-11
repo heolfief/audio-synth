@@ -56,6 +56,7 @@
 #include "../core/audio_core.h"
 #include "../system/error_handler.h"
 #include "../midi/midi.h"
+#include "../gui/gui.h"
 
 /**
  * \fn int keypress(SDL_Event *event, Core *ac)
@@ -65,7 +66,7 @@
  *
  * \return 0 if everything went OK, -1 otherwise
  */
-int keypress(SDL_Event *event, Core *ac);
+int keypress(SDL_Event *event, Core *ac, Gui_SDL_objects* gui);
 
 /**
  * \fn int keyrelease(SDL_Event *event, Core *ac)
