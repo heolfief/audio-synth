@@ -135,8 +135,7 @@ int main(int argc, char *argv[])
 
                 case SDL_KEYDOWN:
 
-                    printf("KEY\n");
-/*                    if (gui->event.key.keysym.sym == SDLK_ESCAPE)
+                    if (gui->event.key.keysym.sym == SDLK_ESCAPE)
                     {
                         if (prompt_quit())
                         {
@@ -145,7 +144,7 @@ int main(int argc, char *argv[])
                         }
                     }
                     if (keypress(&gui->event, audio_core, gui))exit(EXIT_FAILURE);
-  */                  break;
+                    break;
 
                 case SDL_KEYUP:
 
