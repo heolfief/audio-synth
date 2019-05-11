@@ -677,6 +677,7 @@ int create_Leds_map(Gui_SDL_objects *gui, Sys_param *sys_param)
         gui->Leds[nbLeds].sdl_Led =
             gui_create_button(gui->Leds[nbLeds].posX, gui->Leds[nbLeds].posY, gui->Leds[nbLeds].width, gui->Leds[nbLeds].height, gui->Leds[nbLeds].img_led_red);
     }
+    return 0;
 
 }
 int create_buttons_map(Gui_SDL_objects *gui)
@@ -1403,6 +1404,7 @@ int process_leds(Gui_SDL_objects *gui, Core *audio_core)
     }
     short int ledsResults;
     ledsResults = levelVUMeter(audio_core->average_audio_level);
+    printf("ledsResult in ProcessLeds : %d\n",ledsResults);
 
     if (ledsResults == 0)
     {
@@ -1517,12 +1519,13 @@ int process_leds(Gui_SDL_objects *gui, Core *audio_core)
         gui->Leds[6].OnOffLed = ON;
         gui->Leds[7].OnOffLed = ON;
     }
+    //updating the flag about the buffer being new
     audio_core->buffer_is_new = 0;
 
     for (int nbLeds = 0; nbLeds < NUMBER_OF_LEDS; ++nbLeds)
     {
 
-        if (gui->Leds[nbLeds].OnOffLed)    // If ON
+        if (gui->Leds[nbLeds].OnOffLed == ON)    // If ON
         {
             if (nbLeds < NUMBER_OF_LEDS - 3)
             {
@@ -1541,7 +1544,7 @@ int process_leds(Gui_SDL_objects *gui, Core *audio_core)
                 }
 
             }
-            if (nbLeds < NUMBER_OF_LEDS && nbLeds > NUMBER_OF_LEDS - 1)
+            if (nbLeds == NUMBER_OF_LEDS -1)
             {
                 if (gui_set_switch_image(gui->Leds[nbLeds].sdl_Led, gui->Leds[nbLeds].img_led_red))
                 {
@@ -1886,6 +1889,7 @@ short int levelVUMeter(Audio_Buffer average_audio_level)
     { return 1; }
     else
     { LnScaledAudioLevel = log((double) average_audio_level[0]); }
+    printf("value of average audio level : %d",average_audio_level[0]);
 
     /*It should return a number between 1 and 11.09, but we only have 8 LEDs on our synth. I am therefore
      making the choice to set the thresholds accordingly.
