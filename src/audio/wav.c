@@ -6,4 +6,4 @@
  * Here are implemented the functions of recording of WAV files
  */
 
-#include "audio.h"
+#include "wav.h"

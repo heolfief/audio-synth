@@ -26,9 +26,11 @@ set(SOURCE_FILES main.c
         audio_fx/ext_effects/mem.c audio_fx/ext_effects/mem.h
         audio_fx/ext_effects/biquad.c audio_fx/ext_effects/biquad.h
         audio_fx/ext_effects/mem.c audio_fx/ext_effects/mem.h
-        midi/midi.c midi/midi.h)
+        midi/midi.c midi/midi.h
+        gui/keypad.c gui/keypad.h
+        audio/wav.c audio/wav.h)
 
-add_executable(audio_synth ${SOURCE_FILES} gui/keypad.c gui/keypad.h)
+add_executable(audio_synth ${SOURCE_FILES})
 add_executable(audio_synth_valgrind ${SOURCE_FILES})
 
 target_compile_definitions(audio_synth_valgrind PRIVATE VALGRIND)
