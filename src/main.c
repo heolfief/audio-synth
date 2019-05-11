@@ -80,7 +80,7 @@ int main(int argc, char *argv[])
     if (create_buttons_map(gui))exit(EXIT_FAILURE);
     if (create_Text_map(gui))exit(EXIT_FAILURE);
     if (create_Leds_map(gui, audio_core->sys_param))exit(EXIT_FAILURE);
-    if (create_Touch_map(gui, audio_core->sys_param));
+    if (create_Touch_map(gui, audio_core->sys_param))exit(EXIT_FAILURE);
     if (load_sys_param_to_gui(gui, audio_core->sys_param))exit((EXIT_FAILURE));
     if (gui_update(gui))exit(EXIT_FAILURE);
 

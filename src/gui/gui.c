@@ -721,7 +721,7 @@ int create_Touch_map(Gui_SDL_objects *gui, Sys_param *sys_param)
         gui->touch[nbtouch].sdl_Touch =
             gui_create_button(gui->touch[nbtouch].posX, gui->touch[nbtouch].posY, gui->touch[nbtouch].width, gui->touch[nbtouch].height, gui->touch[nbtouch].img_touch_off);
     }
-
+    return 0;
 }
 
 int create_Leds_map(Gui_SDL_objects *gui, Sys_param *sys_param)
