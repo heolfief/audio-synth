@@ -1,7 +1,10 @@
-//
-// Created by robindsj on 09/05/19.
-//
-
+/**
+ * \file keypad.h
+ * \brief Keypad structure and function definition.
+ *
+ *
+ * Here are defined the keypad structure, and the related functions
+ */
 #ifndef AUDIO_SYNTH_SRC_GUI_KEYPAD_H
 #define AUDIO_SYNTH_SRC_GUI_KEYPAD_H
 
@@ -55,7 +58,6 @@
 #include <stdlib.h>
 #include "../core/audio_core.h"
 #include "../system/error_handler.h"
-#include "../midi/midi.h"
 #include "../gui/gui.h"
 
 /**
@@ -63,19 +65,22 @@
  * \brief Function to play with keyboard, connect the key pressed with the note to play
  *
  * \param event The key and if is it press or release, *ac the core
+ * \param ac The Audio core
+ * \param gui the interface
  *
  * \return 0 if everything went OK, -1 otherwise
  */
-int keypress(SDL_Event *event, Core *ac, Gui_SDL_objects* gui);
+int keypress(SDL_Event *event, Core *ac, Gui_SDL_objects *gui);
 
 /**
  * \fn int keyrelease(SDL_Event *event, Core *ac)
  * \brief Function to play with keyboard, connect the key release with the note to stop
  *
  * \param event The key and if is it press or release, *ac the core
- *
+ * * \param ac The Audio core
+ * \param gui the interface
  * \return 0 if everything went OK, -1 otherwise
  */
-int keyrelease(SDL_Event *event, Core *ac);
+int keyrelease(SDL_Event *event, Core *ac, Gui_SDL_objects *gui);
 
 #endif //AUDIO_SYNTH_SRC_GUI_KEYPAD_H

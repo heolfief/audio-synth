@@ -182,6 +182,45 @@ static const int leds_location[NUMBER_OF_LEDS][2] = {
 
 };
 
+static const int touch_location[NUMBER_OF_TOUCH][2] = {
+    //DO
+    {860, 753},
+
+    //DOd
+    {890, 710},
+
+    //RE
+    {926, 753},
+
+    //REd
+    {951, 710},
+
+    //MI
+    {985, 753},
+
+    //FA
+    {1049, 753},
+
+    //FAd
+    {1087, 710},
+
+    //SOL
+    {1114, 753},
+
+    //SOLd
+    {1146, 710},
+
+    //LA
+    {1175, 753},
+
+    //LAd
+    {1194, 710},
+
+    //SI
+    {1239, 753}
+
+};
+
 static double map(double x, double in_min, double in_max, double out_min, double out_max)
 {
     return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
@@ -369,6 +408,13 @@ Gui_SDL_objects *alloc_gui_sdl_objects()
     }
     gui->Leds = Led;
 
+    TOUCH *touch = (TOUCH *) calloc(NUMBER_OF_TOUCH, sizeof(TOUCH));
+    if (touch==NULL){
+        sys_print_error("Memory Allocation error");
+        return NULL;
+    }
+    gui->touch= touch ;
+
     return gui;
 }
 
@@ -381,6 +427,7 @@ int free_gui_sdl_objects(Gui_SDL_objects *gui)
     free(gui->buttons);
     free(gui->preset_name);
     free(gui->Leds);
+    free(gui->touch);
     free(gui);
     return 0;
 }
@@ -429,6 +476,26 @@ int gui_update(Gui_SDL_objects *gui)
         }
         SDL_DestroyTexture(tmp);
     }
+
+
+// For each Touch
+    for (int i = 0; i < NUMBER_OF_TOUCH; ++i)
+    {
+        SDL_Texture
+            *tmp = SDL_CreateTextureFromSurface(gui->renderer, gui->touch[i].sdl_Touch->internal_surface);
+        if (tmp == NULL)
+        {
+            sys_print_SDL_error("Failed creating texture");
+            return -1;
+        }
+        if (SDL_RenderCopyEx(gui->renderer, tmp, NULL, gui->touch[i].sdl_Touch->location_and_size, 0, NULL, SDL_FLIP_NONE))
+        {
+            sys_print_SDL_error("Failed RenderCopy");
+            return -1;
+        }
+        SDL_DestroyTexture(tmp);
+    }
+
 
     // For each multi state switch
     for (int i = 0; i < NUMBER_OF_MS_SWITCHES; ++i)
@@ -634,6 +701,27 @@ int create_switches_map(Gui_SDL_objects *gui, Sys_param *sys_param)
     }
 
     return 0;
+}
+
+int create_Touch_map(Gui_SDL_objects *gui, Sys_param *sys_param)
+{
+    if (gui == NULL || sys_param == NULL)
+    {
+        sys_print_error("Parameter is NULL");
+        return -1;
+    }
+    for (int nbtouch = 0; nbtouch < NUMBER_OF_TOUCH; ++nbtouch)
+    {
+        gui->touch[nbtouch].img_touch_on = TOUCH_ON;
+        gui->touch[nbtouch].img_touch_off = TOUCH_OFF;
+        gui->touch[nbtouch].posX = touch_location[nbtouch][0];
+        gui->touch[nbtouch].posY = touch_location[nbtouch][1];
+        gui->touch[nbtouch].width = WIDTH_TOUCH;
+        gui->touch[nbtouch].height = HEIGHT_TOUCH;
+        gui->touch[nbtouch].sdl_Touch =
+            gui_create_button(gui->touch[nbtouch].posX, gui->touch[nbtouch].posY, gui->touch[nbtouch].width, gui->touch[nbtouch].height, gui->touch[nbtouch].img_touch_off);
+    }
+
 }
 
 int create_Leds_map(Gui_SDL_objects *gui, Sys_param *sys_param)
@@ -1390,6 +1478,57 @@ int process_pots(Gui_SDL_objects *gui, Core *audio_core, Uint8 mouse_is_down)
 
         if (gui_update(gui))return -1;
     }
+
+    return 0;
+}
+
+int process_touch(Gui_SDL_objects *gui,  Uint8 id, Uint8 mode)
+{
+
+    if (gui == NULL )
+    {
+        sys_print_error("Parameter is NULL");
+        return -1;
+    }
+    short int note_played;
+    note_played = id -60;
+
+    for (int nbtouch = 0; nbtouch < NUMBER_OF_TOUCH; ++nbtouch)
+    {
+
+        if (mode == 1)
+        {
+            gui->touch[note_played].OnOffTouch = ON;
+
+        }
+        else
+        {
+            gui->touch[note_played].OnOffTouch = OFF;
+
+        }
+    }
+    for (int nbtouch = 0; nbtouch < NUMBER_OF_TOUCH; ++nbtouch)
+    {
+
+        if (gui->touch[nbtouch].OnOffTouch==ON)    // If ON
+        {
+            if (gui_set_switch_image(gui->touch[nbtouch].sdl_Touch, gui->touch[nbtouch].img_touch_on))
+            {
+                sys_print_error("wrong image to load");
+                return -1;
+            }
+        }
+        else
+        {
+            if (gui_set_switch_image(gui->touch[nbtouch].sdl_Touch, gui->touch[nbtouch].img_touch_off))
+            {
+                sys_print_error("wrong image to load");
+                return -1;
+
+            }
+        }
+    }
+    gui_update(gui);
 
     return 0;
 }

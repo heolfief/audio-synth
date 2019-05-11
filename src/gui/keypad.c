@@ -1,6 +1,10 @@
-//
-// Created by robindsj on 09/05/19.
-//
+/**
+ * \file keypad.
+ * \brief keypad management
+ *
+ *
+ * Here are implemented the keypad structure, and the related functions
+ */
 #include "keypad.h"
 int octave = 0;
 
@@ -49,11 +53,11 @@ int keypress(SDL_Event *event, Core *ac, Gui_SDL_objects *gui)
             {
                 if (midi_note_OFF(ac, i))return -1;
             }
-            if (octave <= OCTAVE_MAX)
+            if (octave >= OCTAVE_MAX)
             {
                 octave++;
             }
-
+            octave++;
             break;
 
         case OCTAVE_L:
@@ -61,52 +65,57 @@ int keypress(SDL_Event *event, Core *ac, Gui_SDL_objects *gui)
             {
                 if (midi_note_OFF(ac, i))return -1;
             }
-            if (octave <= OCTAVE_MIN)
+            if (octave > OCTAVE_MIN)
             {
-                octave--;
+                sys_print_error("Octave min atteinte");
+                return -1;
+
             }
+
+            octave--;
             break;
 
-        case SI_KEY:if (midi_note_ON(ac, SI_NOTE + OCTAVE_GAP * octave, 127))return -1;
+        case SI_KEY:midi_note_ON(ac, SI_NOTE + OCTAVE_GAP * octave, 127);
+            printf("LA");
             break;
 
-        case LA_KEY:if (midi_note_ON(ac, LA_NOTE + OCTAVE_GAP * octave, 127))return -1;
+        case LA_KEY:midi_note_ON(ac, LA_NOTE + OCTAVE_GAP * octave, 127);
             break;
 
-        case MI_KEY:if (midi_note_ON(ac, MI_NOTE + OCTAVE_GAP * octave, 127))return -1;
+        case MI_KEY:midi_note_ON(ac, MI_NOTE + OCTAVE_GAP * octave, 127);
             break;
 
-        case LAd_KEY:if (midi_note_ON(ac, LAd_NOTE + OCTAVE_GAP * octave, 127))return -1;
+        case LAd_KEY:midi_note_ON(ac, LAd_NOTE + OCTAVE_GAP * octave, 127);
             break;
 
-        case SOL_KEY:if (midi_note_ON(ac, SOL_NOTE + OCTAVE_GAP * octave, 127))return -1;
+        case SOL_KEY:midi_note_ON(ac, SOL_NOTE + OCTAVE_GAP * octave, 127);
             break;
 
-        case SOLd_KEY:if (midi_note_ON(ac, SOLd_NOTE + OCTAVE_GAP * octave, 127))return -1;
+        case SOLd_KEY:midi_note_ON(ac, SOLd_NOTE + OCTAVE_GAP * octave, 127);
             break;
 
-        case FA_KEY:if (midi_note_ON(ac, FA_NOTE + OCTAVE_GAP * octave, 127))return -1;
+        case FA_KEY:midi_note_ON(ac, FA_NOTE + OCTAVE_GAP * octave, 127);
             break;
 
-        case FAd_KEY:if (midi_note_ON(ac, FAd_NOTE + OCTAVE_GAP * octave, 127))return -1;
+        case FAd_KEY:midi_note_ON(ac, FAd_NOTE + OCTAVE_GAP * octave, 127);
             break;
 
-        case RE_KEY:if (midi_note_ON(ac, RE_NOTE + OCTAVE_GAP * octave, 127))return -1;
+        case RE_KEY:midi_note_ON(ac, RE_NOTE + OCTAVE_GAP * octave, 127);
             break;
 
-        case REd_KEY:if (midi_note_ON(ac, REd_NOTE + OCTAVE_GAP * octave, 127))return -1;
+        case REd_KEY:midi_note_ON(ac, REd_NOTE + OCTAVE_GAP * octave, 127);
             break;
 
-        case DO_KEY:if (midi_note_ON(ac, DO_NOTE + OCTAVE_GAP * octave, 127))return -1;
+        case DO_KEY:midi_note_ON(ac, DO_NOTE + OCTAVE_GAP * octave, 127);
             break;
 
-        case DOd_KEY:if (midi_note_ON(ac, DOd_NOTE + OCTAVE_GAP * octave, 127))return -1;
+        case DOd_KEY:midi_note_ON(ac, DOd_NOTE + OCTAVE_GAP * octave, 127);
             break;
 
         case RESET_KEY:
             for (int i = 20; i < 110; ++i)
             {
-                if (midi_note_OFF(ac, i))return -1;
+                midi_note_OFF(ac, i);
             }
             break;
 
@@ -115,7 +124,7 @@ int keypress(SDL_Event *event, Core *ac, Gui_SDL_objects *gui)
     return 0;
 }
 
-int keyrelease(SDL_Event *event, Core *ac)
+int keyrelease(SDL_Event *event, Core *ac, Gui_SDL_objects *gui)
 {
     if (event == NULL || ac == NULL)
     {
@@ -125,40 +134,40 @@ int keyrelease(SDL_Event *event, Core *ac)
 
     switch (event->key.keysym.sym)
     {
-        case SI_KEY:if (midi_note_OFF(ac, SI_NOTE + OCTAVE_GAP * octave))return -1;
+        case SI_KEY:midi_note_OFF(ac, SI_NOTE + OCTAVE_GAP * octave);
             break;
 
-        case LA_KEY:if (midi_note_OFF(ac, LA_NOTE + OCTAVE_GAP * octave))return -1;
+        case LA_KEY:midi_note_OFF(ac, LA_NOTE + OCTAVE_GAP * octave);
             break;
 
-        case MI_KEY:if (midi_note_OFF(ac, MI_NOTE + OCTAVE_GAP * octave))return -1;
+        case MI_KEY:midi_note_OFF(ac, MI_NOTE + OCTAVE_GAP * octave);
             break;
 
-        case LAd_KEY:if (midi_note_OFF(ac, LAd_NOTE + OCTAVE_GAP * octave))return -1;
+        case LAd_KEY:midi_note_OFF(ac, LAd_NOTE + OCTAVE_GAP * octave);
             break;
 
-        case SOL_KEY:if (midi_note_OFF(ac, SOL_NOTE + OCTAVE_GAP * octave))return -1;
+        case SOL_KEY:midi_note_OFF(ac, SOL_NOTE + OCTAVE_GAP * octave);
             break;
 
-        case SOLd_KEY:if (midi_note_OFF(ac, SOLd_NOTE + OCTAVE_GAP * octave))return -1;
+        case SOLd_KEY:midi_note_OFF(ac, SOLd_NOTE + OCTAVE_GAP * octave);
             break;
 
-        case FA_KEY:if (midi_note_OFF(ac, FA_NOTE + OCTAVE_GAP * octave))return -1;
+        case FA_KEY:midi_note_OFF(ac, FA_NOTE + OCTAVE_GAP * octave);
             break;
 
-        case FAd_KEY:if (midi_note_OFF(ac, FAd_NOTE + OCTAVE_GAP * octave))return -1;
+        case FAd_KEY:midi_note_OFF(ac, FAd_NOTE + OCTAVE_GAP * octave);
             break;
 
-        case RE_KEY:if (midi_note_OFF(ac, RE_NOTE + OCTAVE_GAP * octave))return -1;
+        case RE_KEY:midi_note_OFF(ac, RE_NOTE + OCTAVE_GAP * octave);
             break;
 
-        case REd_KEY:if (midi_note_OFF(ac, REd_NOTE + OCTAVE_GAP * octave))return -1;
+        case REd_KEY:midi_note_OFF(ac, REd_NOTE + OCTAVE_GAP * octave);
             break;
 
-        case DO_KEY:if (midi_note_OFF(ac, DO_NOTE + OCTAVE_GAP * octave))return -1;
+        case DO_KEY:midi_note_OFF(ac, DO_NOTE + OCTAVE_GAP * octave);
             break;
 
-        case DOd_KEY:if (midi_note_OFF(ac, DOd_NOTE + OCTAVE_GAP * octave))return -1;
+        case DOd_KEY:midi_note_OFF(ac, DOd_NOTE + OCTAVE_GAP * octave);
             break;
 
     }
