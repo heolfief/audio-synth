@@ -7,9 +7,9 @@
 Audio synthesizer coded in C (SDL2 lib). This is a 3y degree school project at INSA Rennes, France.
 
 ## Dependencies
-You will need the SDL2 library and the libxml2 library for the programm to work.
+You will need the SDL2 library, the SDL2-image and SDL2-tff libraries, the sndfile library and the libxml2 library for the programm to work.
 ```bash
-$ sudo apt-get install libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev libxml2-dev
+$ sudo apt-get install libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev libsndfile1-dev libxml2-dev
 ```
 
 ## Build
