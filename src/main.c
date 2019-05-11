@@ -97,7 +97,6 @@ int main(int argc, char *argv[])
     if (compute_filter_coeffs(audio_core->sys_param->filter_param, audio_core->sys_param->sample_rate, audio_core->effect_core->filter_state))return -1;
 
     SDL_PauseAudio(0);                      // Play audio (pause = off)
-    if (process_leds(gui, audio_core))exit(EXIT_FAILURE);
 
     while (!gui->application_quit)
     {
