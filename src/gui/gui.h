@@ -26,6 +26,8 @@
 
 #define NUMBER_OF_BUTTONS 3
 
+#define NUMBER_OF_TOUCH 12
+
 #define IMAGE_SWITCH_ON                 "../src/gui/Figs/switch_on.png"
 #define IMAGE_SWITCH_OFF                "../src/gui/Figs/switch_off.png"
 #define WIDTH_SWITCH                    40
@@ -85,6 +87,11 @@
 #define IMAGE_LED_OFF_GREEN                 "../src/gui/Figs/led_off_green.png"
 #define WIDTH_LED                       25
 #define HEIGHT_LED                      25
+
+#define TOUCH_ON        "../src/gui/Figs/touch_on.png"
+#define TOUCH_OFF       "../src/gui/Figs/touch_off.png"
+#define WIDTH_TOUCH        23
+#define HEIGHT_TOUCH        35
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
@@ -203,7 +210,27 @@ typedef struct
   char *img_led_orange;       /*!<the image of the Orange Led */
   char *img_led_red;          /*!<the image of the Red Led */
   char *img_led_off;          /*!<the image of the Led Off */
+  char img_on[33];
 } LED;
+
+/**
+* \struct Touch
+* \brief define a graphical touch
+*
+*/
+typedef struct
+{
+  OnOff OnOffTouch;              /*!<the parameter of the Touch to know if it's on or not*/
+  SDL_Button_t *sdl_Touch;      /*!<the SDL related objects for the Touch */
+  SDL_Texture *texture;       /*!<the SDL texture of the Touch */
+  Uint16 posX;                /*!<the X position on the screen (in pixels) */
+  Uint16 posY;                /*!<the Y position on the screen (in pixels) */
+  Uint16 width;               /*!<the width (in pixels) */
+  Uint16 height;              /*!<the height (in pixels) */
+  char *img_touch_on;        /*!<the image of the Green Led */
+  char *img_touch_off;       /*!<the image of the Orange Led */
+} TOUCH;
+
 
 /**
  * \struct Mouse_position
@@ -240,6 +267,7 @@ typedef struct
   Button *buttons;
   Text *preset_name;
   LED *Leds;
+  TOUCH *touch;
 } Gui_SDL_objects;
 
 /**
@@ -343,9 +371,19 @@ int create_switches_map(Gui_SDL_objects *gui, Sys_param *sys_param);
  *
  * \return 0 if everything went OK, -1 otherwise
  */
+
 int create_Leds_map(Gui_SDL_objects *gui, Sys_param *sys_param);
+/**
+ * \fn int create_touch_map(Gui_SDL_objects *gui, Sys_param *sys_param)
+ * \brief Function to place and initialize GUI touch
+ *
+ * \param gui The Gui_SDL_objects
+ * \param sys_param The system parameters
+ *
+ * \return 0 if everything went OK, -1 otherwise
+ */
 
-
+int create_Touch_map(Gui_SDL_objects *gui, Sys_param *sys_param);
 /**
  * \fn int create_buttons_map(Gui_SDL_objects *gui)
  * \brief Function to place and initialize GUI buttons
@@ -415,6 +453,18 @@ int process_pots(Gui_SDL_objects *gui, Core *audio_core, Uint8 mouse_is_down);
  */
 int process_leds(Gui_SDL_objects *gui, Core *audio_core);
 
+/**
+ * \fn int process_touch(Gui_SDL_objects *gui)
+ * \brief Function to turn on touch, change image accordingly and free the sdl and texture of the led if not on
+ *
+ * \param gui The Gui_SDL_objects
+ * \param audio_core The system's audio core
+ * \param id the note played
+ * \param is the note starting or stopping
+ *
+ * \return 0 if everything went OK, -1 otherwise
+ */
+int process_touch(Gui_SDL_objects *gui, Uint8 id, Uint8 mode);
 
 /**
  * \fn int change_pot_percent(Gui_SDL_objects *gui, int potnbr, Uint8 mouse_is_down)
