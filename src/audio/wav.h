@@ -8,3 +8,15 @@
 
 #ifndef AUDIO_SYNTH_WAV_H
 #define AUDIO_SYNTH_WAV_H
+
+
+
+
+
+
+
+
+#endif //AUDIO_SYNTH_WAV_H
+
+
+
