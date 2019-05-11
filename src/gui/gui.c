@@ -1404,7 +1404,6 @@ int process_leds(Gui_SDL_objects *gui, Core *audio_core)
     }
     short int ledsResults;
     ledsResults = levelVUMeter(audio_core->average_audio_level);
-    printf("ledsResult in ProcessLeds : %d\n",ledsResults);
 
     if (ledsResults == 0)
     {
@@ -1878,7 +1877,7 @@ int load_sys_param_to_gui(Gui_SDL_objects *gui, Sys_param *sys_param)
     }
 
 }
-short int levelVUMeter(Audio_Buffer average_audio_level)
+Sint8 levelVUMeter(Audio_Buffer average_audio_level)
 {
     double LnScaledAudioLevel;
     short int LEDResult;
@@ -1886,10 +1885,13 @@ short int levelVUMeter(Audio_Buffer average_audio_level)
     //The level is between 0 and 2¹⁶, so between 0 and 1 the Ln value will be set to 1.
     if (average_audio_level[0] == 0) return 0;
     if (average_audio_level[0] <= 1 && average_audio_level[0] != 0)
-    { return 1; }
+    {
+        return 1;
+    }
     else
-    { LnScaledAudioLevel = log((double) average_audio_level[0]); }
-    printf("value of average audio level : %d",average_audio_level[0]);
+    {
+        LnScaledAudioLevel = log((double) average_audio_level[0]);
+    }
 
     /*It should return a number between 1 and 11.09, but we only have 8 LEDs on our synth. I am therefore
      making the choice to set the thresholds accordingly.
@@ -1902,7 +1904,7 @@ short int levelVUMeter(Audio_Buffer average_audio_level)
     return LEDResult;
 }
 
-int prompt_quit()
+Uint8 prompt_quit()
 {
     return tinyfd_messageBox(NULL, "Exit application ?", "yesno", "question", 0);
 }

@@ -440,15 +440,15 @@ int process_leds(Gui_SDL_objects *gui, Core *audio_core);
 int load_sys_param_to_gui(Gui_SDL_objects *gui, Sys_param *sys_param);
 
 /**
-<<<<<<< HEAD
  * \fn int prompt_quit()
  * \brief Function to prompt the user with exit message
  *
  * \return 1 if yes, 0 if no
  */
-int prompt_quit();
+Uint8 prompt_quit();
+
 /**
- * \fn int levelVUMeter(Audio_Buffer *average_level_audio)
+ * \fn Sint8 levelVUMeter(Audio_Buffer *average_level_audio)
 
  * \brief Function to compute with the "ln" function the average audio level in order to adapt it to our number of "LEDs" forming our VUMeter.
  *
@@ -457,6 +457,6 @@ int prompt_quit();
  *
  * \return returns an int between 1 and 8, to know which LED to light up and -1 if something goes wrong
  */
-short int levelVUMeter(Audio_Buffer average_audio_level);
+Sint8 levelVUMeter(Audio_Buffer average_audio_level);
 
 #endif //AUDIO_SYNTH_GUI_H

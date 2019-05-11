@@ -135,7 +135,8 @@ int main(int argc, char *argv[])
 
                 case SDL_KEYDOWN:
 
-                    if (gui->event.key.keysym.sym == SDLK_ESCAPE)
+                    printf("KEY\n");
+/*                    if (gui->event.key.keysym.sym == SDLK_ESCAPE)
                     {
                         if (prompt_quit())
                         {
@@ -144,7 +145,7 @@ int main(int argc, char *argv[])
                         }
                     }
                     if (keypress(&gui->event, audio_core, gui))exit(EXIT_FAILURE);
-                    break;
+  */                  break;
 
                 case SDL_KEYUP:
 
@@ -154,7 +155,7 @@ int main(int argc, char *argv[])
                 case SDL_MOUSEBUTTONDOWN:
 
                     mouse_is_down = 1;
-                    printf("Mouse clic on x=%d, y=%d\n", gui->event.button.x, gui->event.button.y);
+                    //printf("Mouse clic on x=%d, y=%d\n", gui->event.button.x, gui->event.button.y);
                     break;
 
                 case SDL_MOUSEBUTTONUP:

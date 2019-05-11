@@ -14,21 +14,6 @@ int keypress(SDL_Event *event, Core *ac, Gui_SDL_objects *gui)
         return -1;
     }
 
-    /* Is it a release or a press? */
-    if (event->key.type == SDL_KEYUP)
-    {
-        printf("Release:- ");
-    }
-    else
-    {
-        printf("Press:- ");
-    }
-
-    /* Print the hardware scancode first */
-    printf("Scancode: 0x%02X", event->key.keysym.scancode);
-
-    printf("\n");
-
     switch (event->key.keysym.sym)
     {
         case SDLK_KP_PLUS:
@@ -64,12 +49,11 @@ int keypress(SDL_Event *event, Core *ac, Gui_SDL_objects *gui)
             {
                 midi_note_OFF(ac, i);
             }
-            if (octave >= OCTAVE_MAX)
+            if (octave <= OCTAVE_MAX)
             {
-                sys_print_error("Octave max atteinte");
-                return -1;
+                octave++;
             }
-            octave++;
+
             break;
 
         case OCTAVE_L:
@@ -79,16 +63,11 @@ int keypress(SDL_Event *event, Core *ac, Gui_SDL_objects *gui)
             }
             if (octave <= OCTAVE_MIN)
             {
-                sys_print_error("Octave min atteinte");
-                return -1;
-
+                octave--;
             }
-
-            octave--;
             break;
 
         case SI_KEY:midi_note_ON(ac, SI_NOTE + OCTAVE_GAP * octave, 127);
-            printf("LA");
             break;
 
         case LA_KEY:midi_note_ON(ac, LA_NOTE + OCTAVE_GAP * octave, 127);
