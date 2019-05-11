@@ -50,7 +50,6 @@
 #define OCTAVE_MAX      3
 #define OCTAVE_MIN      -3
 
-
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_stdinc.h>
@@ -63,10 +62,6 @@
 #include "../sys_param/xml/preset_xml.h"
 #include "../midi/midi.h"
 #include <SDL_events.h>
-
-
-
-
 
 /**
  * \fn int keypress(SDL_Event *event, Core *ac)

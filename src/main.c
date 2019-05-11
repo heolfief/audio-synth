@@ -58,7 +58,6 @@ int main(int argc, char *argv[])
         exit(EXIT_FAILURE);
     }
 
-
 #ifndef VALGRIND
 
     set_audio_spec(&as, audio_core);
@@ -118,7 +117,6 @@ int main(int argc, char *argv[])
             }
         }
 
-
         while (SDL_PollEvent(&gui->event))
         {
             if (process_switches(gui, audio_core))exit(EXIT_FAILURE);
@@ -146,15 +144,14 @@ int main(int argc, char *argv[])
                             gui->application_quit = SDL_TRUE;
                         }
                     }
-                    else{
-                    keypress (&gui->event, audio_core);
+                    else
+                    {
+                        keypress(&gui->event, audio_core);
                     }
                     break;
-                case SDL_KEYUP:
-                    keyrelease(&gui->event, audio_core);
+                case SDL_KEYUP:keyrelease(&gui->event, audio_core);
 
-                break;
-
+                    break;
 
                 case SDL_MOUSEBUTTONDOWN:
 
