@@ -113,8 +113,8 @@ int midi_note_ON(Core *ac, Uint8 id, Uint8 velo)
     old_note = find_note_from_id(ac->note_array, id);
     if ((old_note != -1) && (ac->note_array[old_note]->onoff == ON))
     {
-        sys_print_error("Note is already ON");
-        return -1;
+        //sys_print_error("Note is already ON");
+        return 0;
     }
 
     free_note = find_free_note(ac->note_array);
