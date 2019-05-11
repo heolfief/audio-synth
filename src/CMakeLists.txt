@@ -4,8 +4,9 @@ find_package(SDL2 REQUIRED)
 find_package(SDL2_image REQUIRED)
 find_package(SDL2TTF REQUIRED)
 find_package(LibXml2 REQUIRED)
+find_package(SndFile REQUIRED)
 
-include_directories(${SDL2_INCLUDE_DIRS} ${SDL2IMAGE_INCLUDE_DIRS} ${SDL2TTF_INCLUDE_DIRS} ${LIBXML2_INCLUDE_DIR})
+include_directories(${SDL2_INCLUDE_DIRS} ${SDL2IMAGE_INCLUDE_DIRS} ${SDL2TTF_INCLUDE_DIRS} ${SNDFILE_INCLUDE_DIRS} ${LIBXML2_INCLUDE_DIR})
 
 set(SOURCE_FILES main.c
         core/audio_core.c core/audio_core.h
@@ -34,7 +35,7 @@ target_compile_definitions(audio_synth_valgrind PRIVATE VALGRIND)
 
 target_link_libraries(audio_synth ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES} ${SDL2TTF_LIBRARY} ${LIBXML2_LIBRARIES} m)
 
-target_link_libraries(audio_synth_valgrind ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES} ${SDL2TTF_LIBRARY} ${LIBXML2_LIBRARIES} m)
+target_link_libraries(audio_synth_valgrind ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES} ${SDL2TTF_LIBRARY} ${SNDFILE_LIBRARIES} ${LIBXML2_LIBRARIES} m)
 
 
 install(TARGETS audio_synth
