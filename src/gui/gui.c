@@ -963,10 +963,10 @@ int process_buttons(Gui_SDL_objects *gui, Core *audio_core, MIDI_Peripheral_fd *
             extract_file_name_from_path(path, preset_name, 4);
             gui->preset_name->text_surface =
                 TTF_RenderText_Blended(gui->preset_name->font, preset_name, gui->preset_name->color);
+            reload_param = 1;
         }
         if (gui_set_switch_image(gui->buttons[0].sdl_button, gui->buttons[0].imgoff))return -1;
         param_changed = 1;
-        reload_param = 1;
     }
 
     // Button SAVE preset
@@ -1882,7 +1882,7 @@ short int levelVUMeter(Audio_Buffer average_audio_level)
 
     //The level is between 0 and 2¹⁶, so between 0 and 1 the Ln value will be set to 1.
     if (average_audio_level[0] == 0) return 0;
-    if (average_audio_level[0] <= 1 && average_audio_level[0]!=0)
+    if (average_audio_level[0] <= 1 && average_audio_level[0] != 0)
     { return 1; }
     else
     { LnScaledAudioLevel = log((double) average_audio_level[0]); }
@@ -1890,7 +1890,7 @@ short int levelVUMeter(Audio_Buffer average_audio_level)
     /*It should return a number between 1 and 11.09, but we only have 8 LEDs on our synth. I am therefore
      making the choice to set the thresholds accordingly.
      */
-    if (LnScaledAudioLevel < 6) LEDResult = round( (double) LnScaledAudioLevel);
+    if (LnScaledAudioLevel < 6) LEDResult = round((double) LnScaledAudioLevel);
     if (LnScaledAudioLevel >= 6 && LnScaledAudioLevel < 8) LEDResult = 6;
     if (LnScaledAudioLevel >= 8 && LnScaledAudioLevel < 9) LEDResult = 7;
     if (LnScaledAudioLevel >= 9) LEDResult = 8;
