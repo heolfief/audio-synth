@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
 
   FILE * test;
     int size;
-    u_int16_t * datarange = NULL;
+    u_int8_t * datarange = NULL;
 
   test= openFile("../fichier_midi/clairdelune.mid","r",RETOUR);
   Header * H ;

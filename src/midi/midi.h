@@ -74,7 +74,7 @@ void fillHeaderRead (Header*Header, FILE* file);
  * \return buffer __uint32_t*  with the data range sorted
  */
 
-__uint16_t  * readDataRange( u_int32_t sizeDataRange, FILE *file);
+__uint8_t  * readDataRange( u_int32_t sizeDataRange, FILE *file);
 /**
  * \fn void setAsBeginDataRange (FILE *f)
  * \brief Function to go at the begining of  midi data ranged and passed it to begin the reading
@@ -129,7 +129,7 @@ u_int32_t getSizeDataRange(FILE *f);
  * \return 0 if everything went OK, -1 otherwise
  */
 
-list * playDataRange(u_int16_t * DataRange, Header * H);
+list * playDataRange(u_int8_t * DataRange, Header * H);
 
 /**
  * \fn playDataRange(u_int32_t DataRangeSorted)
@@ -157,9 +157,9 @@ int readAction (u_int16_t * DataRange, int increments);
  * \return 0 if everything went OK, -1 otherwise
  */
 
-u_int32_t calculDelay (__uint16_t * DataDelay, int power,u_int16_t Noire);
+double calculDelay (__uint8_t * DataDelay, int power,u_int16_t Noire);
 
 
 
-int readEvent (__uint16_t * midiNote, u_int16_t * attack,enum event * midiEvent,u_int16_t * DataRange , int i);
+int readEvent (__uint8_t * midiNote, u_int8_t * attack, event  midiEvent,u_int8_t * DataRange , int *  i);
 #endif

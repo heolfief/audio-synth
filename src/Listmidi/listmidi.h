@@ -4,15 +4,16 @@
 
 
 typedef enum event event;
+
 enum event {OFF,ON};
 
 
 
 typedef struct {
-    __uint16_t  midiNote;
-    __uint16_t  attack;
+    __uint8_t  midiNote;
+    __uint8_t  attack;
    enum  event midiEvent;
-    __uint32_t delay;
+    double delay;
     struct midiList * next;
 }midiList;
 
@@ -37,7 +38,7 @@ typedef struct {
  * \return the target File open
  */
 
-midiList * newNodeList(__uint16_t  *midiNote, __uint16_t *attack, __uint16_t  *midiEvent, __uint32_t  delay, midiList * next);
+midiList * newNodeList(__uint8_t  *midiNote, __uint8_t *attack,  event  midiEvent, double  delay, midiList * next);
 
 /**
  * \fn void initList(list * l)
@@ -49,7 +50,7 @@ midiList * newNodeList(__uint16_t  *midiNote, __uint16_t *attack, __uint16_t  *m
  *
  * \return the target File open
  */
-void initList(list * l);
+list * initList();
 
 /**
  * \fn void printList(list * l)

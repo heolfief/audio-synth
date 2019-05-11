@@ -29,8 +29,8 @@ int closeFile(FILE * fichier){
 }
 
 
-unsigned char * BlockFileReader (FILE * fichier, u_int32_t nombre){
-    unsigned char * buffer;
+u_int8_t * BlockFileReader (FILE * fichier, u_int32_t nombre){
+    u_int8_t  * buffer;
     if ((buffer = (unsigned char *) malloc(sizeof(unsigned char)*nombre)) == NULL){ // verify the allocation
         printf("memory allocation error");
         exit (568);

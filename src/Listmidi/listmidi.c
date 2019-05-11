@@ -5,7 +5,7 @@
 
 
 
-midiList * newNodeList(__uint16_t * midiNote, __uint16_t *attack, __uint16_t  *midiEvent, __uint32_t  delay, midiList * next)
+midiList * newNodeList(__uint8_t * midiNote, __uint8_t *attack,   event  midiEvent, double delay, midiList * previous)
 {
     midiList * new = (midiList*)malloc(sizeof(midiList));  /*Allocation de l'espace mmoire*/
     if (new == NULL)
@@ -13,24 +13,36 @@ midiList * newNodeList(__uint16_t * midiNote, __uint16_t *attack, __uint16_t  *m
         fprintf(stderr, "Warning/error : allocation mmoire dynamique chou dans la fonction %s\n", __FUNCTION__);
         return NULL;		/*L'allocation  chou*/
     }
-    new->midiNote = (*midiNote);
-    new->midiEvent= (*midiEvent);
-    new->attack= (*attack);
+
+    new->midiNote = midiNote;
+    new->midiEvent= midiEvent;
+    new->attack= attack;
     new->delay = delay;
-    next->next = new;
+    previous->next = new;
     new->next = NULL;
     return new;				/*Return du pointeur vers la node cre*/
 }
 
-/*
 
-void initList(list * l)
+
+list *  initList()
 {
-    l->first  ;
-    l->current = NULL;
+    list *l = (list*) malloc(sizeof(list));
+    if (l == NULL)
+    {
+        fprintf(stderr, "Warning/error : allocation memoire dynamique chou dans la fonction %s\n", __FUNCTION__);
+        return NULL;		/*L'allocation  chou*/
+    }
+
+    l->current = (midiList*) malloc(sizeof(midiList));
+    l->first =   l->current;
     l->last = NULL;
+
+    return l ;
+
+
 }
-*/
+
 
 int empty(list * l)
 {
@@ -49,7 +61,7 @@ void printList(list * l)
     n = l->first;
     while (n != NULL)
     {
-        printf(" %d %2X %2x %2x \n ", n->midiEvent, n->delay, n->midiNote,n->attack);
+        printf(" Midi event : %d  Delay : %f  Midi note : %2x attack : %2x \n ", n->midiEvent, n->delay, n->midiNote,n->attack);
         n = n->next;
     }
     printf("}\n");

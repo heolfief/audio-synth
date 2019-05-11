@@ -53,7 +53,7 @@ int closeFile(FILE * file);
  * \return allocated buffer with result of reading on a file
  */
 
-unsigned char * BlockFileReader (FILE * file, u_int32_t  number);
+u_int8_t * BlockFileReader (FILE * file, u_int32_t  number);
 /**
  * \fn int removeFile(FILE *f)
  * \brief Function to remove a file
