@@ -1804,7 +1804,7 @@ int load_sys_param_to_gui(Gui_SDL_objects *gui, Sys_param *sys_param)
         if (gui_set_switch_image(gui->ms_switches[mssw].sdl_button, gui->ms_switches[mssw].img[gui->ms_switches[mssw].curr_state]))return -1;
     }
 
-    for (int i = 0; i < 500 / 3; ++i)
+    for (int i = 0; i < 100; ++i)
     {
         // OSC 1
         uint16_param = gui->pots[0].param;
@@ -2009,7 +2009,7 @@ int load_sys_param_to_gui(Gui_SDL_objects *gui, Sys_param *sys_param)
         { gui->pots[31].percent--; }
 
         if (gui_update(gui))return -1;
-        SDL_Delay(3);
+        SDL_Delay(2);
 
         if (gui_update(gui))return -1;
 

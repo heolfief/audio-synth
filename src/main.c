@@ -29,6 +29,7 @@ int main(int argc, char *argv[])
     Gui_SDL_objects *gui;
     MIDI_Peripheral_fd midi_peripheral = -1;
     Uint8 mouse_is_down = 0;
+    Uint32 lastTime = 0, currentTime;
 
     // Default parameters. If buffer_len changed, core memory allocation needs to be redone
     int sample_rate = 48000;
@@ -96,10 +97,20 @@ int main(int argc, char *argv[])
     // Each time a filter parameter is changed, this function needs to be called
     if (compute_filter_coeffs(audio_core->sys_param->filter_param, audio_core->sys_param->sample_rate, audio_core->effect_core->filter_state))return -1;
 
-    SDL_PauseAudio(0);                      // Play audio (pause = off)
+    SDL_PauseAudio(SDL_FALSE);              // Play audio (pause = off)
 
     while (!gui->application_quit)
     {
+        currentTime = SDL_GetTicks();       // Get time from SDL init in ms
+
+        // TEMP : 1000ms delay
+        if (currentTime > lastTime + 1000)  // If time has passed
+        {
+            lastTime = currentTime;
+
+
+        }
+
         if (audio_core->buffer_is_new) process_leds(gui, audio_core);
 
         if (midi_peripheral != -1)
