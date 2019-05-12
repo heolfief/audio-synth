@@ -8,7 +8,6 @@
 
 #include "audio_core.h"
 
-
 Core *alloc_core(Uint16 buffer_length)
 {
     Core *ac = (Core *) malloc(sizeof(Core));
@@ -27,7 +26,7 @@ Core *alloc_core(Uint16 buffer_length)
     ac->sys_param->master_onoff = ON;
 
     ac->record_param = (RecordParam *) malloc(sizeof(RecordParam));
-    ac->record_param->RecordOnOff=OFF;
+    ac->record_param->RecordOnOff = OFF;
 
     ac->note_array = alloc_polyphony(buffer_length);
     if (ac->note_array == NULL) return NULL;
@@ -76,7 +75,6 @@ int free_core(Core *ac)
     if (free_effect_core(ac->effect_core))return -1;
     if (free_record_param(ac->record_param))return -1;
 
-
     free(ac);
 
     return 0;
@@ -94,7 +92,8 @@ int synthesis_fill_buffer(Core *ac)
 
     for (int sample = 0; sample < ac->sys_param->audio_buffer_length; ++sample)
     {
-        ac->average_audio_level[sample] = moving_average((Sint16) ((double) ac->master_audio[sample] * ((double) ac->sys_param->master_volume / 100.0)));
+        ac->average_audio_level[sample] = moving_average((Sint16) ((double) ac->master_audio[sample]
+            * ((double) ac->sys_param->master_volume / 100.0)));
     }
 
     return 0;

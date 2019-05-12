@@ -26,9 +26,7 @@ typedef struct
 {
   OnOff RecordOnOff;
   SNDFILE *sndFile;
-}RecordParam;
-
-
+} RecordParam;
 
 /**
  * \struct Core
@@ -48,7 +46,6 @@ typedef struct
   Uint8 buffer_is_new;               /*!<flag if the buffer is refilled*/
   RecordParam *record_param;          /*!< structure containing recording parameters*/
 } Core;
-
 
 /**
  * \fn Core alloc_core()

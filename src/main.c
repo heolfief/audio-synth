@@ -24,7 +24,6 @@
 #include "core/audio_core.h"
 #include "audio/wav.h"
 
-
 int main(int argc, char *argv[])
 {
     printf("test");
@@ -116,7 +115,6 @@ int main(int argc, char *argv[])
             process_leds(gui, audio_core);
         }
 
-
         if (midi_peripheral != -1)
         {
             if (process_midi_input(&midi_peripheral, audio_core))exit(EXIT_FAILURE);
@@ -158,7 +156,7 @@ int main(int argc, char *argv[])
                             gui->application_quit = SDL_TRUE;
 
                             //switching off the recording session
-                            audio_core->record_param->RecordOnOff=OFF;
+                            audio_core->record_param->RecordOnOff = OFF;
                             close_wav_file(audio_core->record_param->sndFile);
                         }
                     }
@@ -185,7 +183,6 @@ int main(int argc, char *argv[])
     }
 
     exit_gui(gui);
-
 
     TTF_Quit();
     SDL_CloseAudio();
