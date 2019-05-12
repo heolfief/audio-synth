@@ -18,7 +18,7 @@
 #include "audio/audio.h"
 #include "system/error_handler.h"
 #include "sys_param/xml/preset_xml.h"
-#include "midi/midi.h"
+#include "midi/midi_keyboard.h"
 #include "gui/keypad.h"
 #include "core/audio_core.h"
 

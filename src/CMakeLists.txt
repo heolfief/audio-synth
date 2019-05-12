@@ -26,7 +26,7 @@ set(SOURCE_FILES main.c
         audio_fx/ext_effects/mem.c audio_fx/ext_effects/mem.h
         audio_fx/ext_effects/biquad.c audio_fx/ext_effects/biquad.h
         audio_fx/ext_effects/mem.c audio_fx/ext_effects/mem.h
-        midi/midi.c midi/midi.h
+        midi/midi_keyboard.c midi/midi_keyboard.h
         gui/keypad.c gui/keypad.h
         audio/wav.c audio/wav.h)
 

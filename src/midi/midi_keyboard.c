@@ -5,7 +5,7 @@
  *
  * Here are implemented the MIDI related function, for both MIDI files and USB MIDI (from keyboard)
  */
-#include "midi.h"
+#include "midi_keyboard.h"
 
 // The following list contains known names for midi peripherals in /dev/
 static const char *list_of_common_midi_dev[NUMBER_OF_KNOWN_MIDI_DEV] =

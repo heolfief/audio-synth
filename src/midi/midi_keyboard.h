@@ -6,8 +6,8 @@
  * Here are defined the MIDI related function, for both MIDI files and USB MIDI (from keyboard)
  */
 
-#ifndef AUDIO_SYNTH_SRC_MIDI_MIDI_H_
-#define AUDIO_SYNTH_SRC_MIDI_MIDI_H_
+#ifndef AUDIO_SYNTH_SRC_MIDI_MIDI_KEYBOARD_H_
+#define AUDIO_SYNTH_SRC_MIDI_MIDI_KEYBOARD_H_
 
 #include <stdio.h>
 #include <string.h>
@@ -81,4 +81,4 @@ int midi_note_OFF(Core *ac, Uint8 id);
  */
 int close_midi_peripheral(MIDI_Peripheral_fd fd);
 
-#endif //AUDIO_SYNTH_SRC_MIDI_MIDI_H_
+#endif //AUDIO_SYNTH_SRC_MIDI_MIDI_KEYBOARD_H_
