@@ -102,32 +102,13 @@ int main(int argc, char *argv[])
     SDL_PauseAudio(0);                      // Play audio (pause = off)
     int i =0;
 
-    //SNDFILE *sndFile;
-    //open_wav_file("../AUDIOTEST",sample_rate,sndFile);
-    // Set file settings, 16bit Mono PCM
-    const char *filePath = "../AUDIOTEST";
-    SF_INFO info;
-    info.format = SF_FORMAT_WAV | SF_FORMAT_PCM_16;
-    info.channels = 1;
-    info.samplerate = sample_rate;
-    printf("file %s info created \n",filePath);
+    open_wav_file("../AUDIOTEST",sample_rate, audio_core);
 
-    // Open sound file for writing
-    SNDFILE *sndFile = sf_open(filePath, SFM_WRITE, &info);
-    if (sndFile == NULL) {
-        fprintf(stderr, "Error opening sound file '%s': %s\n", filePath, sf_strerror(sndFile));
-        return -1;
-    }
-    printf("file %s opened for writing \n",filePath);
+    audio_core->record_param->RecordOnOff = ON;
+    audio_core->record_param->buffer_length = buffer_len;
 
     while (!gui->application_quit)
     {
-        if(i<1000){
-            if(write_wav_file(buffer_len,audio_core->master_audio,sndFile))exit(EXIT_FAILURE);
-            i++;
-        }
-        else{close_wav_file(sndFile);}
-
 
         if (audio_core->buffer_is_new)
         {
@@ -175,6 +156,7 @@ int main(int argc, char *argv[])
                         {
                             printf("Quit asked. Closing...\n");
                             gui->application_quit = SDL_TRUE;
+                            close_wav_file(audio_core->record_param->sndFile);
                         }
                     }
                     if (keypress(&gui->event, audio_core, gui))exit(EXIT_FAILURE);

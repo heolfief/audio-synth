@@ -9,7 +9,7 @@
 #include "wav.h"
 #include <sndfile.h>
 
-int open_wav_file(const char *filePath, int sampleRate, SNDFILE *sndFile){
+int open_wav_file(const char *filePath, int sampleRate, Core *ac){
     // Set file settings, 16bit Mono PCM
     SF_INFO info;
     info.format = SF_FORMAT_WAV | SF_FORMAT_PCM_16;
@@ -18,9 +18,9 @@ int open_wav_file(const char *filePath, int sampleRate, SNDFILE *sndFile){
     printf("file %s info created \n",filePath);
 
     // Open sound file for writing
-    sndFile = sf_open(filePath, SFM_WRITE, &info);
-    if (sndFile == NULL) {
-        fprintf(stderr, "Error opening sound file '%s': %s\n", filePath, sf_strerror(sndFile));
+    ac->record_param->sndFile = sf_open(filePath, SFM_WRITE, &info);
+    if (ac->record_param->sndFile == NULL) {
+        fprintf(stderr, "Error opening sound file '%s': %s\n", filePath, sf_strerror(ac->record_param->sndFile));
         return -1;
     }
     printf("file %s opened for writing \n",filePath);

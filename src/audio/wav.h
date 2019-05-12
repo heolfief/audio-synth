@@ -18,7 +18,7 @@
 int write_wav_file(int bufferLength, Audio_Buffer buffer, SNDFILE *sndFile);
 
 
-int open_wav_file(const char *filePath, int sampleRate, SNDFILE *sndFile);
+int open_wav_file(const char *filePath, int sampleRate, Core *ac);
 
 int close_wav_file(SNDFILE *sndFile);
 

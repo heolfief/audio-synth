@@ -7,6 +7,8 @@
  */
 
 #include "audio.h"
+#include "wav.h"
+#include <sndfile.h>
 
 void func_callback(void *userdata, Uint8 *stream, int len)
 {
@@ -22,6 +24,10 @@ void func_callback(void *userdata, Uint8 *stream, int len)
 
     audio_core->phase = (audio_core->phase + s_len);    // Update phase based on play position
     audio_core->buffer_is_new = 1;                      //update the flag meaning that the sound changed
+    if (audio_core->record_param->RecordOnOff)
+    {
+        write_wav_file(audio_core->record_param->buffer_length, audio_core->master_audio, audio_core->record_param->sndFile);
+    }
 }
 
 int set_audio_spec(SDL_AudioSpec *as, const Core *ac)

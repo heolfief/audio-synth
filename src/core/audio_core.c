@@ -8,6 +8,7 @@
 
 #include "audio_core.h"
 
+
 Core *alloc_core(Uint16 buffer_length)
 {
     Core *ac = (Core *) malloc(sizeof(Core));
@@ -24,6 +25,9 @@ Core *alloc_core(Uint16 buffer_length)
     ac->sys_param->master_volume = 100;
     ac->sys_param->master_FX_onoff = ON;
     ac->sys_param->master_onoff = ON;
+
+    ac->record_param = (RecordParam *) malloc(sizeof(RecordParam));
+    ac->record_param->RecordOnOff=OFF;
 
     ac->note_array = alloc_polyphony(buffer_length);
     if (ac->note_array == NULL) return NULL;
@@ -51,7 +55,13 @@ Core *alloc_core(Uint16 buffer_length)
 
     return ac;
 }
-
+int free_record_param(RecordParam *record_param)
+{
+    free(record_param->sndFile);
+    free(record_param->buffer_length);
+    free(record_param);
+    return 0;
+}
 int free_core(Core *ac)
 {
     if (ac == NULL)
@@ -65,6 +75,8 @@ int free_core(Core *ac)
     if (free_audio_buffer(ac->master_audio))return -1;
     if (free_audio_buffer(ac->average_audio_level))return -1;
     if (free_effect_core(ac->effect_core))return -1;
+    if (free_record_param(ac->record_param))return -1;
+
 
     free(ac);
 

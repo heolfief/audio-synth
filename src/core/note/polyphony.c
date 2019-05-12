@@ -114,7 +114,7 @@ int free_polyphony(Polyphony *p)
     return 0;
 }
 
-Audio_Buffer alloc_audio_buffer(Uint16 buff_nb_samples)
+Audio_Buffer alloc_audio_buffer(Uint16  buff_nb_samples)
 {
     Audio_Buffer audio_buff = (Note_Buffer) calloc(buff_nb_samples, sizeof(Audio_Buffer));
     if (audio_buff == NULL)

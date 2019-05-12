@@ -10,10 +10,26 @@
 #define AUDIO_SYNTH_AUDIO_CORE_H
 
 #include <SDL2/SDL_stdinc.h>
+#include <sndfile.h>
 #include "../sys_param/sys_param.h"
 #include "../system/error_handler.h"
 #include "note/polyphony.h"
 #include "../audio_fx/audio_fx.h"
+
+/**
+ * \struct RecordParam
+ * \brief defines the Recording info for the audio core
+ *
+ * The parameters are : a Onoff switch indicating if we need to record and the sound file to record to
+ */
+typedef struct
+{
+  OnOff RecordOnOff;
+  SNDFILE *sndFile;
+  int buffer_length;
+}RecordParam;
+
+
 
 /**
  * \struct Core
@@ -30,8 +46,10 @@ typedef struct
   Uint64 phase;                      /*!<the phase of the oscillators */
   Effect_core *effect_core;          /*!<the structure containing effect related objects */
   Audio_Buffer average_audio_level;  /*!<the average instantaneous volume level that is played by the soundcard */
-  Uint8 buffer_is_new;                 /*!<flag if the buffer is refilled*/
+  Uint8 buffer_is_new;               /*!<flag if the buffer is refilled*/
+  RecordParam *record_param;          /*!< structure containing recording parameters*/
 } Core;
+
 
 /**
  * \fn Core alloc_core()
@@ -41,7 +59,7 @@ typedef struct
  *
  * \return The allocated Core
  */
-Core* alloc_core(Uint16 buffer_length);
+Core *alloc_core(Uint16 buffer_length);
 
 /**
  * \fn int free_core(Core* ac)
