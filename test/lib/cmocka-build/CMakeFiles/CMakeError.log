@@ -1,0 +1,36 @@
+Performing C SOURCE FILE Test WITH_STACK_CLASH_PROTECTION failed with the following output:
+Change Dir: /home/heol/Documents/audio-synth/test/lib/cmocka-build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_67a3f/fast"
+/usr/bin/make -f CMakeFiles/cmTC_67a3f.dir/build.make CMakeFiles/cmTC_67a3f.dir/build
+make[1]: Entering directory '/home/heol/Documents/audio-synth/test/lib/cmocka-build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_67a3f.dir/src.c.o
+/usr/bin/cc   -DWITH_STACK_CLASH_PROTECTION -fstack-clash-protection   -o CMakeFiles/cmTC_67a3f.dir/src.c.o   -c /home/heol/Documents/audio-synth/test/lib/cmocka-build/CMakeFiles/CMakeTmp/src.c
+cc: error: unrecognized command line option '-fstack-clash-protection'; did you mean '-fstack-protector'?
+CMakeFiles/cmTC_67a3f.dir/build.make:65: recipe for target 'CMakeFiles/cmTC_67a3f.dir/src.c.o' failed
+make[1]: *** [CMakeFiles/cmTC_67a3f.dir/src.c.o] Error 1
+make[1]: Leaving directory '/home/heol/Documents/audio-synth/test/lib/cmocka-build/CMakeFiles/CMakeTmp'
+Makefile:126: recipe for target 'cmTC_67a3f/fast' failed
+make: *** [cmTC_67a3f/fast] Error 2
+
+Source file was:
+int main(int argc, char **argv) { char buffer[256]; return buffer[argc]=0;}
+Determining if the include file io.h exists failed with the following output:
+Change Dir: /home/heol/Documents/audio-synth/test/lib/cmocka-build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_f5cf5/fast"
+/usr/bin/make -f CMakeFiles/cmTC_f5cf5.dir/build.make CMakeFiles/cmTC_f5cf5.dir/build
+make[1] : on entre dans le répertoire « /home/heol/Documents/audio-synth/test/lib/cmocka-build/CMakeFiles/CMakeTmp »
+Building C object CMakeFiles/cmTC_f5cf5.dir/CheckIncludeFile.c.o
+/usr/bin/cc    -o CMakeFiles/cmTC_f5cf5.dir/CheckIncludeFile.c.o   -c /home/heol/Documents/audio-synth/test/lib/cmocka-build/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+/home/heol/Documents/audio-synth/test/lib/cmocka-build/CMakeFiles/CMakeTmp/CheckIncludeFile.c:1:10: fatal error: io.h: Aucun fichier ou dossier de ce type
+ #include <io.h>
+          ^~~~~~
+compilation terminated.
+CMakeFiles/cmTC_f5cf5.dir/build.make:65: recipe for target 'CMakeFiles/cmTC_f5cf5.dir/CheckIncludeFile.c.o' failed
+make[1]: *** [CMakeFiles/cmTC_f5cf5.dir/CheckIncludeFile.c.o] Error 1
+make[1] : on quitte le répertoire « /home/heol/Documents/audio-synth/test/lib/cmocka-build/CMakeFiles/CMakeTmp »
+Makefile:126: recipe for target 'cmTC_f5cf5/fast' failed
+make: *** [cmTC_f5cf5/fast] Error 2
+
+

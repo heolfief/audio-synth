@@ -1,0 +1,30 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/heol/Documents/audio-synth/test/lib/cmocka-1.1.3/example/assert_macro.c
+string.h
+-
+assert_macro.h
+/home/heol/Documents/audio-synth/test/lib/cmocka-1.1.3/example/assert_macro.h
+
+/home/heol/Documents/audio-synth/test/lib/cmocka-1.1.3/example/assert_macro.h
+
+/home/heol/Documents/audio-synth/test/lib/cmocka-1.1.3/example/assert_macro_test.c
+stdarg.h
+-
+stddef.h
+-
+setjmp.h
+-
+cmocka.h
+-
+assert_macro.h
+/home/heol/Documents/audio-synth/test/lib/cmocka-1.1.3/example/assert_macro.h
+
+/home/heol/Documents/audio-synth/test/lib/cmocka-1.1.3/include/cmocka.h
+

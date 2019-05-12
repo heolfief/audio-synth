@@ -1,0 +1,25 @@
+cmake_minimum_required(VERSION 3.2)
+project(audio_synth C)
+
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
+
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
+
+include(CTest)
+
+set(CMAKE_C_STANDARD 99)
+
+enable_testing()
+
+set(CMAKE_INSTALL_PREFIX ${PROJECT_SOURCE_DIR})
+
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/bin")
+
+set(INSTALL_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/include)
+set(INSTALL_BIN_DIR ${PROJECT_SOURCE_DIR}/bin)
+set(INSTALL_LIB_DIR ${PROJECT_SOURCE_DIR}/lib)
+
+set(INSTALL_BIN_DIR ${PROJECT_SOURCE_DIR}/bin)
+
+add_subdirectory(src)
+add_subdirectory(test)

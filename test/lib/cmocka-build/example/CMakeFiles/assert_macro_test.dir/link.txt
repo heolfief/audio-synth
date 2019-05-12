@@ -1,0 +1,1 @@
+/usr/bin/cc    CMakeFiles/assert_macro_test.dir/assert_macro.c.o CMakeFiles/assert_macro_test.dir/assert_macro_test.c.o  -o assert_macro_test -Wl,-rpath,/home/heol/Documents/audio-synth/test/lib/cmocka-build/src ../src/libcmocka.so.0.5.1 /usr/lib/x86_64-linux-gnu/librt.so 

@@ -1,0 +1,42 @@
+# This file is a template, and might need editing before it works on your project.
+# use the official gcc image, based on debian
+# can use verions as well, like gcc:5.2
+# see https://hub.docker.com/_/gcc/
+image: gcc
+
+build:
+  stage: build
+  # instead of calling g++ directly you can also use some build toolkit like make
+  # install the necessary build tools when needed
+  before_script: 
+    - apt update && apt -y install make autoconf && apt -y install cmake && apt -y install lcov
+  script: 
+    - ./build.sh
+  after_script:
+    - rm -r Testing
+  cache:
+    paths:
+      - bin/
+
+  artifacts:
+    paths:
+      - bin/audio_synth
+      - bin/audio_synth_test
+      - bin/audio_synth_valgrind
+      - build/run
+  cache:
+    paths:
+      - bin/
+
+# run tests using the binary built before
+test:
+  stage: test
+  script:
+    - ./test.sh
+
+# run code coverage report
+coverage:
+  stage: deploy
+  script:
+    - ./coverage.sh -a
+    - lcov --list build/run/coverage_clean.info 1>&2
