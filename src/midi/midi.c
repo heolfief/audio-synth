@@ -20,7 +20,6 @@ void fillHeaderRead (Header * H, FILE * f){
     for (int i=0; i<4;i++){
         H->MTHD[i] = buffer[i];
 
-
     }
     if (H->MTHD[0]!= 0x4d && H->MTHD[1]!=0x54 && H->MTHD[2] != 0x68 && H->MTHD[3] != 0x64 ) // header number of a midi file
         printf("unrecognized file \n");
@@ -41,7 +40,7 @@ void fillHeaderRead (Header * H, FILE * f){
 
 void setAsBeginDataRange(FILE *f){
     unsigned char * buffer = BlockFileReader(f,1);
-    printf("%2x",buffer[0]);
+
     while(buffer[0]== 0x4d || buffer[0] == 0x54 || buffer[0]== 0x72 || buffer[0]== 0x6b){ // go to the begining of data range detect with the flags 0x4d 0x54 0x72 0x6b
        buffer = BlockFileReader(f,1);
 
@@ -56,13 +55,13 @@ void setAsBeginDataRange(FILE *f){
 
 u_int8_t  * readDataRange (u_int32_t  sizeDataRange,FILE *fichier) {
     u_int8_t * DataRange;
-    moveFile(fichier,4);
+
     DataRange = (u_int8_t*) BlockFileReader(fichier,sizeDataRange);
     return DataRange;
 }
 
 
-list * playDataRange (u_int8_t * DataRange,Header * H){
+list * playDataRange (u_int8_t * DataRange,Header * H, u_int32_t sizeDataRange){
     u_int8_t dataDelay [4];
     double  delay =0;
     u_int8_t  midiNote = 0 ;
@@ -74,9 +73,11 @@ list * playDataRange (u_int8_t * DataRange,Header * H){
     int newNote= 0;
     list * l = initList();
 
+    int stop = sizeDataRange -3 ;
+    printf("size : %d",stop);
 
+while (i!=stop ){
 
-while (DataRange[i]!=0xFF && DataRange [i+1] != 0x2F && DataRange[i+2] != 0x00){
     if (DataRange[i]>127){
         dataDelay [power] = DataRange[i];
         power += 1;
@@ -133,8 +134,7 @@ int  readEvent (__uint8_t * midiNote, u_int8_t * attack,  int * midiEvent,u_int8
 
     switch (DataRange[*i] & MSKHEX) {
         case 0xF0:
-            if (DataRange [*i+1]== 0x2f && DataRange[*i+2]== 0x00) // just to be sure
-                break;
+
            *i+= DataRange[*i+2]+2;
             newNote = 0;
             break;
@@ -203,13 +203,9 @@ int  readEvent (__uint8_t * midiNote, u_int8_t * attack,  int * midiEvent,u_int8
 
 u_int32_t  getSizeDataRange(FILE *f){
     u_int32_t  size;
-
     unsigned char * buffer =NULL;
    buffer= BlockFileReader(f,4);
    size = buffer[0]*16777216 + buffer[1]*65536 + buffer[2]*256 +buffer[3];
-   for (int i= 0; i<4; i++) {
-       printf("size of file : %d buffer : %2x i  : %d \n", size, buffer[i], i);
-   }
     return size;
 
 }

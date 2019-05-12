@@ -12,7 +12,7 @@ int main(int argc, char *argv[])
 {
 
   FILE * test;
-    int size;
+    uint32_t size;
     u_int8_t * datarange = NULL;
 
   test= openFile("../fichier_midi/clairdelune.mid","r",RETOUR);
@@ -20,8 +20,8 @@ int main(int argc, char *argv[])
   fillHeaderRead(H,test);
   setAsBeginDataRange(test);
  size =  getSizeDataRange(test);
- datarange = readDataRange(size,test);
- list * l  = playDataRange(datarange,H);
+  datarange = readDataRange(size,test);
+ list * l  = playDataRange(datarange,H,size);
  printList(l);
 
 
