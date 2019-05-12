@@ -35,7 +35,7 @@ add_executable(audio_synth_valgrind ${SOURCE_FILES})
 
 target_compile_definitions(audio_synth_valgrind PRIVATE VALGRIND)
 
-target_link_libraries(audio_synth ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES} ${SDL2TTF_LIBRARY} ${LIBXML2_LIBRARIES} m)
+target_link_libraries(audio_synth ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES} ${SDL2TTF_LIBRARY} ${LIBXML2_LIBRARIES} ${SNDFILE_LIBRARIES} m)
 
 target_link_libraries(audio_synth_valgrind ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES} ${SDL2TTF_LIBRARY} ${SNDFILE_LIBRARIES} ${LIBXML2_LIBRARIES} m)
 

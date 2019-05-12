@@ -11,6 +11,7 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <errno.h>
+#include <sndfile.h>
 
 #include "sys_param/sys_param.h"
 #include "core/note/polyphony.h"
@@ -21,6 +22,8 @@
 #include "midi/midi.h"
 #include "gui/keypad.h"
 #include "core/audio_core.h"
+#include "audio/wav.h"
+
 
 int main(int argc, char *argv[])
 {
@@ -97,10 +100,41 @@ int main(int argc, char *argv[])
     if (compute_filter_coeffs(audio_core->sys_param->filter_param, audio_core->sys_param->sample_rate, audio_core->effect_core->filter_state))return -1;
 
     SDL_PauseAudio(0);                      // Play audio (pause = off)
+    int i =0;
+
+    //SNDFILE *sndFile;
+    //open_wav_file("../AUDIOTEST",sample_rate,sndFile);
+    // Set file settings, 16bit Mono PCM
+    const char *filePath = "../AUDIOTEST";
+    SF_INFO info;
+    info.format = SF_FORMAT_WAV | SF_FORMAT_PCM_16;
+    info.channels = 1;
+    info.samplerate = sample_rate;
+    printf("file %s info created \n",filePath);
+
+    // Open sound file for writing
+    SNDFILE *sndFile = sf_open(filePath, SFM_WRITE, &info);
+    if (sndFile == NULL) {
+        fprintf(stderr, "Error opening sound file '%s': %s\n", filePath, sf_strerror(sndFile));
+        return -1;
+    }
+    printf("file %s opened for writing \n",filePath);
 
     while (!gui->application_quit)
     {
-        if (audio_core->buffer_is_new) process_leds(gui, audio_core);
+        if(i<1000){
+            if(write_wav_file(buffer_len,audio_core->master_audio,sndFile))exit(EXIT_FAILURE);
+            i++;
+        }
+        else{close_wav_file(sndFile);}
+
+
+        if (audio_core->buffer_is_new)
+        {
+
+            process_leds(gui, audio_core);
+        }
+
 
         if (midi_peripheral != -1)
         {
@@ -166,6 +200,7 @@ int main(int argc, char *argv[])
     }
 
     exit_gui(gui);
+
 
     TTF_Quit();
     SDL_CloseAudio();
