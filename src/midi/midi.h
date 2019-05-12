@@ -161,5 +161,5 @@ double calculDelay (__uint8_t * DataDelay, int power,u_int16_t Noire);
 
 
 
-int readEvent (__uint8_t * midiNote, u_int8_t * attack, event  midiEvent,u_int8_t * DataRange , int *  i);
+int readEvent (__uint8_t * midiNote, u_int8_t * attack, int  * midiEvent,u_int8_t * DataRange , int *  i);
 #endif

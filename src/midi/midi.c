@@ -34,17 +34,20 @@ void fillHeaderRead (Header * H, FILE * f){
 
         H->NOIRE=buffer[12]*256 + buffer[13];
     free(buffer);
-    fseek(f,-1,SEEK_CUR);
+
 }
 
 
 
 void setAsBeginDataRange(FILE *f){
     unsigned char * buffer = BlockFileReader(f,1);
+    printf("%2x",buffer[0]);
     while(buffer[0]== 0x4d || buffer[0] == 0x54 || buffer[0]== 0x72 || buffer[0]== 0x6b){ // go to the begining of data range detect with the flags 0x4d 0x54 0x72 0x6b
        buffer = BlockFileReader(f,1);
+
     }
     free(buffer);
+    fseek(f,-1,SEEK_CUR);
 }
 
 
@@ -64,7 +67,7 @@ list * playDataRange (u_int8_t * DataRange,Header * H){
     double  delay =0;
     u_int8_t  midiNote = 0 ;
     u_int8_t  attack  =0 ;
-    enum event  midiEvent;
+    int  midiEvent = 0;
     int power = 0;
     int i = 0;
     int g=0;
@@ -84,11 +87,11 @@ while (DataRange[i]!=0xFF && DataRange [i+1] != 0x2F && DataRange[i+2] != 0x00){
 
         delay = calculDelay(dataDelay, power, H->NOIRE );
 
-       newNote = readEvent(&midiNote,&attack,midiEvent,DataRange,&i);
+       newNote = readEvent(&midiNote,&attack,&midiEvent,DataRange,&i);
 
          if (newNote) {
-
-             l->current = newNodeList(midiNote, attack, midiEvent, delay, l->current);
+            event MidiEvent = midiEvent;
+             l->current = newNodeList(midiNote, attack, MidiEvent, delay, l->current);
              if (g == 1)
                  l->first = l->current;
 
@@ -121,10 +124,12 @@ double calculDelay(u_int8_t * DataDelay,int power, u_int16_t Noire){
     return res;
 }
 
-int  readEvent (__uint8_t * midiNote, u_int8_t * attack,  event  midiEvent,u_int8_t * DataRange , int * i ){
+int  readEvent (__uint8_t * midiNote, u_int8_t * attack,  int * midiEvent,u_int8_t * DataRange , int * i ){
     static int g=0; // for running status
     int newNote;
     *i +=1;
+
+
 
     switch (DataRange[*i] & MSKHEX) {
         case 0xF0:
@@ -135,19 +140,19 @@ int  readEvent (__uint8_t * midiNote, u_int8_t * attack,  event  midiEvent,u_int
             break;
         case 0x90 :
 
-            midiEvent = ON;
+            *midiEvent = 1;
 
             *midiNote =  DataRange[*i+1];
             *attack = DataRange[*i+2];
 
             if (DataRange[*i+2] == 0 )
-                midiEvent = OFF;
+                *midiEvent = 0;
            * i+=2;
             g=1;
             newNote = 1;
             break;
         case 0x80 :
-            midiEvent = OFF;
+            *midiEvent = 0;
             *midiNote =  DataRange[*i+1];
             *attack =  DataRange[*i+2];
             *i+=2;
@@ -176,12 +181,15 @@ int  readEvent (__uint8_t * midiNote, u_int8_t * attack,  event  midiEvent,u_int
             break;
        default :
            if (g){
-               midiEvent = ON;
+               *midiEvent = 1;
+           }
+           else{
+               *midiEvent = 0;
            }
            *attack =   DataRange[*i+1];
             *midiNote =  DataRange[*i];
             if (DataRange[*i+1] == 0 )
-                midiEvent = OFF;
+                *midiEvent = 0;
 
             *i+=1;
             newNote = 1;
@@ -195,9 +203,13 @@ int  readEvent (__uint8_t * midiNote, u_int8_t * attack,  event  midiEvent,u_int
 
 u_int32_t  getSizeDataRange(FILE *f){
     u_int32_t  size;
+
     unsigned char * buffer =NULL;
    buffer= BlockFileReader(f,4);
    size = buffer[0]*16777216 + buffer[1]*65536 + buffer[2]*256 +buffer[3];
+   for (int i= 0; i<4; i++) {
+       printf("size of file : %d buffer : %2x i  : %d \n", size, buffer[i], i);
+   }
     return size;
 
 }
