@@ -4,7 +4,7 @@ enable_testing()
 
 include_directories("${PROJECT_SOURCE_DIR}/src")
 
-find_library(CMOCKA_LIBRARY cmocka HINTS /lib)
+find_library(CMOCKA_LIBRARY cmocka HINTS ../test/lib/cmocka-build/src)
 
 add_executable(audio_synth_test test.c
         #Sources files
