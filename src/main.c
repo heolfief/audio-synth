@@ -100,12 +100,12 @@ int main(int argc, char *argv[])
     if (compute_filter_coeffs(audio_core->sys_param->filter_param, audio_core->sys_param->sample_rate, audio_core->effect_core->filter_state))return -1;
 
     SDL_PauseAudio(0);                      // Play audio (pause = off)
-    int i =0;
 
-    open_wav_file("../AUDIOTEST",sample_rate, audio_core);
+    //Opening the file audiotest in order to record
+    open_wav_file("../AUDIOTEST", audio_core);
 
+    //setting up the flag to record wav file
     audio_core->record_param->RecordOnOff = ON;
-    audio_core->record_param->buffer_length = buffer_len;
 
     while (!gui->application_quit)
     {
@@ -156,6 +156,9 @@ int main(int argc, char *argv[])
                         {
                             printf("Quit asked. Closing...\n");
                             gui->application_quit = SDL_TRUE;
+
+                            //switching off the recording session
+                            audio_core->record_param->RecordOnOff=OFF;
                             close_wav_file(audio_core->record_param->sndFile);
                         }
                     }

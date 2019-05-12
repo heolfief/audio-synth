@@ -26,7 +26,6 @@ typedef struct
 {
   OnOff RecordOnOff;
   SNDFILE *sndFile;
-  int buffer_length;
 }RecordParam;
 
 
