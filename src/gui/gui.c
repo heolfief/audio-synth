@@ -1124,7 +1124,7 @@ int process_buttons(Gui_SDL_objects *gui, Core *audio_core, MIDI_Peripheral_fd *
             tinyfd_saveFileDialog("Record your musical talent in a wav file", "../recordings/.wav", 1, WavFilterPatterns, NULL);
         if (RecordPath)
         {
-            //Opening the file audiotest in order to record
+            //Opening the selected file in order to record
             open_wav_file(RecordPath, audio_core);
 
             //setting up the flag to record wav file
@@ -1140,17 +1140,19 @@ int process_buttons(Gui_SDL_objects *gui, Core *audio_core, MIDI_Peripheral_fd *
         if (gui_set_switch_image(gui->buttons[4].sdl_button, gui->buttons[4].imgon))return -1;
         if (gui_update(gui))return -1;
 
-
         if (audio_core->record_param->RecordOnOff)
         {
-            tinyfd_messageBox("Recording session", "Looks like you stopped the recording. Were you playing this bad ?\n Feel free to try again ", "yes, I'm not good at music", "Fine", 1);
-            //switching off the recording session
-            audio_core->record_param->RecordOnOff = OFF;
-            close_wav_file(audio_core->record_param->sndFile);
+            if (tinyfd_messageBox("Recording session", "Looks like you stopped the recording. Were you playing this bad that you want to quit ?\n Feel free to try again ", "yesno", "question", 0))
+            {
+                //switching off the recording session
+                audio_core->record_param->RecordOnOff = OFF;
+                close_wav_file(audio_core->record_param->sndFile);
+            }
+
         }
         else
         {
-            tinyfd_messageBox("Recording session", "I believe that in order to stop the recording, you should probably start recording first ?\n Feel free to try to record your exploits ", "yes","Fine",1);
+            tinyfd_messageBox("Recording session", "I believe that in order to stop the recording, you should probably start recording first ?\n Feel free to try to record your exploits ", "yes", "ok", 1);
         }
 
         if (gui_set_switch_image(gui->buttons[3].sdl_button, gui->buttons[3].imgoff))return -1;
