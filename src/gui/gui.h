@@ -19,12 +19,12 @@
 #define NUMBER_OF_POTS                  32
 #define NUMBER_OF_BUTTONS               3
 
-#define NUMBER_OF_SWITCHES 11
-#define NUMBER_OF_MS_SWITCHES 8
-#define NUMBER_OF_POTS 32
-#define NUMBER_OF_LEDS 8
+#define NUMBER_OF_SWITCHES              11
+#define NUMBER_OF_MS_SWITCHES           8
+#define NUMBER_OF_POTS                  32
+#define NUMBER_OF_LEDS                  8
 
-#define NUMBER_OF_BUTTONS 3
+#define NUMBER_OF_BUTTONS               5
 
 #define IMAGE_SWITCH_ON                 "../src/gui/Figs/switch_on.png"
 #define IMAGE_SWITCH_OFF                "../src/gui/Figs/switch_off.png"
@@ -65,6 +65,17 @@
 #define IMAGE_BUTTON_MIDI_CONNECTED     "../src/gui/Figs/bt_midi_connected.png"
 #define WIDTH_BUTTON_MIDI               66
 #define HEIGHT_BUTTON_MIDI              30
+
+#define IMAGE_BUTTON_RECORD_UNPRESSED    "../src/gui/Figs/record_button.png"
+#define IMAGE_BUTTON_RECORD_PRESSED      "../src/gui/Figs/record_button.png"
+#define WIDTH_BUTTON_RECORD             60
+#define HEIGHT_BUTTON_RECORD            60
+
+#define IMAGE_BUTTON_STOP_UNPRESSED     "../src/gui/Figs/stop_button.png"
+#define IMAGE_BUTTON_STOP_PRESSED       "../src/gui/Figs/stop_button.png"
+#define WIDTH_BUTTON_STOP               60
+#define HEIGHT_BUTTON_STOP              60
+
 
 #define FONT_PRESET_NAME                "../src/gui/Figs/Minion_Pro_Bold.ttf"
 #define SIZE_FONT_PRESET_NAME           17

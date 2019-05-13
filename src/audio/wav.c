@@ -37,10 +37,10 @@ int write_wav_file(int bufferLength, Audio_Buffer buffer, SNDFILE *sndFile)
 
     long writtenFrames = sf_writef_short(sndFile, buffer, bufferLength);
     // Check correct number of frames saved
-    printf("written frames : %d\n", writtenFrames);
+    printf("written frames : %ld\n", writtenFrames);
     if (writtenFrames != bufferLength)
     {
-        fprintf(stderr, "Did not write enough frames for source, wrote : %d \n", writtenFrames);
+        fprintf(stderr, "Did not write enough frames for source, wrote : %ld \n", writtenFrames);
         sf_close(sndFile);
         return -1;
     }

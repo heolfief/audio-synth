@@ -106,6 +106,10 @@ int main(int argc, char *argv[])
     //setting up the flag to record wav file
     audio_core->record_param->RecordOnOff = ON;
 
+    //switching off the recording session -> to be put in action in a STOP Button
+    audio_core->record_param->RecordOnOff = OFF;
+    close_wav_file(audio_core->record_param->sndFile);
+
     while (!gui->application_quit)
     {
 
@@ -152,12 +156,11 @@ int main(int argc, char *argv[])
                     {
                         if (prompt_quit())
                         {
+
                             printf("Quit asked. Closing...\n");
                             gui->application_quit = SDL_TRUE;
 
-                            //switching off the recording session
-                            audio_core->record_param->RecordOnOff = OFF;
-                            close_wav_file(audio_core->record_param->sndFile);
+
                         }
                     }
                     if (keypress(&gui->event, audio_core, gui))exit(EXIT_FAILURE);
@@ -181,6 +184,7 @@ int main(int argc, char *argv[])
             }
         }
     }
+
 
     exit_gui(gui);
 
