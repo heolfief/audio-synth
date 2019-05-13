@@ -16,7 +16,7 @@
 
 FILE * openFile (char * nom, char * mode, TypeRetour t){
     FILE * fichier;
-    if ((fichier = fopen(nom,"r")) == (FILE *) NULL){ //verify that File exist otherwise error
+    if ((fichier = fopen(nom,mode)) ==  NULL){ //verify that File exist otherwise error
         printf("open file error");
         return fichier;
     }

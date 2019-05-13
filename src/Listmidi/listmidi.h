@@ -5,7 +5,7 @@
 
 typedef enum event event;
 
-enum event {OFF,ON};
+enum event {OFF_NOTE,ON_NOTE};
 
 
 

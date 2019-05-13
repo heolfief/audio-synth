@@ -74,7 +74,6 @@ list * playDataRange (u_int8_t * DataRange,Header * H, u_int32_t sizeDataRange){
     list * l = initList();
 
     int stop = sizeDataRange -3 ;
-    printf("size : %d",stop);
 
 while (i!=stop ){
 
