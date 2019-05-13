@@ -9,7 +9,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <math.h>
-#include "midi.h"
+#include "midi_file.h"
 #include "../fichier/fichier.h"
 #include "../Listmidi/listmidi.h"
 

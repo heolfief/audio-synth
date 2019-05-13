@@ -21,6 +21,9 @@ set(SOURCE_FILES main.c
         audio/audio.c audio/audio.h
         system/error_handler.h
         audio_fx/audio_fx.c audio_fx/audio_fx.h
+        midi/midi_file.c midi/midi_file.h
+        Listmidi/listmidi.c Listmidi/listmidi.h
+        fichier/fichier.c fichier/fichier.h
         sys_param/xml/preset_xml.c sys_param/xml/preset_xml.h
         audio_fx/ext_effects/snd.c audio_fx/ext_effects/snd.h
         audio_fx/ext_effects/mem.c audio_fx/ext_effects/mem.h
