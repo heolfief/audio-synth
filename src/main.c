@@ -11,6 +11,7 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <errno.h>
+#include <sndfile.h>
 
 #include "sys_param/sys_param.h"
 #include "core/note/polyphony.h"
@@ -21,6 +22,7 @@
 #include "midi/midi_keyboard.h"
 #include "gui/keypad.h"
 #include "core/audio_core.h"
+#include "audio/wav.h"
 
 int main(int argc, char *argv[])
 {
@@ -99,6 +101,7 @@ int main(int argc, char *argv[])
 
     SDL_PauseAudio(SDL_FALSE);              // Play audio (pause = off)
 
+
     while (!gui->application_quit)
     {
         currentTime = SDL_GetTicks();       // Get time from SDL init in ms
@@ -111,6 +114,12 @@ int main(int argc, char *argv[])
         }
 
         if (audio_core->buffer_is_new) process_leds(gui, audio_core);
+
+        if (audio_core->buffer_is_new)
+        {
+
+            process_leds(gui, audio_core);
+        }
 
         if (midi_peripheral != -1)
         {
@@ -149,8 +158,10 @@ int main(int argc, char *argv[])
                     {
                         if (prompt_quit())
                         {
+
                             printf("Quit asked. Closing...\n");
                             gui->application_quit = SDL_TRUE;
+
                         }
                     }
                     if (keypress(&gui->event, audio_core, gui))exit(EXIT_FAILURE);
@@ -175,6 +186,13 @@ int main(int argc, char *argv[])
         }
         SDL_Delay(1);
     }
+
+    //switching off the recording session in case the user forgot to stop
+    if(audio_core->record_param->RecordOnOff){
+        audio_core->record_param->RecordOnOff = OFF;
+        close_wav_file(audio_core->record_param->sndFile);
+    }
+
 
     exit_gui(gui);
 

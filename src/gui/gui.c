@@ -96,7 +96,12 @@ static const int pots_location_and_size[NUMBER_OF_POTS][3] = {
 static const int buttons_location[NUMBER_OF_BUTTONS][2] = {
     {88, 635},
     {88, 670},
-    {290, 620}
+    {290, 620},
+
+    //Locations for the record button
+    {410, 609},
+    //Location for the stop button
+    {480, 609}
 };
 
 static const int pot_min_max[NUMBER_OF_POTS][2] = {
@@ -792,6 +797,18 @@ int create_buttons_map(Gui_SDL_objects *gui)
     gui->buttons[2].width = WIDTH_BUTTON_MIDI;
     gui->buttons[2].height = HEIGHT_BUTTON_MIDI;
 
+    //Record buttons
+    gui->buttons[3].imgon = IMAGE_BUTTON_RECORD_PRESSED;
+    gui->buttons[3].imgoff = IMAGE_BUTTON_RECORD_UNPRESSED;
+    gui->buttons[3].width = WIDTH_BUTTON_RECORD;
+    gui->buttons[3].height = HEIGHT_BUTTON_RECORD;
+
+    //STOP recording button
+    gui->buttons[4].imgon = IMAGE_BUTTON_STOP_PRESSED;
+    gui->buttons[4].imgoff = IMAGE_BUTTON_STOP_UNPRESSED;
+    gui->buttons[4].width = WIDTH_BUTTON_RECORD;
+    gui->buttons[4].height = HEIGHT_BUTTON_RECORD;
+
     for (int bt = 0; bt < NUMBER_OF_BUTTONS; ++bt)
     {
         gui->buttons[bt].pressed = 0;
@@ -1032,8 +1049,9 @@ int process_buttons(Gui_SDL_objects *gui, Core *audio_core, MIDI_Peripheral_fd *
     int param_changed = 0;
     int reload_param = 0;
     char const *path;
+    char const *RecordPath;
     char const *lFilterPatterns[1] = {"*.prst"};
-
+    char const *WavFilterPatterns[1] = {"*.wav"};
     if (gui == NULL || audio_core == NULL)
     {
         sys_print_error("Parameter is NULL");
@@ -1094,6 +1112,51 @@ int process_buttons(Gui_SDL_objects *gui, Core *audio_core, MIDI_Peripheral_fd *
             if (gui_set_switch_image(gui->buttons[2].sdl_button, gui->buttons[2].imgon))return -1;
             if (gui_update(gui))return -1;
         }
+    }
+
+    // Button RECORD wav file
+    if (SDL_Button_mouse_down(gui->buttons[3].sdl_button, &gui->event))
+    {
+        if (gui_set_switch_image(gui->buttons[3].sdl_button, gui->buttons[3].imgon))return -1;
+        if (gui_update(gui))return -1;
+
+        RecordPath =
+            tinyfd_saveFileDialog("Record your musical talent in a wav file", "../recordings/.wav", 1, WavFilterPatterns, NULL);
+        if (RecordPath)
+        {
+            //Opening the file audiotest in order to record
+            open_wav_file(RecordPath, audio_core);
+
+            //setting up the flag to record wav file
+            audio_core->record_param->RecordOnOff = ON;
+
+            if (gui_update(gui))return -1;
+        }
+    }
+
+    // Button STOP wav file
+    if (SDL_Button_mouse_down(gui->buttons[4].sdl_button, &gui->event))
+    {
+        if (gui_set_switch_image(gui->buttons[4].sdl_button, gui->buttons[4].imgon))return -1;
+        if (gui_update(gui))return -1;
+
+
+        if (audio_core->record_param->RecordOnOff)
+        {
+            tinyfd_messageBox("Recording session", "Looks like you stopped the recording. Were you playing this bad ?\n Feel free to try again ", "yes, I'm not good at music", "Fine", 1);
+            //switching off the recording session
+            audio_core->record_param->RecordOnOff = OFF;
+            close_wav_file(audio_core->record_param->sndFile);
+        }
+        else
+        {
+            tinyfd_messageBox("Recording session", "I believe that in order to stop the recording, you should probably start recording first ?\n Feel free to try to record your exploits ", "yes","Fine",1);
+        }
+
+        if (gui_set_switch_image(gui->buttons[3].sdl_button, gui->buttons[3].imgoff))return -1;
+        if (gui_set_switch_image(gui->buttons[4].sdl_button, gui->buttons[4].imgoff))return -1;
+
+        if (gui_update(gui))return -1;
     }
 
     if (param_changed)
