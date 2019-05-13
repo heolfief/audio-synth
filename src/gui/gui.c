@@ -1121,7 +1121,7 @@ int process_buttons(Gui_SDL_objects *gui, Core *audio_core, MIDI_Peripheral_fd *
         if (gui_update(gui))return -1;
 
         RecordPath =
-            tinyfd_saveFileDialog("Record your musical talent in a wav file", "../recordings/.wav", 1, WavFilterPatterns, NULL);
+            tinyfd_saveFileDialog("Record your musical talent in a wav file", "../.wav", 1, WavFilterPatterns, NULL);
         if (RecordPath)
         {
             //Opening the selected file in order to record
@@ -1130,6 +1130,10 @@ int process_buttons(Gui_SDL_objects *gui, Core *audio_core, MIDI_Peripheral_fd *
             //setting up the flag to record wav file
             audio_core->record_param->RecordOnOff = ON;
 
+        }
+        else
+        {
+            if (gui_set_switch_image(gui->buttons[3].sdl_button, gui->buttons[3].imgoff))return -1;
             if (gui_update(gui))return -1;
         }
     }
