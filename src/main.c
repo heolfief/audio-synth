@@ -38,6 +38,9 @@ int main(int argc, char *argv[])
     int size = getSizeDataRange(test);
     u_int8_t * MidiData = readDataRange(size,test);
     list * clairdelune = playDataRange(MidiData,H,size);
+    printList(clairdelune);
+    midiList *n;
+    n = clairdelune->first;
 
 
 
@@ -131,13 +134,20 @@ int main(int argc, char *argv[])
     {
         currentTime = SDL_GetTicks();       // Get time from SDL init in ms
 
+
+
+
+
         // TEMP : 1000ms delay
         if (currentTime > lastTime + 1000)  // If time has passed
         {
+
+
+
             lastTime = currentTime;
 
-
         }
+
 
         if (audio_core->buffer_is_new) process_leds(gui, audio_core);
 
@@ -156,6 +166,7 @@ int main(int argc, char *argv[])
         }
 
         while (SDL_PollEvent(&gui->event))
+
         {
             if (process_switches(gui, audio_core))exit(EXIT_FAILURE);
             if (process_pots(gui, audio_core, mouse_is_down))exit(EXIT_FAILURE);

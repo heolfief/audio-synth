@@ -120,8 +120,11 @@ double calculDelay(u_int8_t * DataDelay,int power, u_int16_t Noire){
 
         res += DataDelay[i]*pow(126,(double) (power-i));
     }
+    if (power >=2 )
     res = res / Noire;
-    return res;
+
+
+    return res ;
 }
 
 int  readEvent (__uint8_t * midiNote, u_int8_t * attack,  int * midiEvent,u_int8_t * DataRange , int * i ){
@@ -142,7 +145,12 @@ int  readEvent (__uint8_t * midiNote, u_int8_t * attack,  int * midiEvent,u_int8
             *midiEvent = 1;
 
             *midiNote =  DataRange[*i+1];
+            if (DataRange[*i+2] > 127){
+                DataRange[*i+2]=127;
+
+            }
             *attack = DataRange[*i+2];
+
 
             if (DataRange[*i+2] == 0 )
                 *midiEvent = 0;
@@ -153,6 +161,10 @@ int  readEvent (__uint8_t * midiNote, u_int8_t * attack,  int * midiEvent,u_int8
         case 0x80 :
             *midiEvent = 0;
             *midiNote =  DataRange[*i+1];
+            if (DataRange[*i+2] > 127){
+                DataRange[*i+2]=127;
+
+            }
             *attack =  DataRange[*i+2];
             *i+=2;
             g=0;
@@ -185,6 +197,10 @@ int  readEvent (__uint8_t * midiNote, u_int8_t * attack,  int * midiEvent,u_int8
            else{
                *midiEvent = 0;
            }
+            if (DataRange[*i+1] > 127){
+                DataRange[*i+1]=127;
+
+            }
            *attack =   DataRange[*i+1];
             *midiNote =  DataRange[*i];
             if (DataRange[*i+1] == 0 )

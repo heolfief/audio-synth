@@ -62,6 +62,9 @@ void printList(list * l)
     while (n != NULL)
     {
         printf(" Midi event : %d  Delay : %f  Midi note : %2x attack : %2x \n ", n->midiEvent, n->delay, n->midiNote,n->attack);
+        if (n->attack > 127){
+            printf ("JES SUIS TROP FORT");
+        }
         n = n->next;
     }
     printf("}\n");
