@@ -56,7 +56,6 @@ Core *alloc_core(Uint16 buffer_length)
 }
 int free_record_param(RecordParam *record_param)
 {
-    free(record_param->sndFile);
     free(record_param);
     return 0;
 }

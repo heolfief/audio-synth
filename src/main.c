@@ -100,15 +100,6 @@ int main(int argc, char *argv[])
 
     SDL_PauseAudio(0);                      // Play audio (pause = off)
 
-    //Opening the file audiotest in order to record
-    open_wav_file("../AUDIOTEST", audio_core);
-
-    //setting up the flag to record wav file
-    audio_core->record_param->RecordOnOff = ON;
-
-    //switching off the recording session -> to be put in action in a STOP Button
-    audio_core->record_param->RecordOnOff = OFF;
-    close_wav_file(audio_core->record_param->sndFile);
 
     while (!gui->application_quit)
     {
@@ -160,7 +151,6 @@ int main(int argc, char *argv[])
                             printf("Quit asked. Closing...\n");
                             gui->application_quit = SDL_TRUE;
 
-
                         }
                     }
                     if (keypress(&gui->event, audio_core, gui))exit(EXIT_FAILURE);
@@ -183,6 +173,12 @@ int main(int argc, char *argv[])
                     break;
             }
         }
+    }
+
+    //switching off the recording session in case the user forgot to stop
+    if(audio_core->record_param->RecordOnOff){
+        audio_core->record_param->RecordOnOff = OFF;
+        close_wav_file(audio_core->record_param->sndFile);
     }
 
 

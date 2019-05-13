@@ -17,14 +17,13 @@
 #define NUMBER_OF_SWITCHES              11
 #define NUMBER_OF_MS_SWITCHES           8
 #define NUMBER_OF_POTS                  32
-#define NUMBER_OF_BUTTONS               3
+#define NUMBER_OF_BUTTONS               5
 
 #define NUMBER_OF_SWITCHES              11
 #define NUMBER_OF_MS_SWITCHES           8
 #define NUMBER_OF_POTS                  32
 #define NUMBER_OF_LEDS                  8
 
-#define NUMBER_OF_BUTTONS               5
 
 #define IMAGE_SWITCH_ON                 "../src/gui/Figs/switch_on.png"
 #define IMAGE_SWITCH_OFF                "../src/gui/Figs/switch_off.png"
@@ -110,6 +109,7 @@
 #include "tinyfiledialogs.h"
 #include "../sys_param/xml/preset_xml.h"
 #include "../midi/midi.h"
+#include "../audio/wav.h"
 
 /**
  * \struct Switch
