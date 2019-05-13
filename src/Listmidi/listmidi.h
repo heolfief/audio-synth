@@ -201,7 +201,7 @@ int insertFirst(list * l, void* data);
  * \return the target File open
  */
 
-int deleteFirst(list * l, void** data);
+int deleteFirst(list * l);
 /**
  * \fn void freeNodeList(nodeList * n)
  * \brief Function to open a target File

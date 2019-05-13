@@ -73,9 +73,9 @@ list * playDataRange (u_int8_t * DataRange,Header * H, u_int32_t sizeDataRange){
     int newNote= 0;
     list * l = initList();
 
-    int stop = sizeDataRange -3 ;
+    int stop = sizeDataRange - 3 ;
 
-while (i!=stop ){
+while (i<stop ){
 
     if (DataRange[i]>127){
         dataDelay [power] = DataRange[i];
@@ -87,9 +87,11 @@ while (i!=stop ){
 
         delay = calculDelay(dataDelay, power, H->NOIRE );
 
+
        newNote = readEvent(&midiNote,&attack,&midiEvent,DataRange,&i);
 
          if (newNote) {
+
             event MidiEvent = midiEvent;
              l->current = newNodeList(midiNote, attack, MidiEvent, delay, l->current);
              if (g == 1)
@@ -120,8 +122,8 @@ double calculDelay(u_int8_t * DataDelay,int power, u_int16_t Noire){
 
         res += DataDelay[i]*pow(126,(double) (power-i));
     }
-    if (power >=2 )
-    res = res / Noire;
+
+    res = res / Noire*2000;
 
 
     return res ;
@@ -133,10 +135,8 @@ int  readEvent (__uint8_t * midiNote, u_int8_t * attack,  int * midiEvent,u_int8
     *i +=1;
 
 
-
     switch (DataRange[*i] & MSKHEX) {
         case 0xF0:
-
            *i+= DataRange[*i+2]+2;
             newNote = 0;
             break;

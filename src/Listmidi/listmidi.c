@@ -44,6 +44,43 @@ list *  initList()
 }
 
 
+void freeList(list* l){
+    while(!empty(l)) deleteFirst(l);
+
+
+
+}
+
+void freeNodeList(midiList *n){
+    if (n!=NULL)
+        free(n);
+
+
+}
+
+void setOnFirst(list *l){
+    l->current = l->first;
+}
+
+
+
+int deleteFirst(list *l){
+    if (empty(l))
+            return 0;
+    midiList * toDel = l->first;
+    l->first = toDel->next;
+    freeNodeList(toDel);
+    if (empty(l))
+    {
+        l->last = NULL;
+
+    }
+    setOnFirst(l);
+    return 1;
+
+}
+
+
 int empty(list * l)
 {
     return (l->first == NULL || l->last == NULL);

@@ -31,21 +31,17 @@
 int main(int argc, char *argv[])
 {
 
-    FILE * test = openFile("../src/fichier_midi/clairdelune.mid","r+",RETOUR);
-    Header * H = (Header*) malloc (sizeof(Header));
-    fillHeaderRead(H,test);
+    FILE *test = openFile("../src/fichier_midi/mario2.mid", "r+", RETOUR);
+    Header *H = (Header *) malloc(sizeof(Header));
+    fillHeaderRead(H, test);
     setAsBeginDataRange(test);
     int size = getSizeDataRange(test);
-    u_int8_t * MidiData = readDataRange(size,test);
-    list * clairdelune = playDataRange(MidiData,H,size);
+    u_int8_t *MidiData = readDataRange(size, test);
+    list *clairdelune = playDataRange(MidiData, H, size);
     printList(clairdelune);
     midiList *n;
     n = clairdelune->first;
-
-
-
-
-
+    int g = 1;
 
     SDL_AudioSpec as;
     Core *audio_core;
@@ -82,8 +78,6 @@ int main(int argc, char *argv[])
         sys_print_error("Failed loading preset");
         exit(EXIT_FAILURE);
     }
-
-#ifndef VALGRIND
 
     set_audio_spec(&as, audio_core);
 
@@ -136,19 +130,30 @@ int main(int argc, char *argv[])
 
 
 
-
-
         // TEMP : 1000ms delay
-        if (currentTime > lastTime + 1000)  // If time has passed
+        if (currentTime > lastTime + n->delay)  // If time has passed
         {
-
-
-
             lastTime = currentTime;
 
+            if (n->midiEvent == 1)
+            {
+                midi_note_ON(audio_core, n->midiNote, n->attack);
+            }
+            else if (n->midiEvent == 0)
+            {
+                midi_note_OFF(audio_core, n->midiNote);
+            }
+
+            if (n->next != NULL)
+            {
+                n = n->next;
+            }
+            else
+            {
+
+
+            }
         }
-
-
         if (audio_core->buffer_is_new) process_leds(gui, audio_core);
 
         if (midi_peripheral != -1)
@@ -166,8 +171,8 @@ int main(int argc, char *argv[])
         }
 
         while (SDL_PollEvent(&gui->event))
-
         {
+
             if (process_switches(gui, audio_core))exit(EXIT_FAILURE);
             if (process_pots(gui, audio_core, mouse_is_down))exit(EXIT_FAILURE);
             if (process_buttons(gui, audio_core, &midi_peripheral))exit(EXIT_FAILURE);
@@ -223,12 +228,11 @@ int main(int argc, char *argv[])
 
     close_midi_peripheral(midi_peripheral);
 
-#endif
+
 
     // Free all the data
     free_gui_sdl_objects(gui);
     free_core(audio_core);
 
     return 0;
-
 }
