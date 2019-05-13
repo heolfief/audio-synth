@@ -108,7 +108,6 @@ int main(int argc, char *argv[])
         {
             lastTime = currentTime;
 
-
         }
 
         if (audio_core->buffer_is_new) process_leds(gui, audio_core);
@@ -174,6 +173,7 @@ int main(int argc, char *argv[])
                     break;
             }
         }
+        SDL_Delay(1);
     }
 
     exit_gui(gui);
