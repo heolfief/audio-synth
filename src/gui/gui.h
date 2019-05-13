@@ -115,7 +115,6 @@
 #include "SDL_Button.h"
 #include "tinyfiledialogs.h"
 #include "../sys_param/xml/preset_xml.h"
-#include "../midi/midi.h"
 #include "../audio/wav.h"
 #include "../midi/midi_keyboard.h"
 
