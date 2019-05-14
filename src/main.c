@@ -207,12 +207,7 @@ int main(int argc, char *argv[])
         }
         SDL_Delay(1);
     }
-
-    //switching off the recording session in case the user forgot to stop
-    if(audio_core->record_param->RecordOnOff){
-        audio_core->record_param->RecordOnOff = OFF;
-        close_wav_file(audio_core->record_param->sndFile);
-    }
+    
 
 
     exit_gui(gui);
