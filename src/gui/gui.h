@@ -68,12 +68,12 @@
 #define HEIGHT_BUTTON_MIDI              30
 
 #define IMAGE_BUTTON_RECORD_UNPRESSED    "../src/gui/Figs/record_button.png"
-#define IMAGE_BUTTON_RECORD_PRESSED      "../src/gui/Figs/record_button.png"
-#define WIDTH_BUTTON_RECORD             60
-#define HEIGHT_BUTTON_RECORD            60
+#define IMAGE_BUTTON_RECORD_PRESSED      "../src/gui/Figs/record_pressed.png"
+#define WIDTH_BUTTON_RECORD             50
+#define HEIGHT_BUTTON_RECORD            50
 
 #define IMAGE_BUTTON_STOP_UNPRESSED     "../src/gui/Figs/stop_button.png"
-#define IMAGE_BUTTON_STOP_PRESSED       "../src/gui/Figs/stop_button.png"
+#define IMAGE_BUTTON_STOP_PRESSED       "../src/gui/Figs/stop_pressed.png"
 #define WIDTH_BUTTON_STOP               60
 #define HEIGHT_BUTTON_STOP              60
 

@@ -96,12 +96,12 @@ static const int pots_location_and_size[NUMBER_OF_POTS][3] = {
 static const int buttons_location[NUMBER_OF_BUTTONS][2] = {
     {88, 635},
     {88, 670},
-    {290, 620},
+    {270, 645},
 
     //Locations for the record button
-    {410, 609},
+    {410, 649},
     //Location for the stop button
-    {480, 609}
+    {480, 649}
 };
 
 static const int pot_min_max[NUMBER_OF_POTS][2] = {
@@ -806,8 +806,8 @@ int create_buttons_map(Gui_SDL_objects *gui)
     //STOP recording button
     gui->buttons[4].imgon = IMAGE_BUTTON_STOP_PRESSED;
     gui->buttons[4].imgoff = IMAGE_BUTTON_STOP_UNPRESSED;
-    gui->buttons[4].width = WIDTH_BUTTON_RECORD;
-    gui->buttons[4].height = HEIGHT_BUTTON_RECORD;
+    gui->buttons[4].width = WIDTH_BUTTON_STOP;
+    gui->buttons[4].height = HEIGHT_BUTTON_STOP;
 
     for (int bt = 0; bt < NUMBER_OF_BUTTONS; ++bt)
     {
