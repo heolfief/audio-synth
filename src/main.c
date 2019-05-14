@@ -29,7 +29,7 @@
 
 int main(int argc, char *argv[])
 {
-    FILE *test = openFile("../src/fichier_midi/clairdelune.mid","r+", RETOUR);
+    FILE *test = openFile("../src/fichier_midi/mario2.mid", "r+", RETOUR);
     Header *H = (Header *) malloc(sizeof(Header));
     fillHeaderRead(H, test);
     setAsBeginDataRange(test);
@@ -37,15 +37,8 @@ int main(int argc, char *argv[])
     u_int8_t *MidiData = readDataRange(size, test);
     list *clairdelune = NULL;
     clairdelune = playDataRange(MidiData, H, size);
-
-   /*midiList *n;
+    midiList *n = NULL;
     n = clairdelune->first;
-*/
-
-
-
-
-
 
     SDL_AudioSpec as;
     Core *audio_core;
@@ -128,107 +121,118 @@ int main(int argc, char *argv[])
         currentTime = SDL_GetTicks();       // Get time from SDL init in ms
 
         // TEMP : 1000ms delay
-        if (currentTime > lastTime + 1000)  // If time has passed
+        if (currentTime > lastTime + n->delay)  // If time has passed
         {
             lastTime = currentTime;
 
-        }
-
-        if (audio_core->buffer_is_new) process_leds(gui, audio_core);
-
-        if (audio_core->buffer_is_new)
-        {
-
-            process_leds(gui, audio_core);
-        }
-
-        if (midi_peripheral != -1)
-        {
-            if (process_midi_input(&midi_peripheral, audio_core))exit(EXIT_FAILURE);
-
-            if (midi_peripheral == -2)
+            if (n->midiEvent == 1)
             {
-                midi_peripheral = -1;
-                gui->buttons[2].pressed = 0;
-                if (gui_set_switch_image(gui->buttons[2].sdl_button, gui->buttons[2].imgoff))return -1;
-                if (gui_update(gui))return -1;
-                tinyfd_messageBox(NULL, "MIDI device disconnected", "ok", "info", 1);
+                midi_note_ON(audio_core, n->midiNote, n->attack);
+            }
+            else if (n->midiEvent == 0)
+            {
+                midi_note_OFF(audio_core, n->midiNote);
+            }
+
+            if (n->next != NULL)
+            {
+                n = n->next;
             }
         }
 
-        while (SDL_PollEvent(&gui->event))
-        {
-            if (process_switches(gui, audio_core))exit(EXIT_FAILURE);
-            if (process_pots(gui, audio_core, mouse_is_down))exit(EXIT_FAILURE);
-            if (process_buttons(gui, audio_core, &midi_peripheral))exit(EXIT_FAILURE);
+            if (audio_core->buffer_is_new) process_leds(gui, audio_core);
 
-            switch (gui->event.type)
+            if (audio_core->buffer_is_new)
             {
-                case SDL_QUIT:
 
-                    if (prompt_quit())
-                    {
-                        printf("Quit asked. Closing...\n");
-                        gui->application_quit = SDL_TRUE;
-                    }
-                    break;
+                process_leds(gui, audio_core);
+            }
 
-                case SDL_KEYDOWN:
+            if (midi_peripheral != -1)
+            {
+                if (process_midi_input(&midi_peripheral, audio_core))exit(EXIT_FAILURE);
 
-                    if (gui->event.key.keysym.sym == SDLK_ESCAPE)
-                    {
+                if (midi_peripheral == -2)
+                {
+                    midi_peripheral = -1;
+                    gui->buttons[2].pressed = 0;
+                    if (gui_set_switch_image(gui->buttons[2].sdl_button, gui->buttons[2].imgoff))return -1;
+                    if (gui_update(gui))return -1;
+                    tinyfd_messageBox(NULL, "MIDI device disconnected", "ok", "info", 1);
+                }
+            }
+
+            while (SDL_PollEvent(&gui->event))
+            {
+                if (process_switches(gui, audio_core))exit(EXIT_FAILURE);
+                if (process_pots(gui, audio_core, mouse_is_down))exit(EXIT_FAILURE);
+                if (process_buttons(gui, audio_core, &midi_peripheral))exit(EXIT_FAILURE);
+
+                switch (gui->event.type)
+                {
+                    case SDL_QUIT:
+
                         if (prompt_quit())
                         {
-
                             printf("Quit asked. Closing...\n");
                             gui->application_quit = SDL_TRUE;
-
                         }
-                    }
-                    if (keypress(&gui->event, audio_core, gui))exit(EXIT_FAILURE);
-                    break;
+                        break;
 
-                case SDL_KEYUP:
+                    case SDL_KEYDOWN:
 
-                    if (keyrelease(&gui->event, audio_core, gui))exit(EXIT_FAILURE);
-                    break;
+                        if (gui->event.key.keysym.sym == SDLK_ESCAPE)
+                        {
+                            if (prompt_quit())
+                            {
 
-                case SDL_MOUSEBUTTONDOWN:
+                                printf("Quit asked. Closing...\n");
+                                gui->application_quit = SDL_TRUE;
 
-                    mouse_is_down = 1;
-                    //printf("Mouse clic on x=%d, y=%d\n", gui->event.button.x, gui->event.button.y);
-                    break;
+                            }
+                        }
+                        if (keypress(&gui->event, audio_core, gui))exit(EXIT_FAILURE);
+                        break;
 
-                case SDL_MOUSEBUTTONUP:
+                    case SDL_KEYUP:
 
-                    mouse_is_down = 0;
-                    break;
+                        if (keyrelease(&gui->event, audio_core, gui))exit(EXIT_FAILURE);
+                        break;
+
+                    case SDL_MOUSEBUTTONDOWN:
+
+                        mouse_is_down = 1;
+                        //printf("Mouse clic on x=%d, y=%d\n", gui->event.button.x, gui->event.button.y);
+                        break;
+
+                    case SDL_MOUSEBUTTONUP:
+
+                        mouse_is_down = 0;
+                        break;
+                }
             }
+            SDL_Delay(1);
         }
-        SDL_Delay(1);
-    }
-    
 
+        exit_gui(gui);
 
-    exit_gui(gui);
+        TTF_Quit();
+        SDL_CloseAudio();
+        SDL_Quit();
 
-    TTF_Quit();
-    SDL_CloseAudio();
-    SDL_Quit();
-
-    close_midi_peripheral(midi_peripheral);
+        close_midi_peripheral(midi_peripheral);
 
 #endif
 
-    // Free all the data
-    closeFile(test);
-    free(H);
-    freeNodeList(MidiData);
-    freeList(clairdelune);
-    free(clairdelune);
-    free_gui_sdl_objects(gui);
-    free_core(audio_core);
+        // Free all the data
+        closeFile(test);
+        free(H);
+        freeNodeList(MidiData);
+        freeList(clairdelune);
+        free(clairdelune);
+        free_gui_sdl_objects(gui);
+        free_core(audio_core);
 
-    return 0;
-}
+        return 0;
+    }
 
