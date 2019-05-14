@@ -103,6 +103,8 @@
 #define WIDTH_TOUCH        23
 #define HEIGHT_TOUCH        35
 
+#define ICON_IMAGE      "../src/gui/Figs/logo.png"
+
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>

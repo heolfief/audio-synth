@@ -314,8 +314,18 @@ int init_gui(Gui_SDL_objects *gui)
         return -1;
     }
 
-    SDL_FreeSurface(tmp); // Free the surface, not needed anymore
 
+    SDL_Surface*    icon;
+
+    icon = IMG_Load(ICON_IMAGE);
+    if (icon != 0)
+        SDL_SetWindowIcon(gui->window, icon);
+
+
+
+// SDL_Quit() and Co
+    SDL_FreeSurface(tmp); // Free the surface, not needed anymore
+    SDL_FreeSurface(icon);
     SDL_SetRenderTarget(gui->renderer, NULL);
 
     gui->background.w = WIDTH_APPLICATION_WINDOW;
@@ -346,6 +356,7 @@ void exit_gui(Gui_SDL_objects *gui)
     {
         SDL_DestroyWindow(gui->window);
     }
+
 }
 
 Gui_SDL_objects *alloc_gui_sdl_objects()
