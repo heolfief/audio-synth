@@ -394,7 +394,7 @@ int create_Leds_map(Gui_SDL_objects *gui, Sys_param *sys_param);
  * \return 0 if everything went OK, -1 otherwise
  */
 
-int create_Touch_map(Gui_SDL_objects *gui, Sys_param *sys_param);
+int create_touch_map(Gui_SDL_objects *gui, Sys_param *sys_param);
 /**
  * \fn int create_buttons_map(Gui_SDL_objects *gui)
  * \brief Function to place and initialize GUI buttons

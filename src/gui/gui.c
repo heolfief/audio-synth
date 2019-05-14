@@ -550,6 +550,9 @@ int gui_update(Gui_SDL_objects *gui)
         SDL_DestroyTexture(tmp);
     }
 
+    gui->preset_name->rect.x = LOCATION_X_PRESET_NAME - gui->preset_name->text_surface->w / 2;
+    gui->preset_name->rect.w = gui->preset_name->text_surface->w;
+    gui->preset_name->rect.h = gui->preset_name->text_surface->h;
     SDL_Texture
         *tmp = SDL_CreateTextureFromSurface(gui->renderer, gui->preset_name->text_surface);
     if (tmp == NULL)
@@ -709,7 +712,7 @@ int create_switches_map(Gui_SDL_objects *gui, Sys_param *sys_param)
     return 0;
 }
 
-int create_Touch_map(Gui_SDL_objects *gui, Sys_param *sys_param)
+int create_touch_map(Gui_SDL_objects *gui, Sys_param *sys_param)
 {
     if (gui == NULL || sys_param == NULL)
     {
@@ -2088,7 +2091,7 @@ int load_sys_param_to_gui(Gui_SDL_objects *gui, Sys_param *sys_param)
 Sint8 levelVUMeter(Audio_Buffer average_audio_level)
 {
     double LnScaledAudioLevel;
-    short int LEDResult;
+    short int LEDResult = 0;
 
     //The level is between 0 and 2¹⁶, so between 0 and 1 the Ln value will be set to 1.
     if (average_audio_level[0] == 0) return 0;
