@@ -65,7 +65,7 @@ u_int8_t  * readDataRange (u_int32_t  sizeDataRange,FILE *fichier) {
 }
 
 
-list * playDataRange (u_int8_t * DataRange,Header * H, u_int32_t sizeDataRange){
+void playDataRange (u_int8_t * DataRange,Header * H, u_int32_t sizeDataRange,list * l){
     u_int8_t dataDelay [4];
     double  delay =0;
     u_int8_t  midiNote = 0 ;
@@ -73,10 +73,8 @@ list * playDataRange (u_int8_t * DataRange,Header * H, u_int32_t sizeDataRange){
     int  midiEvent = 0;
     int power = 0;
     int i = 0;
-    int g=0;
+   static int g=0;
     int newNote= 0;
-    list * l = NULL;
-    l= initList();
 
     int stop = sizeDataRange - 3 ;
 
@@ -115,7 +113,7 @@ i +=1;
 
 }
 
-return l;
+
 }
 
 
@@ -129,7 +127,7 @@ double calculDelay(u_int8_t * DataDelay,int power, u_int16_t Noire){
         res += DataDelay[i]*pow(126,(double) (power-i));
     }
 
-    res = res / Noire*2000;
+    res = res / Noire*3000;
 
 
     return res ;

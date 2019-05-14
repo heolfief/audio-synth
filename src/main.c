@@ -29,15 +29,24 @@
 
 int main(int argc, char *argv[])
 {
-    FILE *test = openFile("../src/fichier_midi/blue.mid", "r+", RETOUR);
+    FILE *test = openFile("../src/fichier_midi/mario2.mid", "r+", RETOUR);
     Header *H = (Header *) malloc(sizeof(Header));
     fillHeaderRead(H, test);
-    setAsBeginDataRange(test);
-    int size = getSizeDataRange(test);
-    u_int8_t *MidiData = readDataRange(size, test);
-    list *clairdelune = NULL;
-    clairdelune = playDataRange(MidiData, H, size);
+    int size =0 ;
+    u_int8_t *MidiData;
+    list * clairdelune = NULL;
+    clairdelune=initList();
 
+
+        setAsBeginDataRange(test);
+        size = getSizeDataRange(test);
+        MidiData = readDataRange(size,test);
+        printf("%d",H->MTRK);
+        playDataRange(MidiData, H, size,clairdelune);
+
+
+
+  printList(clairdelune);
     midiList *n = NULL;
     n = clairdelune->first;
 
@@ -232,7 +241,7 @@ int main(int argc, char *argv[])
         freeNodeList(MidiData);
         freeList(clairdelune);
         free(clairdelune);
-        free_gui_sdl_objects(gui);
+       free_gui_sdl_objects(gui);
         free_core(audio_core);
 
         return 0;

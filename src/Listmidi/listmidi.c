@@ -81,6 +81,37 @@ int deleteFirst(list *l){
 
 }
 
+int count(list* l)
+{
+    int count =0;
+    for(setOnFirst(l); !isOutOfList(l) ; next(l))
+        count++;
+    return count;
+}
+
+void next(list* l)
+{
+    if(isOutOfList(l))
+        return;
+    midiList *n ;
+    n=l->current;
+    l->current = n->next;
+}
+
+int isOutOfList(list* l)
+{
+    return l->current == NULL;
+}
+
+
+void setOnLast(list* l)
+{
+    l->current = l->last;
+}
+
+
+
+
 int isLast(list* l)
 {
 return l->current == l->last && l->current != NULL;

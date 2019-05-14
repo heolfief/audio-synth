@@ -120,7 +120,7 @@ int first(list * l);
  *
  * \return the target File open
  */
-int last(list * l);
+int isLast(list * l);
 
 /**
  * \fn int outOfList(list * l)
@@ -132,7 +132,7 @@ int last(list * l);
  *
  * \return the target File open
  */
-int outOfList(list * l);
+int isOutOfList(list * l);
 /**
  * \fn void setOnFirst(list * l)
  * \brief Function to open a target File
