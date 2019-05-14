@@ -81,6 +81,11 @@ int deleteFirst(list *l){
 
 }
 
+int isLast(list* l)
+{
+return l->current == l->last && l->current != NULL;
+}
+
 
 int empty(list * l)
 {
