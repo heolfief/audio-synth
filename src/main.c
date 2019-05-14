@@ -31,7 +31,7 @@
 int main(int argc, char *argv[])
 {
 
-    FILE *test = openFile("../src/fichier_midi/mario2.mid", "r+", RETOUR);
+    FILE *test = openFile("../src/fichier_midi/clairdelune.mid","r+", RETOUR);
     Header *H = (Header *) malloc(sizeof(Header));
     fillHeaderRead(H, test);
     setAsBeginDataRange(test);
@@ -41,6 +41,12 @@ int main(int argc, char *argv[])
     printList(clairdelune);
     midiList *n;
     n = clairdelune->first;
+
+
+
+
+
+
     int g = 1;
 
     SDL_AudioSpec as;
@@ -231,6 +237,7 @@ int main(int argc, char *argv[])
 
 
     // Free all the data
+    freeList(clairdelune);
     free_gui_sdl_objects(gui);
     free_core(audio_core);
 
