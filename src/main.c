@@ -237,6 +237,7 @@ int main(int argc, char *argv[])
 
 
     // Free all the data
+    free(H);
     freeList(clairdelune);
     free_gui_sdl_objects(gui);
     free_core(audio_core);
