@@ -37,7 +37,7 @@ u_int8_t * BlockFileReader (FILE * fichier, u_int32_t nombre){
     }
 
     fread(buffer,sizeof(unsigned char),nombre,fichier);
-    return buffer;
+    return  buffer;
 
 }
 

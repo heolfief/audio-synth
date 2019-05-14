@@ -27,7 +27,8 @@ midiList * newNodeList(__uint8_t * midiNote, __uint8_t *attack,   event  midiEve
 
 list *  initList()
 {
-    list *l = (list*) malloc(sizeof(list));
+    list * l =NULL;
+    l = (list*) malloc(sizeof(list));
     if (l == NULL)
     {
         fprintf(stderr, "Warning/error : allocation memoire dynamique chou dans la fonction %s\n", __FUNCTION__);
@@ -83,7 +84,7 @@ int deleteFirst(list *l){
 
 int empty(list * l)
 {
-    return (l->first == NULL || l->last == NULL);
+    return (l->first == NULL && l->last == NULL);
 }
 
 int oneElement(list * l)
@@ -99,10 +100,9 @@ void printList(list * l)
     while (n != NULL)
     {
         printf(" Midi event : %d  Delay : %f  Midi note : %2x attack : %2x \n ", n->midiEvent, n->delay, n->midiNote,n->attack);
-        if (n->attack > 127){
-            printf ("JES SUIS TROP FORT");
-        }
+
         n = n->next;
     }
+    freeNodeList(n);
     printf("}\n");
 }

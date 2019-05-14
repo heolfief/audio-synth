@@ -32,6 +32,8 @@ void fillHeaderRead (Header * H, FILE * f){
         H->MTRK=buffer[10]*256+buffer[11];
 
         H->NOIRE=buffer[12]*256 + buffer[13];
+
+
     free(buffer);
 
 }
@@ -39,9 +41,11 @@ void fillHeaderRead (Header * H, FILE * f){
 
 
 void setAsBeginDataRange(FILE *f){
-    unsigned char * buffer = BlockFileReader(f,1);
+    unsigned char * buffer = NULL;
+    buffer = BlockFileReader(f,1);
 
     while(buffer[0]== 0x4d || buffer[0] == 0x54 || buffer[0]== 0x72 || buffer[0]== 0x6b){ // go to the begining of data range detect with the flags 0x4d 0x54 0x72 0x6b
+        free(buffer);
        buffer = BlockFileReader(f,1);
 
     }
@@ -71,7 +75,8 @@ list * playDataRange (u_int8_t * DataRange,Header * H, u_int32_t sizeDataRange){
     int i = 0;
     int g=0;
     int newNote= 0;
-    list * l = initList();
+    list * l = NULL;
+    l= initList();
 
     int stop = sizeDataRange - 3 ;
 
@@ -109,6 +114,7 @@ while (i<stop ){
 i +=1;
 
 }
+
 return l;
 }
 
@@ -221,7 +227,9 @@ u_int32_t  getSizeDataRange(FILE *f){
     unsigned char * buffer =NULL;
    buffer= BlockFileReader(f,4);
    size = buffer[0]*16777216 + buffer[1]*65536 + buffer[2]*256 +buffer[3];
+    free(buffer);
     return size;
+
 
 }
 

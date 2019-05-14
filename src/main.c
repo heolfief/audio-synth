@@ -1,8 +1,8 @@
 /**
- * \file main.c
- * \brief Main program
- *
- */
+* \file main.c
+* \brief Main program
+*
+*/
 
 #include <SDL2/SDL.h>
 #include <math.h>
@@ -11,6 +11,7 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <errno.h>
+#include <sndfile.h>
 
 #include "sys_param/sys_param.h"
 #include "core/note/polyphony.h"
@@ -21,33 +22,30 @@
 #include "midi/midi_keyboard.h"
 #include "gui/keypad.h"
 #include "core/audio_core.h"
+#include "audio/wav.h"
+#include "fichier/fichier.h"
 #include "midi/midi_file.h"
 #include "Listmidi/listmidi.h"
-#include "fichier/fichier.h"
-
-
-
 
 int main(int argc, char *argv[])
 {
-
     FILE *test = openFile("../src/fichier_midi/clairdelune.mid","r+", RETOUR);
     Header *H = (Header *) malloc(sizeof(Header));
     fillHeaderRead(H, test);
     setAsBeginDataRange(test);
     int size = getSizeDataRange(test);
     u_int8_t *MidiData = readDataRange(size, test);
-    list *clairdelune = playDataRange(MidiData, H, size);
-    printList(clairdelune);
-    midiList *n;
+    list *clairdelune = NULL;
+    clairdelune = playDataRange(MidiData, H, size);
+
+   /*midiList *n;
     n = clairdelune->first;
+*/
 
 
 
 
 
-
-    int g = 1;
 
     SDL_AudioSpec as;
     Core *audio_core;
@@ -55,8 +53,6 @@ int main(int argc, char *argv[])
     MIDI_Peripheral_fd midi_peripheral = -1;
     Uint8 mouse_is_down = 0;
     Uint32 lastTime = 0, currentTime;
-
-
 
     // Default parameters. If buffer_len changed, core memory allocation needs to be redone
     int sample_rate = 48000;
@@ -84,6 +80,8 @@ int main(int argc, char *argv[])
         sys_print_error("Failed loading preset");
         exit(EXIT_FAILURE);
     }
+
+#ifndef VALGRIND
 
     set_audio_spec(&as, audio_core);
 
@@ -125,42 +123,24 @@ int main(int argc, char *argv[])
     SDL_PauseAudio(SDL_FALSE);              // Play audio (pause = off)
 
 
-
-
-
-
-
     while (!gui->application_quit)
     {
         currentTime = SDL_GetTicks();       // Get time from SDL init in ms
 
-
-
         // TEMP : 1000ms delay
-        if (currentTime > lastTime + n->delay)  // If time has passed
+        if (currentTime > lastTime + 1000)  // If time has passed
         {
             lastTime = currentTime;
 
-            if (n->midiEvent == 1)
-            {
-                midi_note_ON(audio_core, n->midiNote, n->attack);
-            }
-            else if (n->midiEvent == 0)
-            {
-                midi_note_OFF(audio_core, n->midiNote);
-            }
-
-            if (n->next != NULL)
-            {
-                n = n->next;
-            }
-            else
-            {
-
-
-            }
         }
+
         if (audio_core->buffer_is_new) process_leds(gui, audio_core);
+
+        if (audio_core->buffer_is_new)
+        {
+
+            process_leds(gui, audio_core);
+        }
 
         if (midi_peripheral != -1)
         {
@@ -178,7 +158,6 @@ int main(int argc, char *argv[])
 
         while (SDL_PollEvent(&gui->event))
         {
-
             if (process_switches(gui, audio_core))exit(EXIT_FAILURE);
             if (process_pots(gui, audio_core, mouse_is_down))exit(EXIT_FAILURE);
             if (process_buttons(gui, audio_core, &midi_peripheral))exit(EXIT_FAILURE);
@@ -200,8 +179,10 @@ int main(int argc, char *argv[])
                     {
                         if (prompt_quit())
                         {
+
                             printf("Quit asked. Closing...\n");
                             gui->application_quit = SDL_TRUE;
+
                         }
                     }
                     if (keypress(&gui->event, audio_core, gui))exit(EXIT_FAILURE);
@@ -224,7 +205,15 @@ int main(int argc, char *argv[])
                     break;
             }
         }
+        SDL_Delay(1);
     }
+
+    //switching off the recording session in case the user forgot to stop
+    if(audio_core->record_param->RecordOnOff){
+        audio_core->record_param->RecordOnOff = OFF;
+        close_wav_file(audio_core->record_param->sndFile);
+    }
+
 
     exit_gui(gui);
 
@@ -234,13 +223,17 @@ int main(int argc, char *argv[])
 
     close_midi_peripheral(midi_peripheral);
 
-
+#endif
 
     // Free all the data
+    closeFile(test);
     free(H);
+    freeNodeList(MidiData);
     freeList(clairdelune);
+    free(clairdelune);
     free_gui_sdl_objects(gui);
     free_core(audio_core);
 
     return 0;
 }
+

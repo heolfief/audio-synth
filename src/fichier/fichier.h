@@ -48,12 +48,12 @@ int closeFile(FILE * file);
  * \brief Function to read various number of bytes in a File
  *
  * \param file Target File
- * \param number Number of bytes you want to read
+ * \param size Number of bytes you want to read
  *
  * \return allocated buffer with result of reading on a file
  */
 
-u_int8_t * BlockFileReader (FILE * file, u_int32_t  number);
+u_int8_t * BlockFileReader (FILE * file, u_int32_t  size);
 /**
  * \fn int removeFile(FILE *f)
  * \brief Function to remove a file
