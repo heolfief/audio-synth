@@ -129,7 +129,7 @@ u_int32_t getSizeDataRange(FILE *f);
  * \return 0 if everything went OK, -1 otherwise
  */
 
-void  playDataRange(u_int8_t * DataRange, Header * H,u_int32_t sizeDataRange,list *l);
+void  sortDataRange(u_int8_t * DataRange, Header * H,u_int32_t sizeDataRange,list *l);
 
 /**
  * \fn playDataRange(u_int32_t DataRangeSorted)
@@ -143,8 +143,7 @@ void  playDataRange(u_int8_t * DataRange, Header * H,u_int32_t sizeDataRange,lis
  * \return 0 if everything went OK, -1 otherwise
  */
 
-int readAction (u_int16_t * DataRange, int increments);
-
+int * playDataRange (FILE  * test);
 /**
  * \fn playDataRange(u_int32_t DataRangeSorted)
  * \brief Function to know the length of midi Data Range

@@ -42,11 +42,11 @@ int main(int argc, char *argv[])
         size = getSizeDataRange(test);
         MidiData = readDataRange(size,test);
         printf("%d",H->MTRK);
-        playDataRange(MidiData, H, size,clairdelune);
+        sortDataRange(MidiData, H, size,clairdelune);
 
 
 
-  printList(clairdelune);
+  //printList(clairdelune);
     midiList *n = NULL;
     n = clairdelune->first;
 

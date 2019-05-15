@@ -64,8 +64,50 @@ u_int8_t  * readDataRange (u_int32_t  sizeDataRange,FILE *fichier) {
     return DataRange;
 }
 
+int * playDataRange (FILE * file){
+    Header * H;
+    fillHeaderRead(H,file);
+    u_int8_t  * MidiData;
+    u_int32_t   sizeDataRange;
+    list *l = initList();
+    int * DataRange  = malloc(sizeof(MidiData)*H->MTRK);
 
-void playDataRange (u_int8_t * DataRange,Header * H, u_int32_t sizeDataRange,list * l){
+    for (int i = 0; i<H->MTRK;i++){
+        moveFile(file,sizeDataRange);
+        setAsBeginDataRange(file);
+        MidiData = readDataRange(sizeDataRange,file);
+        sortDataRange(MidiData,H,sizeDataRange,l);
+
+
+
+
+    }
+
+
+
+
+    return 1;
+
+
+
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+void sortDataRange (u_int8_t * DataRange,Header * H, u_int32_t sizeDataRange,list * l){
     u_int8_t dataDelay [4];
     double  delay =0;
     u_int8_t  midiNote = 0 ;
