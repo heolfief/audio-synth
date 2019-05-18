@@ -98,9 +98,9 @@ static const int buttons_location[NUMBER_OF_BUTTONS][2] = {
     {88, 670},
     {270, 645},
 
-    //Locations for the record button
+    //Location for the wav record button
     {410, 649},
-    //Location for the stop button
+    //Location for the wav stop record button
     {480, 649}
 };
 
@@ -285,12 +285,17 @@ static int extract_file_name_from_path(const char *path, char *out, int extensio
 
 int init_gui(Gui *gui)
 {
-    if (SDL_CreateWindowAndRenderer(WIDTH_APPLICATION_WINDOW, HEIGHT_APPLICATION_WINDOW, SDL_WINDOW_SHOWN, &gui->window, &gui->renderer)
-        != 0)
+    //Init gui and add flags for the GPU rendering
+   gui->window = SDL_CreateWindow(NAME_APPLICATION,SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED,WIDTH_APPLICATION_WINDOW,HEIGHT_APPLICATION_WINDOW,SDL_WINDOW_SHOWN);
+
+    gui->renderer = SDL_CreateRenderer(gui->window,-1,SDL_RENDERER_ACCELERATED);
+
+    if(gui->window == NULL || gui->renderer == NULL)
     {
         sys_print_SDL_error("ERROR in creating window and renderer");
         return -1;
     }
+
 
     gui->texture =
         SDL_CreateTexture(gui->renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, WIDTH_APPLICATION_WINDOW, HEIGHT_APPLICATION_WINDOW);

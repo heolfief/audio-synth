@@ -9,7 +9,7 @@
 #ifndef AUDIO_SYNTH_GUI_H
 #define AUDIO_SYNTH_GUI_H
 
-#define NAME_APPLICATION "audio_synth"
+#define NAME_APPLICATION                "INSWAVE"
 #define IMAGE_APPLICATION_BACKGROUND    "../src/gui/Figs/background.png"
 #define WIDTH_APPLICATION_WINDOW        1300
 #define HEIGHT_APPLICATION_WINDOW       816
