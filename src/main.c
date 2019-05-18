@@ -77,14 +77,21 @@ int main(int argc, char *argv[])
         exit(EXIT_FAILURE);
     }
 
+    //Initialize the GUI
     if (init_gui(gui))exit(EXIT_FAILURE);
+
+    //create maps for the different SDL elements
     if (create_switches_map(gui, audio_core->sys_param))exit(EXIT_FAILURE);
     if (create_pots_map(gui, audio_core->sys_param))exit(EXIT_FAILURE);
     if (create_buttons_map(gui))exit(EXIT_FAILURE);
     if (create_Text_map(gui))exit(EXIT_FAILURE);
     if (create_Leds_map(gui, audio_core->sys_param))exit(EXIT_FAILURE);
     if (create_touch_map(gui, audio_core->sys_param))exit(EXIT_FAILURE);
+
+    //load the system parameters to the GUI, to set the different sound parameters
     if (load_sys_param_to_gui(gui, audio_core->sys_param))exit((EXIT_FAILURE));
+
+    //updates the GUI with the new parameters loaded
     if (gui_update(gui))exit(EXIT_FAILURE);
 
     if (SDL_OpenAudio(&as, NULL) != 0)
@@ -101,7 +108,7 @@ int main(int argc, char *argv[])
 
     SDL_PauseAudio(SDL_FALSE);              // Play audio (pause = off)
 
-
+    //Loops that keeps running until the user exits the app
     while (!gui->application_quit)
     {
         currentTime = SDL_GetTicks();       // Get time from SDL init in ms
@@ -113,12 +120,11 @@ int main(int argc, char *argv[])
 
         }
 
-        if (audio_core->buffer_is_new) process_leds(gui, audio_core);
-
+        //checks if the buffer has been updated and process the leds of the VUmeter
         if (audio_core->buffer_is_new)
         {
 
-            process_leds(gui, audio_core);
+            if(process_leds(gui, audio_core))exit(EXIT_FAILURE);
         }
 
         if (midi_peripheral != -1)
@@ -135,6 +141,7 @@ int main(int argc, char *argv[])
             }
         }
 
+        //loop waiting for an SDL event like a keyboard touch or mouse movements
         while (SDL_PollEvent(&gui->event))
         {
             if (process_switches(gui, audio_core))exit(EXIT_FAILURE);
