@@ -182,7 +182,7 @@ static const int leds_location[NUMBER_OF_LEDS][2] = {
     //Second Orange Led
     {1212, 55},
 
-    //ONLY RED LED
+    //ONLY RED Led
     {1212, 35}
 
 };
@@ -283,7 +283,7 @@ static int extract_file_name_from_path(const char *path, char *out, int extensio
     return getSubString(path, out, pos_of_last_slash + 1, strlen(path) - extension_lenght - 2);
 }
 
-int init_gui(Gui_SDL_objects *gui)
+int init_gui(Gui *gui)
 {
     if (SDL_CreateWindowAndRenderer(WIDTH_APPLICATION_WINDOW, HEIGHT_APPLICATION_WINDOW, SDL_WINDOW_SHOWN, &gui->window, &gui->renderer)
         != 0)
@@ -342,7 +342,7 @@ int init_gui(Gui_SDL_objects *gui)
     return 0;
 }
 
-void exit_gui(Gui_SDL_objects *gui)
+void exit_gui(Gui *gui)
 {
     if (NULL != gui->texture)
     {
@@ -359,22 +359,14 @@ void exit_gui(Gui_SDL_objects *gui)
 
 }
 
-Gui_SDL_objects *alloc_gui_sdl_objects()
+Gui *alloc_gui()
 {
-    Gui_SDL_objects *gui = (Gui_SDL_objects *) malloc(sizeof(Gui_SDL_objects));
+    Gui *gui = (Gui *) malloc(sizeof(Gui));
     if (gui == NULL)
     {
         sys_print_error("Memory allocation error");
         return NULL;
     }
-
-    Mouse_position *mp = (Mouse_position *) malloc(sizeof(Mouse_position));
-    if (mp == NULL)
-    {
-        sys_print_error("Memory allocation error");
-        return NULL;
-    }
-    gui->mouse_position = mp;
 
     Switch *sw = (Switch *) calloc(NUMBER_OF_SWITCHES, sizeof(Switch));
     if (sw == NULL)
@@ -416,15 +408,15 @@ Gui_SDL_objects *alloc_gui_sdl_objects()
     }
     gui->preset_name = txt;
 
-    LED *Led = (LED *) calloc(NUMBER_OF_LEDS, sizeof(LED));
-    if (Led == NULL)
+    Led *led = (Led *) calloc(NUMBER_OF_LEDS, sizeof(Led));
+    if (led == NULL)
     {
         sys_print_error("Memory Allocation error");
         return NULL;
     }
-    gui->Leds = Led;
+    gui->Leds = led;
 
-    TOUCH *touch = (TOUCH *) calloc(NUMBER_OF_TOUCH, sizeof(TOUCH));
+    Touch *touch = (Touch *) calloc(NUMBER_OF_TOUCH, sizeof(Touch));
     if (touch == NULL)
     {
         sys_print_error("Memory Allocation error");
@@ -435,9 +427,8 @@ Gui_SDL_objects *alloc_gui_sdl_objects()
     return gui;
 }
 
-int free_gui_sdl_objects(Gui_SDL_objects *gui)
+int free_gui(Gui *gui)
 {
-    free(gui->mouse_position);
     free(gui->switches);
     free(gui->ms_switches);
     free(gui->pots);
@@ -449,7 +440,7 @@ int free_gui_sdl_objects(Gui_SDL_objects *gui)
     return 0;
 }
 
-int gui_update(Gui_SDL_objects *gui)
+int gui_update(Gui *gui)
 {
     // Render background
     if (SDL_RenderCopy(gui->renderer, gui->texture, NULL, &gui->background))
@@ -604,7 +595,7 @@ int gui_set_switch_image(SDL_Button_t *button, char *path_to_image)
     return 0;
 }
 
-int create_Text_map(Gui_SDL_objects *gui)
+int create_Text_map(Gui *gui)
 {
     if (gui == NULL)
     {
@@ -627,7 +618,7 @@ int create_Text_map(Gui_SDL_objects *gui)
     return 0;
 }
 
-int create_switches_map(Gui_SDL_objects *gui, Sys_param *sys_param)
+int create_switches_map(Gui *gui, Sys_param *sys_param)
 {
     if (gui == NULL || sys_param == NULL)
     {
@@ -723,7 +714,7 @@ int create_switches_map(Gui_SDL_objects *gui, Sys_param *sys_param)
     return 0;
 }
 
-int create_touch_map(Gui_SDL_objects *gui, Sys_param *sys_param)
+int create_touch_map(Gui *gui, Sys_param *sys_param)
 {
     if (gui == NULL || sys_param == NULL)
     {
@@ -744,7 +735,7 @@ int create_touch_map(Gui_SDL_objects *gui, Sys_param *sys_param)
     return 0;
 }
 
-int create_Leds_map(Gui_SDL_objects *gui, Sys_param *sys_param)
+int create_Leds_map(Gui *gui, Sys_param *sys_param)
 {
     if (gui == NULL || sys_param == NULL)
     {
@@ -788,7 +779,7 @@ int create_Leds_map(Gui_SDL_objects *gui, Sys_param *sys_param)
     return 0;
 
 }
-int create_buttons_map(Gui_SDL_objects *gui)
+int create_buttons_map(Gui *gui)
 {
     if (gui == NULL)
     {
@@ -835,7 +826,7 @@ int create_buttons_map(Gui_SDL_objects *gui)
     return 0;
 }
 
-int create_pots_map(Gui_SDL_objects *gui, Sys_param *sys_param)
+int create_pots_map(Gui *gui, Sys_param *sys_param)
 {
     if (gui == NULL || sys_param == NULL)
     {
@@ -926,7 +917,7 @@ int create_pots_map(Gui_SDL_objects *gui, Sys_param *sys_param)
     return 0;
 }
 
-int process_switches(Gui_SDL_objects *gui, Core *audio_core)
+int process_switches(Gui *gui, Core *audio_core)
 {
     OnOff *onoff_param = NULL;
     Waveform *wave_param = NULL;
@@ -1058,7 +1049,7 @@ int process_switches(Gui_SDL_objects *gui, Core *audio_core)
     return 0;
 }
 
-int process_buttons(Gui_SDL_objects *gui, Core *audio_core, MIDI_Peripheral_fd *midi_peripheral)
+int process_buttons(Gui *gui, Core *audio_core, MIDI_Peripheral_fd *midi_peripheral)
 {
     int param_changed = 0;
     int reload_param = 0;
@@ -1195,7 +1186,7 @@ int process_buttons(Gui_SDL_objects *gui, Core *audio_core, MIDI_Peripheral_fd *
     return 0;
 }
 
-int process_pots(Gui_SDL_objects *gui, Core *audio_core, Uint8 mouse_is_down)
+int process_pots(Gui *gui, Core *audio_core, Uint8 mouse_is_down)
 {
     double *double_param = NULL;
     Uint8 *uint8_param = NULL;
@@ -1566,7 +1557,7 @@ int process_pots(Gui_SDL_objects *gui, Core *audio_core, Uint8 mouse_is_down)
     return 0;
 }
 
-int process_touch(Gui_SDL_objects *gui, Uint8 id, Uint8 mode)
+int process_touch(Gui *gui, Uint8 id, Uint8 mode)
 {
     if (gui == NULL)
     {
@@ -1616,7 +1607,7 @@ int process_touch(Gui_SDL_objects *gui, Uint8 id, Uint8 mode)
     return 0;
 }
 
-int process_leds(Gui_SDL_objects *gui, Core *audio_core)
+int process_leds(Gui *gui, Core *audio_core)
 {
 
     if (gui == NULL || audio_core == NULL)
@@ -1792,7 +1783,7 @@ int process_leds(Gui_SDL_objects *gui, Core *audio_core)
 
 }
 
-int change_pot_percent(Gui_SDL_objects *gui, int potnbr, Uint8 mouse_is_down)
+int change_pot_percent(Gui *gui, int potnbr, Uint8 mouse_is_down)
 {
     if (gui->event.type == SDL_MOUSEWHEEL)
     {
@@ -1828,7 +1819,7 @@ int change_pot_percent(Gui_SDL_objects *gui, int potnbr, Uint8 mouse_is_down)
     }
 }
 
-int load_sys_param_to_gui(Gui_SDL_objects *gui, Sys_param *sys_param)
+int load_sys_param_to_gui(Gui *gui, Sys_param *sys_param)
 {
     if (gui == NULL || sys_param == NULL)
     {

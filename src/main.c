@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
 {
     SDL_AudioSpec as;
     Core *audio_core;
-    Gui_SDL_objects *gui;
+    Gui *gui;
     MIDI_Peripheral_fd midi_peripheral = -1;
     Uint8 mouse_is_down = 0;
     Uint32 lastTime = 0, currentTime;
@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
 
     audio_core->sys_param->sample_rate = sample_rate;
 
-    gui = alloc_gui_sdl_objects();
+    gui = alloc_gui();
     if (gui == NULL)
     {
         sys_print_error("Failed allocating memory to gui");
@@ -205,7 +205,7 @@ int main(int argc, char *argv[])
 #endif
 
     // Free all the data
-    free_gui_sdl_objects(gui);
+    free_gui(gui);
     free_core(audio_core);
 
     return 0;

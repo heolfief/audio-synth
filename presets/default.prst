@@ -17,7 +17,7 @@
   <osc3>
     <onoff>0</onoff>
     <amp>32000</amp>
-    <detune>12</detune>
+    <detune>0</detune>
     <duty>10</duty>
     <wave>2</wave>
   </osc3>

@@ -32,7 +32,7 @@ typedef struct
  * \struct Core
  * \brief define an audio core
  *
- * An audio core is consisted of a buffer containing final audio data to be played by the soundcard, the system parameters,
+ * An audio core consists of a buffer containing final audio data to be played by the soundcard, the system parameters,
  * the polyphony array of the system and the phase of the system.
  */
 typedef struct
