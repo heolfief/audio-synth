@@ -12,6 +12,7 @@
 #include "midi_file.h"
 #include "../fichier/fichier.h"
 #include "../Listmidi/listmidi.h"
+#include "../Listmidi/listDataRange.h"
 
 
 
@@ -57,7 +58,7 @@ void setAsBeginDataRange(FILE *f){
 
 
 
-u_int8_t  * readDataRange (u_int32_t  sizeDataRange,FILE *fichier) {
+u_int8_t  * readDataRange (u_int32_t sizeDataRange,FILE *fichier) {
     u_int8_t * DataRange;
 
     DataRange = (u_int8_t*) BlockFileReader(fichier,sizeDataRange);
@@ -117,7 +118,6 @@ void sortDataRange (u_int8_t * DataRange,Header * H, u_int32_t sizeDataRange,mid
     int i = 0;
    static int g=0;
     int newNote= 0;
-
     int stop = sizeDataRange - 3 ;
 
 while (i<stop ){

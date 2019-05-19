@@ -27,7 +27,7 @@ midiData * newNodeList(__uint8_t * midiNote, __uint8_t *attack,   event  midiEve
 
 midiList *  initList()
 {
-    midiList * l =NULL;
+    midiList * l = NULL;
 
     l = (midiList*) malloc(sizeof(midiList));
     if (l == NULL)
@@ -35,8 +35,10 @@ midiList *  initList()
         fprintf(stderr, "Warning/error : allocation memoire dynamique chou dans la fonction %s\n", __FUNCTION__);
         return NULL;		/*L'allocation  chou*/
     }
+    l->current= NULL;
+    l->first = NULL;
 
-    l->current = (midiList*) malloc(sizeof(midiList));
+    l->current = (midiData*) malloc(sizeof(midiData));
     l->first =   l->current;
     l->last = NULL;
     l->accrued_delay =0;

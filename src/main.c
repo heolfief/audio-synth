@@ -26,6 +26,7 @@
 #include "fichier/fichier.h"
 #include "midi/midi_file.h"
 #include "Listmidi/listmidi.h"
+#include "Listmidi/listDataRange.h"
 
 int main(int argc, char *argv[])
 {
@@ -33,29 +34,36 @@ int main(int argc, char *argv[])
     Header *H = (Header *) malloc(sizeof(Header));
     fillHeaderRead(H, test);
     int size =0 ;
+
     u_int8_t *MidiData = NULL;
-  //  midiList * clairdelune = initList();
+    midiList * clairdelune =NULL ;
+    dataRangeList * blue = NULL;
+    blue = initdataRangeList();
 
-for (int i= 0; i<13;i++)
+for (int i = 0; i<5;i++)
 {
-
-    setAsBeginDataRange(test);
-    size = getSizeDataRange(test);
-   // MidiData = readDataRange(size, test);
-  //  sortDataRange(MidiData, H, size, clairdelune);
-    moveFile(test,size);
-
-}
-
+    clairdelune = initList();
     setAsBeginDataRange(test);
     size = getSizeDataRange(test);
     MidiData = readDataRange(size, test);
-    // sortDataRange(MidiData, H, size, clairdelune);
+
+   sortDataRange(MidiData, H, size, clairdelune);
+
+   blue->current = newDataRange(clairdelune);
+
+   if (i==0){
+      blue->first=blue->current;
+
+   }
+
+    //freeList(clairdelune);
 
 
- // printList(clairdelune);
-    midiList *n = NULL;
-  //  n = clairdelune->first;
+}
+
+printList(clairdelune);
+    midiData *n = NULL;
+  // n = clairdelune->first;
 
 
     SDL_AudioSpec as;
@@ -243,11 +251,14 @@ for (int i= 0; i<13;i++)
 #endif
 
         // Free all the data
+
         closeFile(test);
         free(H);
-        freeNodeList(MidiData);
-       // freeList(clairdelune);
-       // free(clairdelune);
+//        freeNodeList(MidiData);
+
+    //    freeList(clairdelune);
+     //   free(clairdelune);
+    freeDataRange(blue);
        free_gui_sdl_objects(gui);
         free_core(audio_core);
 
