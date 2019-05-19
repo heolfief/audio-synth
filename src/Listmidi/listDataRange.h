@@ -16,14 +16,14 @@
 
 
 typedef struct {
-  struct midiList * first;		/*!< L'adresse du premier élément de la liste */
-  struct  midiList * current;		/*!< L'adresse de l'élément courant de la liste */
-  struct midiList * last;		/*!< L'adresse du dernier élément de la liste */
+  struct midiList * firstDataRange;		/*!< L'adresse du premier élément de la liste */
+  struct  midiList * currentDataRange;		/*!< L'adresse de l'élément courant de la liste */
+  struct midiList * lastDataRange;		/*!< L'adresse du dernier élément de la liste */
 }dataRangeList;
 
 
 
-
+void updateDelayDataRange(dataRangeList * l, int size);
 /**
  * \fn midiList * newList(void * ptr, nodeList * next)
  * \brief Function to open a target File
@@ -211,7 +211,7 @@ int deleteCurrentDataRange(dataRangeList * l, void** data);
 
 
 
-
+midiData * getFirstNoteToPlay(dataRangeList * l, int size);
 
 
 

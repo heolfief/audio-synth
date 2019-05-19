@@ -30,9 +30,9 @@ dataRangeList * initdataRangeList()
         return NULL;		/*L'allocation  chou*/
     }
 
-    l->current = (dataRangeList*) malloc(sizeof(dataRangeList));
-    l->first =   l->current;
-    l->last = NULL;
+    l->currentDataRange = (dataRangeList*) malloc(sizeof(dataRangeList));
+    l->firstDataRange =   l->currentDataRange;
+    l->lastDataRange = NULL;
 
     return l ;
 
@@ -50,7 +50,7 @@ void freeDataRange(dataRangeList * l){
 
 
 void setOnFirstDataRange(dataRangeList * l){
-    l->current = l->first;
+    l->currentDataRange = l->firstDataRange;
 }
 
 
@@ -58,12 +58,12 @@ void setOnFirstDataRange(dataRangeList * l){
 int deleteFirstDataRange(dataRangeList *l){
     if (empty(l))
         return 0;
-    midiList * toDel = l->first;
-    l->first = toDel->nextmidiList;
+    midiList * toDel = l->firstDataRange;
+    l->firstDataRange = toDel->nextmidiList;
     freeList(toDel);
     if (emptyDataRange(l))
     {
-        l->last = NULL;
+        l->lastDataRange = NULL;
 
     }
     setOnFirstDataRange(l);
@@ -78,32 +78,54 @@ void nextDataRange(dataRangeList * l)
     if(OutOfDataRangeList(l))
         return;
     midiList *n ;
-    n=l->current;
-    l->current = n->nextmidiList;
+    n=l->currentDataRange;
+    l->currentDataRange = n->nextmidiList;
 }
 
 int OutOfDataRangeList(dataRangeList * l)
 {
-    return l->current == NULL;
+    return l->currentDataRange == NULL;
 }
 
 
 void setOnLastDataRange(dataRangeList* l)
 {
-    l->current = l->last;
+    l->currentDataRange = l->lastDataRange;
 }
 
 
 int LastDataRange(dataRangeList * l)
 {
-    return l->current == l->last && l->current != NULL;
+    return l->currentDataRange == l->lastDataRange && l->currentDataRange != NULL;
 }
 
 
 int emptyDataRange(dataRangeList * l)
 {
-    return (l->first == NULL && l->last == NULL);
+    return (l->firstDataRange == NULL && l->lastDataRange == NULL);
 }
 
 
+
+
+void updateDelayDataRange(dataRangeList * l, int size){
+    midiList *m;
+    midiData *n;
+    m=l->firstDataRange;
+    for (int i=0;i<size;i++){
+        m=l->currentDataRange;
+            n=m->current;
+        m->accrued_delay = m->accrued_delay + n->delay;
+    m->nextmidiList;
+    printf("%d \n",m->accrued_delay);
+    }
+}
+
+
+//midiData * getFirstNoteToPlay(dataRangeList * l, int size){
+
+
+
+
+}
 

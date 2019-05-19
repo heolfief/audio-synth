@@ -40,7 +40,7 @@ int main(int argc, char *argv[])
     dataRangeList * blue = NULL;
     blue = initdataRangeList();
 
-for (int i = 0; i<5;i++)
+for (int i = 0; i<H->MTRK;i++)
 {
     clairdelune = initList();
     setAsBeginDataRange(test);
@@ -49,18 +49,17 @@ for (int i = 0; i<5;i++)
 
    sortDataRange(MidiData, H, size, clairdelune);
 
-   blue->current = newDataRange(clairdelune);
+   blue->currentDataRange = newDataRange(clairdelune);
 
    if (i==0){
-      blue->first=blue->current;
+      blue->firstDataRange=blue->currentDataRange;
 
    }
 
     //freeList(clairdelune);
-
-
 }
 
+updateDelayDataRange(blue,H->MTRK);
 printList(clairdelune);
     midiData *n = NULL;
   // n = clairdelune->first;
