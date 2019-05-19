@@ -19,7 +19,6 @@ typedef struct {
   struct midiList * first;		/*!< L'adresse du premier élément de la liste */
   struct  midiList * current;		/*!< L'adresse de l'élément courant de la liste */
   struct midiList * last;		/*!< L'adresse du dernier élément de la liste */
-  int delay;
 }dataRangeList;
 
 
@@ -35,8 +34,7 @@ typedef struct {
  *
  * \return the target File open
  */
-
-dataRangeList* newDataRange(int  delay, dataRangeList * next);
+midiList * newDataRange(midiList * previous);
 
 /**
  * \fn void initList(list * l)
@@ -132,18 +130,6 @@ void setOnLastDataRange(dataRangeList * l);
  * \return the target File open
  */
 void nextDataRange(dataRangeList * l);
-/**
- * \fn void* getCurrent(list * l)
- * \brief Function to open a target File
- *
- * \param name Name of the target file
- * \param mode Opening method : r+: reading, w+: writting ...
- * \param t TypeRetour kind of return
- *
- * \return the target File open
- */
-
-void* getCurrentDataRange(dataRangeList * l);
 
 /**
  * \fn int insertFirst(list * l, void* data)
@@ -168,18 +154,7 @@ int insertFirstDataRange(dataRangeList * l, void* data);
  */
 
 int deleteFirstDataRange(dataRangeList * l);
-/**
- * \fn void freeNodeList(nodeList * n)
- * \brief Function to open a target File
- *
- * \param name Name of the target file
- * \param mode Opening method : r+: reading, w+: writting ...
- * \param t TypeRetour kind of return
- *
- * \return the target File open
- */
 
-void freemidiList(dataRangeList * n);
 /**
  * \fn void freeList(list * l)
  * \brief Function to open a target File

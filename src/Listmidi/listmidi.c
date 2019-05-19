@@ -5,7 +5,7 @@
 
 
 
-midiList * newNodeList(__uint8_t * midiNote, __uint8_t *attack,   event  midiEvent, double delay, midiData * previous)
+midiData * newNodeList(__uint8_t * midiNote, __uint8_t *attack,   event  midiEvent, double delay, midiData * previous)
 {
     midiData * new = (midiData*)malloc(sizeof(midiData));  /*Allocation de l'espace mmoire*/
     if (new == NULL)
@@ -39,7 +39,8 @@ midiList *  initList()
     l->current = (midiList*) malloc(sizeof(midiList));
     l->first =   l->current;
     l->last = NULL;
-
+    l->accrued_delay =0;
+    l->nextmidiList = NULL;
     return l ;
 
 
@@ -53,7 +54,7 @@ void freeList(midiList* l){
 
 }
 
-void freeNodeList(midiList *n){
+void freeNodeList(midiData *n){
     if (n!=NULL)
         free(n);
 

@@ -34,6 +34,8 @@ typedef  struct {
   struct midiData * first;		/*!< L'adresse du premier élément de la liste */
   struct  midiData * current;		/*!< L'adresse de l'élément courant de la liste */
   struct midiData * last;
+  double  accrued_delay;
+  struct midiList * nextmidiList;
 
 }midiList;
 
@@ -54,7 +56,7 @@ typedef  struct {
  * \return the target File open
  */
 
-midiList * newNodeList(__uint8_t  *midiNote, __uint8_t *attack,  event  midiEvent, double  delay, midiData * next);
+midiData * newNodeList(__uint8_t  *midiNote, __uint8_t *attack,  event  midiEvent, double  delay, midiData * next);
 
 /**
  * \fn void initList(list * l)
@@ -229,7 +231,7 @@ int deleteFirst(midiList * l);
  * \return the target File open
  */
 
-void freeNodeList(midiList * n);
+void freeNodeList(midiData * n);
 /**
  * \fn void freeList(list * l)
  * \brief Function to open a target File

@@ -23,6 +23,7 @@ set(SOURCE_FILES main.c
         audio_fx/audio_fx.c audio_fx/audio_fx.h
         midi/midi_file.c midi/midi_file.h
         Listmidi/listmidi.c Listmidi/listmidi.h
+        Listmidi/listDataRange.c Listmidi/listDataRange.h
         fichier/fichier.c fichier/fichier.h
         sys_param/xml/preset_xml.c sys_param/xml/preset_xml.h
         audio_fx/ext_effects/snd.c audio_fx/ext_effects/snd.h
