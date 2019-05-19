@@ -41,8 +41,6 @@ typedef struct {
 */
 
 
-
-
 /**
  * \fn void fillHeaderRead (Header*H, FILE* f)
  * \brief Function to fill an midi header from a target file

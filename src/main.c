@@ -29,24 +29,31 @@
 
 int main(int argc, char *argv[])
 {
-    FILE *test = openFile("../src/fichier_midi/mario2.mid", "r+", RETOUR);
+    FILE *test = openFile("../src/fichier_midi/blue.mid", "r+", RETOUR);
     Header *H = (Header *) malloc(sizeof(Header));
     fillHeaderRead(H, test);
     int size =0 ;
-    u_int8_t *MidiData;
-    list * clairdelune = NULL;
-    clairdelune=initList();
+    u_int8_t *MidiData = NULL;
+    list * clairdelune = initList();
+
+for (int i= 0; i<13;i++)
+{
+
+    setAsBeginDataRange(test);
+    size = getSizeDataRange(test);
+   // MidiData = readDataRange(size, test);
+  //  sortDataRange(MidiData, H, size, clairdelune);
+    moveFile(test,size);
+
+}
+
+    setAsBeginDataRange(test);
+    size = getSizeDataRange(test);
+    MidiData = readDataRange(size, test);
+     sortDataRange(MidiData, H, size, clairdelune);
 
 
-        setAsBeginDataRange(test);
-        size = getSizeDataRange(test);
-        MidiData = readDataRange(size,test);
-        printf("%d",H->MTRK);
-        sortDataRange(MidiData, H, size,clairdelune);
-
-
-
-  //printList(clairdelune);
+ // printList(clairdelune);
     midiList *n = NULL;
     n = clairdelune->first;
 

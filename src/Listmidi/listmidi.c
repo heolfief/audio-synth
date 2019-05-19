@@ -28,6 +28,7 @@ midiList * newNodeList(__uint8_t * midiNote, __uint8_t *attack,   event  midiEve
 list *  initList()
 {
     list * l =NULL;
+
     l = (list*) malloc(sizeof(list));
     if (l == NULL)
     {

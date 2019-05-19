@@ -135,6 +135,8 @@ while (i<stop ){
 
        newNote = readEvent(&midiNote,&attack,&midiEvent,DataRange,&i);
 
+
+
          if (newNote) {
 
             event MidiEvent = midiEvent;
@@ -168,8 +170,8 @@ double calculDelay(u_int8_t * DataDelay,int power, u_int16_t Noire){
 
         res += DataDelay[i]*pow(126,(double) (power-i));
     }
-
-    res = res / Noire*3000;
+    if (power > 1 )
+    res = res / Noire;
 
 
     return res ;
