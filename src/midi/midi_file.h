@@ -127,7 +127,7 @@ u_int32_t getSizeDataRange(FILE *f);
  * \return 0 if everything went OK, -1 otherwise
  */
 
-void  sortDataRange(u_int8_t * DataRange, Header * H,u_int32_t sizeDataRange,list *l);
+void  sortDataRange(u_int8_t * DataRange, Header * H,u_int32_t sizeDataRange,midiList *l);
 
 /**
  * \fn playDataRange(u_int32_t DataRangeSorted)

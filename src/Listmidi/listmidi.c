@@ -5,9 +5,9 @@
 
 
 
-midiList * newNodeList(__uint8_t * midiNote, __uint8_t *attack,   event  midiEvent, double delay, midiList * previous)
+midiList * newNodeList(__uint8_t * midiNote, __uint8_t *attack,   event  midiEvent, double delay, midiData * previous)
 {
-    midiList * new = (midiList*)malloc(sizeof(midiList));  /*Allocation de l'espace mmoire*/
+    midiData * new = (midiData*)malloc(sizeof(midiData));  /*Allocation de l'espace mmoire*/
     if (new == NULL)
     {
         fprintf(stderr, "Warning/error : allocation mmoire dynamique chou dans la fonction %s\n", __FUNCTION__);
@@ -25,11 +25,11 @@ midiList * newNodeList(__uint8_t * midiNote, __uint8_t *attack,   event  midiEve
 
 
 
-list *  initList()
+midiList *  initList()
 {
-    list * l =NULL;
+    midiList * l =NULL;
 
-    l = (list*) malloc(sizeof(list));
+    l = (midiList*) malloc(sizeof(midiList));
     if (l == NULL)
     {
         fprintf(stderr, "Warning/error : allocation memoire dynamique chou dans la fonction %s\n", __FUNCTION__);
@@ -46,7 +46,7 @@ list *  initList()
 }
 
 
-void freeList(list* l){
+void freeList(midiList* l){
     while(!empty(l)) deleteFirst(l);
 
 
@@ -60,16 +60,16 @@ void freeNodeList(midiList *n){
 
 }
 
-void setOnFirst(list *l){
+void setOnFirst(midiList *l){
     l->current = l->first;
 }
 
 
 
-int deleteFirst(list *l){
+int deleteFirst(midiList *l){
     if (empty(l))
             return 0;
-    midiList * toDel = l->first;
+    midiData * toDel = l->first;
     l->first = toDel->next;
     freeNodeList(toDel);
     if (empty(l))
@@ -82,7 +82,7 @@ int deleteFirst(list *l){
 
 }
 
-int count(list* l)
+int count(midiList* l)
 {
     int count =0;
     for(setOnFirst(l); !isOutOfList(l) ; next(l))
@@ -90,22 +90,22 @@ int count(list* l)
     return count;
 }
 
-void next(list* l)
+void next(midiList* l)
 {
     if(isOutOfList(l))
         return;
-    midiList *n ;
+    midiData *n ;
     n=l->current;
     l->current = n->next;
 }
 
-int isOutOfList(list* l)
+int isOutOfList(midiList* l)
 {
     return l->current == NULL;
 }
 
 
-void setOnLast(list* l)
+void setOnLast(midiList* l)
 {
     l->current = l->last;
 }
@@ -113,25 +113,25 @@ void setOnLast(list* l)
 
 
 
-int isLast(list* l)
+int isLast(midiList* l)
 {
 return l->current == l->last && l->current != NULL;
 }
 
 
-int empty(list * l)
+int empty(midiList * l)
 {
     return (l->first == NULL && l->last == NULL);
 }
 
-int oneElement(list * l)
+int oneElement(midiList * l)
 {
     return (l->first != NULL && l->first == l->last);
 }
 
-void printList(list * l)
+void printList(midiList * l)
 {
-    midiList* n;
+    midiData* n;
     printf("{");
     n = l->first;
     while (n != NULL)
@@ -143,3 +143,4 @@ void printList(list * l)
     freeNodeList(n);
     printf("}\n");
 }
+

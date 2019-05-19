@@ -1,44 +1,26 @@
+//
+// Created by vincent on 19/05/19.
+//
+
+#ifndef AUDIO_SYNTH_SRC_LISTMIDI_LISTDATARANGE_H_
+#define AUDIO_SYNTH_SRC_LISTMIDI_LISTDATARANGE_H_
+//
+// Created by vincent on 19/05/19.
+//
 #include <stdio.h>
-#ifndef LISTMIDI_H
-#define LISTMIDI_H
-
-
-typedef enum event event;
-
-enum event {OFF_NOTE,ON_NOTE};
+#include "listmidi.h"
 
 
 
 
 
-
-
-/*!
-* \brief Une liste chaînée de note midi
-*/
 
 typedef struct {
-    __uint8_t  midiNote;
-    __uint8_t  attack;
-   enum  event midiEvent;
-    double delay;
-    struct midiData * next;
-}midiData;
-
-
-
-
-
-
-typedef  struct {
-  struct midiData * first;		/*!< L'adresse du premier élément de la liste */
-  struct  midiData * current;		/*!< L'adresse de l'élément courant de la liste */
-  struct midiData * last;
-
-}midiList;
-
-
-
+  struct midiList * first;		/*!< L'adresse du premier élément de la liste */
+  struct  midiList * current;		/*!< L'adresse de l'élément courant de la liste */
+  struct midiList * last;		/*!< L'adresse du dernier élément de la liste */
+  int delay;
+}dataRangeList;
 
 
 
@@ -54,7 +36,7 @@ typedef  struct {
  * \return the target File open
  */
 
-midiList * newNodeList(__uint8_t  *midiNote, __uint8_t *attack,  event  midiEvent, double  delay, midiData * next);
+dataRangeList* newDataRange(int  delay, dataRangeList * next);
 
 /**
  * \fn void initList(list * l)
@@ -66,7 +48,7 @@ midiList * newNodeList(__uint8_t  *midiNote, __uint8_t *attack,  event  midiEven
  *
  * \return the target File open
  */
-midiList * initList();
+dataRangeList * initdataRangeList();
 
 /**
  * \fn void printList(list * l)
@@ -78,18 +60,7 @@ midiList * initList();
  *
  * \return the target File open
  */
-void printList(midiList * l);
-/**
- * \fn int empty(list * l)
- * \brief Function to open a target File
- *
- * \param name Name of the target file
- * \param mode Opening method : r+: reading, w+: writting ...
- * \param t TypeRetour kind of return
- *
- * \return the target File open
- */
-int empty(midiList * l);
+int emptyDataRange(dataRangeList * l);
 /**
  * \fn int oneElement(list * l)
  * \brief Function to open a target File
@@ -101,30 +72,9 @@ int empty(midiList * l);
  * \return the target File open
  */
 
-int oneElement(midiList * l);
-/**
- * \fn int count(list* l)
- * \brief Function to open a target File
- *
- * \param name Name of the target file
- * \param mode Opening method : r+: reading, w+: writting ...
- * \param t TypeRetour kind of return
- *
- * \return the target File open
- */
-int count(midiList* l);
 
-/**
- * \fn int first(list * l)
- * \brief Function to open a target File
- *
- * \param name Name of the target file
- * \param mode Opening method : r+: reading, w+: writting ...
- * \param t TypeRetour kind of return
- *
- * \return the target File open
- */
-int first(midiList * l);
+
+int firstDataRange(dataRangeList * l);
 
 /**
  * \fn int last(list * l)
@@ -136,7 +86,7 @@ int first(midiList * l);
  *
  * \return the target File open
  */
-int isLast(midiList * l);
+int LastDataRange(dataRangeList * l);
 
 /**
  * \fn int outOfList(list * l)
@@ -148,7 +98,7 @@ int isLast(midiList * l);
  *
  * \return the target File open
  */
-int isOutOfList(midiList * l);
+int OutOfDataRangeList(dataRangeList * l);
 /**
  * \fn void setOnFirst(list * l)
  * \brief Function to open a target File
@@ -159,7 +109,7 @@ int isOutOfList(midiList * l);
  *
  * \return the target File open
  */
-void setOnFirst(midiList * l);
+void setOnFirstDataRange(dataRangeList * l);
 /**
  * \fn void setOnLast(list * l)
  * \brief Function to open a target File
@@ -170,7 +120,7 @@ void setOnFirst(midiList * l);
  *
  * \return the target File open
  */
-void setOnLast(midiList * l);
+void setOnLastDataRange(dataRangeList * l);
 /**
  * \fn void next(list * l)
  * \brief Function to open a target File
@@ -181,7 +131,7 @@ void setOnLast(midiList * l);
  *
  * \return the target File open
  */
-void next(midiList * l);
+void nextDataRange(dataRangeList * l);
 /**
  * \fn void* getCurrent(list * l)
  * \brief Function to open a target File
@@ -193,7 +143,7 @@ void next(midiList * l);
  * \return the target File open
  */
 
-void* getCurrent(midiList * l);
+void* getCurrentDataRange(dataRangeList * l);
 
 /**
  * \fn int insertFirst(list * l, void* data)
@@ -205,7 +155,7 @@ void* getCurrent(midiList * l);
  *
  * \return the target File open
  */
-int insertFirst(midiList * l, void* data);
+int insertFirstDataRange(dataRangeList * l, void* data);
 /**
  * \fn int deleteFirst(list * l, void** data)
  * \brief Function to open a target File
@@ -217,7 +167,7 @@ int insertFirst(midiList * l, void* data);
  * \return the target File open
  */
 
-int deleteFirst(midiList * l);
+int deleteFirstDataRange(dataRangeList * l);
 /**
  * \fn void freeNodeList(nodeList * n)
  * \brief Function to open a target File
@@ -229,7 +179,7 @@ int deleteFirst(midiList * l);
  * \return the target File open
  */
 
-void freeNodeList(midiList * n);
+void freemidiList(dataRangeList * n);
 /**
  * \fn void freeList(list * l)
  * \brief Function to open a target File
@@ -241,7 +191,7 @@ void freeNodeList(midiList * n);
  * \return the target File open
  */
 
-void freeList(midiList * l);
+void freeDataRange(dataRangeList * l);
 /**
  * \fn int insertLast(list * l, void* data)
  * \brief Function to open a target File
@@ -253,7 +203,7 @@ void freeList(midiList * l);
  * \return the target File open
  */
 
-int insertLast(midiList * l, void* data);
+int insertLastDataRange(dataRangeList * l, void* data);
 
 /**
  * \fn int deleteLast(list * l, void** data)
@@ -265,7 +215,7 @@ int insertLast(midiList * l, void* data);
  *
  * \return the target File open
  */
-int deleteLast(midiList * l, void** data);
+int deleteLastDataRange(dataRangeList * l, void** data);
 
 /**
  * \fn int insertAfterCurrent(list * l, void* data)
@@ -278,23 +228,21 @@ int deleteLast(midiList * l, void** data);
  * \return the target File open
  */
 
-int insertAfterCurrent(midiList * l, void* data);
-/**
- * \fn int deleteCurrent(list * l, void** data)
- * \brief Function to open a target File
- *
- * \param name Name of the target file
- * \param mode Opening method : r+: reading, w+: writting ...
- * \param t TypeRetour kind of return
- *
- * \return the target File open
- */
 
 
-
-int deleteCurrent(midiList * l, void** data);
+int deleteCurrentDataRange(dataRangeList * l, void** data);
 
 
 
 
-#endif
+
+
+
+
+
+
+
+
+
+
+#endif //AUDIO_SYNTH_SRC_LISTMIDI_LISTDATARANGE_H_

@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
     fillHeaderRead(H, test);
     int size =0 ;
     u_int8_t *MidiData = NULL;
-    list * clairdelune = initList();
+  //  midiList * clairdelune = initList();
 
 for (int i= 0; i<13;i++)
 {
@@ -50,12 +50,12 @@ for (int i= 0; i<13;i++)
     setAsBeginDataRange(test);
     size = getSizeDataRange(test);
     MidiData = readDataRange(size, test);
-     sortDataRange(MidiData, H, size, clairdelune);
+    // sortDataRange(MidiData, H, size, clairdelune);
 
 
  // printList(clairdelune);
     midiList *n = NULL;
-    n = clairdelune->first;
+  //  n = clairdelune->first;
 
 
     SDL_AudioSpec as;
@@ -246,8 +246,8 @@ for (int i= 0; i<13;i++)
         closeFile(test);
         free(H);
         freeNodeList(MidiData);
-        freeList(clairdelune);
-        free(clairdelune);
+       // freeList(clairdelune);
+       // free(clairdelune);
        free_gui_sdl_objects(gui);
         free_core(audio_core);
 
