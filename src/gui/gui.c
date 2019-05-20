@@ -419,7 +419,7 @@ Gui *alloc_gui()
     }
     gui->buttons = bt;
 
-    Text *txt = (Text *) calloc(NUMBER_OF_TEXTS,sizeof(Text));
+    Text *txt = (Text *) calloc(NUMBER_OF_TEXTS, sizeof(Text));
     if (txt == NULL)
     {
         sys_print_error("Memory allocation error");
@@ -654,7 +654,6 @@ int create_Text_map(Gui *gui)
     gui->texts[1].rect.x = LOCATION_X_MIDI_TEXT - gui->texts[1].text_surface->w / 2;
     gui->texts[1].rect.y = LOCATION_Y_MIDI_TEXT;
     gui->texts[1].rect.h = gui->texts[1].text_surface->h;
-
 
     return 0;
 }
@@ -1122,6 +1121,7 @@ int process_buttons(Gui *gui, Core *audio_core, MIDI_Peripheral_fd *midi_periphe
     char const *RecordPath;
     char const *lFilterPatterns[1] = {"*.prst"};
     char const *WavFilterPatterns[1] = {"*.wav"};
+    char const *MIDIFilterpatterns[1] = {"*.mid"};
     if (gui == NULL || audio_core == NULL)
     {
         sys_print_error("Parameter is NULL");
@@ -1146,6 +1146,7 @@ int process_buttons(Gui *gui, Core *audio_core, MIDI_Peripheral_fd *midi_periphe
         if (gui_set_switch_image(gui->buttons[0].sdl_button, gui->buttons[0].imgoff))return -1;
         param_changed = 1;
     }
+
 
     // Button SAVE preset
     if (SDL_Button_mouse_down(gui->buttons[1].sdl_button, &gui->event))
@@ -1182,6 +1183,49 @@ int process_buttons(Gui *gui, Core *audio_core, MIDI_Peripheral_fd *midi_periphe
             if (gui_set_switch_image(gui->buttons[2].sdl_button, gui->buttons[2].imgon))return -1;
             if (gui_update(gui))return -1;
         }
+    }
+
+    // Button LOAD MIDI file
+    if (SDL_Button_mouse_down(gui->buttons[5].sdl_button, &gui->event))
+    {
+        if (gui_set_switch_image(gui->buttons[5].sdl_button, gui->buttons[5].imgon))return -1;
+        if (gui_update(gui))return -1;
+
+        path = tinyfd_openFileDialog("Load a MIDI file", "../", 1, MIDIFilterpatterns, NULL, 0);
+        if (path)
+        {
+            // TO BE FILLED BY VINCE's function when loading if (load_preset(path, audio_core->sys_param, ABSOLUTE_PATH_MODE))return -1;
+            audio_core->midi_param->Midi_file_opened = ON;
+
+            extract_file_name_from_path(path, preset_name, 3);
+            gui->texts[1].text_surface =
+                TTF_RenderText_Blended(gui->texts[1].font, preset_name, gui->texts[1].color);
+            reload_param = 1;
+        }
+        if (gui_set_switch_image(gui->buttons[5].sdl_button, gui->buttons[5].imgoff))return -1;
+        param_changed = 1;
+    }
+
+    // Button PLAY MIDI file
+    if (SDL_Button_mouse_down(gui->buttons[6].sdl_button, &gui->event))
+    {
+        if (gui_set_switch_image(gui->buttons[6].sdl_button, gui->buttons[6].imgon))return -1;
+        if (gui_update(gui))return -1;
+        if (audio_core->midi_param->Midi_file_opened == ON)
+        {
+            //TO BE FILLED BY VINCE'S function when playing a midi file
+
+
+            audio_core->midi_param->Midi_playing_OnOff = ON;
+        }
+        else
+        {
+            tinyfd_messageBox("MIDI playing session", "In order to play a MIDI file you should probably start by opening a midi file first ?\n Please open a MIDI file on the button above ", "yes", "ok", 1);
+
+        }
+
+        if (gui_set_switch_image(gui->buttons[6].sdl_button, gui->buttons[6].imgoff))return -1;
+        param_changed = 1;
     }
 
     // Button RECORD wav file
