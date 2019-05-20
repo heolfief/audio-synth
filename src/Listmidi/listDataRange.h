@@ -23,7 +23,7 @@ typedef struct {
 
 
 
-void updateDelayDataRange(dataRangeList * l, int size);
+dataRangeList * updateDelayDataRange(dataRangeList * l, int size);
 /**
  * \fn midiList * newList(void * ptr, nodeList * next)
  * \brief Function to open a target File
@@ -34,7 +34,7 @@ void updateDelayDataRange(dataRangeList * l, int size);
  *
  * \return the target File open
  */
-midiList * newDataRange(midiList * previous);
+midiList * newDataRange(midiList * current, midiList * previous);
 
 /**
  * \fn void initList(list * l)

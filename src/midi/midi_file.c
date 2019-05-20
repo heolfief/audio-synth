@@ -171,8 +171,8 @@ double calculDelay(u_int8_t * DataDelay,int power, u_int16_t Noire){
         res += DataDelay[i]*pow(126,(double) (power-i));
     }
     if (power > 1 )
-    res = res / Noire;
-
+    res = res /Noire;
+    printf("Noire : %d",Noire);
 
     return res ;
 }
@@ -219,23 +219,23 @@ int  readEvent (__uint8_t * midiNote, u_int8_t * attack,  int * midiEvent,u_int8
             newNote = 1;
             break;
         case  0XE0:
-           * i += 3;
-            newNote = 0;
-            break;
-        case  0XB0 :
-            *i += 3;
-            newNote = 0;
-            break;
-        case 0xA0 :
-           * i += 3;
-            newNote = 0;
-            break;
-        case 0xC0 :
            * i += 2;
             newNote = 0;
             break;
-        case 0xD0 :
+        case  0XB0 :
             *i += 2;
+            newNote = 0;
+            break;
+        case 0xA0 :
+           * i += 2;
+            newNote = 0;
+            break;
+        case 0xC0 :
+           * i += 1;
+            newNote = 0;
+            break;
+        case 0xD0 :
+            *i += 1;
             newNote = 0;
             break;
        default :
@@ -277,6 +277,45 @@ u_int32_t  getSizeDataRange(FILE *f){
 
 
 
+dataRangeList * readMidiFile(char * nameOfFile) {
+FILE *test = openFile(nameOfFile, "r+", RETOUR);
+Header *H = (Header *) malloc(sizeof(Header));
+fillHeaderRead(H, test);
+int size =0 ;
+
+u_int8_t *MidiData = NULL;
+midiList * clairdelune =NULL ;
+dataRangeList * blue = NULL;
+blue = initdataRangeList();
+
+for (int i = 0; i<H->MTRK;i++)
+{
+
+clairdelune = initList();
+setAsBeginDataRange(test);
+size = getSizeDataRange(test);
+if (H->SMF == 1 && i==0 )
+{
+moveFile(test, size);
+setAsBeginDataRange(test);
+size = getSizeDataRange(test);
+}
 
 
+MidiData = readDataRange(size, test);
+
+sortDataRange(MidiData, H, size, clairdelune);
+
+blue->currentDataRange = newDataRange(clairdelune, (midiList *) blue->currentDataRange);
+
+if (i == 0)
+{
+blue->firstDataRange = blue->currentDataRange;
+
+}
+
+
+closeFile(test);
+return blue;
+}}
 

@@ -34,7 +34,7 @@ typedef  struct {
   struct midiData * first;		/*!< L'adresse du premier élément de la liste */
   struct  midiData * current;		/*!< L'adresse de l'élément courant de la liste */
   struct midiData * last;
-  double  accrued_delay;
+  double   accrued_delay;
   struct midiList * nextmidiList;
 
 }midiList;

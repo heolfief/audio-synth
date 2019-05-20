@@ -7,6 +7,7 @@
  */
 #include <stdio.h>
 #include "../Listmidi/listmidi.h"
+#include "../Listmidi/listDataRange.h"
 #ifndef MIDI_H
 #define MIDI_H
 #define MSKHEX 0xF0
@@ -159,4 +160,9 @@ double calculDelay (__uint8_t * DataDelay, int power,u_int16_t Noire);
 
 
 int readEvent (__uint8_t * midiNote, u_int8_t * attack, int  * midiEvent,u_int8_t * DataRange , int *  i);
+
+
+dataRangeList * readMidiFile(char * nameOfFile) ;
+
+
 #endif

@@ -30,39 +30,9 @@
 
 int main(int argc, char *argv[])
 {
-    FILE *test = openFile("../src/fichier_midi/blue.mid", "r+", RETOUR);
-    Header *H = (Header *) malloc(sizeof(Header));
-    fillHeaderRead(H, test);
-    int size =0 ;
 
-    u_int8_t *MidiData = NULL;
-    midiList * clairdelune =NULL ;
-    dataRangeList * blue = NULL;
-    blue = initdataRangeList();
+double controlNote =1000;
 
-for (int i = 0; i<H->MTRK;i++)
-{
-    clairdelune = initList();
-    setAsBeginDataRange(test);
-    size = getSizeDataRange(test);
-    MidiData = readDataRange(size, test);
-
-   sortDataRange(MidiData, H, size, clairdelune);
-
-   blue->currentDataRange = newDataRange(clairdelune);
-
-   if (i==0){
-      blue->firstDataRange=blue->currentDataRange;
-
-   }
-
-    //freeList(clairdelune);
-}
-
-updateDelayDataRange(blue,H->MTRK);
-printList(clairdelune);
-    midiData *n = NULL;
-  // n = clairdelune->first;
 
 
     SDL_AudioSpec as;
@@ -139,31 +109,48 @@ printList(clairdelune);
     if (compute_filter_coeffs(audio_core->sys_param->filter_param, audio_core->sys_param->sample_rate, audio_core->effect_core->filter_state))return -1;
 
     SDL_PauseAudio(SDL_FALSE);              // Play audio (pause = off)
-
+int g=0;
+u_int8_t * NoteOn[1000];
 
     while (!gui->application_quit)
     {
         currentTime = SDL_GetTicks();       // Get time from SDL init in ms
+
+    if (n!= NULL)
+    {
 
         // TEMP : 1000ms delay
         if (currentTime > lastTime + n->delay)  // If time has passed
         {
             lastTime = currentTime;
 
+
+            if (currentTime > controlNote){
+                controlNote = currentTime +1000;
+                for (int i = 0 ; i<g/2 ; i++){
+                    midi_note_OFF(audio_core, NoteOn[i]);
+                }
+
+
+
+            }
+
             if (n->midiEvent == 1)
             {
                 midi_note_ON(audio_core, n->midiNote, n->attack);
+                g++;
+                NoteOn[g]=n->midiNote;
             }
             else if (n->midiEvent == 0)
             {
-                midi_note_OFF(audio_core, n->midiNote);
+               midi_note_OFF(audio_core, n->midiNote);
             }
 
-            if (n->next != NULL)
-            {
-                n = n->next;
-            }
+           blue = updateDelayDataRange(blue, H->MTRK);
+
+            n = getFirstNoteToPlay(blue, H->MTRK);
         }
+    }
 
             if (audio_core->buffer_is_new) process_leds(gui, audio_core);
 
@@ -252,12 +239,12 @@ printList(clairdelune);
         // Free all the data
 
         closeFile(test);
-        free(H);
+  /*      free(H);
 //        freeNodeList(MidiData);
 
     //    freeList(clairdelune);
      //   free(clairdelune);
-    freeDataRange(blue);
+    freeDataRange(blue);*/
        free_gui_sdl_objects(gui);
         free_core(audio_core);
 
