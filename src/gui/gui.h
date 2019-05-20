@@ -23,7 +23,7 @@
 #define NUMBER_OF_MS_SWITCHES           8
 #define NUMBER_OF_POTS                  32
 #define NUMBER_OF_LEDS                  8
-
+#define NUMBER_OF_TEXTS                 2
 
 #define NUMBER_OF_TOUCH 12
 
@@ -62,10 +62,10 @@
 #define WIDTH_BUTTON_SAVE               60
 #define HEIGHT_BUTTON_SAVE              19
 
-#define IMAGE_BUTTON_MIDI_STANDBY       "../src/gui/Figs/bt_midi_standby.png"
+#define IMAGE_BUTTON_MIDI_STANDBY       "../src/gui/Figs/button_keyboard_MIDI.png"
 #define IMAGE_BUTTON_MIDI_CONNECTED     "../src/gui/Figs/bt_midi_connected.png"
-#define WIDTH_BUTTON_MIDI               66
-#define HEIGHT_BUTTON_MIDI              30
+#define WIDTH_BUTTON_MIDI               50
+#define HEIGHT_BUTTON_MIDI              35
 
 #define IMAGE_BUTTON_RECORD_UNPRESSED    "../src/gui/Figs/record_button.png"
 #define IMAGE_BUTTON_RECORD_PRESSED      "../src/gui/Figs/record_pressed.png"
@@ -99,6 +99,8 @@
 #define COLOR_B_FONT_PRESET_NAME        186
 #define LOCATION_X_PRESET_NAME          119
 #define LOCATION_Y_PRESET_NAME          705
+#define LOCATION_X_MIDI_TEXT            296
+#define LOCATION_Y_MIDI_TEXT            680
 
 #define IMAGE_MS_SWITCH_MAX_STATES      4
 #define POT_INCREMENT                   1
@@ -277,7 +279,7 @@ typedef struct
   Multi_state_Switch *ms_switches;
   Potentiometer *pots;
   Button *buttons;
-  Text *preset_name;
+  Text *texts;
   Led *Leds;
   Touch *touch;
 } Gui;
