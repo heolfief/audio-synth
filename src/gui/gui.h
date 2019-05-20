@@ -62,10 +62,10 @@
 #define WIDTH_BUTTON_SAVE               60
 #define HEIGHT_BUTTON_SAVE              19
 
-#define IMAGE_BUTTON_MIDI_STANDBY       "../src/gui/Figs/button_keyboard_MIDI.png"
+#define IMAGE_BUTTON_MIDI_STANDBY       "../src/gui/Figs/bt_keyboard_MIDI.png"
 #define IMAGE_BUTTON_MIDI_CONNECTED     "../src/gui/Figs/bt_midi_connected.png"
-#define WIDTH_BUTTON_MIDI               50
-#define HEIGHT_BUTTON_MIDI              35
+#define WIDTH_BUTTON_MIDI               75
+#define HEIGHT_BUTTON_MIDI              52
 
 #define IMAGE_BUTTON_RECORD_UNPRESSED    "../src/gui/Figs/record_button.png"
 #define IMAGE_BUTTON_RECORD_PRESSED      "../src/gui/Figs/record_pressed.png"
@@ -78,17 +78,17 @@
 #define HEIGHT_BUTTON_STOP              60
 
 #define IMAGE_BUTTON_MIDI_PLAY_UNPRESSED     "../src/gui/Figs/button_play_MIDI.png"
-#define IMAGE_BUTTON_MIDI_PLAY_PRESSED       "../src/gui/Figs/button_play_MIDI.png"
+#define IMAGE_BUTTON_MIDI_PLAY_PRESSED       "../src/gui/Figs/play_on.png"
 #define WIDTH_BUTTON_MIDI_PLAY               30
 #define HEIGHT_BUTTON_MIDI_PLAY              34
 
 #define IMAGE_BUTTON_MIDI_PAUSE_UNPRESSED     "../src/gui/Figs/button_pause_MIDI.png"
-#define IMAGE_BUTTON_MIDI_PAUSE_PRESSED       "../src/gui/Figs/button_pause_MIDI.png"
+#define IMAGE_BUTTON_MIDI_PAUSE_PRESSED       "../src/gui/Figs/pause_on.png"
 #define WIDTH_BUTTON_MIDI_PAUSE              30
 #define HEIGHT_BUTTON_MIDI_PAUSE              33
 
 #define IMAGE_BUTTON_MIDI_STOP_UNPRESSED     "../src/gui/Figs/button_stop_MIDI.png"
-#define IMAGE_BUTTON_MIDI_STOP_PRESSED       "../src/gui/Figs/button_stop_MIDI.png"
+#define IMAGE_BUTTON_MIDI_STOP_PRESSED       "../src/gui/Figs/stop_on.png"
 #define WIDTH_BUTTON_MIDI_STOP               30
 #define HEIGHT_BUTTON_MIDI_STOP              30
 

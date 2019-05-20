@@ -97,7 +97,8 @@ static const int pots_location_and_size[NUMBER_OF_POTS][3] = {
 static const int buttons_location[NUMBER_OF_BUTTONS][2] = {
     {88, 635},
     {88, 670},
-    {270, 615},
+    //midi keyboard
+    {300, 585},
 
     //Location for the wav record button
     {410, 649},
