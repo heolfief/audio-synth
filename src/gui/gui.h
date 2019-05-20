@@ -17,7 +17,7 @@
 #define NUMBER_OF_SWITCHES              11
 #define NUMBER_OF_MS_SWITCHES           8
 #define NUMBER_OF_POTS                  32
-#define NUMBER_OF_BUTTONS               5
+#define NUMBER_OF_BUTTONS               9
 
 #define NUMBER_OF_SWITCHES              11
 #define NUMBER_OF_MS_SWITCHES           8

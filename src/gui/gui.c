@@ -96,12 +96,24 @@ static const int pots_location_and_size[NUMBER_OF_POTS][3] = {
 static const int buttons_location[NUMBER_OF_BUTTONS][2] = {
     {88, 635},
     {88, 670},
-    {270, 645},
+    {270, 615},
 
     //Location for the wav record button
     {410, 649},
     //Location for the wav stop record button
-    {480, 649}
+    {480, 649},
+
+    //Location for the load MIDI file button
+    {232,660},
+
+    //Location for the Play midi file button
+    {232,685},
+
+    //Location for the pause midi file button
+    {270,685},
+
+    //Location for the stop midi file button
+    {320,685}
 };
 
 static const int pot_min_max[NUMBER_OF_POTS][2] = {
@@ -818,6 +830,12 @@ int create_buttons_map(Gui *gui)
     gui->buttons[4].imgoff = IMAGE_BUTTON_STOP_UNPRESSED;
     gui->buttons[4].width = WIDTH_BUTTON_STOP;
     gui->buttons[4].height = HEIGHT_BUTTON_STOP;
+
+    //Load midi file button
+    gui->buttons[3].imgon = IMAGE_BUTTON_RECORD_PRESSED;
+    gui->buttons[3].imgoff = IMAGE_BUTTON_RECORD_UNPRESSED;
+    gui->buttons[3].width = WIDTH_BUTTON_RECORD;
+    gui->buttons[3].height = HEIGHT_BUTTON_RECORD;
 
     for (int bt = 0; bt < NUMBER_OF_BUTTONS; ++bt)
     {
