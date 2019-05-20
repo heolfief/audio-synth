@@ -832,10 +832,28 @@ int create_buttons_map(Gui *gui)
     gui->buttons[4].height = HEIGHT_BUTTON_STOP;
 
     //Load midi file button
-    gui->buttons[3].imgon = IMAGE_BUTTON_RECORD_PRESSED;
-    gui->buttons[3].imgoff = IMAGE_BUTTON_RECORD_UNPRESSED;
-    gui->buttons[3].width = WIDTH_BUTTON_RECORD;
-    gui->buttons[3].height = HEIGHT_BUTTON_RECORD;
+    gui->buttons[5].imgon = IMAGE_BUTTON_LOAD_PRESSED;
+    gui->buttons[5].imgoff = IMAGE_BUTTON_LOAD_UNPRESSED;
+    gui->buttons[5].width = WIDTH_BUTTON_LOAD;
+    gui->buttons[5].height = HEIGHT_BUTTON_LOAD;
+
+    //Play midi file button
+    gui->buttons[6].imgon = IMAGE_BUTTON_MIDI_PLAY_PRESSED;
+    gui->buttons[6].imgoff = IMAGE_BUTTON_MIDI_PLAY_UNPRESSED;
+    gui->buttons[6].width = WIDTH_BUTTON_MIDI_PLAY;
+    gui->buttons[6].height = HEIGHT_BUTTON_MIDI_PLAY;
+
+    //Pause midi file button
+    gui->buttons[7].imgon = IMAGE_BUTTON_MIDI_PAUSE_PRESSED;
+    gui->buttons[7].imgoff = IMAGE_BUTTON_MIDI_PAUSE_UNPRESSED;
+    gui->buttons[7].width = WIDTH_BUTTON_MIDI_PAUSE;
+    gui->buttons[7].height = HEIGHT_BUTTON_MIDI_PAUSE;
+
+    //STOP midi file button
+    gui->buttons[8].imgon = IMAGE_BUTTON_MIDI_STOP_PRESSED;
+    gui->buttons[8].imgoff = IMAGE_BUTTON_MIDI_STOP_UNPRESSED;
+    gui->buttons[8].width = WIDTH_BUTTON_MIDI_STOP;
+    gui->buttons[8].height = HEIGHT_BUTTON_MIDI_STOP;
 
     for (int bt = 0; bt < NUMBER_OF_BUTTONS; ++bt)
     {

@@ -77,6 +77,20 @@
 #define WIDTH_BUTTON_STOP               60
 #define HEIGHT_BUTTON_STOP              60
 
+#define IMAGE_BUTTON_MIDI_PLAY_UNPRESSED     "../src/gui/Figs/button_play_MIDI.png"
+#define IMAGE_BUTTON_MIDI_PLAY_PRESSED       "../src/gui/Figs/button_play_MIDI.png"
+#define WIDTH_BUTTON_MIDI_PLAY               30
+#define HEIGHT_BUTTON_MIDI_PLAY              34
+
+#define IMAGE_BUTTON_MIDI_PAUSE_UNPRESSED     "../src/gui/Figs/button_pause_MIDI.png"
+#define IMAGE_BUTTON_MIDI_PAUSE_PRESSED       "../src/gui/Figs/button_pause_MIDI.png"
+#define WIDTH_BUTTON_MIDI_PAUSE              30
+#define HEIGHT_BUTTON_MIDI_PAUSE              33
+
+#define IMAGE_BUTTON_MIDI_STOP_UNPRESSED     "../src/gui/Figs/button_stop_MIDI.png"
+#define IMAGE_BUTTON_MIDI_STOP_PRESSED       "../src/gui/Figs/button_stop_MIDI.png"
+#define WIDTH_BUTTON_MIDI_STOP               30
+#define HEIGHT_BUTTON_MIDI_STOP              30
 
 #define FONT_PRESET_NAME                "../src/gui/Figs/Minion_Pro_Bold.ttf"
 #define SIZE_FONT_PRESET_NAME           17
