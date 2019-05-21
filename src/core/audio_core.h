@@ -32,6 +32,8 @@ typedef struct
 {
   OnOff Midi_file_opened;             /*!< flag is a midi file is open*/
   OnOff Midi_playing_OnOff;           /*!< flag if a midi file is being played*/
+  OnOff Midi_paused_file;             /*!< flag if a midi file is paused*/
+  OnOff Midi_stopped_file;            /*!< flag if a midi file is stopped and closed*/
 
 }MidiParam;
 /**

@@ -1225,9 +1225,12 @@ int process_buttons(Gui *gui, Core *audio_core, MIDI_Peripheral_fd *midi_periphe
 
         }
 
-        if (audio_core->midi_param->Midi_playing_OnOff==ON)
+        if (audio_core->midi_param->Midi_playing_OnOff == ON)
         {
             if (gui_set_switch_image(gui->buttons[6].sdl_button, gui->buttons[6].imgon))return -1;
+
+            //switches the stop button back to off
+            if(gui_set_switch_image(gui->buttons[7].sdl_button, gui->buttons[7].imgoff))return -1;
 
         }
         else
@@ -1250,18 +1253,27 @@ int process_buttons(Gui *gui, Core *audio_core, MIDI_Peripheral_fd *midi_periphe
 
 
             audio_core->midi_param->Midi_playing_OnOff = OFF;
+            audio_core->midi_param->Midi_paused_file = ON;
+
         }
         else
         {
             tinyfd_messageBox("ERROR in MIDI playing session", "In order to pause a MIDI file you should probably start by playing or opening a midi file first ?\n Please open a MIDI file on the button above or launch the song with the play button to the left.", "yes", "ok", 1);
 
         }
-        if (audio_core->midi_param->Midi_playing_OnOff==ON)
+
+        //If on pause play button switches to off
+        if (audio_core->midi_param->Midi_playing_OnOff == OFF)
         {
+            if (gui_set_switch_image(gui->buttons[6].sdl_button, gui->buttons[6].imgoff))return -1;
+
+        }
+        if (audio_core->midi_param->Midi_paused_file == OFF)
+        {
+            if (gui_set_switch_image(gui->buttons[7].sdl_button, gui->buttons[7].imgoff))return -1;
 
         }
 
-            if (gui_set_switch_image(gui->buttons[7].sdl_button, gui->buttons[7].imgoff))return -1;
         param_changed = 1;
     }
 
@@ -1278,8 +1290,14 @@ int process_buttons(Gui *gui, Core *audio_core, MIDI_Peripheral_fd *midi_periphe
 
             audio_core->midi_param->Midi_playing_OnOff = OFF;
             audio_core->midi_param->Midi_file_opened = OFF;
+            audio_core->midi_param->Midi_paused_file = OFF;
+            audio_core->midi_param->Midi_stopped_file = ON;
+
             gui->texts[1].text_surface =
                 TTF_RenderText_Blended(gui->texts[1].font, midi_text, gui->texts[1].color);
+
+            tinyfd_messageBox("MIDI playing session", "The MIDI file has been successfully closed", "yes", "ok", 1);
+
         }
         else
         {
@@ -1288,6 +1306,10 @@ int process_buttons(Gui *gui, Core *audio_core, MIDI_Peripheral_fd *midi_periphe
         }
 
         if (gui_set_switch_image(gui->buttons[8].sdl_button, gui->buttons[8].imgoff))return -1;
+        if (gui_set_switch_image(gui->buttons[7].sdl_button, gui->buttons[7].imgoff))return -1;
+        if (gui_set_switch_image(gui->buttons[6].sdl_button, gui->buttons[6].imgoff))return -1;
+
+
         param_changed = 1;
     }
 
