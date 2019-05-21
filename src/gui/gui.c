@@ -1221,11 +1221,73 @@ int process_buttons(Gui *gui, Core *audio_core, MIDI_Peripheral_fd *midi_periphe
         }
         else
         {
-            tinyfd_messageBox("MIDI playing session", "In order to play a MIDI file you should probably start by opening a midi file first ?\n Please open a MIDI file on the button above ", "yes", "ok", 1);
+            tinyfd_messageBox("ERROR in MIDI playing session", "In order to PLAY a MIDI file you should probably start by opening a midi file first ?\n Please open a MIDI file on the button above ", "yes", "ok", 1);
 
         }
 
-        if (gui_set_switch_image(gui->buttons[6].sdl_button, gui->buttons[6].imgoff))return -1;
+        if (audio_core->midi_param->Midi_playing_OnOff==ON)
+        {
+            if (gui_set_switch_image(gui->buttons[6].sdl_button, gui->buttons[6].imgon))return -1;
+
+        }
+        else
+        {
+            if (gui_set_switch_image(gui->buttons[6].sdl_button, gui->buttons[6].imgoff))return -1;
+
+        }
+        param_changed = 1;
+    }
+
+
+    // Button PAUSE MIDI file
+    if (SDL_Button_mouse_down(gui->buttons[7].sdl_button, &gui->event))
+    {
+        if (gui_set_switch_image(gui->buttons[7].sdl_button, gui->buttons[7].imgon))return -1;
+        if (gui_update(gui))return -1;
+        if (audio_core->midi_param->Midi_playing_OnOff == ON)
+        {
+            //TO BE FILLED BY VINCE'S function when pausing a midi file
+
+
+            audio_core->midi_param->Midi_playing_OnOff = OFF;
+        }
+        else
+        {
+            tinyfd_messageBox("ERROR in MIDI playing session", "In order to pause a MIDI file you should probably start by playing or opening a midi file first ?\n Please open a MIDI file on the button above or launch the song with the play button to the left.", "yes", "ok", 1);
+
+        }
+        if (audio_core->midi_param->Midi_playing_OnOff==ON)
+        {
+
+        }
+
+            if (gui_set_switch_image(gui->buttons[7].sdl_button, gui->buttons[7].imgoff))return -1;
+        param_changed = 1;
+    }
+
+
+    // Button STOP MIDI file
+    if (SDL_Button_mouse_down(gui->buttons[8].sdl_button, &gui->event))
+    {
+        if (gui_set_switch_image(gui->buttons[8].sdl_button, gui->buttons[8].imgon))return -1;
+        if (gui_update(gui))return -1;
+        if (audio_core->midi_param->Midi_playing_OnOff == ON || audio_core->midi_param->Midi_file_opened == ON)
+        {
+            //TO BE FILLED BY VINCE'S function when stopping a midi file
+
+
+            audio_core->midi_param->Midi_playing_OnOff = OFF;
+            audio_core->midi_param->Midi_file_opened = OFF;
+            gui->texts[1].text_surface =
+                TTF_RenderText_Blended(gui->texts[1].font, midi_text, gui->texts[1].color);
+        }
+        else
+        {
+            tinyfd_messageBox("ERROR in MIDI playing session", "In order to STOP a MIDI file you should probably start by playing or opening a midi file first ?\n Please open a MIDI file on the button above or launch the song with the play button to the left.", "yes", "ok", 1);
+
+        }
+
+        if (gui_set_switch_image(gui->buttons[8].sdl_button, gui->buttons[8].imgoff))return -1;
         param_changed = 1;
     }
 
