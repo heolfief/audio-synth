@@ -13,7 +13,8 @@
 #include "../fichier/fichier.h"
 #include "../Listmidi/listmidi.h"
 #include "../Listmidi/listDataRange.h"
-
+#include "../core/audio_core.h"
+#include "../midi/midi_keyboard.h"
 
 
 void fillHeaderRead (Header * H, FILE * f){
@@ -318,4 +319,49 @@ blue->firstDataRange = blue->currentDataRange;
 closeFile(test);
 return blue;
 }}
+
+
+
+playMidiFile(Core * audio_core, double currentTime,dataRangeList * l,int size){
+    static controlNote;
+    static u_int8_t  * NoteOn[1000];
+    static g;
+
+   midiData * n;
+   /*
+if (currentTime > lastTime )  // If time has passed
+{
+lastTime = currentTime;
+*/
+
+
+    if (currentTime > controlNote){
+        controlNote = currentTime +1000;
+        for (int i = 0 ; i<g/2 ; i++){
+            midi_note_OFF(audio_core, NoteOn[i]);
+        }
+
+
+
+    }
+    if (n->midiEvent == 1)
+    {
+        midi_note_ON(audio_core, n->midiNote, n->attack);
+        g++;
+        NoteOn[g]=n->midiNote;
+    }
+    else if (n->midiEvent == 0)
+    {
+        midi_note_OFF(audio_core, n->midiNote);
+    }
+
+    l = updateDelayDataRange(l, size);
+
+    n = getFirstNoteToPlay(l, size);
+}
+
+
+
+
+
 
