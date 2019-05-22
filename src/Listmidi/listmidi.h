@@ -17,7 +17,7 @@ enum event {OFF_NOTE,ON_NOTE};
 * \brief Une liste chaînée de note midi
 */
 
-typedef struct {
+typedef struct midiData{
     __uint8_t  midiNote;
     __uint8_t  attack;
    enum  event midiEvent;
@@ -27,10 +27,7 @@ typedef struct {
 
 
 
-
-
-
-typedef  struct {
+typedef  struct midiList{
   struct midiData * first;		/*!< L'adresse du premier élément de la liste */
   struct  midiData * current;		/*!< L'adresse de l'élément courant de la liste */
   struct midiData * last;
@@ -56,7 +53,7 @@ typedef  struct {
  * \return the target File open
  */
 
-midiData * newNodeList(__uint8_t  *midiNote, __uint8_t *attack,  event  midiEvent, double  delay, midiData * next);
+midiData * new_note_list(__uint8_t midiNote, __uint8_t attack, event midiEvent, double delay, midiData *previous);
 
 /**
  * \fn void initList(list * l)

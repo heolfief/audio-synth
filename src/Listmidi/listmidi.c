@@ -5,7 +5,7 @@
 
 
 
-midiData * newNodeList(__uint8_t * midiNote, __uint8_t *attack,   event  midiEvent, double delay, midiData * previous)
+midiData * new_note_list(__uint8_t midiNote, __uint8_t attack, event midiEvent, double delay, midiData *previous)
 {
     midiData * new = (midiData*)malloc(sizeof(midiData));  /*Allocation de l'espace mmoire*/
     if (new == NULL)
@@ -16,9 +16,9 @@ midiData * newNodeList(__uint8_t * midiNote, __uint8_t *attack,   event  midiEve
 
     new->midiNote = midiNote;
     new->midiEvent= midiEvent;
-    new->attack= attack;
+    new->attack= (u_int8_t ) attack;
     new->delay = delay;
-    previous->next = new;
+    previous->next = (struct midiData * ) new;
     new->next = NULL;
     return new;				/*Return du pointeur vers la node cre*/
 }
@@ -38,7 +38,7 @@ midiList *  initList()
     l->current= NULL;
     l->first = NULL;
 
-    l->current = (midiData*) malloc(sizeof(midiData));
+    l->current = (struct midiData*) malloc(sizeof(midiData));
     l->first =   l->current;
     l->last = NULL;
     l->accrued_delay =0;
@@ -72,8 +72,8 @@ void setOnFirst(midiList *l){
 int deleteFirst(midiList *l){
     if (empty(l))
             return 0;
-    midiData * toDel = l->first;
-    l->first = toDel->next;
+    midiData * toDel = ( midiData * )l->first;
+    l->first = l->first->next;
     freeNodeList(toDel);
     if (empty(l))
     {
@@ -97,8 +97,8 @@ void next(midiList* l)
 {
     if(isOutOfList(l))
         return;
-    midiData *n ;
-    n=l->current;
+      midiData *n ;
+     n=(midiData*)l->current;
     l->current = n->next;
 }
 
@@ -124,7 +124,7 @@ return l->current == l->last && l->current != NULL;
 
 int empty(midiList * l)
 {
-    return (l->first == NULL && l->last == NULL);
+    return (l->first == NULL);
 }
 
 int oneElement(midiList * l)
@@ -136,12 +136,12 @@ void printList(midiList * l)
 {
     midiData* n;
     printf("{");
-    n = l->first;
+    n =(midiData*) l->first;
     while (n != NULL)
     {
         printf(" Midi event : %d  Delay : %f  Midi note : %2x attack : %2x \n ", n->midiEvent, n->delay, n->midiNote,n->attack);
 
-        n = n->next;
+        n = (midiData*) n->next;
     }
     freeNodeList(n);
     printf("}\n");

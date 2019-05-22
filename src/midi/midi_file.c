@@ -140,7 +140,7 @@ while (i<stop ){
          if (newNote) {
 
             event MidiEvent = midiEvent;
-             l->current = newNodeList(midiNote, attack, MidiEvent, delay, l->current);
+             l->current = new_note_list(midiNote, attack, MidiEvent, delay, l->current);
              if (g == 1)
                  l->first = l->current;
 
@@ -172,7 +172,7 @@ double calculDelay(u_int8_t * DataDelay,int power, u_int16_t Noire){
     }
     if (power > 1 )
     res = res /Noire;
-    printf("Noire : %d",Noire);
+   // printf("Noire : %d",Noire);
 
     return res ;
 }
