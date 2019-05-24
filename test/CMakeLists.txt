@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.2)
 
 enable_testing()
+find_package(SndFile REQUIRED)
+
 
 include_directories("${PROJECT_SOURCE_DIR}/src")
 
@@ -38,7 +40,7 @@ target_compile_definitions(audio_synth_test PRIVATE TEST)
 target_link_libraries(audio_synth_test -fprofile-arcs -ftest-coverage)
 target_compile_options(audio_synth_test PRIVATE -O0 -fprofile-arcs -ftest-coverage)
 
-target_link_libraries(audio_synth_test ${CMOCKA_LIBRARY})
+target_link_libraries(audio_synth_test ${CMOCKA_LIBRARY} ${SNDFILE_LIBRARIES})
 target_link_libraries(audio_synth_test m)
 
 install(TARGETS audio_synth_test RUNTIME DESTINATION bin DESTINATION ${INSTALL_BIN_DIR})

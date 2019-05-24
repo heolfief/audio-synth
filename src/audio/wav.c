@@ -11,6 +11,8 @@
 
 int open_wav_file(const char *filePath, Core *ac)
 {
+    if(filePath==NULL)return -1;
+    if(ac==NULL)return -1;
     // Set file settings, 16bit Mono PCM
     SF_INFO info;
     info.format = SF_FORMAT_WAV | SF_FORMAT_PCM_16;
@@ -30,7 +32,8 @@ int open_wav_file(const char *filePath, Core *ac)
 
 int write_wav_file(int bufferLength, Audio_Buffer buffer, SNDFILE *sndFile)
 {
-
+    if(buffer==NULL)return -1;
+    if(sndFile ==NULL)return -1;
     long writtenFrames = sf_writef_short(sndFile, buffer, bufferLength);
     // Check correct number of frames saved
     if (writtenFrames != bufferLength)
@@ -45,6 +48,7 @@ int write_wav_file(int bufferLength, Audio_Buffer buffer, SNDFILE *sndFile)
 }
 int close_wav_file(SNDFILE *sndFile)
 {
+    if(sndFile == NULL)return -1;
     sf_write_sync(sndFile);
     sf_close(sndFile);
     return 0;
