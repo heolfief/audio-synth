@@ -41,7 +41,7 @@ typedef  struct midiList{
 
 
 
-
+void fill_midiData(__uint8_t midiNote, __uint8_t attack, event midiEvent, double delay, midiData *current);
 /**
  * \fn midiList * newList(void * ptr, nodeList * next)
  * \brief Function to open a target File

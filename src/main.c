@@ -39,14 +39,14 @@ double controlNote =1000;
     int size =0 ;
 
     u_int8_t *MidiData = NULL;
-
-    dataRangeList * blue = NULL;
-    blue = initdataRangeList();
-
-    for (int i = 0; i<H->MTRK;i++)
+    midiList * clairdelune ;
+   // dataRangeList * blue ;
+ //   blue = initdataRangeList();
+/*
+    for (int i = 0; i<H->MTRK-1;i++)
     {
 
-        midiList * clairdelune = initList();
+        clairdelune = initList();
         setAsBeginDataRange(test);
         size = getSizeDataRange(test);
         if (H->SMF == 1 && i == 0)
@@ -60,21 +60,20 @@ double controlNote =1000;
 
         sortDataRange(MidiData, H, size, clairdelune);
 
-        blue->currentDataRange = newDataRange(clairdelune, (midiList *) blue->currentDataRange);
-
+        blue->currentDataRange = newMidiList(clairdelune, (midiList *) blue->currentDataRange);
         if (i == 0)
         {
             blue->firstDataRange = blue->currentDataRange;
 
         }
-        freeList(clairdelune);
-        free(clairdelune);
+int g =0;
 
     }
+    blue->currentDataRange = blue->firstDataRange;
     midiData * n;
     blue = updateDelayDataRange(blue, H->MTRK);
     n = getFirstNoteToPlay(blue, H->MTRK);
-
+*/
 
 
     SDL_AudioSpec as;
@@ -288,7 +287,7 @@ u_int8_t * NoteOn[1000];
 
 //        freeList(clairdelune);
    //     free(clairdelune);
-    freeDataRange(blue);
+//    freeDataRange(blue);
        free_gui_sdl_objects(gui);
         free_core(audio_core);
 

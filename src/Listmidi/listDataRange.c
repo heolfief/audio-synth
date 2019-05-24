@@ -2,48 +2,49 @@
 #include "listmidi.h"
 #include "stdio.h"
 #include "stdlib.h"
+#include "../core/note/adsr.h"
 
-
-
-midiList * newDataRange(midiList * current,  midiList * previous)
+midiList * newMidiList(midiList *current, midiList *previous)
 {
 
-    midiList * new ;
+    midiList * new = (midiList *) malloc(sizeof(midiList));
+    if (new == NULL)
+    {
+        sys_print_error("newMidiList is NULL");
+    }
 
-    current->current =current ->first;
+    new->nextmidiList =  (midiList*) previous;
 
-
-    new = current;
-    new ->accrued_delay = 0;
-    previous->nextmidiList = new;
-    new->nextmidiList = NULL;
+    fill_midiList(current,new);
     return new;				/*Return du pointeur vers la node cre*/
 }
 
 
 
+void fill_midiList(midiList * currentDataRange, midiList * new){
+
+    new = currentDataRange;
+    new ->accrued_delay = 0;
+
+}
 
 
 
-
-dataRangeList * initdataRangeList()
+dataRangeList *  initdataRangeList()
 {
-    dataRangeList * l =NULL;
 
-    l = (dataRangeList*) malloc(sizeof(dataRangeList));
+    dataRangeList * l = (dataRangeList*) malloc(sizeof(dataRangeList));
     if (l == NULL)
     {
-        fprintf(stderr, "Warning/error : allocation memoire dynamique chou dans la fonction %s\n", __FUNCTION__);
-        return NULL;		/*L'allocation  chou*/
+        sys_print_error("initilisation DataRangelist is NULL");
+
     }
 
-    l->currentDataRange = (dataRangeList*) malloc(sizeof(dataRangeList));
-    l->firstDataRange =   l->currentDataRange;
+    l->currentDataRange = NULL;
+    l->firstDataRange =  NULL;
     l->lastDataRange = NULL;
 
-    return l ;
-
-
+    return l;
 }
 
 
@@ -132,13 +133,15 @@ dataRangeList *  updateDelayDataRange(dataRangeList * l, int size){
 
 
     for (int i=0;i<size;i++){
-        n=m->current;
-        if (n!=NULL && m!=NULL)
+
+        if (l->currentDataRange != NULL)
         {
-
-            m->accrued_delay +=  n->delay;
-
-            l->currentDataRange = m;
+            n=m->current;
+            if (n!=NULL)
+            {
+                m->accrued_delay += n->delay;
+                l->currentDataRange = m;
+            }
         }
          nextDataRange(l);
         m=l->currentDataRange;
@@ -168,30 +171,32 @@ m=l->currentDataRange;
 
 
 
-for (int i=0; i<size;i++){
-    m= l->currentDataRange;
-    n = m->current;
+for (int i=0; i<size;i++)
+{
+    m = l->currentDataRange;
 
-    if ( m->current != NULL)
-    {
 
-        if (i != old_dataRange && ((m->accrued_delay+n->delay) - old_delay) <= delay )
+        n = m->current;
+
+        if (m->current != NULL)
         {
-            numberOfMidiData = i;
-            delay = (m->accrued_delay+n->delay) - old_delay;
+
+            if (i != old_dataRange && ((m->accrued_delay + n->delay) - old_delay) <= delay)
+            {
+                numberOfMidiData = i;
+                delay = (m->accrued_delay + n->delay) - old_delay;
+
+            }
+            else if ((m->accrued_delay + n->delay) <= delay)
+            {
+                numberOfMidiData = i;
+                delay = m->accrued_delay + n->delay;
+
+            }
 
         }
-        else if ((m->accrued_delay + n->delay)<=delay){
-            numberOfMidiData = i;
-            delay = m->accrued_delay + n->delay;
-
-
-        }
-
-    }
 
         nextDataRange(l);
-
 
 
 }
@@ -205,7 +210,7 @@ for (int i=0 ; i<(numberOfMidiData);i++){
 
 }
     n = m->current;
-if (old_dataRange == numberOfMidiData){
+if (old_dataRange == numberOfMidiData ){
     test=n->delay;
 old_delay =0;
 
@@ -225,7 +230,7 @@ else
 
 
 
-
+// si j'ai un null en n ça va me poser des problèmes
 
 
 

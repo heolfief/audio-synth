@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "listmidi.h"
+#include "../core/note/adsr.h"
 #include <stdlib.h>
 
 
@@ -7,45 +8,47 @@
 
 midiData * new_note_list(__uint8_t midiNote, __uint8_t attack, event midiEvent, double delay, midiData *previous)
 {
-    midiData * new = (midiData*)malloc(sizeof(midiData));  /*Allocation de l'espace mmoire*/
+    midiData * new = (midiData*)malloc(sizeof(midiData));
     if (new == NULL)
     {
-        fprintf(stderr, "Warning/error : allocation mmoire dynamique chou dans la fonction %s\n", __FUNCTION__);
-        return NULL;		/*L'allocation  chou*/
+        sys_print_error("error new node list malloc");
+        return NULL;
     }
+    fill_midiData(midiNote,attack,midiEvent,delay,new);
 
-    new->midiNote = midiNote;
-    new->midiEvent= midiEvent;
-    new->attack= (u_int8_t ) attack;
-    new->delay = delay;
-    previous->next = (struct midiData * ) new;
-    new->next = NULL;
-    return new;				/*Return du pointeur vers la node cre*/
+        new->next = (midiList*) previous;
+
+
+    return new;
+}
+
+
+void fill_midiData(__uint8_t midiNote, __uint8_t attack, event midiEvent, double delay, midiData *current){
+
+    current->midiNote = midiNote;
+    current->midiEvent= midiEvent;
+    current->attack= (u_int8_t ) attack;
+    current->delay = delay;
+
+
+
 }
 
 
 
-midiList *  initList()
+midiList * initList()
 {
-    midiList * l = NULL;
-
-    l = (midiList*) malloc(sizeof(midiList));
+    midiList * l = (midiList*) malloc(sizeof(midiList));
     if (l == NULL)
     {
-        fprintf(stderr, "Warning/error : allocation memoire dynamique chou dans la fonction %s\n", __FUNCTION__);
-        return NULL;		/*L'allocation  chou*/
+        sys_print_error("initialisation midi list is NULL");
+
     }
-    l->current= NULL;
-    l->first = NULL;
-
-    l->current = (struct midiData*) malloc(sizeof(midiData));
-    l->first =   l->current;
+   l->accrued_delay = 0;
+    l->current = NULL;
+    l->first= NULL;
     l->last = NULL;
-    l->accrued_delay =0;
-    l->nextmidiList = NULL;
-    return l ;
-
-
+    return  l;
 }
 
 
@@ -124,6 +127,8 @@ return l->current == l->last && l->current != NULL;
 
 int empty(midiList * l)
 {
+    if (l==NULL)
+        return 1;
     return (l->first == NULL);
 }
 

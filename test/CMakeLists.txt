@@ -17,6 +17,7 @@ add_executable(audio_synth_test test.c
         ../src/sys_param/sys_param.h ../src/sys_param/sys_param.c
         ../src/audio_fx/ext_effects/snd.c ../src/audio_fx/ext_effects/snd.h
         ../src/audio_fx/ext_effects/biquad.c ../src/audio_fx/ext_effects/biquad.h
+        ../src/midi/listmidi.c ../src/midi/listmidi.h
         ../src/audio_fx/ext_effects/mem.c ../src/audio_fx/ext_effects/mem.h
 
         #Tests files
@@ -24,7 +25,7 @@ add_executable(audio_synth_test test.c
         note_test/note_test.c note_test/note_test.h
         note_test/polyphony_test.c note_test/polyphony_test.h
         core_test/core_test.c core_test/core_test.h
-        sys_param_test/sys_param_test.c sys_param_test/sys_param_test.h list_midi_test/list_midi_test.c list_midi_test/list_midi_test.h)
+        sys_param_test/sys_param_test.c sys_param_test/sys_param_test.h list_midi_test/list_midi_test.c list_midi_test/list_midi_test.h midi/midi_list.c midi/midi_list.h)
 
 add_dependencies(audio_synth_test audio_synth_test)
 

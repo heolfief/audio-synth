@@ -12,9 +12,6 @@
 
 
 
-
-
-
 typedef struct {
   struct midiList * firstDataRange;		/*!< L'adresse du premier élément de la liste */
   struct  midiList * currentDataRange;		/*!< L'adresse de l'élément courant de la liste */
@@ -23,18 +20,24 @@ typedef struct {
 
 
 
+
+void fill_midiList( midiList * currentDataRange, midiList *  new);
+
+
+
+
+
 dataRangeList * updateDelayDataRange(dataRangeList * l, int size);
 /**
  * \fn midiList * newList(void * ptr, nodeList * next)
  * \brief Function to open a target File
- *
  * \param name Name of the target file
  * \param mode Opening method : r+: reading, w+: writting ...
  * \param t TypeRetour kind of return
  *
  * \return the target File open
  */
-midiList * newDataRange(midiList * current, midiList * previous);
+midiList * newMidiList(midiList *current, midiList *previous);
 
 /**
  * \fn void initList(list * l)

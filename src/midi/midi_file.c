@@ -64,13 +64,13 @@ u_int8_t  * readDataRange (u_int32_t sizeDataRange,FILE *fichier) {
     DataRange = (u_int8_t*) BlockFileReader(fichier,sizeDataRange);
     return DataRange;
 }
-
+/*
 int * playDataRange (FILE * file){
     Header * H;
     fillHeaderRead(H,file);
     u_int8_t  * MidiData;
     u_int32_t   sizeDataRange;
-    midiList *l = initList();
+     initList(l);
     int * DataRange  = malloc(sizeof(MidiData)*H->MTRK);
 
     for (int i = 0; i<H->MTRK;i++){
@@ -78,9 +78,6 @@ int * playDataRange (FILE * file){
         setAsBeginDataRange(file);
         MidiData = readDataRange(sizeDataRange,file);
         sortDataRange(MidiData,H,sizeDataRange,l);
-
-
-
 
     }
 
@@ -95,7 +92,7 @@ int * playDataRange (FILE * file){
 
 
 
-}
+}*/
 
 
 
@@ -128,7 +125,7 @@ while (i<stop ){
     }
     else {
         dataDelay [power] = DataRange[i];
-        g++;
+
 
         delay = calculDelay(dataDelay, power, H->NOIRE );
 
@@ -139,8 +136,9 @@ while (i<stop ){
 
          if (newNote) {
 
-            event MidiEvent = midiEvent;
-             l->current = new_note_list(midiNote, attack, MidiEvent, delay, l->current);
+
+             l->current = new_note_list(midiNote, attack, midiEvent, delay, l->current);
+             g++;
              if (g == 1)
                  l->first = l->current;
 
@@ -156,7 +154,13 @@ while (i<stop ){
 i +=1;
 
 }
+if (l->current ==NULL && l->first == NULL)
+{
+    l->current = new_note_list(0, 0, 0, 0, l->current);
+    l->first = l->current;
+}
 
+g=0;
 
 }
 
@@ -286,12 +290,12 @@ int size =0 ;
 u_int8_t *MidiData = NULL;
 midiList * clairdelune =NULL ;
 dataRangeList * blue = NULL;
-blue = initdataRangeList();
+ initdataRangeList(blue);
 
 for (int i = 0; i<H->MTRK;i++)
 {
 
-clairdelune = initList();
+initList(clairdelune);
 setAsBeginDataRange(test);
 size = getSizeDataRange(test);
 if (H->SMF == 1 && i==0 )
@@ -306,7 +310,7 @@ MidiData = readDataRange(size, test);
 
 sortDataRange(MidiData, H, size, clairdelune);
 
-blue->currentDataRange = newDataRange(clairdelune, (midiList *) blue->currentDataRange);
+blue->currentDataRange = newMidiList(clairdelune, (midiList *) blue->currentDataRange);
 
 if (i == 0)
 {
