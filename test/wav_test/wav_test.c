@@ -19,20 +19,13 @@ int setup_wav(void **state)
         sys_print_error_test("Memory allocation error on the core during setup_wav");
         return -1;
     }
+    ac->sys_param->sample_rate = TEST_SAMPLERATE;
 
-    // Set file settings, 16bit Mono PCM
-    SF_INFO info;
-    info.format = SF_FORMAT_WAV | SF_FORMAT_PCM_16;
-    info.channels = 1;
-    info.samplerate = TEST_SAMPLERATE;
+    assert_int_equal(open_wav_file(TEST_FILE_PATH, ac),0);
+    assert_int_equal(open_wav_file(TEST_FILE_PATH, NULL),-1);
 
-    // Open sound file for writing
-    ac->record_param->sndFile = sf_open(TEST_FILE_PATH, SFM_WRITE, &info);
-    if (ac->record_param->sndFile == NULL)
-    {
-        fprintf(stderr, "Error opening sound file '%s': %s\n", TEST_FILE_PATH, sf_strerror(ac->record_param->sndFile));
-        return -1;
-    }
+
+
     *state = ac->record_param->sndFile;
 
     free_core(ac);
@@ -48,7 +41,7 @@ int teardown_wav(void **state)
     // Error handling behaviour test
     assert_int_equal(close_wav_file(NULL), -1);
 
-    if (close_wav_file(sndfile))return -1;
+    assert_int_equal(close_wav_file(sndfile),0);
 
     return 0;
 }
