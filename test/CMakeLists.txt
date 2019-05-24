@@ -18,13 +18,15 @@ add_executable(audio_synth_test test.c
         ../src/audio_fx/ext_effects/snd.c ../src/audio_fx/ext_effects/snd.h
         ../src/audio_fx/ext_effects/biquad.c ../src/audio_fx/ext_effects/biquad.h
         ../src/audio_fx/ext_effects/mem.c ../src/audio_fx/ext_effects/mem.h
+        ../src/audio/wav.c ../src/audio/wav.h
 
         #Tests files
         oscillator_test/osc_test.c oscillator_test/osc_test.h
         note_test/note_test.c note_test/note_test.h
         note_test/polyphony_test.c note_test/polyphony_test.h
         core_test/core_test.c core_test/core_test.h
-        sys_param_test/sys_param_test.c sys_param_test/sys_param_test.h)
+        sys_param_test/sys_param_test.c sys_param_test/sys_param_test.h
+        wav_test/wav_test.c wav_test/wav_test.h)
 
 add_dependencies(audio_synth_test audio_synth_test)
 
