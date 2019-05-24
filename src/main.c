@@ -157,7 +157,7 @@ u_int8_t * NoteOn[1000];
     {
         currentTime = SDL_GetTicks();       // Get time from SDL init in ms
 
-    if (n!= NULL)
+    /*if (n!= NULL)
     {
 
         // TEMP : 1000ms delay
@@ -192,7 +192,7 @@ u_int8_t * NoteOn[1000];
 
             n = getFirstNoteToPlay(blue, H->MTRK);
         }
-    }
+    }*/
 
             if (audio_core->buffer_is_new) process_leds(gui, audio_core);
 

@@ -23,12 +23,11 @@
  */
 
 typedef struct {
-    u_int16_t MTHD[4]; /*!< 4 bytes for header flag*/
-    u_int16_t SPEC_ADDR[4]; /*!< 4 bytes to inform about the addressing specs*/
-    u_int16_t SMF ;/*!<2 bytes to indicate the data ranges: 0 only one data range, 1 several tracks played simultaneously, 2 more tracks but to be played one after the other*/
-    u_int16_t MTRK ; /*!<2 bytes for the number of data ranges*/
-    u_int16_t NOIRE; /*!< 2 bytes: number divisions of the black*/
-
+    __uint16_t MTHD[4]; /*!< 4 bytes for header flag*/
+  __uint16_t SPEC_ADDR[4]; /*!< 4 bytes to inform about the addressing specs*/
+  __uint16_t SMF ;/*!<2 bytes to indicate the data ranges: 0 only one data range, 1 several tracks played simultaneously, 2 more tracks but to be played one after the other*/
+  __uint16_t MTRK ; /*!<2 bytes for the number of data ranges*/
+  __uint16_t NOIRE; /*!< 2 bytes: number divisions of the black*/
 } Header;
 /*
 typedef struct {
@@ -40,7 +39,6 @@ typedef struct {
 
 }NOTE;
 */
-
 
 /**
  * \fn void fillHeaderRead (Header*H, FILE* f)
@@ -73,7 +71,7 @@ void fillHeaderRead (Header*Header, FILE* file);
  * \return buffer __uint32_t*  with the data range sorted
  */
 
-__uint8_t  * readDataRange( u_int32_t sizeDataRange, FILE *file);
+__uint8_t  * readDataRange( __uint32_t sizeDataRange, FILE *file);
 /**
  * \fn void setAsBeginDataRange (FILE *f)
  * \brief Function to go at the begining of  midi data ranged and passed it to begin the reading
@@ -94,7 +92,7 @@ void setAsBeginDataRange (FILE *file);
  * \return u_int32_t  currentLine
  */
 
-u_int16_t getSizeMetaData(int i, u_int16_t * DataRange);
+__uint16_t getSizeMetaData(int i, __uint32_t * DataRange);
 /**
  * \fn u_int32_t writeRomDataRange(FILE *f,u_int32_t size)
  * \brief Write Data Range sorted without Meta Data in a file tmp.txt, this function use  skipMetaData
@@ -105,7 +103,7 @@ u_int16_t getSizeMetaData(int i, u_int16_t * DataRange);
  * \return u_int32_t length that write in tmp.txt
  */
 
-u_int32_t writeRomDataRange(FILE *file,u_int32_t size);
+__uint32_t writeRomDataRange(FILE *file,__uint32_t size);
 /**
  * \fn u_int32_t getSizeDataRange(FILE *f)
  * \brief Function to know the length of midi Data Range
@@ -115,7 +113,7 @@ u_int32_t writeRomDataRange(FILE *file,u_int32_t size);
  * \return length of data range
  */
 
-u_int32_t getSizeDataRange(FILE *f);
+__uint32_t getSizeDataRange(FILE *f);
 /**
  * \fn playDataRange(u_int32_t DataRangeSorted)
  * \brief Function to know the length of midi Data Range
@@ -128,7 +126,7 @@ u_int32_t getSizeDataRange(FILE *f);
  * \return 0 if everything went OK, -1 otherwise
  */
 
-void  sortDataRange(u_int8_t * DataRange, Header * H,u_int32_t sizeDataRange,midiList *l);
+void  sortDataRange(__uint8_t* DataRange, Header * H,__uint32_t sizeDataRange,midiList *l);
 
 /**
  * \fn playDataRange(u_int32_t DataRangeSorted)
@@ -155,11 +153,11 @@ int * playDataRange (FILE  * test);
  * \return 0 if everything went OK, -1 otherwise
  */
 
-double calculDelay (__uint8_t * DataDelay, int power,u_int16_t Noire);
+double calculDelay (__uint8_t * DataDelay, int power,__uint16_t Noire);
 
 
 
-int readEvent (__uint8_t * midiNote, u_int8_t * attack, int  * midiEvent,u_int8_t * DataRange , int *  i);
+int readEvent (__uint8_t * midiNote, __uint8_t * attack, int  * midiEvent,__uint8_t* DataRange , int *  i);
 
 
 dataRangeList * readMidiFile(char * nameOfFile) ;

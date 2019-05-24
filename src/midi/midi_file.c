@@ -105,7 +105,7 @@ int * playDataRange (FILE * file){
 
 
 
-void sortDataRange (u_int8_t * DataRange,Header * H, u_int32_t sizeDataRange,midiList * l){
+void sortDataRange (__uint8_t * DataRange,Header * H, __uint32_t sizeDataRange,midiList * l){
     u_int8_t dataDelay [4];
     double  delay =0;
     u_int8_t  midiNote = 0 ;
@@ -165,7 +165,7 @@ g=0;
 }
 
 
-double calculDelay(u_int8_t * DataDelay,int power, u_int16_t Noire){
+double calculDelay(__uint8_t * DataDelay,int power, __uint16_t Noire){
     double res = 0;
 
     for(int i = 0;i<=power;i++){

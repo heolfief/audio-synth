@@ -16,7 +16,7 @@ midiData * new_note_list(__uint8_t midiNote, __uint8_t attack, event midiEvent, 
     }
     fill_midiData(midiNote,attack,midiEvent,delay,new);
 
-        new->next = (midiList*) previous;
+        new->next =  previous;
 
 
     return new;
@@ -29,9 +29,7 @@ void fill_midiData(__uint8_t midiNote, __uint8_t attack, event midiEvent, double
     current->midiEvent= midiEvent;
     current->attack= (u_int8_t ) attack;
     current->delay = delay;
-
-
-
+    current->next=NULL;
 }
 
 
@@ -54,7 +52,7 @@ midiList * initList()
 
 void freeList(midiList* l){
     while(!empty(l)) deleteFirst(l);
-
+    free(l);
 
 
 }

@@ -13,11 +13,11 @@ add_executable(audio_synth_test test.c
         ../src/core/note/note.c ../src/core/note/note.h ../src/core/note/adsr.h
         ../src/core/note/polyphony.h ../src/core/note/polyphony.c
         ../src/core/oscillator/osc.h ../src/core/oscillator/osc.c
+        ../src/Listmidi/listmidi.c ../src/Listmidi/listmidi.h
         ../src/system/error_handler.h
         ../src/sys_param/sys_param.h ../src/sys_param/sys_param.c
         ../src/audio_fx/ext_effects/snd.c ../src/audio_fx/ext_effects/snd.h
         ../src/audio_fx/ext_effects/biquad.c ../src/audio_fx/ext_effects/biquad.h
-        ../src/midi/listmidi.c ../src/midi/listmidi.h
         ../src/audio_fx/ext_effects/mem.c ../src/audio_fx/ext_effects/mem.h
 
         #Tests files
