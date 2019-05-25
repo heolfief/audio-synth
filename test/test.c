@@ -8,7 +8,8 @@
 #include "note_test/polyphony_test.h"
 #include "core_test/core_test.h"
 #include "sys_param_test/sys_param_test.h"
-#include "midi/midi_list.h"
+#include "midi_test/midi_list.h"
+#include "midi_test/midi_list_data_Range_test.h"
 
 int main(void)
 {
@@ -52,7 +53,10 @@ int main(void)
 
 
             //midiList test
-            cmocka_unit_test_setup_teardown(test_next_midiData,setup_midiData,teardown_midiData)
+            cmocka_unit_test_setup_teardown(test_next_midiData,setup_midiData,teardown_midiData),
+
+            //dataRange test
+           cmocka_unit_test_setup_teardown(test_next_dataRangeList,setup_dataRangeList,teardown_dataRangeList)
         };
 
     return cmocka_run_group_tests(tests, NULL, NULL);

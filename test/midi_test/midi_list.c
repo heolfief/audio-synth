@@ -6,7 +6,6 @@
 
 int setup_midiData(void **state)
 {
-    midiData * midi_info = NULL;
     midiList * midi_List = initList();
 
     if (midi_List == NULL){
@@ -27,16 +26,16 @@ int teardown_midiData(void **state)
 void test_next_midiData(void **state){
     midiList * m = *state;
 
-    m->current =  new_note_list(9,9,ON_NOTE,9,NULL);
+         m->current =  new_note_list(9,9,ON_NOTE,9,m->current);
+         m->first = m->current;
+         void * test = m;
+         assert_non_null(m);
 
-    void * test = m;
-    assert_non_null(m);
+         m->current = new_note_list(8,8,OFF_NOTE,8,m->current);
 
-    m->current = new_note_list(8,8,OFF_NOTE,8,m->current);
-    m->first = m->current;
-    next(m);
+         next(m);
 
-    assert_ptr_equal(test,m);
+         assert_ptr_equal(test,m);
 
 
 }

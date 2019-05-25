@@ -60,7 +60,7 @@ double controlNote =1000;
 
         sortDataRange(MidiData, H, size, clairdelune);
 
-        blue->currentDataRange = newMidiList(clairdelune, (midiList *) blue->currentDataRange);
+        blue->currentDataRange = new_Midi_List(clairdelune, (midiList *) blue->currentDataRange);
         if (i == 0)
         {
             blue->firstDataRange = blue->currentDataRange;

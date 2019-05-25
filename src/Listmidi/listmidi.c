@@ -15,8 +15,8 @@ midiData * new_note_list(__uint8_t midiNote, __uint8_t attack, event midiEvent, 
         return NULL;
     }
     fill_midiData(midiNote,attack,midiEvent,delay,new);
-
-        new->next =  previous;
+    if (previous != NULL)
+        previous->next = new;
 
 
     return new;
@@ -39,7 +39,7 @@ midiList * initList()
     midiList * l = (midiList*) malloc(sizeof(midiList));
     if (l == NULL)
     {
-        sys_print_error("initialisation midi list is NULL");
+        sys_print_error("initialisation midi_test list is NULL");
 
     }
    l->accrued_delay = 0;

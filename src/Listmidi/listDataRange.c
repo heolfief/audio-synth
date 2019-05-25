@@ -4,29 +4,18 @@
 #include "stdlib.h"
 #include "../core/note/adsr.h"
 
-midiList * newMidiList(midiList *current, midiList *previous)
+midiList * new_Midi_List(midiList *current, midiList *previous)
 {
 
-    midiList * new = (midiList *) malloc(sizeof(midiList));
-    if (new == NULL)
-    {
-        sys_print_error("newMidiList is NULL");
-    }
+    current->nextmidiList = previous;
+    current ->accrued_delay = 0;
 
-    new->nextmidiList =  (midiList*) previous;
-
-    fill_midiList(current,new);
-    return new;				/*Return du pointeur vers la node cre*/
+    return current;				/*Return of ptr for DataRange List*/
 }
 
 
 
-void fill_midiList(midiList * currentDataRange, midiList * new){
 
-    new = currentDataRange;
-    new ->accrued_delay = 0;
-
-}
 
 
 
@@ -41,7 +30,7 @@ dataRangeList *  initdataRangeList()
     }
 
     l->currentDataRange = NULL;
-    l->firstDataRange =  NULL;
+    l->firstDataRange = NULL;
     l->lastDataRange = NULL;
 
     return l;
@@ -49,8 +38,8 @@ dataRangeList *  initdataRangeList()
 
 
 void freeDataRange(dataRangeList * l){
-    while(!empty(l)) deleteFirstDataRange(l);
-
+    while(!emptyDataRange(l)) deleteFirstDataRange(l);
+    free(l);
 
 
 }
@@ -64,10 +53,10 @@ void setOnFirstDataRange(dataRangeList * l){
 
 
 int deleteFirstDataRange(dataRangeList *l){
-    if (empty(l))
+    if (emptyDataRange(l))
         return 0;
-    midiList * toDel = l->firstDataRange;
-    l->firstDataRange = toDel->nextmidiList;
+    midiList * toDel = (midiList*) l->firstDataRange;
+    l->firstDataRange = l->firstDataRange->nextmidiList;
     freeList(toDel);
     if (emptyDataRange(l))
     {
@@ -96,32 +85,16 @@ int OutOfDataRangeList(dataRangeList * l)
 }
 
 
-void setOnLastDataRange(dataRangeList* l)
-{
-    l->currentDataRange = l->lastDataRange;
-}
-
-
-int LastDataRange(dataRangeList * l)
-{
-    return l->currentDataRange == l->lastDataRange && l->currentDataRange != NULL;
-}
-
 
 int emptyDataRange(dataRangeList * l)
 {
-    return (l->firstDataRange == NULL && l->lastDataRange == NULL);
+    if (l==NULL)
+        return 1;
+    return (l->firstDataRange == NULL);
 }
 
 
-void nextMidiList(dataRangeList* l)
-{
-    if(OutOfDataRangeList(l))
-        return;
-    midiList *n ;
-    n=l->currentDataRange;
-    l->currentDataRange = n->nextmidiList;
-}
+
 
 
 

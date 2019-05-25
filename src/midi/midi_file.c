@@ -18,12 +18,12 @@
 
 
 void fillHeaderRead (Header * H, FILE * f){
-    u_int8_t *  buffer = BlockFileReader(f,14);//control that the file is a midi file, with the Header flag MTHD
+    u_int8_t *  buffer = BlockFileReader(f,14);//control that the file is a midi_test file, with the Header flag MTHD
     for (int i=0; i<4;i++){
         H->MTHD[i] = buffer[i];
 
     }
-    if (H->MTHD[0]!= 0x4d && H->MTHD[1]!=0x54 && H->MTHD[2] != 0x68 && H->MTHD[3] != 0x64 ) // header number of a midi file
+    if (H->MTHD[0]!= 0x4d && H->MTHD[1]!=0x54 && H->MTHD[2] != 0x68 && H->MTHD[3] != 0x64 ) // header number of a midi_test file
         printf("unrecognized file \n");
 
     for (int i= 4; i<8; i++){   // fill header
@@ -311,7 +311,7 @@ MidiData = readDataRange(size, test);
 
 sortDataRange(MidiData, H, size, clairdelune);
 
-blue->currentDataRange = newMidiList(clairdelune, (midiList *) blue->currentDataRange);
+blue->currentDataRange = new_Midi_List(clairdelune, (midiList *) blue->currentDataRange);
 
 if (i == 0)
 {
