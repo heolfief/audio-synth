@@ -9,9 +9,8 @@
 #include "midi_list_data_Range_test.h"
 
 
-int setup_dataRangeList(void **state){
-
-
+int setup_dataRangeList(void **state)
+{
     dataRangeList * DataRangeList = initdataRangeList();
 
     if (DataRangeList == NULL){
@@ -71,5 +70,40 @@ void *test = m->currentDataRange; // create temp variable to test if the nex is 
 }
 
 void test_update_delay_dataRangeList(void **state){
+    dataRangeList * m = *state;
+    midiList *n = initList();
+
+    for (int i = 0;i<5;i++) // midiList creation
+    {
+        n->current = new_note_list(i+1, i+1, ON_NOTE, i+1, n->current);
+
+        if (empty(n)){
+            n->first = n->current;
+        }
+
+
+    }
+    setOnFirst(n);
+    m->currentDataRange = new_Midi_List(n,m->currentDataRange); // go the midiList for the first data range list
+
+
+    m->firstDataRange = m->currentDataRange;
+
+    assert_int_equal(m->currentDataRange->accrued_delay,0); // test before the update
+
+    updateDelayDataRange(m,getCount(m));
+
+
+    assert_int_equal( m->currentDataRange->accrued_delay,1); // test after the update
+
+
+}
+
+
+void test_get_first_not_to_play(void **state){
+    dataRangeList * m = *state;
+    midiList *n = initList();
+    
+
 
 }

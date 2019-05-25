@@ -94,7 +94,17 @@ int emptyDataRange(dataRangeList * l)
 }
 
 
-
+int getCount(dataRangeList * l)
+{
+    int count = 0; // Initialize count
+    midiList* current = l->firstDataRange; // Initialize current
+    while ( current != NULL)
+    {
+        count++;
+        current = current->nextmidiList;
+    }
+    return count;
+}
 
 
 

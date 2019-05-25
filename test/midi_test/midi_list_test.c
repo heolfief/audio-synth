@@ -2,7 +2,7 @@
 // Created by vincent on 24/05/19.
 //
 
-#include "midi_list.h"
+#include "midi_list_test.h"
 
 int setup_midiData(void **state)
 {

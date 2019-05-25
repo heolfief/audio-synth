@@ -33,11 +33,6 @@ int setup_midiData(void **state);
 int teardown_midiData(void **state);
 
 /**
- * \fn void test_midiData_fill_struct(void **state)
- * \brief Function to test fill_midiData function
- */
-void test_midiData_fill_struct(void **state);
-/**
  * \fn void test_delete_midiData(void **state)
  * \brief Function to test freeNodelist function
  */

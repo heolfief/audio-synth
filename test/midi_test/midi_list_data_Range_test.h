@@ -40,6 +40,12 @@ int teardown_dataRangeList(void **state);
 
 void test_next_dataRangeList(void **state);
 
+/**
+ * \fn void test_update_delay_dataRangeList(void **state)
+ * \brief Function to test update delay dataRangeList function
+ */
+void test_update_delay_dataRangeList(void **state);
+
 
 
 

@@ -1,12 +1,8 @@
-//
-// Created by vincent on 19/05/19.
-//
+
 
 #ifndef AUDIO_SYNTH_SRC_LISTMIDI_LISTDATARANGE_H_
 #define AUDIO_SYNTH_SRC_LISTMIDI_LISTDATARANGE_H_
-//
-// Created by vincent on 19/05/19.
-//
+
 #include <stdio.h>
 #include "listmidi.h"
 
@@ -17,11 +13,6 @@ typedef struct dataRangeList{
   struct  midiList * currentDataRange;		/*!< L'adresse de l'élément courant de la liste */
   struct midiList * lastDataRange;		/*!< L'adresse du dernier élément de la liste */
 }dataRangeList;
-
-
-
-
-
 
 
 
@@ -128,15 +119,21 @@ int deleteFirstDataRange(dataRangeList * l);
 void freeDataRange(dataRangeList * l);
 
 
-
-
-
-
+/**
+ * \fn void freeList(list * l)
+ * \brief Function to open a target File
+ *
+ * \param name Name of the target file
+ * \param mode Opening method : r+: reading, w+: writting ...
+ * \param t TypeRetour kind of return
+ *
+ * \return the target File open
+ */
 midiData * getFirstNoteToPlay(dataRangeList * l, int size);
 
 
 
-
+int getCount(dataRangeList * l);
 
 
 

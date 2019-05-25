@@ -28,7 +28,7 @@ add_executable(audio_synth_test test.c
         core_test/core_test.c core_test/core_test.h
         sys_param_test/sys_param_test.c sys_param_test/sys_param_test.h
         list_midi_test/list_midi_test.c list_midi_test/list_midi_test.h
-        midi_test/midi_list.c midi_test/midi_list.h
+        midi_test/midi_list_test.c midi_test/midi_list_test.h
         midi_test/midi_list_data_Range_test.c midi_test/midi_list_data_Range_test.h)
 
 add_dependencies(audio_synth_test audio_synth_test)
