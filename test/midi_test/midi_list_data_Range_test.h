@@ -45,8 +45,11 @@ void test_next_dataRangeList(void **state);
  * \brief Function to test update delay dataRangeList function
  */
 void test_update_delay_dataRangeList(void **state);
-
-
+/**
+ * \fn void test_get_first_note_to_play(void **state)
+ * \brief Function to test get first npte to play  function
+ */
+void test_get_first_note_to_play(void **state);
 
 
 

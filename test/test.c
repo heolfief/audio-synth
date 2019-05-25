@@ -57,7 +57,8 @@ int main(void)
 
             //dataRange test
            cmocka_unit_test_setup_teardown(test_next_dataRangeList,setup_dataRangeList,teardown_dataRangeList),
-            cmocka_unit_test_setup_teardown(test_update_delay_dataRangeList,setup_dataRangeList,teardown_dataRangeList),
+           cmocka_unit_test_setup_teardown(test_update_delay_dataRangeList,setup_dataRangeList,teardown_dataRangeList),
+           cmocka_unit_test_setup_teardown(test_get_first_note_to_play,setup_dataRangeList,teardown_dataRangeList),
         };
 
     return cmocka_run_group_tests(tests, NULL, NULL);

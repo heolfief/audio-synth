@@ -100,10 +100,45 @@ void test_update_delay_dataRangeList(void **state){
 }
 
 
-void test_get_first_not_to_play(void **state){
+void test_get_first_note_to_play(void **state){
     dataRangeList * m = *state;
     midiList *n = initList();
-    
+    for (int i = 0;i<5;i++) // midiList creation
+    {
+        n->current = new_note_list(i+1, i+1, ON_NOTE, i+1, n->current);
+
+        if (empty(n)){
+            n->first = n->current;
+        }
+
+
+    }
+    setOnFirst(n);
+    m->currentDataRange = new_Midi_List(n,m->currentDataRange); // go the midiList for the first data range list
+    n = initList();
+    for (int i = 0; i<5;i++ ){ // midi_test List creation
+        n->current = new_note_list(i+5, i+5, ON_NOTE, i+5, n->current);
+
+        if (empty(n)){
+            n->first = n->current;
+        }
+
+    }
+    m->currentDataRange = new_Midi_List(n,m->currentDataRange); // put the seconde midiList in data Range List
+    m->firstDataRange = m->currentDataRange;
+
+    updateDelayDataRange(m,getCount(m));
+
+
+    midiData * g =getFirstNoteToPlay(m,getCount(m));
+    assert_int_equal(g->delay,1);
+    assert_int_equal(g->midiNote,1);
+    updateDelayDataRange(m,getCount(m));
+     g =getFirstNoteToPlay(m,getCount(m));
+    assert_int_equal(g->delay,2);
+    assert_int_equal(g->midiNote,2);
+
+
 
 
 }

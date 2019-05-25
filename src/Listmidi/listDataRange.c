@@ -194,27 +194,18 @@ for (int i=0 ; i<(numberOfMidiData);i++){
 }
     n = m->current;
 if (old_dataRange == numberOfMidiData ){
-    test=n->delay;
 old_delay =0;
 
 }
 else
 {
     old_dataRange = numberOfMidiData;
-   test = n->delay;
     n->delay =  (n->delay - old_delay);
     double temp = n->delay;
     old_delay = m->accrued_delay + temp;
 }
 
     m->accrued_delay +=n->delay;
-//printf("%d delay :%d midiNote : %2X, accrued : %f  \n",numberOfMidiData,n->delay, n->midiNote , m->accrued_delay);
-
-
-
-
-// si j'ai un null en n ça va me poser des problèmes
-
 
 
 next(m);
