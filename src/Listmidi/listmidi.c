@@ -86,13 +86,6 @@ int deleteFirst(midiList *l){
 
 }
 
-int count(midiList* l)
-{
-    int count =0;
-    for(setOnFirst(l); !isOutOfList(l) ; next(l))
-        count++;
-    return count;
-}
 
 void next(midiList* l)
 {
@@ -109,18 +102,7 @@ int isOutOfList(midiList* l)
 }
 
 
-void setOnLast(midiList* l)
-{
-    l->current = l->last;
-}
 
-
-
-
-int isLast(midiList* l)
-{
-return l->current == l->last && l->current != NULL;
-}
 
 
 int empty(midiList * l)
@@ -130,12 +112,8 @@ int empty(midiList * l)
     return (l->first == NULL);
 }
 
-int oneElement(midiList * l)
-{
-    return (l->first != NULL && l->first == l->last);
-}
-
-void printList(midiList * l)
+/*
+void printList(midiList * l)//1
 {
     midiData* n;
     printf("{");
@@ -150,3 +128,4 @@ void printList(midiList * l)
     printf("}\n");
 }
 
+*/

@@ -19,26 +19,11 @@ int setup_midiData(void **state)
 
 int teardown_midiData(void **state)
 {
-
+    //free midiList
     freeList(*state);
     return 0;
 }
-/*
-void test_midiData_fill_struct(void **state){
-    midiData * midi_info = *state;
-    int return_value =5;
-    midi_info->midiEvent = OFF_NOTE;
-    midi_info->delay = 5;
-    midi_info->midiNote = 5;
-    midi_info->attack = 5;
-    midi_info->next = midi_info;
-    midiData * test = initList();
 
-    assert_ptr_equal(midifill_midiData(5,5,OFF_NOTE,5,midi_info),midi_info);
-
-
-}
-*/
 void test_next_midiData(void **state){
     midiList * m = *state;
 
@@ -49,9 +34,14 @@ void test_next_midiData(void **state){
 
     m->current = new_note_list(8,8,OFF_NOTE,8,m->current);
     m->first = m->current;
-    m->current = m->current->next;
+    next(m);
 
     assert_ptr_equal(test,m);
 
 
 }
+
+
+
+
+

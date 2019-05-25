@@ -89,29 +89,8 @@ void printList(midiList * l);
  * \return the target File open
  */
 int empty(midiList * l);
-/**
- * \fn int oneElement(list * l)
- * \brief Function to open a target File
- *
- * \param name Name of the target file
- * \param mode Opening method : r+: reading, w+: writting ...
- * \param t TypeRetour kind of return
- *
- * \return the target File open
- */
 
-int oneElement(midiList * l);
-/**
- * \fn int count(list* l)
- * \brief Function to open a target File
- *
- * \param name Name of the target file
- * \param mode Opening method : r+: reading, w+: writting ...
- * \param t TypeRetour kind of return
- *
- * \return the target File open
- */
-int count(midiList* l);
+
 
 /**
  * \fn int first(list * l)
@@ -159,17 +138,7 @@ int isOutOfList(midiList * l);
  * \return the target File open
  */
 void setOnFirst(midiList * l);
-/**
- * \fn void setOnLast(list * l)
- * \brief Function to open a target File
- *
- * \param name Name of the target file
- * \param mode Opening method : r+: reading, w+: writting ...
- * \param t TypeRetour kind of return
- *
- * \return the target File open
- */
-void setOnLast(midiList * l);
+
 /**
  * \fn void next(list * l)
  * \brief Function to open a target File
@@ -181,18 +150,6 @@ void setOnLast(midiList * l);
  * \return the target File open
  */
 void next(midiList * l);
-/**
- * \fn void* getCurrent(list * l)
- * \brief Function to open a target File
- *
- * \param name Name of the target file
- * \param mode Opening method : r+: reading, w+: writting ...
- * \param t TypeRetour kind of return
- *
- * \return the target File open
- */
-
-void* getCurrent(midiList * l);
 
 /**
  * \fn int insertFirst(list * l, void* data)
@@ -241,30 +198,7 @@ void freeNodeList(midiData * n);
  */
 
 void freeList(midiList * l);
-/**
- * \fn int insertLast(list * l, void* data)
- * \brief Function to open a target File
- *
- * \param name Name of the target file
- * \param mode Opening method : r+: reading, w+: writting ...
- * \param t TypeRetour kind of return
- *
- * \return the target File open
- */
 
-int insertLast(midiList * l, void* data);
-
-/**
- * \fn int deleteLast(list * l, void** data)
- * \brief Function to open a target File
- *
- * \param name Name of the target file
- * \param mode Opening method : r+: reading, w+: writting ...
- * \param t TypeRetour kind of return
- *
- * \return the target File open
- */
-int deleteLast(midiList * l, void** data);
 
 /**
  * \fn int insertAfterCurrent(list * l, void* data)
