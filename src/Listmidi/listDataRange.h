@@ -17,7 +17,7 @@ typedef struct dataRangeList{
 
 
 
-dataRangeList * updateDelayDataRange(dataRangeList * l, int size);
+dataRangeList * updateDelayDataRange(dataRangeList * l);
 /**
  * \fn midiList * newList(void * ptr, nodeList * next)
  * \brief Function to open a target File
@@ -129,7 +129,7 @@ void freeDataRange(dataRangeList * l);
  *
  * \return the target File open
  */
-midiData * getFirstNoteToPlay(dataRangeList * l, int size);
+midiData * getFirstNoteToPlay(dataRangeList * l);
 
 
 

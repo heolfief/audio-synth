@@ -108,14 +108,14 @@ int getCount(dataRangeList * l)
 
 
 
-dataRangeList *  updateDelayDataRange(dataRangeList * l, int size){
+dataRangeList *  updateDelayDataRange(dataRangeList * l){
     midiList *m;
     midiData *n;
     l->currentDataRange = l->firstDataRange;
     m=l->currentDataRange;
 
 
-    for (int i=0;i<size;i++){
+    for (int i=0;i<getCount(l);i++){
 
         if (l->currentDataRange != NULL)
         {
@@ -140,7 +140,7 @@ dataRangeList *  updateDelayDataRange(dataRangeList * l, int size){
 
 
 
-midiData * getFirstNoteToPlay(dataRangeList * l, int size){
+midiData * getFirstNoteToPlay(dataRangeList * l){
 double delay =1000000;
 static double old_delay;
 static int old_dataRange;
@@ -154,7 +154,7 @@ m=l->currentDataRange;
 
 
 
-for (int i=0; i<size;i++)
+for (int i=0; i<getCount(l);i++)
 {
     m = l->currentDataRange;
 

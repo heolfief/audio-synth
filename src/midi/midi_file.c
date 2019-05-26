@@ -281,89 +281,84 @@ u_int32_t  getSizeDataRange(FILE *f){
 }
 
 
-
-dataRangeList * readMidiFile(char * nameOfFile) {
-FILE *test = openFile(nameOfFile, "r+", RETOUR);
-Header *H = (Header *) malloc(sizeof(Header));
-fillHeaderRead(H, test);
-int size =0 ;
-
-u_int8_t *MidiData = NULL;
-midiList * clairdelune =NULL ;
-dataRangeList * blue = NULL;
- initdataRangeList(blue);
-
-for (int i = 0; i<H->MTRK;i++)
+playMidiFile(Core * audio_core, double currentTime,dataRangeList * l,int size)
 {
+static controlNote;
 
-initList(clairdelune);
-setAsBeginDataRange(test);
-size = getSizeDataRange(test);
-if (H->SMF == 1 && i==0 )
-{
-moveFile(test, size);
-setAsBeginDataRange(test);
-size = getSizeDataRange(test);
+static lastTime = 0;
+static midiData *n;
+
+
+if (n == NULL){
+l = updateDelayDataRange(l);
+
+n = getFirstNoteToPlay(l);
 }
 
 
-MidiData = readDataRange(size, test);
-
-sortDataRange(MidiData, H, size, clairdelune);
-
-blue->currentDataRange = new_Midi_List(clairdelune, (midiList *) blue->currentDataRange);
-
-if (i == 0)
-{
-blue->firstDataRange = blue->currentDataRange;
-
-}
 
 
-closeFile(test);
-return blue;
-}}
-
-
-
-playMidiFile(Core * audio_core, double currentTime,dataRangeList * l,int size){
-    static controlNote;
-    static u_int8_t  * NoteOn[1000];
-    static g;
-
-   midiData * n;
-   /*
-if (currentTime > lastTime )  // If time has passed
+if (currentTime > lastTime + n->delay )  // If time has passed
 {
 lastTime = currentTime;
-*/
+
+if (n->midiEvent == 1)
+{
+midi_note_ON(audio_core, n->midiNote, n->attack);
 
 
-    if (currentTime > controlNote){
-        controlNote = currentTime +1000;
-        for (int i = 0 ; i<g/2 ; i++){
-            midi_note_OFF(audio_core, NoteOn[i]);
-        }
-
-
-
-    }
-    if (n->midiEvent == 1)
-    {
-        midi_note_ON(audio_core, n->midiNote, n->attack);
-        g++;
-        NoteOn[g]=n->midiNote;
-    }
-    else if (n->midiEvent == 0)
-    {
-        midi_note_OFF(audio_core, n->midiNote);
-    }
-
-    l = updateDelayDataRange(l, size);
-
-    n = getFirstNoteToPlay(l, size);
+}
+else if (n->midiEvent == 0)
+{
+midi_note_OFF(audio_core, n->midiNote);
 }
 
+l = updateDelayDataRange(l);
+
+n = getFirstNoteToPlay(l);
+}
+}
+
+
+
+
+dataRangeList * record_midi_file(char * name)
+{
+    FILE *test = openFile(name, "r+", RETOUR);
+    Header *H = (Header *) malloc(sizeof(Header));
+    fillHeaderRead(H, test);
+    int size = 0;
+
+    midiData *MidiData;
+    midiList *clairdelune = NULL;
+    dataRangeList * blue;
+    blue = initdataRangeList();
+
+    for (int i = 0; i < H->MTRK - 1; i++)
+    {
+
+        clairdelune = initList();
+        setAsBeginDataRange(test);
+        size = getSizeDataRange(test);
+        if (H->SMF == 1 && i == 0)
+        {
+            moveFile(test, size);
+            setAsBeginDataRange(test);
+            size = getSizeDataRange(test);
+        }
+
+        MidiData = readDataRange(size, test);
+
+        sortDataRange(MidiData, H, size, clairdelune);
+
+        blue->currentDataRange = new_Midi_List(clairdelune, (midiList *) blue->currentDataRange);
+
+        int g = 0;
+
+    }
+    closeFile(test);
+    return blue;
+}
 
 
 

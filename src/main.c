@@ -32,51 +32,10 @@ int main(int argc, char *argv[])
 {
 
 double controlNote =1000;
+char * name = "../src/fichier_midi/blue.mid";
 
-    /*FILE *test = openFile("../src/fichier_midi/blue.mid", "r+", RETOUR);
-    Header *H = (Header *) malloc(sizeof(Header));
-    fillHeaderRead(H, test);
-    int size =0 ;
-
-    u_int8_t *MidiData = NULL;
-    midiList * clairdelune ;*/
-   // dataRangeList * blue ;
- //   blue = initdataRangeList();
-/*
-    for (int i = 0; i<H->MTRK-1;i++)
-    {
-
-        clairdelune = initList();
-        setAsBeginDataRange(test);
-        size = getSizeDataRange(test);
-        if (H->SMF == 1 && i == 0)
-        {
-            moveFile(test, size);
-            setAsBeginDataRange(test);
-            size = getSizeDataRange(test);
-        }
-
-        MidiData = readDataRange(size, test);
-
-        sortDataRange(MidiData, H, size, clairdelune);
-
-        blue->currentDataRange = new_Midi_List(clairdelune, (midiList *) blue->currentDataRange);
-        if (i == 0)
-        {
-            blue->firstDataRange = blue->currentDataRange;
-
-        }
-int g =0;
-
-    }
-    blue->currentDataRange = blue->firstDataRange;
-    midiData * n;
-    blue = updateDelayDataRange(blue, H->MTRK);
-    n = getFirstNoteToPlay(blue, H->MTRK);
-*/
-
-
-
+  dataRangeList * l = initdataRangeList();
+  l = record_midi_file(name);
 
     SDL_AudioSpec as;
     Core *audio_core;
@@ -160,46 +119,7 @@ int g =0;
         currentTime = SDL_GetTicks();       // Get time from SDL init in ms
 
 
-    /*if (n!= NULL)
-    {
-
-
-        // TEMP : 1000ms delay
-        if (currentTime > lastTime )  // If time has passed
-        {
-            lastTime = currentTime;
-
-
-
-            if (currentTime > controlNote){
-                controlNote = currentTime +1000;
-                for (int i = 0 ; i<g/2 ; i++){
-                //    midi_note_OFF(audio_core, NoteOn[i]);
-                g=0;
-                }
-
-
-
-            }
-
-            if (n->midiEvent == 1)
-            {
-                midi_note_ON(audio_core, n->midiNote, n->attack);
-                g++;
-                NoteOn[g]=n->midiNote;
-            }
-            else if (n->midiEvent == 0)
-            {
-               midi_note_OFF(audio_core, n->midiNote);
-            }
-
-           blue = updateDelayDataRange(blue, H->MTRK);
-
-            n = getFirstNoteToPlay(blue, H->MTRK);
-     }
-    }
-
-        }*/
+    playMidiFile(audio_core, currentTime,l,31);
 
 
 
