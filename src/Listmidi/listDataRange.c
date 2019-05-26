@@ -39,7 +39,7 @@ dataRangeList *  initdataRangeList()
 
 void freeDataRange(dataRangeList * l){
     while(!emptyDataRange(l)) deleteFirstDataRange(l);
-    free(l);
+
 
 
 }
@@ -113,9 +113,14 @@ dataRangeList *  updateDelayDataRange(dataRangeList * l){
     midiData *n;
     l->currentDataRange = l->firstDataRange;
     m=l->currentDataRange;
+    static g = 0;
 
 
     for (int i=0;i<getCount(l);i++){
+
+        if (g==0){
+            m->current = m->first;
+        }
 
         if (l->currentDataRange != NULL)
         {
@@ -133,7 +138,7 @@ dataRangeList *  updateDelayDataRange(dataRangeList * l){
     l->currentDataRange = l->firstDataRange;
     m=l->currentDataRange;
 
-
+g++;
 
     return l;
 }
@@ -144,7 +149,7 @@ midiData * getFirstNoteToPlay(dataRangeList * l){
 double delay =1000000;
 static double old_delay;
 static int old_dataRange;
-
+static g = 0;
 int numberOfMidiData = 0;
 midiList *m;
 midiData *n;
@@ -156,16 +161,33 @@ m=l->currentDataRange;
 
 for (int i=0; i<getCount(l);i++)
 {
-    m = l->currentDataRange;
+    m=l->currentDataRange;
+    if (g==0){
+        setOnFirst(m);
+    }
 
 
         n = m->current;
 
-        if (m->current != NULL)
+        if (m->current !=NULL && n->next!=NULL ){
+
+            if (delay >= m->accrued_delay){
+                delay = m->accrued_delay;
+                numberOfMidiData = i;
+            }
+
+
+
+        }
+        nextDataRange(l);
+}
+
+g++;
+
+     /*   if (m->current != NULL)
         {
 
-            if (i != old_dataRange && ((m->accrued_delay + n->delay) - old_delay) <= delay)
-            {
+            if (i != old_d*
                 numberOfMidiData = i;
                 delay = (m->accrued_delay + n->delay) - old_delay;
 
@@ -183,15 +205,17 @@ for (int i=0; i<getCount(l);i++)
 
 
 }
+      */
 l->currentDataRange = l->firstDataRange;
 m=l->currentDataRange;
 
 
 for (int i=0 ; i<(numberOfMidiData);i++){
     nextDataRange(l);
-    m= l->currentDataRange;
+    m=l->currentDataRange;
 
 }
+double temp;
     n = m->current;
 if (old_dataRange == numberOfMidiData ){
 old_delay =0;
@@ -200,15 +224,25 @@ old_delay =0;
 else
 {
     old_dataRange = numberOfMidiData;
-    n->delay =  (n->delay - old_delay);
-    double temp = n->delay;
-    old_delay = m->accrued_delay + temp;
+     temp = n->delay;
+    old_delay =  temp;
 }
 
     m->accrued_delay +=n->delay;
 
 
 next(m);
+m=l->firstDataRange;
+for (int i = 0;i<getCount(l);i++){
+    if (numberOfMidiData != i)
+       m->accrued_delay = m->accrued_delay - temp;
+        nextDataRange(l);
+        setOnFirst(l);
+    m=l->currentDataRange;
+}
+
+n->delay=n->delay-old_delay;
+
 return n;
 
 }

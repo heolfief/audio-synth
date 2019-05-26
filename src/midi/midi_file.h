@@ -162,5 +162,15 @@ int readEvent (__uint8_t * midiNote, __uint8_t * attack, int  * midiEvent,__uint
 
 dataRangeList * record_midi_file(char * name);
 
-playMidiFile(Core * audio_core, double currentTime,dataRangeList * l,int size);
+
+
+
+void playMidiFile(Core * audio_core, double currentTime,dataRangeList * l,int size);
+
+
+
+void controlMidi (double currenTime,Core * ac );
+
+
+
 #endif

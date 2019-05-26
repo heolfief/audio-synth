@@ -52,7 +52,7 @@ midiList * initList()
 
 void freeList(midiList* l){
     while(!empty(l)) deleteFirst(l);
-    free(l);
+
 
 
 }

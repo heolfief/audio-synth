@@ -178,6 +178,8 @@ double calculDelay(__uint8_t * DataDelay,int power, __uint16_t Noire){
     if (power > 1 )
     res = res /Noire;
    // printf("Noire : %d",Noire);
+if (Noire == 96)
+    return res*2.5 ;
 
     return res ;
 }
@@ -281,26 +283,26 @@ u_int32_t  getSizeDataRange(FILE *f){
 }
 
 
-playMidiFile(Core * audio_core, double currentTime,dataRangeList * l,int size)
+void playMidiFile(Core * audio_core, double currentTime,dataRangeList * l,int size)
 {
-static controlNote;
 
-static lastTime = 0;
+static double lastTime = 0;
 static midiData *n;
 
 
 if (n == NULL){
+
 l = updateDelayDataRange(l);
 
 n = getFirstNoteToPlay(l);
+
+
 }
-
-
-
 
 if (currentTime > lastTime + n->delay )  // If time has passed
 {
 lastTime = currentTime;
+
 
 if (n->midiEvent == 1)
 {
@@ -313,7 +315,6 @@ else if (n->midiEvent == 0)
 midi_note_OFF(audio_core, n->midiNote);
 }
 
-l = updateDelayDataRange(l);
 
 n = getFirstNoteToPlay(l);
 }
@@ -329,7 +330,7 @@ dataRangeList * record_midi_file(char * name)
     fillHeaderRead(H, test);
     int size = 0;
 
-    midiData *MidiData;
+    u_int8_t *MidiData;
     midiList *clairdelune = NULL;
     dataRangeList * blue;
     blue = initdataRangeList();
@@ -356,10 +357,46 @@ dataRangeList * record_midi_file(char * name)
         int g = 0;
 
     }
+    blue->firstDataRange= blue->currentDataRange;
+    for (int i = 0;i<H->MTRK-1;i++){
+        setOnFirst(blue->firstDataRange);
+
+
+    }
+
     closeFile(test);
     return blue;
 }
 
+
+
+void controlMidi (double currenTime,Core * ac ){
+    static dataRangeList *l;
+    static int g = 0;
+
+    if (ac->midi_param->Midi_file_opened && g==0){
+        l=record_midi_file((char *)ac->midi_param->Midi_file_Path);
+        g++;
+
+    }
+    if(ac->midi_param->Midi_playing_OnOff ){
+        playMidiFile(ac ,currenTime,l,31);
+    }
+    if (ac->midi_param->Midi_paused_file)
+    {
+
+        for (int i = 0; i < 100; i++)
+        {
+
+        }
+    }
+    if (ac->midi_param->Midi_stopped_file)
+    {
+        freeDataRange(l);
+        g == 0;
+    }
+
+}
 
 
 
