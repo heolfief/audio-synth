@@ -42,6 +42,7 @@ void freeDataRange(dataRangeList * l){
 
 
 
+
 }
 
 
@@ -113,7 +114,7 @@ dataRangeList *  updateDelayDataRange(dataRangeList * l){
     midiData *n;
     l->currentDataRange = l->firstDataRange;
     m=l->currentDataRange;
-    static g = 0;
+    static int  g = 0;
 
 
     for (int i=0;i<getCount(l);i++){
@@ -149,7 +150,7 @@ midiData * getFirstNoteToPlay(dataRangeList * l){
 double delay =1000000;
 static double old_delay;
 static int old_dataRange;
-static g = 0;
+static int g = 0;
 int numberOfMidiData = 0;
 midiList *m;
 midiData *n;
@@ -184,28 +185,7 @@ for (int i=0; i<getCount(l);i++)
 
 g++;
 
-     /*   if (m->current != NULL)
-        {
 
-            if (i != old_d*
-                numberOfMidiData = i;
-                delay = (m->accrued_delay + n->delay) - old_delay;
-
-            }
-            else if ((m->accrued_delay + n->delay) <= delay)
-            {
-                numberOfMidiData = i;
-                delay = m->accrued_delay + n->delay;
-
-            }
-
-        }
-
-        nextDataRange(l);
-
-
-}
-      */
 l->currentDataRange = l->firstDataRange;
 m=l->currentDataRange;
 
@@ -237,7 +217,7 @@ for (int i = 0;i<getCount(l);i++){
     if (numberOfMidiData != i)
        m->accrued_delay = m->accrued_delay - temp;
         nextDataRange(l);
-        setOnFirst(l);
+        setOnFirstDataRange(l);
     m=l->currentDataRange;
 }
 

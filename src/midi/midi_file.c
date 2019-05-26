@@ -181,7 +181,7 @@ double calculDelay(__uint8_t * DataDelay,int power, __uint16_t Noire){
 if (Noire == 96)
     return res*2.5 ;
 
-    return res ;
+    return res/4 ;
 }
 
 int  readEvent (__uint8_t * midiNote, u_int8_t * attack,  int * midiEvent,u_int8_t * DataRange , int * i ){

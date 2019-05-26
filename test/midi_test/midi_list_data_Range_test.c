@@ -131,9 +131,8 @@ void test_get_first_note_to_play(void **state){
 
 
     midiData * g =getFirstNoteToPlay(m);
-    assert_int_equal(g->delay,1);
+    assert_int_equal(g->delay,0);
     assert_int_equal(g->midiNote,1);
-    updateDelayDataRange(m);
      g =getFirstNoteToPlay(m);
     assert_int_equal(g->delay,2);
     assert_int_equal(g->midiNote,2);
