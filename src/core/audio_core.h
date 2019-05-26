@@ -34,7 +34,7 @@ typedef struct
   OnOff Midi_playing_OnOff;           /*!< flag if a midi file is being played*/
   OnOff Midi_paused_file;             /*!< flag if a midi file is paused*/
   OnOff Midi_stopped_file;            /*!< flag if a midi file is stopped and closed*/
-
+  const char *Midi_file_Path;         /*!< path of the file to be played*/
 }MidiParam;
 /**
  * \struct Core

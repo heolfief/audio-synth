@@ -1197,6 +1197,7 @@ int process_buttons(Gui *gui, Core *audio_core, MIDI_Peripheral_fd *midi_periphe
         {
             // TO BE FILLED BY VINCE's function when loading if (load_preset(path, audio_core->sys_param, ABSOLUTE_PATH_MODE))return -1;
             audio_core->midi_param->Midi_file_opened = ON;
+            audio_core->midi_param->Midi_file_Path = path;
 
             extract_file_name_from_path(path, preset_name, 3);
             gui->texts[1].text_surface =
