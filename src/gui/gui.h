@@ -9,7 +9,7 @@
 #ifndef AUDIO_SYNTH_GUI_H
 #define AUDIO_SYNTH_GUI_H
 
-#define NAME_APPLICATION "audio_synth"
+#define NAME_APPLICATION                "INSWAVE"
 #define IMAGE_APPLICATION_BACKGROUND    "../src/gui/Figs/background.png"
 #define WIDTH_APPLICATION_WINDOW        1300
 #define HEIGHT_APPLICATION_WINDOW       816
@@ -17,14 +17,13 @@
 #define NUMBER_OF_SWITCHES              11
 #define NUMBER_OF_MS_SWITCHES           8
 #define NUMBER_OF_POTS                  32
-#define NUMBER_OF_BUTTONS               3
+#define NUMBER_OF_BUTTONS               9
 
-#define NUMBER_OF_SWITCHES 11
-#define NUMBER_OF_MS_SWITCHES 8
-#define NUMBER_OF_POTS 32
-#define NUMBER_OF_LEDS 8
-
-#define NUMBER_OF_BUTTONS 3
+#define NUMBER_OF_SWITCHES              11
+#define NUMBER_OF_MS_SWITCHES           8
+#define NUMBER_OF_POTS                  32
+#define NUMBER_OF_LEDS                  8
+#define NUMBER_OF_TEXTS                 2
 
 #define NUMBER_OF_TOUCH 12
 
@@ -63,10 +62,35 @@
 #define WIDTH_BUTTON_SAVE               60
 #define HEIGHT_BUTTON_SAVE              19
 
-#define IMAGE_BUTTON_MIDI_STANDBY       "../src/gui/Figs/bt_midi_standby.png"
+#define IMAGE_BUTTON_MIDI_STANDBY       "../src/gui/Figs/bt_keyboard_MIDI.png"
 #define IMAGE_BUTTON_MIDI_CONNECTED     "../src/gui/Figs/bt_midi_connected.png"
-#define WIDTH_BUTTON_MIDI               66
-#define HEIGHT_BUTTON_MIDI              30
+#define WIDTH_BUTTON_MIDI               75
+#define HEIGHT_BUTTON_MIDI              52
+
+#define IMAGE_BUTTON_RECORD_UNPRESSED    "../src/gui/Figs/record_button.png"
+#define IMAGE_BUTTON_RECORD_PRESSED      "../src/gui/Figs/record_pressed.png"
+#define WIDTH_BUTTON_RECORD             50
+#define HEIGHT_BUTTON_RECORD            50
+
+#define IMAGE_BUTTON_STOP_UNPRESSED     "../src/gui/Figs/stop_button.png"
+#define IMAGE_BUTTON_STOP_PRESSED       "../src/gui/Figs/stop_pressed.png"
+#define WIDTH_BUTTON_STOP               60
+#define HEIGHT_BUTTON_STOP              60
+
+#define IMAGE_BUTTON_MIDI_PLAY_UNPRESSED     "../src/gui/Figs/button_play_MIDI.png"
+#define IMAGE_BUTTON_MIDI_PLAY_PRESSED       "../src/gui/Figs/play_on.png"
+#define WIDTH_BUTTON_MIDI_PLAY               30
+#define HEIGHT_BUTTON_MIDI_PLAY              34
+
+#define IMAGE_BUTTON_MIDI_PAUSE_UNPRESSED     "../src/gui/Figs/button_pause_MIDI.png"
+#define IMAGE_BUTTON_MIDI_PAUSE_PRESSED       "../src/gui/Figs/pause_on.png"
+#define WIDTH_BUTTON_MIDI_PAUSE              30
+#define HEIGHT_BUTTON_MIDI_PAUSE              33
+
+#define IMAGE_BUTTON_MIDI_STOP_UNPRESSED     "../src/gui/Figs/button_stop_MIDI.png"
+#define IMAGE_BUTTON_MIDI_STOP_PRESSED       "../src/gui/Figs/stop_on.png"
+#define WIDTH_BUTTON_MIDI_STOP               30
+#define HEIGHT_BUTTON_MIDI_STOP              30
 
 #define FONT_PRESET_NAME                "../src/gui/Figs/Minion_Pro_Bold.ttf"
 #define SIZE_FONT_PRESET_NAME           17
@@ -75,6 +99,8 @@
 #define COLOR_B_FONT_PRESET_NAME        186
 #define LOCATION_X_PRESET_NAME          119
 #define LOCATION_Y_PRESET_NAME          705
+#define LOCATION_X_MIDI_TEXT            296
+#define LOCATION_Y_MIDI_TEXT            680
 
 #define IMAGE_MS_SWITCH_MAX_STATES      4
 #define POT_INCREMENT                   1
@@ -93,6 +119,8 @@
 #define WIDTH_TOUCH        23
 #define HEIGHT_TOUCH        35
 
+#define ICON_IMAGE      "../src/gui/Figs/logo.png"
+
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
@@ -105,6 +133,7 @@
 #include "SDL_Button.h"
 #include "tinyfiledialogs.h"
 #include "../sys_param/xml/preset_xml.h"
+#include "../audio/wav.h"
 #include "../midi/midi_keyboard.h"
 
 /**
@@ -199,7 +228,7 @@ typedef struct
 */
 typedef struct
 {
-  OnOff OnOffLed;              /*!<the parameter of the led to know if it's on or not*/
+  OnOff OnOffLed;             /*!<the parameter of the led to know if it's on or not*/
   SDL_Button_t *sdl_Led;      /*!<the SDL related objects for the Led */
   SDL_Texture *texture;       /*!<the SDL texture of the Led */
   Uint16 posX;                /*!<the X position on the screen (in pixels) */
@@ -211,7 +240,7 @@ typedef struct
   char *img_led_red;          /*!<the image of the Red Led */
   char *img_led_off;          /*!<the image of the Led Off */
   char img_on[33];
-} LED;
+} Led;
 
 /**
 * \struct Touch
@@ -220,34 +249,20 @@ typedef struct
 */
 typedef struct
 {
-  OnOff OnOffTouch;              /*!<the parameter of the Touch to know if it's on or not*/
-  SDL_Button_t *sdl_Touch;      /*!<the SDL related objects for the Touch */
+  OnOff OnOffTouch;           /*!<the parameter of the Touch to know if it's on or not*/
+  SDL_Button_t *sdl_Touch;    /*!<the SDL related objects for the Touch */
   SDL_Texture *texture;       /*!<the SDL texture of the Touch */
   Uint16 posX;                /*!<the X position on the screen (in pixels) */
   Uint16 posY;                /*!<the Y position on the screen (in pixels) */
   Uint16 width;               /*!<the width (in pixels) */
   Uint16 height;              /*!<the height (in pixels) */
-  char *img_touch_on;        /*!<the image of the Green Led */
-  char *img_touch_off;       /*!<the image of the Orange Led */
-} TOUCH;
-
-
-/**
- * \struct Mouse_position
- * \brief define a Gui_SDL_objects structure
- *
- * This structure contains all the SDL GUI data for the application's GUI.
- *
- */
-typedef struct
-{
-  int x;        /*!<the X position of the mouse on the window (in pixels) */
-  int y;        /*!<the Y position on the mouse on the window (in pixels) */
-} Mouse_position;
+  char *img_touch_on;         /*!<the image of the Green Led */
+  char *img_touch_off;        /*!<the image of the Orange Led */
+} Touch;
 
 /**
- * \struct Gui_SDL_objects
- * \brief define a Gui_SDL_objects structure
+ * \struct Gui
+ * \brief define a Gui structure
  *
  * This structure contains all the SDL GUI data for the application's GUI.
  *
@@ -260,61 +275,60 @@ typedef struct
   SDL_Rect background;
   SDL_Event event;
   Uint8 application_quit;
-  Mouse_position *mouse_position;
   Switch *switches;
   Multi_state_Switch *ms_switches;
   Potentiometer *pots;
   Button *buttons;
-  Text *preset_name;
-  LED *Leds;
-  TOUCH *touch;
-} Gui_SDL_objects;
+  Text *texts;
+  Led *Leds;
+  Touch *touch;
+} Gui;
 
 /**
- * \fn int init_gui(Gui_SDL_objects *gui)
+ * \fn int init_gui(Gui *gui)
  * \brief Function to initialize GUI (open application window)
  *
- * \param gui The Gui_SDL_objects to init
+ * \param gui The Gui object to init
  *
  * \return 0 if everything went OK, -1 otherwise
  */
-int init_gui(Gui_SDL_objects *gui);
+int init_gui(Gui *gui);
 
 /**
- * \fn void exit_gui(Gui_SDL_objects *gui)
+ * \fn void exit_gui(Gui *gui)
  * \brief Function to exit GUI (close application window)
  *
- * \param gui The Gui_SDL_objects to exit
+ * \param gui The Gui object to exit
  */
-void exit_gui(Gui_SDL_objects *gui);
+void exit_gui(Gui *gui);
 
 /**
- * \fn Gui_SDL_objects *alloc_gui_sdl_objects()
- * \brief Function to allocate memory for a Gui_SDL_objects
+ * \fn Gui *alloc_gui()
+ * \brief Function to allocate memory for a Gui
  *
- * \return the allocated Gui_SDL_objects
+ * \return the allocated Gui
  */
-Gui_SDL_objects *alloc_gui_sdl_objects();
+Gui *alloc_gui();
 
 /**
- * \fn int free_gui_sdl_objects(Gui_SDL_objects *gui)
- * \brief Function to free memory of an Gui_SDL_objects
+ * \fn int free_gui(Gui *gui)
+ * \brief Function to free memory of an Gui
  *
- * \param gui The Gui_SDL_objects to free
+ * \param gui The Gui object to free
  *
  * \return 0
  */
-int free_gui_sdl_objects(Gui_SDL_objects *gui);
+int free_gui(Gui *gui);
 
 /**
- * \fn int gui_update(Gui_SDL_objects *gui)
+ * \fn int gui_update(Gui *gui)
  * \brief Function to update the display of the GUI
  *
- * \param gui The Gui_SDL_objects to display
+ * \param gui The Gui object to display
  *
  * \return 0 if everything went OK, -1 otherwise
  */
-int gui_update(Gui_SDL_objects *gui);
+int gui_update(Gui *gui);
 
 /**
  * \fn SDL_Button_t *gui_create_button(int x_location, int y_location, int button_width, int button_height, char *path_to_image)
@@ -342,152 +356,152 @@ SDL_Button_t *gui_create_button(int x_location, int y_location, int button_width
 int gui_set_switch_image(SDL_Button_t *button, char *path_to_image);
 
 /**
- * \fn int create_Text_map(Gui_SDL_objects *gui)
+ * \fn int create_Text_map(Gui *gui)
  * \brief Function to place and initialize text
  *
- * \param gui The Gui_SDL_objects
+ * \param gui The Gui object
  *
  * \return 0 if everything went OK, -1 otherwise
  */
-int create_Text_map(Gui_SDL_objects *gui);
+int create_Text_map(Gui *gui);
 
 /**
- * \fn int create_switches_map(Gui_SDL_objects *gui, Sys_param *sys_param)
+ * \fn int create_switches_map(Gui *gui, Sys_param *sys_param)
  * \brief Function to place and initialize GUI switches
  *
- * \param gui The Gui_SDL_objects
+ * \param gui The Gui object
  * \param sys_param The system parameters
  *
  * \return 0 if everything went OK, -1 otherwise
  */
-int create_switches_map(Gui_SDL_objects *gui, Sys_param *sys_param);
+int create_switches_map(Gui *gui, Sys_param *sys_param);
 
 /**
- * \fn int create_leds_map(Gui_SDL_objects *gui, Sys_param *sys_param)
+ * \fn int create_leds_map(Gui *gui, Sys_param *sys_param)
  * \brief Function to place and initialize GUI leds
  *
- * \param gui The Gui_SDL_objects
+ * \param gui The Gui object
  * \param sys_param The system parameters
  *
  * \return 0 if everything went OK, -1 otherwise
  */
 
-int create_Leds_map(Gui_SDL_objects *gui, Sys_param *sys_param);
+int create_Leds_map(Gui *gui, Sys_param *sys_param);
 /**
- * \fn int create_touch_map(Gui_SDL_objects *gui, Sys_param *sys_param)
+ * \fn int create_touch_map(Gui *gui, Sys_param *sys_param)
  * \brief Function to place and initialize GUI touch
  *
- * \param gui The Gui_SDL_objects
+ * \param gui The Gui object
  * \param sys_param The system parameters
  *
  * \return 0 if everything went OK, -1 otherwise
  */
 
-int create_Touch_map(Gui_SDL_objects *gui, Sys_param *sys_param);
+int create_touch_map(Gui *gui, Sys_param *sys_param);
 /**
- * \fn int create_buttons_map(Gui_SDL_objects *gui)
+ * \fn int create_buttons_map(Gui *gui)
  * \brief Function to place and initialize GUI buttons
  *
- * \param gui The Gui_SDL_objects
+ * \param gui The Gui object
  *
  * \return 0 if everything went OK, -1 otherwise
  */
-int create_buttons_map(Gui_SDL_objects *gui);
+int create_buttons_map(Gui *gui);
 
 /**
- * \fn int create_pots_map(Gui_SDL_objects *gui, Sys_param *sys_param)
+ * \fn int create_pots_map(Gui *gui, Sys_param *sys_param)
  * \brief Function to place and initialize GUI potentiometers
  *
- * \param gui The Gui_SDL_objects
+ * \param gui The Gui object
  * \param sys_param The system parameters
  *
  * \return 0 if everything went OK, -1 otherwise
  */
-int create_pots_map(Gui_SDL_objects *gui, Sys_param *sys_param);
+int create_pots_map(Gui *gui, Sys_param *sys_param);
 
 /**
- * \fn int process_buttons(Gui_SDL_objects *gui)
+ * \fn int process_buttons(Gui *gui)
  * \brief Function to check switches status, change parameter accordingly and update switch image
  *
- * \param gui The Gui_SDL_objects
+ * \param gui The Gui object
  * \param audio_core The system's audio core
  *
  * \return 0 if everything went OK, -1 otherwise
  */
-int process_switches(Gui_SDL_objects *gui, Core *audio_core);
+int process_switches(Gui *gui, Core *audio_core);
 
 /**
- * \fn int process_buttons(Gui_SDL_objects *gui, Core *audio_core, MIDI_Peripheral_fd* midi_peripheral)
+ * \fn int process_buttons(Gui *gui, Core *audio_core, MIDI_Peripheral_fd* midi_peripheral)
  * \brief Function to check buttons status, change parameter accordingly and update button image
  *
- * \param gui The Gui_SDL_objects
+ * \param gui The Gui object
  * \param audio_core The system's audio core
  * \param midi_peripheral the MIDI peripheral file descriptor address
  *
  * \return 0 if everything went OK, -1 otherwise
  */
-int process_buttons(Gui_SDL_objects *gui, Core *audio_core, MIDI_Peripheral_fd *midi_peripheral);
+int process_buttons(Gui *gui, Core *audio_core, MIDI_Peripheral_fd *midi_peripheral);
 
 /**
- * \fn int process_pots(Gui_SDL_objects *gui)
+ * \fn int process_pots(Gui *gui)
  * \brief Function to check pots status, change parameter accordingly and set image rotation
  *
- * \param gui The Gui_SDL_objects
+ * \param gui The Gui object
  * \param audio_core The system's audio core
  * \param mouse_is_down Flag for mouse button pressed down
  *
  * \return 0 if everything went OK, -1 otherwise
  */
-int process_pots(Gui_SDL_objects *gui, Core *audio_core, Uint8 mouse_is_down);
+int process_pots(Gui *gui, Core *audio_core, Uint8 mouse_is_down);
 
 
 
 /**
- * \fn int process_leds(Gui_SDL_objects *gui)
+ * \fn int process_leds(Gui *gui)
  * \brief Function to check leds status, change image accordingly and free the sdl and texture of the led if not on
  *
- * \param gui The Gui_SDL_objects
+ * \param gui The Gui object
  * \param audio_core The system's audio core
  *
  * \return 0 if everything went OK, -1 otherwise
  */
-int process_leds(Gui_SDL_objects *gui, Core *audio_core);
+int process_leds(Gui *gui, Core *audio_core);
 
 /**
- * \fn int process_touch(Gui_SDL_objects *gui)
+ * \fn int process_touch(Gui *gui)
  * \brief Function to turn on touch, change image accordingly and free the sdl and texture of the led if not on
  *
- * \param gui The Gui_SDL_objects
+ * \param gui The Gui object
  * \param audio_core The system's audio core
  * \param id the note played
  * \param is the note starting or stopping
  *
  * \return 0 if everything went OK, -1 otherwise
  */
-int process_touch(Gui_SDL_objects *gui, Uint8 id, Uint8 mode);
+int process_touch(Gui *gui, Uint8 id, Uint8 mode);
 
 /**
- * \fn int change_pot_percent(Gui_SDL_objects *gui, int potnbr, Uint8 mouse_is_down)
+ * \fn int change_pot_percent(Gui *gui, int potnbr, Uint8 mouse_is_down)
  * \brief Function to check change pot percent according to mouse movement or mousewheel
  *
- * \param gui The Gui_SDL_objects
+ * \param gui The Gui object
  * \param potnbr the number of the pot being processed
  * \param mouse_is_down flag if mouse button is pressed
  *
  * \return 0 if everything went OK, -1 otherwise
  */
- int change_pot_percent(Gui_SDL_objects *gui, int potnbr, Uint8 mouse_is_down);
+ int change_pot_percent(Gui *gui, int potnbr, Uint8 mouse_is_down);
 
 /**
- * \fn int load_sys_param_to_gui(Gui_SDL_objects *gui, Sys_param *sys_param)
+ * \fn int load_sys_param_to_gui(Gui *gui, Sys_param *sys_param)
  * \brief Function to load all the system parameters to the GUI (set pots and switches rotation/status accordingly)
  *
- * \param gui The Gui_SDL_objects
+ * \param gui The Gui object
  * \param audio_core The system's audio core
  *
  * \return 0 if everything went OK, -1 otherwise
  */
-int load_sys_param_to_gui(Gui_SDL_objects *gui, Sys_param *sys_param);
+int load_sys_param_to_gui(Gui *gui, Sys_param *sys_param);
 
 /**
  * \fn int prompt_quit()

@@ -13,6 +13,7 @@
 #include "../sys_param/sys_param.h"
 #include "../system/error_handler.h"
 #include "../core/audio_core.h"
+#include "sndfile.h"
 
 /**
  *  \fn void func_callback(void *unused, Uint8 *stream, int len)

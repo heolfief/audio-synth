@@ -91,7 +91,7 @@ void test_update_delay_dataRangeList(void **state){
 
     assert_int_equal(m->currentDataRange->accrued_delay,0); // test before the update
 
-    updateDelayDataRange(m,getCount(m));
+    updateDelayDataRange(m);
 
 
     assert_int_equal( m->currentDataRange->accrued_delay,1); // test after the update
@@ -127,14 +127,14 @@ void test_get_first_note_to_play(void **state){
     m->currentDataRange = new_Midi_List(n,m->currentDataRange); // put the seconde midiList in data Range List
     m->firstDataRange = m->currentDataRange;
 
-    updateDelayDataRange(m,getCount(m));
+    updateDelayDataRange(m);
 
 
-    midiData * g =getFirstNoteToPlay(m,getCount(m));
+    midiData * g =getFirstNoteToPlay(m);
     assert_int_equal(g->delay,1);
     assert_int_equal(g->midiNote,1);
-    updateDelayDataRange(m,getCount(m));
-     g =getFirstNoteToPlay(m,getCount(m));
+    updateDelayDataRange(m);
+     g =getFirstNoteToPlay(m);
     assert_int_equal(g->delay,2);
     assert_int_equal(g->midiNote,2);
 
