@@ -34,8 +34,8 @@ int main(int argc, char *argv[])
 double controlNote =1000;
 char * name = "../src/fichier_midi/blue.mid";
 
-  dataRangeList * l = initdataRangeList();
-  l = record_midi_file(name);
+  //dataRangeList * l = initdataRangeList();
+ // l = record_midi_file(name);
 
     SDL_AudioSpec as;
     Core *audio_core;
@@ -119,7 +119,7 @@ char * name = "../src/fichier_midi/blue.mid";
         currentTime = SDL_GetTicks();       // Get time from SDL init in ms
 
 
-    playMidiFile(audio_core, currentTime,l,31);
+   // playMidiFile(audio_core, currentTime,l,31);
 
 
 
