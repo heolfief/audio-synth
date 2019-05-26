@@ -8,7 +8,7 @@
 #include "keypad.h"
 int octave = 0;
 
-int keypress(SDL_Event *event, Core *ac, Gui_SDL_objects *gui)
+int keypress(SDL_Event *event, Core *ac, Gui *gui)
 {
     Uint8 *uint8_param;
 
@@ -155,7 +155,7 @@ int keypress(SDL_Event *event, Core *ac, Gui_SDL_objects *gui)
     return 0;
 }
 
-int keyrelease(SDL_Event *event, Core *ac, Gui_SDL_objects *gui)
+int keyrelease(SDL_Event *event, Core *ac, Gui *gui)
 {
     if (event == NULL || ac == NULL)
     {

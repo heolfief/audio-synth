@@ -70,7 +70,7 @@
  *
  * \return 0 if everything went OK, -1 otherwise
  */
-int keypress(SDL_Event *event, Core *ac, Gui_SDL_objects *gui);
+int keypress(SDL_Event *event, Core *ac, Gui *gui);
 
 /**
  * \fn int keyrelease(SDL_Event *event, Core *ac)
@@ -81,6 +81,6 @@ int keypress(SDL_Event *event, Core *ac, Gui_SDL_objects *gui);
  * \param gui the interface
  * \return 0 if everything went OK, -1 otherwise
  */
-int keyrelease(SDL_Event *event, Core *ac, Gui_SDL_objects *gui);
+int keyrelease(SDL_Event *event, Core *ac, Gui *gui);
 
 #endif //AUDIO_SYNTH_SRC_GUI_KEYPAD_H
