@@ -34,9 +34,6 @@
  * This struct is define with first data range current data range last data range
  */
 
-// DOXYGEN
-dataRangeList *updateDelayDataRange(dataRangeList *l);
-
 
 typedef struct dataRangeList
 {
@@ -54,8 +51,6 @@ typedef struct dataRangeList
  *
  * \return data range list updated
  */
-
-
 dataRangeList *updateDelayDataRange(dataRangeList *l);
 
 /**
@@ -164,13 +159,12 @@ void freeDataRange(dataRangeList *l);
  * \return the target File open
  */
 midiData *getFirstNoteToPlay(dataRangeList *l);
+
 /**
  * \fn getCount(dataRangeList *l)
  * \brief Function to count the element stored in data range list
  *
  * \param l data range list to count
-
-<<<<<<< HEAD
  *
  * \return the number of of element stored
  */
