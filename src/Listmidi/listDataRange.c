@@ -189,41 +189,55 @@ midiData * getFirstNoteToPlay(dataRangeList * l){
     m=l->currentDataRange;
 
 
+    
     for (int i=0 ; i<(numberOfMidiData);i++){
         nextDataRange(l);
         m=l->currentDataRange;
 
     }
-    double temp;
+    static double temp;
+    static double sauv =0;
+    static double flag_same_data_range=0;
+
     n = m->current;
+    if (n==NULL){
+        return NULL;
+    }
     if (old_dataRange == numberOfMidiData ){
         old_delay =0;
-
-
+        temp = n->delay;
+        sauv += n->delay;
+        flag_same_data_range ++;
     }
     else
     {
         old_dataRange = numberOfMidiData;
+        if (m->current !=m->first)
         temp = n->delay;
-        old_delay =  temp;
+        if (flag_same_data_range > 1){
+            old_delay= sauv;
+            sauv =0;
+            flag_same_data_range =0;
+        }else if (m->current != m->first)
+        old_delay = temp;
+
+
     }
 
-
-
+    m->accrued_delay += n->next->delay;
 
     next(m);
-    midiData * Next = m->current;
-    m->accrued_delay += Next->delay;
-    m=l->firstDataRange;
-    setOnFirstDataRange(l);
 
+    setOnFirstDataRange(l);
+    m=l->firstDataRange;
     for (int i = 0;i<getCount(l);i++){
-        if (numberOfMidiData != i)
+        if (numberOfMidiData != i && m->current!=m->first)
             m->accrued_delay = m->accrued_delay - temp;
         nextDataRange(l);
 
         m=l->currentDataRange;
     }
+
 
     n->delay=n->delay-old_delay;
 

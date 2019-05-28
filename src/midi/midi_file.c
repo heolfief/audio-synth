@@ -144,7 +144,7 @@ double calculDelay(__uint8_t *DataDelay, int power, __uint16_t Noire)
     }
     if (Noire == 96)
     {
-        return res *2.5;
+        return res*2.5;
     }
 
     if (Noire == 1024)
