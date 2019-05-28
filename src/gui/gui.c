@@ -1222,6 +1222,7 @@ int process_buttons(Gui *gui, Core *audio_core, MIDI_Peripheral_fd *midi_periphe
         {
             audio_core->midi_param->Midi_file_opened = ON;
             audio_core->midi_param->Midi_file_Path = path;
+            audio_core->midi_param->Midi_stopped_file =OFF;
 
             extract_file_name_from_path(path, preset_name, 3);
             gui->texts[1].text_surface =

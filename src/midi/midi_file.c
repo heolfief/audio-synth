@@ -144,7 +144,7 @@ double calculDelay(__uint8_t *DataDelay, int power, __uint16_t Noire)
     }
     if (Noire == 96)
     {
-        return res * 2.5;
+        return res *2.5;
     }
 
     if (Noire == 1024)
@@ -284,6 +284,9 @@ void playMidiFile(Core *audio_core, double currentTime, dataRangeList *l)
     {
         l = updateDelayDataRange(l);
         n = getFirstNoteToPlay(l);
+        if (n==NULL){
+            return;
+        }
     }
 
     if (currentTime > lastTime + n->delay)  // If time has passed
@@ -352,39 +355,40 @@ void controlMidi(double currentTime, Core *ac)
 {
     static dataRangeList *l;
     static int g = 0;
-    static int f = 0;
+
 
     if (ac->midi_param->Midi_file_opened && g == 0)
     {
         l = record_midi_file((char *) ac->midi_param->Midi_file_Path);
-        f = 0;
+
         g++;
 
     }
     if (ac->midi_param->Midi_playing_OnOff)
     {
         playMidiFile(ac, currentTime, l);
-        f = 0;
+
     }
-    if (ac->midi_param->Midi_paused_file && f == 0)
+    if (ac->midi_param->Midi_paused_file )
     {
         for (int i = 0; i < POLYPHONY_MAX; i++)
         {
             note_off(ac->note_array[i]);
             ac->note_array[i]->master_onoff = OFF;
         }
-        f = 1;
+
     }
-    if (ac->midi_param->Midi_stopped_file && f == 0)
+    if (ac->midi_param->Midi_stopped_file)
     {
         for (int i = 0; i < POLYPHONY_MAX; i++)
         {
             note_off(ac->note_array[i]);
             ac->note_array[i]->master_onoff = OFF;
         }
-        f = 1;
+  g=0;
         freeDataRange(l);
-        g = 0;
+        free(l);
+
     }
 
 }
