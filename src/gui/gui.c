@@ -11,6 +11,7 @@
 
 Sint8 param_is_being_mouse_changed = -1;
 char preset_name[100] = {"default"};
+char midi_text[100] = {"no midi track selected"};
 
 static const int switches_location[NUMBER_OF_SWITCHES][2] = {
     {77, 52},         // Switch osc1 OnOff
@@ -96,12 +97,25 @@ static const int pots_location_and_size[NUMBER_OF_POTS][3] = {
 static const int buttons_location[NUMBER_OF_BUTTONS][2] = {
     {88, 635},
     {88, 670},
-    {270, 645},
+    //midi keyboard
+    {300, 585},
 
     //Location for the wav record button
     {410, 649},
     //Location for the wav stop record button
-    {480, 649}
+    {480, 645},
+
+    //Location for the load MIDI file button
+    {266, 650},
+
+    //Location for the Play midi file button
+    {232, 700},
+
+    //Location for the pause midi file button
+    {278, 700},
+
+    //Location for the stop midi file button
+    {325, 702}
 };
 
 static const int pot_min_max[NUMBER_OF_POTS][2] = {
@@ -286,16 +300,16 @@ static int extract_file_name_from_path(const char *path, char *out, int extensio
 int init_gui(Gui *gui)
 {
     //Init gui and add flags for the GPU rendering
-   gui->window = SDL_CreateWindow(NAME_APPLICATION,SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED,WIDTH_APPLICATION_WINDOW,HEIGHT_APPLICATION_WINDOW,SDL_WINDOW_SHOWN);
+    gui->window =
+        SDL_CreateWindow(NAME_APPLICATION, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WIDTH_APPLICATION_WINDOW, HEIGHT_APPLICATION_WINDOW, SDL_WINDOW_SHOWN);
 
-    gui->renderer = SDL_CreateRenderer(gui->window,-1,SDL_RENDERER_ACCELERATED);
+    gui->renderer = SDL_CreateRenderer(gui->window, -1, SDL_RENDERER_ACCELERATED);
 
-    if(gui->window == NULL || gui->renderer == NULL)
+    if (gui->window == NULL || gui->renderer == NULL)
     {
         sys_print_SDL_error("ERROR in creating window and renderer");
         return -1;
     }
-
 
     gui->texture =
         SDL_CreateTexture(gui->renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, WIDTH_APPLICATION_WINDOW, HEIGHT_APPLICATION_WINDOW);
@@ -319,12 +333,13 @@ int init_gui(Gui *gui)
         return -1;
     }
 
-
-    SDL_Surface*    icon;
+    SDL_Surface *icon;
 
     icon = IMG_Load(ICON_IMAGE);
     if (icon != 0)
+    {
         SDL_SetWindowIcon(gui->window, icon);
+    }
 
 
 
@@ -405,13 +420,13 @@ Gui *alloc_gui()
     }
     gui->buttons = bt;
 
-    Text *txt = (Text *) malloc(sizeof(Text));
+    Text *txt = (Text *) calloc(NUMBER_OF_TEXTS, sizeof(Text));
     if (txt == NULL)
     {
         sys_print_error("Memory allocation error");
         return NULL;
     }
-    gui->preset_name = txt;
+    gui->texts = txt;
 
     Led *led = (Led *) calloc(NUMBER_OF_LEDS, sizeof(Led));
     if (led == NULL)
@@ -438,7 +453,7 @@ int free_gui(Gui *gui)
     free(gui->ms_switches);
     free(gui->pots);
     free(gui->buttons);
-    free(gui->preset_name);
+    free(gui->texts);
     free(gui->Leds);
     free(gui->touch);
     free(gui);
@@ -556,23 +571,30 @@ int gui_update(Gui *gui)
         }
         SDL_DestroyTexture(tmp);
     }
+    // For each text
+    gui->texts[0].rect.x = LOCATION_X_PRESET_NAME - gui->texts[0].text_surface->w / 2;
+    gui->texts[1].rect.x = LOCATION_X_MIDI_TEXT - gui->texts[1].text_surface->w / 2;
 
-    gui->preset_name->rect.x = LOCATION_X_PRESET_NAME - gui->preset_name->text_surface->w / 2;
-    gui->preset_name->rect.w = gui->preset_name->text_surface->w;
-    gui->preset_name->rect.h = gui->preset_name->text_surface->h;
-    SDL_Texture
-        *tmp = SDL_CreateTextureFromSurface(gui->renderer, gui->preset_name->text_surface);
-    if (tmp == NULL)
+    for (int i = 0; i < NUMBER_OF_TEXTS; ++i)
     {
-        sys_print_SDL_error("Failed creating texture");
-        return -1;
+        gui->texts[i].rect.w = gui->texts[i].text_surface->w;
+        gui->texts[i].rect.h = gui->texts[i].text_surface->h;
+        SDL_Texture
+            *tmp = SDL_CreateTextureFromSurface(gui->renderer, gui->texts[i].text_surface);
+        if (tmp == NULL)
+        {
+            sys_print_SDL_error("Failed creating texture");
+            return -1;
+        }
+
+        if (SDL_RenderCopyEx(gui->renderer, tmp, NULL, &gui->texts[i].rect, 0, NULL, SDL_FLIP_NONE))
+        {
+            sys_print_SDL_error("Failed RenderCopy");
+            return -1;
+        }
+
+        SDL_DestroyTexture(tmp);
     }
-    if (SDL_RenderCopyEx(gui->renderer, tmp, NULL, &gui->preset_name->rect, 0, NULL, SDL_FLIP_NONE))
-    {
-        sys_print_SDL_error("Failed RenderCopy");
-        return -1;
-    }
-    SDL_DestroyTexture(tmp);
 
     SDL_RenderPresent(gui->renderer);
 }
@@ -607,18 +629,32 @@ int create_Text_map(Gui *gui)
         sys_print_error("Parameter is NULL");
         return -1;
     }
+    for (int txt = 0; txt < NUMBER_OF_TEXTS; ++txt)
+    {
 
-    gui->preset_name->font = TTF_OpenFont(FONT_PRESET_NAME, SIZE_FONT_PRESET_NAME);
-    gui->preset_name->color.r = COLOR_R_FONT_PRESET_NAME;
-    gui->preset_name->color.g = COLOR_G_FONT_PRESET_NAME;
-    gui->preset_name->color.b = COLOR_B_FONT_PRESET_NAME;
-    gui->preset_name->color.a = 0;
-    gui->preset_name->text_surface =
-        TTF_RenderText_Blended(gui->preset_name->font, preset_name, gui->preset_name->color);
-    gui->preset_name->rect.x = LOCATION_X_PRESET_NAME - gui->preset_name->text_surface->w / 2;
-    gui->preset_name->rect.y = LOCATION_Y_PRESET_NAME;
-    gui->preset_name->rect.w = gui->preset_name->text_surface->w;
-    gui->preset_name->rect.h = gui->preset_name->text_surface->h;
+        gui->texts[txt].font = TTF_OpenFont(FONT_PRESET_NAME, SIZE_FONT_PRESET_NAME);
+        gui->texts[txt].color.r = COLOR_R_FONT_PRESET_NAME;
+        gui->texts[txt].color.g = COLOR_G_FONT_PRESET_NAME;
+        gui->texts[txt].color.b = COLOR_B_FONT_PRESET_NAME;
+        gui->texts[txt].color.a = 0;
+
+    }
+    //for the preset text
+    gui->texts[0].text_surface =
+        TTF_RenderText_Blended(gui->texts[0].font, preset_name, gui->texts[0].color);
+    gui->texts[0].rect.w = gui->texts[0].text_surface->w;
+    gui->texts[0].rect.x = LOCATION_X_PRESET_NAME - gui->texts[0].text_surface->w / 2;
+    gui->texts[0].rect.y = LOCATION_Y_PRESET_NAME;
+    gui->texts[0].rect.h = gui->texts[0].text_surface->h;
+
+
+    //for the midi text
+    gui->texts[1].text_surface =
+        TTF_RenderText_Blended(gui->texts[1].font, midi_text, gui->texts[1].color);
+    gui->texts[1].rect.w = gui->texts[1].text_surface->w;
+    gui->texts[1].rect.x = LOCATION_X_MIDI_TEXT - gui->texts[1].text_surface->w / 2;
+    gui->texts[1].rect.y = LOCATION_Y_MIDI_TEXT;
+    gui->texts[1].rect.h = gui->texts[1].text_surface->h;
 
     return 0;
 }
@@ -818,6 +854,30 @@ int create_buttons_map(Gui *gui)
     gui->buttons[4].imgoff = IMAGE_BUTTON_STOP_UNPRESSED;
     gui->buttons[4].width = WIDTH_BUTTON_STOP;
     gui->buttons[4].height = HEIGHT_BUTTON_STOP;
+
+    //Load midi file button
+    gui->buttons[5].imgon = IMAGE_BUTTON_LOAD_PRESSED;
+    gui->buttons[5].imgoff = IMAGE_BUTTON_LOAD_UNPRESSED;
+    gui->buttons[5].width = WIDTH_BUTTON_LOAD;
+    gui->buttons[5].height = HEIGHT_BUTTON_LOAD;
+
+    //Play midi file button
+    gui->buttons[6].imgon = IMAGE_BUTTON_MIDI_PLAY_PRESSED;
+    gui->buttons[6].imgoff = IMAGE_BUTTON_MIDI_PLAY_UNPRESSED;
+    gui->buttons[6].width = WIDTH_BUTTON_MIDI_PLAY;
+    gui->buttons[6].height = HEIGHT_BUTTON_MIDI_PLAY;
+
+    //Pause midi file button
+    gui->buttons[7].imgon = IMAGE_BUTTON_MIDI_PAUSE_PRESSED;
+    gui->buttons[7].imgoff = IMAGE_BUTTON_MIDI_PAUSE_UNPRESSED;
+    gui->buttons[7].width = WIDTH_BUTTON_MIDI_PAUSE;
+    gui->buttons[7].height = HEIGHT_BUTTON_MIDI_PAUSE;
+
+    //STOP midi file button
+    gui->buttons[8].imgon = IMAGE_BUTTON_MIDI_STOP_PRESSED;
+    gui->buttons[8].imgoff = IMAGE_BUTTON_MIDI_STOP_UNPRESSED;
+    gui->buttons[8].width = WIDTH_BUTTON_MIDI_STOP;
+    gui->buttons[8].height = HEIGHT_BUTTON_MIDI_STOP;
 
     for (int bt = 0; bt < NUMBER_OF_BUTTONS; ++bt)
     {
@@ -1062,6 +1122,7 @@ int process_buttons(Gui *gui, Core *audio_core, MIDI_Peripheral_fd *midi_periphe
     char const *RecordPath;
     char const *lFilterPatterns[1] = {"*.prst"};
     char const *WavFilterPatterns[1] = {"*.wav"};
+    char const *MIDIFilterpatterns[1] = {"*.mid"};
     if (gui == NULL || audio_core == NULL)
     {
         sys_print_error("Parameter is NULL");
@@ -1074,18 +1135,26 @@ int process_buttons(Gui *gui, Core *audio_core, MIDI_Peripheral_fd *midi_periphe
         if (gui_set_switch_image(gui->buttons[0].sdl_button, gui->buttons[0].imgon))return -1;
         if (gui_update(gui))return -1;
 
+        //emptying the polyphony array
+        for (int i = 0; i < POLYPHONY_MAX; i++)
+        {
+            note_off(audio_core->note_array[i]);
+            audio_core->note_array[i]->master_onoff = OFF;
+        }
+
         path = tinyfd_openFileDialog("Load a preset", "../presets", 1, lFilterPatterns, NULL, 0);
         if (path)
         {
             if (load_preset(path, audio_core->sys_param, ABSOLUTE_PATH_MODE))return -1;
             extract_file_name_from_path(path, preset_name, 4);
-            gui->preset_name->text_surface =
-                TTF_RenderText_Blended(gui->preset_name->font, preset_name, gui->preset_name->color);
+            gui->texts[0].text_surface =
+                TTF_RenderText_Blended(gui->texts[0].font, preset_name, gui->texts[0].color);
             reload_param = 1;
         }
         if (gui_set_switch_image(gui->buttons[0].sdl_button, gui->buttons[0].imgoff))return -1;
         param_changed = 1;
     }
+
 
     // Button SAVE preset
     if (SDL_Button_mouse_down(gui->buttons[1].sdl_button, &gui->event))
@@ -1093,13 +1162,19 @@ int process_buttons(Gui *gui, Core *audio_core, MIDI_Peripheral_fd *midi_periphe
         if (gui_set_switch_image(gui->buttons[1].sdl_button, gui->buttons[1].imgon))return -1;
         if (gui_update(gui))return -1;
 
+        //emptying the polyphony array
+        for (int i = 0; i < POLYPHONY_MAX; i++)
+        {
+            note_off(audio_core->note_array[i]);
+            audio_core->note_array[i]->master_onoff = OFF;
+        }
         path = tinyfd_saveFileDialog("Load a preset", "../presets/.prst", 1, lFilterPatterns, NULL);
         if (path)
         {
             if (save_preset(path, audio_core->sys_param, ABSOLUTE_PATH_MODE))return -1;
             extract_file_name_from_path(path, preset_name, 4);
-            gui->preset_name->text_surface =
-                TTF_RenderText_Blended(gui->preset_name->font, preset_name, gui->preset_name->color);
+            gui->texts[0].text_surface =
+                TTF_RenderText_Blended(gui->texts[0].font, preset_name, gui->texts[0].color);
         }
         if (gui_set_switch_image(gui->buttons[1].sdl_button, gui->buttons[1].imgoff))return -1;
         param_changed = 1;
@@ -1113,6 +1188,12 @@ int process_buttons(Gui *gui, Core *audio_core, MIDI_Peripheral_fd *midi_periphe
             *midi_peripheral = open_midi_peripheral();
             if (*midi_peripheral == -1)
             {
+                //emptying the polyphony array
+                for (int i = 0; i < POLYPHONY_MAX; i++)
+                {
+                    note_off(audio_core->note_array[i]);
+                    audio_core->note_array[i]->master_onoff = OFF;
+                }
                 sys_print_error("Failed opening MIDI device.");
                 tinyfd_messageBox("Error", "No MIDI device found.", "ok", "error", 1);
                 return 0;
@@ -1124,12 +1205,177 @@ int process_buttons(Gui *gui, Core *audio_core, MIDI_Peripheral_fd *midi_periphe
         }
     }
 
+    // Button LOAD MIDI file
+    if (SDL_Button_mouse_down(gui->buttons[5].sdl_button, &gui->event))
+    {
+        if (gui_set_switch_image(gui->buttons[5].sdl_button, gui->buttons[5].imgon))return -1;
+        if (gui_update(gui))return -1;
+
+        //emptying the polyphony array
+        for (int i = 0; i < POLYPHONY_MAX; i++)
+        {
+            note_off(audio_core->note_array[i]);
+            audio_core->note_array[i]->master_onoff = OFF;
+        }
+        path = tinyfd_openFileDialog("Load a MIDI file", "../", 1, MIDIFilterpatterns, NULL, 0);
+        if (path)
+        {
+            // TO BE FILLED BY VINCE's function when loading if (load_preset(path, audio_core->sys_param, ABSOLUTE_PATH_MODE))return -1;
+            audio_core->midi_param->Midi_file_opened = ON;
+            audio_core->midi_param->Midi_file_Path = path;
+
+            extract_file_name_from_path(path, preset_name, 3);
+            gui->texts[1].text_surface =
+                TTF_RenderText_Blended(gui->texts[1].font, preset_name, gui->texts[1].color);
+            reload_param = 1;
+        }
+        if (gui_set_switch_image(gui->buttons[5].sdl_button, gui->buttons[5].imgoff))return -1;
+        param_changed = 1;
+    }
+
+    // Button PLAY MIDI file
+    if (SDL_Button_mouse_down(gui->buttons[6].sdl_button, &gui->event))
+    {
+        if (gui_set_switch_image(gui->buttons[6].sdl_button, gui->buttons[6].imgon))return -1;
+        if (gui_update(gui))return -1;
+        if (audio_core->midi_param->Midi_file_opened == ON)
+        {
+            //TO BE FILLED BY VINCE'S function when playing a midi file
+
+
+            audio_core->midi_param->Midi_playing_OnOff = ON;
+            audio_core->midi_param->Midi_paused_file=OFF;
+        }
+        else
+        {
+            //emptying the polyphony array
+            for (int i = 0; i < POLYPHONY_MAX; i++)
+            {
+                note_off(audio_core->note_array[i]);
+                audio_core->note_array[i]->master_onoff = OFF;
+            }
+            tinyfd_messageBox("ERROR in MIDI playing session", "In order to PLAY a MIDI file you should probably start by opening a midi file first ?\n Please open a MIDI file on the button above ", "yes", "ok", 1);
+
+        }
+
+        if (audio_core->midi_param->Midi_playing_OnOff == ON)
+        {
+            if (gui_set_switch_image(gui->buttons[6].sdl_button, gui->buttons[6].imgon))return -1;
+
+            //switches the stop button back to off
+            if(gui_set_switch_image(gui->buttons[7].sdl_button, gui->buttons[7].imgoff))return -1;
+
+        }
+        else
+        {
+            if (gui_set_switch_image(gui->buttons[6].sdl_button, gui->buttons[6].imgoff))return -1;
+
+        }
+        param_changed = 1;
+    }
+
+
+    // Button PAUSE MIDI file
+    if (SDL_Button_mouse_down(gui->buttons[7].sdl_button, &gui->event))
+    {
+        if (gui_set_switch_image(gui->buttons[7].sdl_button, gui->buttons[7].imgon))return -1;
+        if (gui_update(gui))return -1;
+        if (audio_core->midi_param->Midi_playing_OnOff == ON)
+        {
+            //TO BE FILLED BY VINCE'S function when pausing a midi file
+
+
+            audio_core->midi_param->Midi_playing_OnOff = OFF;
+            audio_core->midi_param->Midi_paused_file = ON;
+
+        }
+        else
+        {
+            //emptying the polyphony array
+            for (int i = 0; i < POLYPHONY_MAX; i++)
+            {
+                note_off(audio_core->note_array[i]);
+                audio_core->note_array[i]->master_onoff = OFF;
+            }
+            tinyfd_messageBox("ERROR in MIDI playing session", "In order to pause a MIDI file you should probably start by playing or opening a midi file first ?\n Please open a MIDI file on the button above or launch the song with the play button to the left.", "yes", "ok", 1);
+
+        }
+
+        //If on pause play button switches to off
+        if (audio_core->midi_param->Midi_playing_OnOff == OFF)
+        {
+            if (gui_set_switch_image(gui->buttons[6].sdl_button, gui->buttons[6].imgoff))return -1;
+
+        }
+        if (audio_core->midi_param->Midi_paused_file == OFF)
+        {
+            if (gui_set_switch_image(gui->buttons[7].sdl_button, gui->buttons[7].imgoff))return -1;
+
+        }
+
+        param_changed = 1;
+    }
+
+
+    // Button STOP MIDI file
+    if (SDL_Button_mouse_down(gui->buttons[8].sdl_button, &gui->event))
+    {
+        if (gui_set_switch_image(gui->buttons[8].sdl_button, gui->buttons[8].imgon))return -1;
+        if (gui_update(gui))return -1;
+        if (audio_core->midi_param->Midi_playing_OnOff == ON || audio_core->midi_param->Midi_file_opened == ON)
+        {
+            //TO BE FILLED BY VINCE'S function when stopping a midi file
+
+
+            audio_core->midi_param->Midi_playing_OnOff = OFF;
+            audio_core->midi_param->Midi_file_opened = OFF;
+            audio_core->midi_param->Midi_paused_file = OFF;
+            audio_core->midi_param->Midi_stopped_file = ON;
+
+            gui->texts[1].text_surface =
+                TTF_RenderText_Blended(gui->texts[1].font, midi_text, gui->texts[1].color);
+
+            //emptying the polyphony array
+            for (int i = 0; i < POLYPHONY_MAX; i++)
+            {
+                note_off(audio_core->note_array[i]);
+                audio_core->note_array[i]->master_onoff = OFF;
+            }
+            tinyfd_messageBox("MIDI playing session", "The MIDI file has been successfully closed", "yes", "ok", 1);
+
+        }
+        else
+        {
+            //emptying the polyphony array
+            for (int i = 0; i < POLYPHONY_MAX; i++)
+            {
+                note_off(audio_core->note_array[i]);
+                audio_core->note_array[i]->master_onoff = OFF;
+            }
+            tinyfd_messageBox("ERROR in MIDI playing session", "In order to STOP a MIDI file you should probably start by playing or opening a midi file first ?\n Please open a MIDI file on the button above or launch the song with the play button to the left.", "yes", "ok", 1);
+
+        }
+
+        if (gui_set_switch_image(gui->buttons[8].sdl_button, gui->buttons[8].imgoff))return -1;
+        if (gui_set_switch_image(gui->buttons[7].sdl_button, gui->buttons[7].imgoff))return -1;
+        if (gui_set_switch_image(gui->buttons[6].sdl_button, gui->buttons[6].imgoff))return -1;
+
+
+        param_changed = 1;
+    }
+
     // Button RECORD wav file
     if (SDL_Button_mouse_down(gui->buttons[3].sdl_button, &gui->event))
     {
         if (gui_set_switch_image(gui->buttons[3].sdl_button, gui->buttons[3].imgon))return -1;
         if (gui_update(gui))return -1;
 
+        //emptying the polyphony array
+        for (int i = 0; i < POLYPHONY_MAX; i++)
+        {
+            note_off(audio_core->note_array[i]);
+            audio_core->note_array[i]->master_onoff = OFF;
+        }
         RecordPath =
             tinyfd_saveFileDialog("Record your musical talent in a wav file", "../.wav", 1, WavFilterPatterns, NULL);
         if (RecordPath)
@@ -1156,6 +1402,12 @@ int process_buttons(Gui *gui, Core *audio_core, MIDI_Peripheral_fd *midi_periphe
 
         if (audio_core->record_param->RecordOnOff)
         {
+            //emptying the polyphony array
+            for (int i = 0; i < POLYPHONY_MAX; i++)
+            {
+                note_off(audio_core->note_array[i]);
+                audio_core->note_array[i]->master_onoff = OFF;
+            }
             if (tinyfd_messageBox("Recording session", "Looks like you stopped the recording. Were you playing this bad that you want to quit ?\n Feel free to try again ", "yesno", "question", 0))
             {
                 //switching off the recording session
@@ -1166,6 +1418,12 @@ int process_buttons(Gui *gui, Core *audio_core, MIDI_Peripheral_fd *midi_periphe
         }
         else
         {
+            //emptying the polyphony array
+            for (int i = 0; i < POLYPHONY_MAX; i++)
+            {
+                note_off(audio_core->note_array[i]);
+                audio_core->note_array[i]->master_onoff = OFF;
+            }
             tinyfd_messageBox("Recording session", "I believe that in order to stop the recording, you should probably start recording first ?\n Feel free to try to record your exploits ", "yes", "ok", 1);
         }
 

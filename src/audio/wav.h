@@ -17,7 +17,7 @@
 
 /**
  *  \fn int write_wav_file(int bufferLength, Audio_Buffer buffer, SNDFILE *sndFile)
- *  \brief This function is called when the recording is on inside the callback of the core.
+ *  \brief This function is called when the recording is on, inside the callback of the core.
  *
  *  \param bufferLength an int indicating the length of the buffer
  *  \param buffer A pointer to the audio data buffer.

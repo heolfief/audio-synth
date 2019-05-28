@@ -28,6 +28,12 @@ Core *alloc_core(Uint16 buffer_length)
     ac->record_param = (RecordParam *) malloc(sizeof(RecordParam));
     ac->record_param->RecordOnOff = OFF;
 
+    ac->midi_param = (MidiParam *) malloc(sizeof(MidiParam));
+
+    ac->midi_param->Midi_file_opened=OFF;
+    ac->midi_param->Midi_playing_OnOff=OFF;
+
+
     ac->note_array = alloc_polyphony(buffer_length);
     if (ac->note_array == NULL) return NULL;
 
@@ -59,6 +65,12 @@ int free_record_param(RecordParam *record_param)
     free(record_param);
     return 0;
 }
+
+int free_midi_param(MidiParam *midi_param)
+{
+    free(midi_param);
+    return 0;
+}
 int free_core(Core *ac)
 {
     if (ac == NULL)
@@ -73,6 +85,7 @@ int free_core(Core *ac)
     if (free_audio_buffer(ac->average_audio_level))return -1;
     if (free_effect_core(ac->effect_core))return -1;
     if (free_record_param(ac->record_param))return -1;
+    if (free_midi_param(ac->midi_param)) return -1;
 
     free(ac);
 

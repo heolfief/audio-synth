@@ -23,6 +23,7 @@
 #include "gui/keypad.h"
 #include "core/audio_core.h"
 #include "audio/wav.h"
+#include "midi/midi_file.h"
 
 int main(int argc, char *argv[])
 {
@@ -107,14 +108,20 @@ int main(int argc, char *argv[])
     if (compute_filter_coeffs(audio_core->sys_param->filter_param, audio_core->sys_param->sample_rate, audio_core->effect_core->filter_state))return -1;
 
     SDL_PauseAudio(SDL_FALSE);              // Play audio (pause = off)
-
+int g=0;
     //Loops that keeps running until the user exits the app
     while (!gui->application_quit)
     {
+
+
+
         currentTime = SDL_GetTicks();       // Get time from SDL init in ms
 
+
+        controlMidi(currentTime,audio_core);
+
         // TEMP : 1000ms delay
-        if (currentTime > lastTime + 1000)  // If time has passed
+        if (currentTime > lastTime )  // If time has passed
         {
             lastTime = currentTime;
 
@@ -193,7 +200,6 @@ int main(int argc, char *argv[])
         }
         SDL_Delay(1);
     }
-
     //switching off the recording session in case the user forgot to stop
     if(audio_core->record_param->RecordOnOff){
         audio_core->record_param->RecordOnOff = OFF;

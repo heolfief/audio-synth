@@ -1,282 +1,183 @@
 #include <stdio.h>
 #ifndef LISTMIDI_H
 #define LISTMIDI_H
-
-
+/**
+ * \file listmidi.h
+ * \brief Midi list functions
+ *
+ *
+ * Here are defined the data structure of an event of midiData and midiList with the associated functions
+ */
+/**
+ * \enum event
+ * \brief define an event
+ *
+ * This enum is define with OFF_NOTE ON_NOTE
+ */
 typedef enum event event;
 
-enum event {OFF,ON};
+enum event {OFF_NOTE,ON_NOTE};
 
 
 
-typedef struct {
-    __uint8_t  midiNote;
-    __uint8_t  attack;
-   enum  event midiEvent;
-    double delay;
-    struct midiList * next;
+
+
+
+
+/**
+ * \struct midiData
+ * \brief define an Note
+ *
+ * This struct is define with midiNote, attack,midiEvent,delay,next
+ */
+
+typedef struct midiData{
+    __uint8_t  midiNote;/*!< The midi Note to play */
+    __uint8_t  attack;/*!< The attack of the note  */
+   enum  event midiEvent;  /*!< The event */
+    double delay;  /*!< Delay to wait before this event*/
+    struct midiData * next; /*!< The next midiData*/
+}midiData;
+
+
+/**
+ * \struct midiList
+ * \brief define an linked list of midiData
+ *
+ * This struct is define with first,current,last,accrued_delay,nextmidiList
+ */
+typedef  struct midiList{
+  struct midiData * first;		/*!< The first midiData in the list */
+  struct  midiData * current;		/*!< The current midiData in the list */
+  struct midiData * last;            /*!< The last midiData in the list*/
+  double   accrued_delay;           /*!< The accrued delay of all note read before*/
+  struct midiList * nextmidiList;   /*!< The next midiList*/
+
 }midiList;
 
 
-/*!
-* \brief Une liste chaînée d'éléments génériques (void*)
-*/
-typedef struct {
-    struct midiList * first;		/*!< L'adresse du premier élément de la liste */
-    struct  midiList * current;		/*!< L'adresse de l'élément courant de la liste */
-    struct midiList * last;		/*!< L'adresse du dernier élément de la liste */
-}list;
 
 /**
- * \fn midiList * newList(void * ptr, nodeList * next)
- * \brief Function to open a target File
+ * \fn fill_midiData(__uint8_t midiNote, __uint8_t attack, event midiEvent, double delay, midiData *current)
+ * \brief Function to fill an midiData struct
  *
- * \param name Name of the target file
- * \param mode Opening method : r+: reading, w+: writting ...
- * \param t TypeRetour kind of return
+ * \param midiNote The midi Note to play
+ * \param attack the attack of the selected note
+ * \param midiEvent The event associated with the selected note
+ * \param delay The delay before this note has played
+ * \param midiData The current midiData to know the next midiData
  *
- * \return the target File open
+ */
+void fill_midiData(__uint8_t midiNote, __uint8_t attack, event midiEvent, double delay, midiData *current);
+/**
+ * \fn new_note_list(__uint8_t midiNote, __uint8_t attack, event midiEvent, double delay, midiData *previous)
+ * \brief Function to allocate a new node
+ *
+ * \param midiNote The midi Note to play
+ * \param attack the attack of the selected note
+ * \param midiEvent The event associated with the selected note
+ * \param delay The delay before this note has played
+ * \param previous The current midiData to know the next midiData
+ *
+
+ * \return An Struct midiData filled
  */
 
-midiList * newNodeList(__uint8_t  *midiNote, __uint8_t *attack,  event  midiEvent, double  delay, midiList * next);
+midiData * new_note_list(__uint8_t midiNote, __uint8_t attack, event midiEvent, double delay, midiData *previous);
 
 /**
- * \fn void initList(list * l)
- * \brief Function to open a target File
+ * \fn void initList()
+ * \brief Function to init a midiList with an allocation
  *
- * \param name Name of the target file
- * \param mode Opening method : r+: reading, w+: writting ...
- * \param t TypeRetour kind of return
  *
- * \return the target File open
+ * \return an midiList allocated
  */
-list * initList();
+midiList * initList();
 
-/**
- * \fn void printList(list * l)
- * \brief Function to open a target File
- *
- * \param name Name of the target file
- * \param mode Opening method : r+: reading, w+: writting ...
- * \param t TypeRetour kind of return
- *
- * \return the target File open
- */
-void printList(list * l);
 /**
  * \fn int empty(list * l)
- * \brief Function to open a target File
+ * \brief Function to know if a list is empty or not
  *
- * \param name Name of the target file
- * \param mode Opening method : r+: reading, w+: writting ...
- * \param t TypeRetour kind of return
- *
- * \return the target File open
- */
-int empty(list * l);
-/**
- * \fn int oneElement(list * l)
- * \brief Function to open a target File
- *
- * \param name Name of the target file
- * \param mode Opening method : r+: reading, w+: writting ...
- * \param t TypeRetour kind of return
- *
- * \return the target File open
- */
+ * \param l The midiList to test
 
-int oneElement(list * l);
-/**
- * \fn int count(list* l)
- * \brief Function to open a target File
  *
- * \param name Name of the target file
- * \param mode Opening method : r+: reading, w+: writting ...
- * \param t TypeRetour kind of return
- *
- * \return the target File open
+ * \return 1 if the list was empty 0 otherwise
  */
-int count(list* l);
+int empty(midiList * l);
+
+
 
 /**
- * \fn int first(list * l)
- * \brief Function to open a target File
+ * \fn first(midiList * l)
+ * \brief Function to know if the element was the first
  *
- * \param name Name of the target file
- * \param mode Opening method : r+: reading, w+: writting ...
- * \param t TypeRetour kind of return
- *
- * \return the target File open
- */
-int first(list * l);
+ * \param l The midiList
 
-/**
- * \fn int last(list * l)
- * \brief Function to open a target File
  *
- * \param name Name of the target file
- * \param mode Opening method : r+: reading, w+: writting ...
- * \param t TypeRetour kind of return
- *
- * \return the target File open
+ * \return 1 if the current was the fist in the midiList 0 otherwise
  */
-int last(list * l);
+int first(midiList * l);
+
+
 
 /**
  * \fn int outOfList(list * l)
- * \brief Function to open a target File
+ * \brief Function to know if the current element of the list is Out of list
  *
- * \param name Name of the target file
- * \param mode Opening method : r+: reading, w+: writting ...
- * \param t TypeRetour kind of return
+ * \param l The midiList
+
  *
- * \return the target File open
+ * \return 1 if the current was Out of the list  in the midiList 0 otherwise
  */
-int outOfList(list * l);
+int isOutOfList(midiList * l);
 /**
  * \fn void setOnFirst(list * l)
- * \brief Function to open a target File
+ * \brief Function to put the current element of a midiList to the first
  *
- * \param name Name of the target file
- * \param mode Opening method : r+: reading, w+: writting ...
- * \param t TypeRetour kind of return
- *
- * \return the target File open
+ * \param l The midiList with the current to put at first
+
+
  */
-void setOnFirst(list * l);
-/**
- * \fn void setOnLast(list * l)
- * \brief Function to open a target File
- *
- * \param name Name of the target file
- * \param mode Opening method : r+: reading, w+: writting ...
- * \param t TypeRetour kind of return
- *
- * \return the target File open
- */
-void setOnLast(list * l);
+void setOnFirst(midiList * l);
+
 /**
  * \fn void next(list * l)
- * \brief Function to open a target File
+ * \brief Function to put the current element of a midi list to the next element
  *
- * \param name Name of the target file
- * \param mode Opening method : r+: reading, w+: writting ...
- * \param t TypeRetour kind of return
- *
- * \return the target File open
+ \param l The midiList with the current to next
  */
-void next(list * l);
-/**
- * \fn void* getCurrent(list * l)
- * \brief Function to open a target File
- *
- * \param name Name of the target file
- * \param mode Opening method : r+: reading, w+: writting ...
- * \param t TypeRetour kind of return
- *
- * \return the target File open
- */
-
-void* getCurrent(list * l);
+void next(midiList * l);
 
 /**
- * \fn int insertFirst(list * l, void* data)
- * \brief Function to open a target File
+ * \fn int deleteFirst(midiList * l)
+ * \brief Function to delete the first element of the list
  *
- * \param name Name of the target file
- * \param mode Opening method : r+: reading, w+: writting ...
- * \param t TypeRetour kind of return
+ \param l The midiList with the current to next
  *
- * \return the target File open
- */
-int insertFirst(list * l, void* data);
-/**
- * \fn int deleteFirst(list * l, void** data)
- * \brief Function to open a target File
- *
- * \param name Name of the target file
- * \param mode Opening method : r+: reading, w+: writting ...
- * \param t TypeRetour kind of return
- *
- * \return the target File open
+ * \return 1 if the first element was deleted  in the midiList 0 otherwise
  */
 
-int deleteFirst(list * l, void** data);
+int deleteFirst(midiList * l);
 /**
  * \fn void freeNodeList(nodeList * n)
- * \brief Function to open a target File
+ * \brief Function to free an node of the list in our case a midiData
  *
- * \param name Name of the target file
- * \param mode Opening method : r+: reading, w+: writting ...
- * \param t TypeRetour kind of return
- *
- * \return the target File open
+ * \param n the selected midiData to delete
+
+
  */
 
-void freeNodeList(midiList * n);
+void freeNodeList(midiData * n);
 /**
  * \fn void freeList(list * l)
- * \brief Function to open a target File
+ * \brief Function to free a midiList
  *
- * \param name Name of the target file
- * \param mode Opening method : r+: reading, w+: writting ...
- * \param t TypeRetour kind of return
- *
- * \return the target File open
+ \param l The midiList to delete
  */
 
-void freeList(list * l);
-/**
- * \fn int insertLast(list * l, void* data)
- * \brief Function to open a target File
- *
- * \param name Name of the target file
- * \param mode Opening method : r+: reading, w+: writting ...
- * \param t TypeRetour kind of return
- *
- * \return the target File open
- */
-
-int insertLast(list * l, void* data);
-
-/**
- * \fn int deleteLast(list * l, void** data)
- * \brief Function to open a target File
- *
- * \param name Name of the target file
- * \param mode Opening method : r+: reading, w+: writting ...
- * \param t TypeRetour kind of return
- *
- * \return the target File open
- */
-int deleteLast(list * l, void** data);
-
-/**
- * \fn int insertAfterCurrent(list * l, void* data)
- * \brief Function to open a target File
- *
- * \param name Name of the target file
- * \param mode Opening method : r+: reading, w+: writting ...
- * \param t TypeRetour kind of return
- *
- * \return the target File open
- */
-
-int insertAfterCurrent(list * l, void* data);
-/**
- * \fn int deleteCurrent(list * l, void** data)
- * \brief Function to open a target File
- *
- * \param name Name of the target file
- * \param mode Opening method : r+: reading, w+: writting ...
- * \param t TypeRetour kind of return
- *
- * \return the target File open
- */
+void freeList(midiList * l);
 
 
-
-int deleteCurrent(list * l, void** data);
 
 
 

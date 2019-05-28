@@ -7,6 +7,8 @@
  */
 #include <stdio.h>
 #include "../Listmidi/listmidi.h"
+#include "../Listmidi/listDataRange.h"
+#include "../core/audio_core.h"
 #ifndef MIDI_H
 #define MIDI_H
 #define MSKHEX 0xF0
@@ -22,25 +24,12 @@
  */
 
 typedef struct {
-    u_int16_t MTHD[4]; /*!< 4 bytes for header flag*/
-    u_int16_t SPEC_ADDR[4]; /*!< 4 bytes to inform about the addressing specs*/
-    u_int16_t SMF ;/*!<2 bytes to indicate the data ranges: 0 only one data range, 1 several tracks played simultaneously, 2 more tracks but to be played one after the other*/
-    u_int16_t MTRK ; /*!<2 bytes for the number of data ranges*/
-    u_int16_t NOIRE; /*!< 2 bytes: number divisions of the black*/
-
+    __uint16_t MTHD[4]; /*!< 4 bytes for header flag*/
+  __uint16_t SPEC_ADDR[4]; /*!< 4 bytes to inform about the addressing specs*/
+  __uint16_t SMF ;/*!<2 bytes to indicate the data ranges: 0 only one data range, 1 several tracks played simultaneously, 2 more tracks but to be played one after the other*/
+  __uint16_t MTRK ; /*!<2 bytes for the number of data ranges*/
+  __uint16_t NOIRE; /*!< 2 bytes: number divisions of the black*/
 } Header;
-/*
-typedef struct {
-    u
-
-
-
-
-
-}NOTE;
-*/
-
-
 
 
 /**
@@ -56,25 +45,16 @@ typedef struct {
 void fillHeaderRead (Header*Header, FILE* file);
 /**
  * \fn __uint32_t  *readDataRange (FILE *f)
- * \brief Function to read Data range from target file and record it in a buffer , this function read a file with readDataRangeSorted,setAsBeginDataRange,recordDataRange,getSizeDataRange
+ * \brief Function to read Data range from target file and record it in a buffer.
  *
  * \param file Target file to read midi data range
+ * \param sizeDataRange size of the data range
  *
- * \return buffer __uint32_t*  with the data range sorted
+ * \return buffer __uint8_t*  with the data range of a midi file
  */
 
-//__uint32_t  * playDataRange (FILE *file);
-/**
- * \fn __uint32_t  * readDataRangeSorted( u_int32_t size)
- * \brief Function read Data range and stock in buffer with size of data range
- *
- * \param size Size of the length of data
- * \param f midi File targeted for read
- *
- * \return buffer __uint32_t*  with the data range sorted
- */
 
-__uint8_t  * readDataRange( u_int32_t sizeDataRange, FILE *file);
+__uint8_t  * readDataRange( __uint32_t sizeDataRange, FILE *file);
 /**
  * \fn void setAsBeginDataRange (FILE *f)
  * \brief Function to go at the begining of  midi data ranged and passed it to begin the reading
@@ -84,29 +64,7 @@ __uint8_t  * readDataRange( u_int32_t sizeDataRange, FILE *file);
  */
 
 void setAsBeginDataRange (FILE *file);
-/**
- * \fn u_int32_t skipMetaData(FILE *file,u_int32_t size,u_int32_t currentLine)
- * \brief Function to ignore metaData in a data range
- *
- * \param file Target midi file
- * \param size length of the Data range to be read
- * \param currentLine Position for read in the File
- *
- * \return u_int32_t  currentLine
- */
 
-u_int16_t getSizeMetaData(int i, u_int16_t * DataRange);
-/**
- * \fn u_int32_t writeRomDataRange(FILE *f,u_int32_t size)
- * \brief Write Data Range sorted without Meta Data in a file tmp.txt, this function use  skipMetaData
- *
- * \param file Target File that contains data that wants to write in tmp.txt
- * \param size length of data Range
- *
- * \return u_int32_t length that write in tmp.txt
- */
-
-u_int32_t writeRomDataRange(FILE *file,u_int32_t size);
 /**
  * \fn u_int32_t getSizeDataRange(FILE *f)
  * \brief Function to know the length of midi Data Range
@@ -116,50 +74,88 @@ u_int32_t writeRomDataRange(FILE *file,u_int32_t size);
  * \return length of data range
  */
 
-u_int32_t getSizeDataRange(FILE *f);
+__uint32_t getSizeDataRange(FILE *f);
 /**
- * \fn playDataRange(u_int32_t DataRangeSorted)
- * \brief Function to know the length of midi Data Range
+ * \fn sorDataRange(u_int32_t DataRangeSorted)
+ * \brief Function to sort all the event of a data range
  *
- * \param
- * \param buffer_length The size of the audio buffer (number of audio samples in the buffer)
- * \param sample_rate The sample rate of the system
- * \param phase The phase value at the beginning of the buffer
+ * \param DataRange buffer with the dataRange from midi File
+ * \param H Header information  of the midi file
+ * \param sizeDataRange size of the data Range
+ * \param l The midiist to fill with the data range sorted
  *
- * \return 0 if everything went OK, -1 otherwise
+
  */
 
-list * playDataRange(u_int8_t * DataRange, Header * H,u_int32_t sizeDataRange);
+void  sortDataRange(__uint8_t* DataRange, Header * H,__uint32_t sizeDataRange,midiList *l);
+
 
 /**
- * \fn playDataRange(u_int32_t DataRangeSorted)
- * \brief Function to know the length of midi Data Range
+ * \fn calculDelay (__uint8_t * DataDelay, int power,__uint16_t Noire)
+ * \brief Function to calcul th delay betwen two events, with conversion of hexadecimal into decimal
  *
- * \param
- * \param buffer_length The size of the audio buffer (number of audio samples in the buffer)
- * \param sample_rate The sample rate of the system
- * \param phase The phase value at the beginning of the buffer
+ * \param DataDelay An array with the data of delay in hex
+ * \param power_rate The power of hexadecimal data
+ * \param Noire The time indicator to know how divide the time
  *
- * \return 0 if everything went OK, -1 otherwise
+ * \return the resultat of the operation
  */
 
-int readAction (u_int16_t * DataRange, int increments);
+double calculDelay (__uint8_t * DataDelay, int power,__uint16_t Noire);
 
 /**
- * \fn playDataRange(u_int32_t DataRangeSorted)
- * \brief Function to know the length of midi Data Range
+ * \fn readEvent (__uint8_t * midiNote, __uint8_t * attack, int  * midiEvent,__uint8_t* DataRange , int *  i)
+ * \brief Function to sort the kind of event
  *
- * \param
- * \param buffer_length The size of the audio buffer (number of audio samples in the buffer)
- * \param sample_rate The sample rate of the system
- * \param phase The phase value at the beginning of the buffer
+ * \param midiNote The struct to fill
+ * \param attack the attack of the note
+ * \param midiEvent the kind of event Note on or Note off
+ * \param DataRange The array with all data from the midi File
+ * \param i The incrementation in the DataRange array
  *
- * \return 0 if everything went OK, -1 otherwise
+ * \return the incrementation in the arrey DataRange
  */
 
-double calculDelay (__uint8_t * DataDelay, int power,u_int16_t Noire);
+
+int readEvent (__uint8_t * midiNote, __uint8_t * attack, int  * midiEvent,__uint8_t* DataRange , int *  i);
+/**
+ * \fn record_midi_file(char * name)
+ * \brief Function to record in dataRangeList all the midilist with the note of a midi File
+ *
+ * \param name the path of the targeted file
+ *
+ * \return the dataRangelist filled with all data of midi file
+ */
+
+dataRangeList * record_midi_file(char * name);
+
+
+/**
+ * \fn playMidiFile(Core * audio_core, double currentTime,dataRangeList * l,int size)
+ * \brief Function to play  song with a dataRange List
+ *
+ * \param audio_core the core of the application
+ * \param currentTime the tima has passed from the moment that application started
+ * \param l_the data range with all the data
+ * \param size the number of data Range
+ *
+
+ */
+
+
+void playMidiFile(Core * audio_core, double currentTime,dataRangeList * l,int size);
+
+/**
+ * \fn controlMidi (double currenTime,Core * ac )
+ * \brief Function to control the midi reading with the different flags from gui
+ *
+ * \param ac core the core of the application
+ * \param currenTime he tima has passed from the moment that application started
+ */
+
+
+void controlMidi (double currenTime,Core * ac );
 
 
 
-int readEvent (__uint8_t * midiNote, u_int8_t * attack, int  * midiEvent,u_int8_t * DataRange , int *  i);
 #endif

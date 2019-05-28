@@ -24,10 +24,18 @@
  */
 typedef struct
 {
-  OnOff RecordOnOff;
-  SNDFILE *sndFile;
+  OnOff RecordOnOff;                  /*!< flag if a wav file is being recorded*/
+  SNDFILE *sndFile;                   /*!< the "sndfile" being recorded*/
 } RecordParam;
 
+typedef struct
+{
+  OnOff Midi_file_opened;             /*!< flag is a midi file is open*/
+  OnOff Midi_playing_OnOff;           /*!< flag if a midi file is being played*/
+  OnOff Midi_paused_file;             /*!< flag if a midi file is paused*/
+  OnOff Midi_stopped_file;            /*!< flag if a midi file is stopped and closed*/
+  const char *Midi_file_Path;         /*!< path of the file to be played*/
+}MidiParam;
 /**
  * \struct Core
  * \brief define an audio core
@@ -45,6 +53,7 @@ typedef struct
   Audio_Buffer average_audio_level;  /*!<the average instantaneous volume level that is played by the soundcard */
   Uint8 buffer_is_new;               /*!<flag if the buffer is refilled*/
   RecordParam *record_param;          /*!< structure containing recording parameters*/
+  MidiParam *midi_param;              /*!< structure containing midi playing parameters*/
 } Core;
 
 /**
@@ -106,5 +115,26 @@ int master_effects(Core *ac);
  * \return the actual average
  */
 Sint16 moving_average(Sint16 sample);
+
+/**
+ * \fn int free_record_param(RecordParam *record_param)
+ * \brief free the recording parameters of the audio core
+ *
+ * \param recording parameters
+ *
+ * \return 0 if went well
+ */
+int free_record_param(RecordParam *record_param);
+
+/**
+ * \fn int free_midi_param(MidiParam *midi_param)
+ * \brief free the midi playing parameters of the audio core
+ *
+ * \param midi parameters
+ *
+ * \return 0 if went well
+ */
+int free_midi_param(MidiParam *midi_param);
+
 
 #endif //AUDIO_SYNTH_AUDIO_CORE_H

@@ -16,7 +16,7 @@
 
 FILE * openFile (char * nom, char * mode, TypeRetour t){
     FILE * fichier;
-    if ((fichier = fopen(nom,"r")) == (FILE *) NULL){ //verify that File exist otherwise error
+    if ((fichier = fopen(nom,mode)) ==  NULL){ //verify that File exist otherwise error
         printf("open file error");
         return fichier;
     }
@@ -37,7 +37,7 @@ u_int8_t * BlockFileReader (FILE * fichier, u_int32_t nombre){
     }
 
     fread(buffer,sizeof(unsigned char),nombre,fichier);
-    return buffer;
+    return  buffer;
 
 }
 
