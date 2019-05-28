@@ -32,7 +32,7 @@ int main(int argc, char *argv[])
     Gui *gui;
     MIDI_Peripheral_fd midi_peripheral = -1;
     Uint8 mouse_is_down = 0;
-    Uint32 lastTime = 0, currentTime;
+    Uint32 currentTime;
 
     // Default parameters. If buffer_len changed, core memory allocation needs to be redone
     int sample_rate = 48000;
@@ -116,15 +116,9 @@ int main(int argc, char *argv[])
 
         controlMidi(currentTime, audio_core);
 
-        if (currentTime > lastTime)  // If time has passed
-        {
-            lastTime = currentTime;
-        }
-
         //checks if the buffer has been updated and process the leds of the VUmeter
         if (audio_core->buffer_is_new)
         {
-
             if (process_leds(gui, audio_core))exit(EXIT_FAILURE);
         }
 
@@ -153,6 +147,11 @@ int main(int argc, char *argv[])
             {
                 case SDL_QUIT:
 
+                    for (int i = 0; i < POLYPHONY_MAX; i++)
+                    {
+                        note_off(audio_core->note_array[i]);
+                        audio_core->note_array[i]->master_onoff = OFF;
+                    }
                     if (prompt_quit())
                     {
                         printf("Quit asked. Closing...\n");
@@ -164,9 +163,13 @@ int main(int argc, char *argv[])
 
                     if (gui->event.key.keysym.sym == SDLK_ESCAPE)
                     {
+                        for (int i = 0; i < POLYPHONY_MAX; i++)
+                        {
+                            note_off(audio_core->note_array[i]);
+                            audio_core->note_array[i]->master_onoff = OFF;
+                        }
                         if (prompt_quit())
                         {
-
                             printf("Quit asked. Closing...\n");
                             gui->application_quit = SDL_TRUE;
 
@@ -183,7 +186,6 @@ int main(int argc, char *argv[])
                 case SDL_MOUSEBUTTONDOWN:
 
                     mouse_is_down = 1;
-                    //printf("Mouse clic on x=%d, y=%d\n", gui->event.button.x, gui->event.button.y);
                     break;
 
                 case SDL_MOUSEBUTTONUP:
@@ -194,6 +196,7 @@ int main(int argc, char *argv[])
         }
         SDL_Delay(1);
     }
+
     //switching off the recording session in case the user forgot to stop
     if (audio_core->record_param->RecordOnOff)
     {

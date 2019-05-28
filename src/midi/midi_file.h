@@ -120,16 +120,15 @@ int readEvent(__uint8_t *midiNote, __uint8_t *attack, int *midiEvent, __uint8_t 
 dataRangeList *record_midi_file(char *name);
 
 /**
- * \fn playMidiFile(Core * audio_core, double currentTime,dataRangeList * l,int size)
+ * \fn playMidiFile(Core * audio_core, double currentTime,dataRangeList * l)
  * \brief Function to play  song with a dataRange List
  *
  * \param audio_core the core of the application
  * \param currentTime the tima has passed from the moment that application started
  * \param l_the data range with all the data
- * \param size the number of data Range
  *
  */
-void playMidiFile(Core *audio_core, double currentTime, dataRangeList *l, int size);
+void playMidiFile(Core *audio_core, double currentTime, dataRangeList *l);
 
 /**
  * \fn controlMidi (double currentTime,Core * ac )

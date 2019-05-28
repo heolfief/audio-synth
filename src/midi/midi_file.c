@@ -259,7 +259,7 @@ u_int32_t getSizeDataRange(FILE *f)
 
 }
 
-void playMidiFile(Core *audio_core, double currentTime, dataRangeList *l, int size)
+void playMidiFile(Core *audio_core, double currentTime, dataRangeList *l)
 {
 
     static double lastTime = 0;
@@ -294,14 +294,14 @@ void playMidiFile(Core *audio_core, double currentTime, dataRangeList *l, int si
 
 dataRangeList *record_midi_file(char *name)
 {
-    FILE *test = openFile(name, "r+", RETOUR);
-    Header *H = (Header *) malloc(sizeof(Header));
-    fillHeaderRead(H, test);
     int size = 0;
-
     u_int8_t *MidiData;
     midiList *clairdelune = NULL;
     dataRangeList *blue;
+    FILE *test = openFile(name, "r+", RETOUR);
+    Header *H = (Header *) malloc(sizeof(Header));
+    fillHeaderRead(H, test);
+
     blue = initdataRangeList();
 
     for (int i = 0; i < H->MTRK - 1; i++)
@@ -322,15 +322,12 @@ dataRangeList *record_midi_file(char *name)
         sortDataRange(MidiData, H, size, clairdelune);
 
         blue->currentDataRange = new_Midi_List(clairdelune, (midiList *) blue->currentDataRange);
-
-        int g = 0;
-
     }
+
     blue->firstDataRange = blue->currentDataRange;
     for (int i = 0; i < H->MTRK - 1; i++)
     {
         setOnFirst(blue->firstDataRange);
-
     }
 
     closeFile(test);
@@ -352,20 +349,17 @@ void controlMidi(double currentTime, Core *ac)
     }
     if (ac->midi_param->Midi_playing_OnOff)
     {
-        playMidiFile(ac, currentTime, l, 31);
+        playMidiFile(ac, currentTime, l);
         f = 0;
     }
     if (ac->midi_param->Midi_paused_file && f == 0)
     {
-
         for (int i = 0; i < POLYPHONY_MAX; i++)
         {
             note_off(ac->note_array[i]);
             ac->note_array[i]->master_onoff = OFF;
         }
-
         f = 1;
-
     }
     if (ac->midi_param->Midi_stopped_file && f == 0)
     {
