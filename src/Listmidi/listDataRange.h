@@ -1,10 +1,3 @@
-/**
- * \file listDataRange.h
- * \brief BRIEF DESCRIPTION
- *
- *  DESCRIPTION
- */
-
 
 /**
  * \file listDataRange.h

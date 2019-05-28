@@ -387,7 +387,7 @@ void controlMidi(double currentTime, Core *ac)
         }
   g=0;
         freeDataRange(l);
-        free(l);
+        l =NULL;
 
     }
 

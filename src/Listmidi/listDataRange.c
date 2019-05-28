@@ -1,11 +1,3 @@
-
-
-#include "listDataRange.h"
-
-#include "listmidi.h"
-#include "stdio.h"
-#include "stdlib.h"
-#include "../core/note/adsr.h"
 /**
  * \file listDataRange.c
  * \brief list dataRange function
@@ -13,6 +5,14 @@
  *
  * Here are defined the function that works data range list
  */
+
+#include "listDataRange.h"
+
+#include "listmidi.h"
+#include "stdio.h"
+#include "stdlib.h"
+#include "../core/note/adsr.h"
+
 
 midiList *new_Midi_List(midiList *current, midiList *previous)
 {
@@ -199,6 +199,7 @@ midiData * getFirstNoteToPlay(dataRangeList * l){
     if (old_dataRange == numberOfMidiData ){
         old_delay =0;
 
+
     }
     else
     {
@@ -207,12 +208,15 @@ midiData * getFirstNoteToPlay(dataRangeList * l){
         old_delay =  temp;
     }
 
-    m->accrued_delay +=n->delay;
+
 
 
     next(m);
+    midiData * Next = m->current;
+    m->accrued_delay += Next->delay;
     m=l->firstDataRange;
     setOnFirstDataRange(l);
+
     for (int i = 0;i<getCount(l);i++){
         if (numberOfMidiData != i)
             m->accrued_delay = m->accrued_delay - temp;
