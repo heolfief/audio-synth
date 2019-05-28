@@ -19,7 +19,7 @@
 typedef struct dataRangeList
 {
   struct midiList *firstDataRange;        /*!< L'adresse du premier élément de la liste */
-  struct midiList *currentDataRange;        /*!< L'adresse de l'élément courant de la liste */
+  struct midiList *currentDataRange;      /*!< L'adresse de l'élément courant de la liste */
   struct midiList *lastDataRange;        /*!< L'adresse du dernier élément de la liste */
 } dataRangeList;
 

@@ -12,7 +12,6 @@
 #ifndef MIDI_H
 #define MIDI_H
 #define MSKHEX 0xF0u
-#define MSKBIN 0x80
 
 /**
  * \struct Header

@@ -282,11 +282,8 @@ void playMidiFile(Core *audio_core, double currentTime, dataRangeList *l)
 
     if (n == NULL)
     {
-
         l = updateDelayDataRange(l);
-
         n = getFirstNoteToPlay(l);
-
     }
 
     if (currentTime > lastTime + n->delay)  // If time has passed
