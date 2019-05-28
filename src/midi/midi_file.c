@@ -373,27 +373,40 @@ dataRangeList * record_midi_file(char * name)
 void controlMidi (double currenTime,Core * ac ){
     static dataRangeList *l;
     static int g = 0;
+    static int f = 0;
 
     if (ac->midi_param->Midi_file_opened && g==0){
         l=record_midi_file((char *)ac->midi_param->Midi_file_Path);
+        f=0;
         g++;
 
     }
     if(ac->midi_param->Midi_playing_OnOff ){
         playMidiFile(ac ,currenTime,l,31);
+        f=0;
     }
-    if (ac->midi_param->Midi_paused_file)
+    if (ac->midi_param->Midi_paused_file && f == 0)
     {
 
-        for (int i = 0; i < 100; i++)
+        for (int i = 0; i < POLYPHONY_MAX; i++)
         {
-
+            note_off(ac->note_array[i]);
+            ac->note_array[i]->master_onoff = OFF;
         }
+
+    f=1;
+        printf("coucou\n");
     }
-    if (ac->midi_param->Midi_stopped_file)
+    if (ac->midi_param->Midi_stopped_file && f ==0)
     {
+        for (int i = 0; i < POLYPHONY_MAX; i++)
+        {
+            note_off(ac->note_array[i]);
+            ac->note_array[i]->master_onoff = OFF;
+        }
+        f=1;
         freeDataRange(l);
-        g == 0;
+        g = 0;
     }
 
 }

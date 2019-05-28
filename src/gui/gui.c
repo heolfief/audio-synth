@@ -1135,6 +1135,13 @@ int process_buttons(Gui *gui, Core *audio_core, MIDI_Peripheral_fd *midi_periphe
         if (gui_set_switch_image(gui->buttons[0].sdl_button, gui->buttons[0].imgon))return -1;
         if (gui_update(gui))return -1;
 
+        //emptying the polyphony array
+        for (int i = 0; i < POLYPHONY_MAX; i++)
+        {
+            note_off(audio_core->note_array[i]);
+            audio_core->note_array[i]->master_onoff = OFF;
+        }
+
         path = tinyfd_openFileDialog("Load a preset", "../presets", 1, lFilterPatterns, NULL, 0);
         if (path)
         {
@@ -1155,6 +1162,12 @@ int process_buttons(Gui *gui, Core *audio_core, MIDI_Peripheral_fd *midi_periphe
         if (gui_set_switch_image(gui->buttons[1].sdl_button, gui->buttons[1].imgon))return -1;
         if (gui_update(gui))return -1;
 
+        //emptying the polyphony array
+        for (int i = 0; i < POLYPHONY_MAX; i++)
+        {
+            note_off(audio_core->note_array[i]);
+            audio_core->note_array[i]->master_onoff = OFF;
+        }
         path = tinyfd_saveFileDialog("Load a preset", "../presets/.prst", 1, lFilterPatterns, NULL);
         if (path)
         {
@@ -1175,6 +1188,12 @@ int process_buttons(Gui *gui, Core *audio_core, MIDI_Peripheral_fd *midi_periphe
             *midi_peripheral = open_midi_peripheral();
             if (*midi_peripheral == -1)
             {
+                //emptying the polyphony array
+                for (int i = 0; i < POLYPHONY_MAX; i++)
+                {
+                    note_off(audio_core->note_array[i]);
+                    audio_core->note_array[i]->master_onoff = OFF;
+                }
                 sys_print_error("Failed opening MIDI device.");
                 tinyfd_messageBox("Error", "No MIDI device found.", "ok", "error", 1);
                 return 0;
@@ -1192,6 +1211,12 @@ int process_buttons(Gui *gui, Core *audio_core, MIDI_Peripheral_fd *midi_periphe
         if (gui_set_switch_image(gui->buttons[5].sdl_button, gui->buttons[5].imgon))return -1;
         if (gui_update(gui))return -1;
 
+        //emptying the polyphony array
+        for (int i = 0; i < POLYPHONY_MAX; i++)
+        {
+            note_off(audio_core->note_array[i]);
+            audio_core->note_array[i]->master_onoff = OFF;
+        }
         path = tinyfd_openFileDialog("Load a MIDI file", "../", 1, MIDIFilterpatterns, NULL, 0);
         if (path)
         {
@@ -1219,9 +1244,16 @@ int process_buttons(Gui *gui, Core *audio_core, MIDI_Peripheral_fd *midi_periphe
 
 
             audio_core->midi_param->Midi_playing_OnOff = ON;
+            audio_core->midi_param->Midi_paused_file=OFF;
         }
         else
         {
+            //emptying the polyphony array
+            for (int i = 0; i < POLYPHONY_MAX; i++)
+            {
+                note_off(audio_core->note_array[i]);
+                audio_core->note_array[i]->master_onoff = OFF;
+            }
             tinyfd_messageBox("ERROR in MIDI playing session", "In order to PLAY a MIDI file you should probably start by opening a midi file first ?\n Please open a MIDI file on the button above ", "yes", "ok", 1);
 
         }
@@ -1259,6 +1291,12 @@ int process_buttons(Gui *gui, Core *audio_core, MIDI_Peripheral_fd *midi_periphe
         }
         else
         {
+            //emptying the polyphony array
+            for (int i = 0; i < POLYPHONY_MAX; i++)
+            {
+                note_off(audio_core->note_array[i]);
+                audio_core->note_array[i]->master_onoff = OFF;
+            }
             tinyfd_messageBox("ERROR in MIDI playing session", "In order to pause a MIDI file you should probably start by playing or opening a midi file first ?\n Please open a MIDI file on the button above or launch the song with the play button to the left.", "yes", "ok", 1);
 
         }
@@ -1297,11 +1335,23 @@ int process_buttons(Gui *gui, Core *audio_core, MIDI_Peripheral_fd *midi_periphe
             gui->texts[1].text_surface =
                 TTF_RenderText_Blended(gui->texts[1].font, midi_text, gui->texts[1].color);
 
+            //emptying the polyphony array
+            for (int i = 0; i < POLYPHONY_MAX; i++)
+            {
+                note_off(audio_core->note_array[i]);
+                audio_core->note_array[i]->master_onoff = OFF;
+            }
             tinyfd_messageBox("MIDI playing session", "The MIDI file has been successfully closed", "yes", "ok", 1);
 
         }
         else
         {
+            //emptying the polyphony array
+            for (int i = 0; i < POLYPHONY_MAX; i++)
+            {
+                note_off(audio_core->note_array[i]);
+                audio_core->note_array[i]->master_onoff = OFF;
+            }
             tinyfd_messageBox("ERROR in MIDI playing session", "In order to STOP a MIDI file you should probably start by playing or opening a midi file first ?\n Please open a MIDI file on the button above or launch the song with the play button to the left.", "yes", "ok", 1);
 
         }
@@ -1320,6 +1370,12 @@ int process_buttons(Gui *gui, Core *audio_core, MIDI_Peripheral_fd *midi_periphe
         if (gui_set_switch_image(gui->buttons[3].sdl_button, gui->buttons[3].imgon))return -1;
         if (gui_update(gui))return -1;
 
+        //emptying the polyphony array
+        for (int i = 0; i < POLYPHONY_MAX; i++)
+        {
+            note_off(audio_core->note_array[i]);
+            audio_core->note_array[i]->master_onoff = OFF;
+        }
         RecordPath =
             tinyfd_saveFileDialog("Record your musical talent in a wav file", "../.wav", 1, WavFilterPatterns, NULL);
         if (RecordPath)
@@ -1346,6 +1402,12 @@ int process_buttons(Gui *gui, Core *audio_core, MIDI_Peripheral_fd *midi_periphe
 
         if (audio_core->record_param->RecordOnOff)
         {
+            //emptying the polyphony array
+            for (int i = 0; i < POLYPHONY_MAX; i++)
+            {
+                note_off(audio_core->note_array[i]);
+                audio_core->note_array[i]->master_onoff = OFF;
+            }
             if (tinyfd_messageBox("Recording session", "Looks like you stopped the recording. Were you playing this bad that you want to quit ?\n Feel free to try again ", "yesno", "question", 0))
             {
                 //switching off the recording session
@@ -1356,6 +1418,12 @@ int process_buttons(Gui *gui, Core *audio_core, MIDI_Peripheral_fd *midi_periphe
         }
         else
         {
+            //emptying the polyphony array
+            for (int i = 0; i < POLYPHONY_MAX; i++)
+            {
+                note_off(audio_core->note_array[i]);
+                audio_core->note_array[i]->master_onoff = OFF;
+            }
             tinyfd_messageBox("Recording session", "I believe that in order to stop the recording, you should probably start recording first ?\n Feel free to try to record your exploits ", "yes", "ok", 1);
         }
 

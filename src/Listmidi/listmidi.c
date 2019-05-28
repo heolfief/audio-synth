@@ -1,3 +1,11 @@
+/**
+ * \file listmidi.h
+ * \brief Midi list functions
+ *
+ *
+ * Here are defined the function to control midiData and midi list and an event
+ */
+
 #include <stdio.h>
 #include "listmidi.h"
 #include "../core/note/adsr.h"
