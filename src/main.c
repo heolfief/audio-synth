@@ -198,7 +198,7 @@ int g=0;
                     break;
             }
         }
-        SDL_Delay(1);
+        SDL_Delay(0.1);
     }
     //switching off the recording session in case the user forgot to stop
     if(audio_core->record_param->RecordOnOff){

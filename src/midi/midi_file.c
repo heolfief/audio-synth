@@ -297,14 +297,14 @@ dataRangeList * record_midi_file(char * name)
     int size = 0;
 
     u_int8_t *MidiData;
-    midiList *clairdelune = NULL;
-    dataRangeList * blue;
-    blue = initdataRangeList();
+    midiList *midi_List = NULL;
+    dataRangeList * data_range_list;
+    data_range_list = initdataRangeList();
 
     for (int i = 0; i < H->MTRK - 1; i++)
     {
 
-        clairdelune = initList();
+        midi_List = initList();
         setAsBeginDataRange(test);
         size = getSizeDataRange(test);
         if (H->SMF == 1 && i == 0)
@@ -316,22 +316,22 @@ dataRangeList * record_midi_file(char * name)
 
         MidiData = readDataRange(size, test);
 
-        sortDataRange(MidiData, H, size, clairdelune);
+        sortDataRange(MidiData, H, size, midi_List);
 
-        blue->currentDataRange = new_Midi_List(clairdelune, (midiList *) blue->currentDataRange);
+        data_range_list->currentDataRange = new_Midi_List(midi_List, (midiList *) data_range_list->currentDataRange);
 
         int g = 0;
 
     }
-    blue->firstDataRange= blue->currentDataRange;
+    data_range_list->firstDataRange= data_range_list->currentDataRange;
     for (int i = 0;i<H->MTRK-1;i++){
-        setOnFirst(blue->firstDataRange);
+        setOnFirst(data_range_list->firstDataRange);
 
 
     }
 
     closeFile(test);
-    return blue;
+    return data_range_list;
 }
 
 

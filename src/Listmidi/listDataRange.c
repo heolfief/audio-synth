@@ -212,18 +212,20 @@ temp=n->delay;
 else
 {
     old_dataRange = numberOfMidiData;
-     temp = n->delay;
+     temp = n->delay-old_delay;
     old_delay =  temp;
 }
 
-    m->accrued_delay +=n->delay;
+
 
 
 next(m);
+n=m->current;
+m->accrued_delay = m->accrued_delay+n->delay;
 
 
-    setOnFirstDataRange(l);
-    m=l->firstDataRange;
+setOnFirstDataRange(l);
+m=l->firstDataRange;
 for (int i = 0;i<getCount(l);i++){
     if (numberOfMidiData != i)
        m->accrued_delay = m->accrued_delay - temp;
