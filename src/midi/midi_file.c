@@ -139,11 +139,15 @@ double calculDelay(__uint8_t * DataDelay,int power, __uint16_t Noire){
     }
     if (power > 1 )
     res = res /Noire;
-   // printf("Noire : %d",Noire);
 if (Noire == 96)
     return res*2.5 ;
 
-    return res/4 ;
+if (Noire == 1024)
+    return res/6 ;
+if (Noire == 480)
+    return res /2 ;
+
+return res;
 }
 
 int  readEvent (__uint8_t * midiNote, u_int8_t * attack,  int * midiEvent,u_int8_t * DataRange , int * i ){
@@ -357,7 +361,7 @@ void controlMidi (double currenTime,Core * ac ){
         }
 
     f=1;
-        printf("coucou\n");
+
     }
     if (ac->midi_param->Midi_stopped_file && f ==0)
     {

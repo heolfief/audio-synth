@@ -206,6 +206,7 @@ double temp;
     n = m->current;
 if (old_dataRange == numberOfMidiData ){
 old_delay =0;
+temp=n->delay;
 
 }
 else
@@ -219,12 +220,15 @@ else
 
 
 next(m);
-m=l->firstDataRange;
+
+
+    setOnFirstDataRange(l);
+    m=l->firstDataRange;
 for (int i = 0;i<getCount(l);i++){
     if (numberOfMidiData != i)
        m->accrued_delay = m->accrued_delay - temp;
         nextDataRange(l);
-        setOnFirstDataRange(l);
+
     m=l->currentDataRange;
 }
 
