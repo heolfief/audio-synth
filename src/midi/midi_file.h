@@ -14,8 +14,6 @@
 #define MSKHEX 0xF0
 #define MSKBIN 0x80
 
-
-
 /**
  * \struct Header
  * \brief define an header of a midi file
@@ -23,14 +21,15 @@
  * This struct is define with MTHD, SPEC_ADDR,SMF,MTRK,NOIRE
  */
 
-typedef struct {
-    __uint16_t MTHD[4]; /*!< 4 bytes for header flag*/
+typedef struct
+{
+  __uint16_t MTHD[4]; /*!< 4 bytes for header flag*/
   __uint16_t SPEC_ADDR[4]; /*!< 4 bytes to inform about the addressing specs*/
-  __uint16_t SMF ;/*!<2 bytes to indicate the data ranges: 0 only one data range, 1 several tracks played simultaneously, 2 more tracks but to be played one after the other*/
-  __uint16_t MTRK ; /*!<2 bytes for the number of data ranges*/
+  __uint16_t
+      SMF;/*!<2 bytes to indicate the data ranges: 0 only one data range, 1 several tracks played simultaneously, 2 more tracks but to be played one after the other*/
+  __uint16_t MTRK; /*!<2 bytes for the number of data ranges*/
   __uint16_t NOIRE; /*!< 2 bytes: number divisions of the black*/
 } Header;
-
 
 /**
  * \fn void fillHeaderRead (Header*H, FILE* f)
@@ -42,7 +41,7 @@ typedef struct {
  * \return error if file is not a midi file
  */
 
-void fillHeaderRead (Header*Header, FILE* file);
+void fillHeaderRead(Header *Header, FILE *file);
 /**
  * \fn __uint32_t  *readDataRange (FILE *f)
  * \brief Function to read Data range from target file and record it in a buffer.
@@ -54,7 +53,7 @@ void fillHeaderRead (Header*Header, FILE* file);
  */
 
 
-__uint8_t  * readDataRange( __uint32_t sizeDataRange, FILE *file);
+__uint8_t *readDataRange(__uint32_t sizeDataRange, FILE *file);
 /**
  * \fn void setAsBeginDataRange (FILE *f)
  * \brief Function to go at the begining of  midi data ranged and passed it to begin the reading
@@ -63,7 +62,7 @@ __uint8_t  * readDataRange( __uint32_t sizeDataRange, FILE *file);
  *
  */
 
-void setAsBeginDataRange (FILE *file);
+void setAsBeginDataRange(FILE *file);
 
 /**
  * \fn u_int32_t getSizeDataRange(FILE *f)
@@ -87,8 +86,7 @@ __uint32_t getSizeDataRange(FILE *f);
 
  */
 
-void  sortDataRange(__uint8_t* DataRange, Header * H,__uint32_t sizeDataRange,midiList *l);
-
+void sortDataRange(__uint8_t *DataRange, Header *H, __uint32_t sizeDataRange, midiList *l);
 
 /**
  * \fn calculDelay (__uint8_t * DataDelay, int power,__uint16_t Noire)
@@ -101,7 +99,7 @@ void  sortDataRange(__uint8_t* DataRange, Header * H,__uint32_t sizeDataRange,mi
  * \return the resultat of the operation
  */
 
-double calculDelay (__uint8_t * DataDelay, int power,__uint16_t Noire);
+double calculDelay(__uint8_t *DataDelay, int power, __uint16_t Noire);
 
 /**
  * \fn readEvent (__uint8_t * midiNote, __uint8_t * attack, int  * midiEvent,__uint8_t* DataRange , int *  i)
@@ -117,7 +115,7 @@ double calculDelay (__uint8_t * DataDelay, int power,__uint16_t Noire);
  */
 
 
-int readEvent (__uint8_t * midiNote, __uint8_t * attack, int  * midiEvent,__uint8_t* DataRange , int *  i);
+int readEvent(__uint8_t *midiNote, __uint8_t *attack, int *midiEvent, __uint8_t *DataRange, int *i);
 /**
  * \fn record_midi_file(char * name)
  * \brief Function to record in dataRangeList all the midilist with the note of a midi File
@@ -127,8 +125,7 @@ int readEvent (__uint8_t * midiNote, __uint8_t * attack, int  * midiEvent,__uint
  * \return the dataRangelist filled with all data of midi file
  */
 
-dataRangeList * record_midi_file(char * name);
-
+dataRangeList *record_midi_file(char *name);
 
 /**
  * \fn playMidiFile(Core * audio_core, double currentTime,dataRangeList * l,int size)
@@ -143,7 +140,7 @@ dataRangeList * record_midi_file(char * name);
  */
 
 
-void playMidiFile(Core * audio_core, double currentTime,dataRangeList * l,int size);
+void playMidiFile(Core *audio_core, double currentTime, dataRangeList *l, int size);
 
 /**
  * \fn controlMidi (double currenTime,Core * ac )
@@ -154,8 +151,6 @@ void playMidiFile(Core * audio_core, double currentTime,dataRangeList * l,int si
  */
 
 
-void controlMidi (double currenTime,Core * ac );
-
-
+void controlMidi(double currenTime, Core *ac);
 
 #endif

@@ -11,44 +11,46 @@
 #include <stdlib.h>
 #include "fichier.h"
 
-
-
-
-FILE * openFile (char * nom, char * mode, TypeRetour t){
-    FILE * fichier;
-    if ((fichier = fopen(nom,mode)) ==  NULL){ //verify that File exist otherwise error
+FILE *openFile(char *nom, char *mode, TypeRetour t)
+{
+    FILE *fichier;
+    if ((fichier = fopen(nom, mode)) == NULL)
+    { //verify that File exist otherwise error
         printf("open file error");
         return fichier;
     }
     return fichier;
 }
 
-int closeFile(FILE * fichier){
-   return( fclose (fichier));
+int closeFile(FILE *fichier)
+{
+    return (fclose(fichier));
 
 }
 
-
-u_int8_t * BlockFileReader (FILE * fichier, u_int32_t nombre){
-    u_int8_t  * buffer;
-    if ((buffer = (unsigned char *) malloc(sizeof(unsigned char)*nombre)) == NULL){ // verify the allocation
+u_int8_t *BlockFileReader(FILE *fichier, u_int32_t nombre)
+{
+    u_int8_t *buffer;
+    if ((buffer = (unsigned char *) malloc(sizeof(unsigned char) * nombre)) == NULL)
+    { // verify the allocation
         printf("memory allocation error");
-        exit (568);
+        exit(568);
     }
 
-    fread(buffer,sizeof(unsigned char),nombre,fichier);
-    return  buffer;
+    fread(buffer, sizeof(unsigned char), nombre, fichier);
+    return buffer;
 
 }
 
-int removeFile(FILE *f){
+int removeFile(FILE *f)
+{
     return (removeFile(f));
 
 }
 
-
-void moveFile(FILE *f, int number){
-    fseek(f,number,SEEK_CUR);
+void moveFile(FILE *f, int number)
+{
+    fseek(f, number, SEEK_CUR);
 
 }
 

@@ -6,18 +6,14 @@
 #include <stdio.h>
 #include "listmidi.h"
 
+typedef struct dataRangeList
+{
+  struct midiList *firstDataRange;        /*!< L'adresse du premier élément de la liste */
+  struct midiList *currentDataRange;        /*!< L'adresse de l'élément courant de la liste */
+  struct midiList *lastDataRange;        /*!< L'adresse du dernier élément de la liste */
+} dataRangeList;
 
-
-typedef struct dataRangeList{
-  struct midiList * firstDataRange;		/*!< L'adresse du premier élément de la liste */
-  struct  midiList * currentDataRange;		/*!< L'adresse de l'élément courant de la liste */
-  struct midiList * lastDataRange;		/*!< L'adresse du dernier élément de la liste */
-}dataRangeList;
-
-
-
-
-dataRangeList * updateDelayDataRange(dataRangeList * l);
+dataRangeList *updateDelayDataRange(dataRangeList *l);
 /**
  * \fn midiList * newList(void * ptr, nodeList * next)
  * \brief Function to open a target File
@@ -27,7 +23,7 @@ dataRangeList * updateDelayDataRange(dataRangeList * l);
  *
  * \return the target File open
  */
-midiList * new_Midi_List(midiList *current, midiList *previous);
+midiList *new_Midi_List(midiList *current, midiList *previous);
 
 /**
  * \fn void initList(list * l)
@@ -39,7 +35,7 @@ midiList * new_Midi_List(midiList *current, midiList *previous);
  *
  * \return the target File open
  */
-dataRangeList * initdataRangeList();
+dataRangeList *initdataRangeList();
 
 /**
  * \fn void printList(list * l)
@@ -51,10 +47,7 @@ dataRangeList * initdataRangeList();
  *
  * \return the target File open
  */
-int emptyDataRange(dataRangeList * l);
-
-
-
+int emptyDataRange(dataRangeList *l);
 
 /**
  * \fn int outOfList(list * l)
@@ -66,7 +59,7 @@ int emptyDataRange(dataRangeList * l);
  *
  * \return the target File open
  */
-int OutOfDataRangeList(dataRangeList * l);
+int OutOfDataRangeList(dataRangeList *l);
 /**
  * \fn void setOnFirst(list * l)
  * \brief Function to open a target File
@@ -77,7 +70,7 @@ int OutOfDataRangeList(dataRangeList * l);
  *
  * \return the target File open
  */
-void setOnFirstDataRange(dataRangeList * l);
+void setOnFirstDataRange(dataRangeList *l);
 
 /**
  * \fn void next(list * l)
@@ -89,8 +82,7 @@ void setOnFirstDataRange(dataRangeList * l);
  *
  * \return the target File open
  */
-void nextDataRange(dataRangeList * l);
-
+void nextDataRange(dataRangeList *l);
 
 /**
  * \fn int deleteFirst(list * l, void** data)
@@ -103,7 +95,7 @@ void nextDataRange(dataRangeList * l);
  * \return the target File open
  */
 
-int deleteFirstDataRange(dataRangeList * l);
+int deleteFirstDataRange(dataRangeList *l);
 
 /**
  * \fn void freeList(list * l)
@@ -116,8 +108,7 @@ int deleteFirstDataRange(dataRangeList * l);
  * \return the target File open
  */
 
-void freeDataRange(dataRangeList * l);
-
+void freeDataRange(dataRangeList *l);
 
 /**
  * \fn void freeList(list * l)
@@ -129,13 +120,8 @@ void freeDataRange(dataRangeList * l);
  *
  * \return the target File open
  */
-midiData * getFirstNoteToPlay(dataRangeList * l);
+midiData *getFirstNoteToPlay(dataRangeList *l);
 
-
-
-int getCount(dataRangeList * l);
-
-
-
+int getCount(dataRangeList *l);
 
 #endif //AUDIO_SYNTH_SRC_LISTMIDI_LISTDATARANGE_H_

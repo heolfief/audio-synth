@@ -108,30 +108,24 @@ int main(int argc, char *argv[])
     if (compute_filter_coeffs(audio_core->sys_param->filter_param, audio_core->sys_param->sample_rate, audio_core->effect_core->filter_state))return -1;
 
     SDL_PauseAudio(SDL_FALSE);              // Play audio (pause = off)
-int g=0;
+
     //Loops that keeps running until the user exits the app
     while (!gui->application_quit)
     {
-
-
-
         currentTime = SDL_GetTicks();       // Get time from SDL init in ms
 
+        controlMidi(currentTime, audio_core);
 
-        controlMidi(currentTime,audio_core);
-
-        // TEMP : 1000ms delay
-        if (currentTime > lastTime )  // If time has passed
+        if (currentTime > lastTime)  // If time has passed
         {
             lastTime = currentTime;
-
         }
 
         //checks if the buffer has been updated and process the leds of the VUmeter
         if (audio_core->buffer_is_new)
         {
 
-            if(process_leds(gui, audio_core))exit(EXIT_FAILURE);
+            if (process_leds(gui, audio_core))exit(EXIT_FAILURE);
         }
 
         if (midi_peripheral != -1)
@@ -201,11 +195,11 @@ int g=0;
         SDL_Delay(1);
     }
     //switching off the recording session in case the user forgot to stop
-    if(audio_core->record_param->RecordOnOff){
+    if (audio_core->record_param->RecordOnOff)
+    {
         audio_core->record_param->RecordOnOff = OFF;
         close_wav_file(audio_core->record_param->sndFile);
     }
-
 
     exit_gui(gui);
 
