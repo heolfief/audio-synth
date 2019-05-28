@@ -2,6 +2,7 @@
 // Created by vincent on 24/05/19.
 //
 
+#include <stdlib.h>
 #include "midi_list_test.h"
 
 int setup_midiData(void **state)
@@ -19,7 +20,9 @@ int setup_midiData(void **state)
 int teardown_midiData(void **state)
 {
     //free midiList
+
     freeList(*state);
+    free(*state);
     return 0;
 }
 

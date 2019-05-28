@@ -25,6 +25,7 @@ int setup_dataRangeList(void **state)
 int teardown_dataRangeList(void **state)
 {
     freeDataRange(*state);
+    free(*state);
     return 0;
 }
 
@@ -66,6 +67,9 @@ void *test = m->currentDataRange; // create temp variable to test if the nex is 
 
     nextDataRange(m);
     assert_ptr_equal(m->currentDataRange,test);
+
+    assert_int_equal( getCount(m),2);
+
 
 }
 

@@ -38,7 +38,12 @@ dataRangeList *  initdataRangeList()
 
 
 void freeDataRange(dataRangeList * l){
-    while(!emptyDataRange(l)) deleteFirstDataRange(l);
+    while(!emptyDataRange(l))
+    {
+
+        deleteFirstDataRange(l);
+
+    }
 
 
 
@@ -59,11 +64,13 @@ int deleteFirstDataRange(dataRangeList *l){
     midiList * toDel = (midiList*) l->firstDataRange;
     l->firstDataRange = l->firstDataRange->nextmidiList;
     freeList(toDel);
+    free(toDel);
     if (emptyDataRange(l))
     {
         l->lastDataRange = NULL;
 
     }
+
     setOnFirstDataRange(l);
     return 1;
 

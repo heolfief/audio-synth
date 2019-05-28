@@ -65,44 +65,6 @@ u_int8_t  * readDataRange (u_int32_t sizeDataRange,FILE *fichier) {
     DataRange = (u_int8_t*) BlockFileReader(fichier,sizeDataRange);
     return DataRange;
 }
-/*
-int * playDataRange (FILE * file){
-    Header * H;
-    fillHeaderRead(H,file);
-    u_int8_t  * MidiData;
-    u_int32_t   sizeDataRange;
-     initList(l);
-    int * DataRange  = malloc(sizeof(MidiData)*H->MTRK);
-
-    for (int i = 0; i<H->MTRK;i++){
-        moveFile(file,sizeDataRange);
-        setAsBeginDataRange(file);
-        MidiData = readDataRange(sizeDataRange,file);
-        sortDataRange(MidiData,H,sizeDataRange,l);
-
-    }
-
-
-
-
-    return 1;
-
-
-
-
-
-
-
-}*/
-
-
-
-
-
-
-
-
-
 
 
 
