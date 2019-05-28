@@ -1,3 +1,9 @@
+/**
+ * \file listDataRange.h
+ * \brief BRIEF DESCRIPTION
+ *
+ *  DESCRIPTION
+ */
 
 
 /**
@@ -15,6 +21,10 @@
 
 #include <stdio.h>
 #include "listmidi.h"
+#include "stdio.h"
+#include "stdlib.h"
+#include "../core/note/adsr.h"
+#include "listmidi.h"
 
 /**
  * \struct dataRangeList
@@ -24,6 +34,8 @@
  * This struct is define with first data range current data range last data range
  */
 
+// DOXYGEN
+dataRangeList *updateDelayDataRange(dataRangeList *l);
 
 
 typedef struct dataRangeList
