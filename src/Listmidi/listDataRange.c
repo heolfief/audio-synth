@@ -1,12 +1,14 @@
+/**
+ * \file listDataRange.c
+ * \brief BRIEF DESCRIPTION
+ *
+ *  DESCRIPTION
+ */
+
 #include "listDataRange.h"
-#include "listmidi.h"
-#include "stdio.h"
-#include "stdlib.h"
-#include "../core/note/adsr.h"
 
 midiList *new_Midi_List(midiList *current, midiList *previous)
 {
-
     current->nextmidiList = previous;
     current->accrued_delay = 0;
 
@@ -15,12 +17,11 @@ midiList *new_Midi_List(midiList *current, midiList *previous)
 
 dataRangeList *initdataRangeList()
 {
-
     dataRangeList *l = (dataRangeList *) malloc(sizeof(dataRangeList));
     if (l == NULL)
     {
         sys_print_error("initilisation DataRangelist is NULL");
-
+        return NULL;
     }
 
     l->currentDataRange = NULL;
@@ -34,11 +35,8 @@ void freeDataRange(dataRangeList *l)
 {
     while (!emptyDataRange(l))
     {
-
         deleteFirstDataRange(l);
-
     }
-
 }
 
 void setOnFirstDataRange(dataRangeList *l)
@@ -64,7 +62,6 @@ int deleteFirstDataRange(dataRangeList *l)
 
     setOnFirstDataRange(l);
     return 1;
-
 }
 
 void nextDataRange(dataRangeList *l)
@@ -134,7 +131,6 @@ dataRangeList *updateDelayDataRange(dataRangeList *l)
 
     }
     l->currentDataRange = l->firstDataRange;
-    m = l->currentDataRange;
 
     g++;
 
@@ -150,9 +146,7 @@ midiData *getFirstNoteToPlay(dataRangeList *l)
     int numberOfMidiData = 0;
     midiList *m;
     midiData *n;
-    double test = 0;
     l->currentDataRange = l->firstDataRange;
-    m = l->currentDataRange;
 
     for (int i = 0; i < getCount(l); i++)
     {
@@ -223,6 +217,5 @@ midiData *getFirstNoteToPlay(dataRangeList *l)
     n->delay = n->delay - old_delay;
 
     return n;
-
 }
 

@@ -1,6 +1,3 @@
-#include <stdio.h>
-#ifndef LISTMIDI_H
-#define LISTMIDI_H
 /**
  * \file listmidi.h
  * \brief Midi list functions
@@ -8,6 +5,12 @@
  *
  * Here are defined the data structure of an event of midiData and midiList with the associated functions
  */
+
+#ifndef LISTMIDI_H
+#define LISTMIDI_H
+
+#include <stdio.h>
+
 /**
  * \enum event
  * \brief define an event
@@ -15,7 +18,6 @@
  * This enum is define with OFF_NOTE ON_NOTE
  */
 typedef enum event event;
-
 enum event
 {
   OFF_NOTE, ON_NOTE
@@ -27,7 +29,6 @@ enum event
  *
  * This struct is define with midiNote, attack,midiEvent,delay,next
  */
-
 typedef struct midiData
 {
   __uint8_t midiNote;/*!< The midi Note to play */
@@ -50,7 +51,6 @@ typedef struct midiList
   struct midiData *last;            /*!< The last midiData in the list*/
   double accrued_delay;           /*!< The accrued delay of all note read before*/
   struct midiList *nextmidiList;   /*!< The next midiList*/
-
 } midiList;
 
 /**
@@ -65,6 +65,7 @@ typedef struct midiList
  *
  */
 void fill_midiData(__uint8_t midiNote, __uint8_t attack, event midiEvent, double delay, midiData *current);
+
 /**
  * \fn new_note_list(__uint8_t midiNote, __uint8_t attack, event midiEvent, double delay, midiData *previous)
  * \brief Function to allocate a new node
@@ -75,16 +76,13 @@ void fill_midiData(__uint8_t midiNote, __uint8_t attack, event midiEvent, double
  * \param delay The delay before this note has played
  * \param previous The current midiData to know the next midiData
  *
-
  * \return An Struct midiData filled
  */
-
 midiData *new_note_list(__uint8_t midiNote, __uint8_t attack, event midiEvent, double delay, midiData *previous);
 
 /**
  * \fn void initList()
  * \brief Function to init a midiList with an allocation
- *
  *
  * \return an midiList allocated
  */
@@ -95,7 +93,6 @@ midiList *initList();
  * \brief Function to know if a list is empty or not
  *
  * \param l The midiList to test
-
  *
  * \return 1 if the list was empty 0 otherwise
  */
@@ -106,7 +103,6 @@ int empty(midiList *l);
  * \brief Function to know if the element was the first
  *
  * \param l The midiList
-
  *
  * \return 1 if the current was the fist in the midiList 0 otherwise
  */
@@ -117,18 +113,16 @@ int first(midiList *l);
  * \brief Function to know if the current element of the list is Out of list
  *
  * \param l The midiList
-
  *
  * \return 1 if the current was Out of the list  in the midiList 0 otherwise
  */
 int isOutOfList(midiList *l);
+
 /**
  * \fn void setOnFirst(list * l)
  * \brief Function to put the current element of a midiList to the first
  *
  * \param l The midiList with the current to put at first
-
-
  */
 void setOnFirst(midiList *l);
 
@@ -148,25 +142,22 @@ void next(midiList *l);
  *
  * \return 1 if the first element was deleted  in the midiList 0 otherwise
  */
-
 int deleteFirst(midiList *l);
+
 /**
  * \fn void freeNodeList(nodeList * n)
  * \brief Function to free an node of the list in our case a midiData
  *
  * \param n the selected midiData to delete
-
-
  */
-
 void freeNodeList(midiData *n);
+
 /**
  * \fn void freeList(list * l)
  * \brief Function to free a midiList
  *
  \param l The midiList to delete
  */
-
 void freeList(midiList *l);
 
 #endif

@@ -5,7 +5,7 @@
  *
  * Here are defined the function that works on midi
  */
- 
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
