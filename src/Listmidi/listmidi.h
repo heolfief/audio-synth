@@ -16,13 +16,10 @@
  */
 typedef enum event event;
 
-enum event {OFF_NOTE,ON_NOTE};
-
-
-
-
-
-
+enum event
+{
+  OFF_NOTE, ON_NOTE
+};
 
 /**
  * \struct midiData
@@ -31,14 +28,14 @@ enum event {OFF_NOTE,ON_NOTE};
  * This struct is define with midiNote, attack,midiEvent,delay,next
  */
 
-typedef struct midiData{
-    __uint8_t  midiNote;/*!< The midi Note to play */
-    __uint8_t  attack;/*!< The attack of the note  */
-   enum  event midiEvent;  /*!< The event */
-    double delay;  /*!< Delay to wait before this event*/
-    struct midiData * next; /*!< The next midiData*/
-}midiData;
-
+typedef struct midiData
+{
+  __uint8_t midiNote;/*!< The midi Note to play */
+  __uint8_t attack;/*!< The attack of the note  */
+  enum event midiEvent;  /*!< The event */
+  double delay;  /*!< Delay to wait before this event*/
+  struct midiData *next; /*!< The next midiData*/
+} midiData;
 
 /**
  * \struct midiList
@@ -46,16 +43,15 @@ typedef struct midiData{
  *
  * This struct is define with first,current,last,accrued_delay,nextmidiList
  */
-typedef  struct midiList{
-  struct midiData * first;		/*!< The first midiData in the list */
-  struct  midiData * current;		/*!< The current midiData in the list */
-  struct midiData * last;            /*!< The last midiData in the list*/
-  double   accrued_delay;           /*!< The accrued delay of all note read before*/
-  struct midiList * nextmidiList;   /*!< The next midiList*/
+typedef struct midiList
+{
+  struct midiData *first;        /*!< The first midiData in the list */
+  struct midiData *current;        /*!< The current midiData in the list */
+  struct midiData *last;            /*!< The last midiData in the list*/
+  double accrued_delay;           /*!< The accrued delay of all note read before*/
+  struct midiList *nextmidiList;   /*!< The next midiList*/
 
-}midiList;
-
-
+} midiList;
 
 /**
  * \fn fill_midiData(__uint8_t midiNote, __uint8_t attack, event midiEvent, double delay, midiData *current)
@@ -83,7 +79,7 @@ void fill_midiData(__uint8_t midiNote, __uint8_t attack, event midiEvent, double
  * \return An Struct midiData filled
  */
 
-midiData * new_note_list(__uint8_t midiNote, __uint8_t attack, event midiEvent, double delay, midiData *previous);
+midiData *new_note_list(__uint8_t midiNote, __uint8_t attack, event midiEvent, double delay, midiData *previous);
 
 /**
  * \fn void initList()
@@ -92,7 +88,7 @@ midiData * new_note_list(__uint8_t midiNote, __uint8_t attack, event midiEvent, 
  *
  * \return an midiList allocated
  */
-midiList * initList();
+midiList *initList();
 
 /**
  * \fn int empty(list * l)
@@ -103,9 +99,7 @@ midiList * initList();
  *
  * \return 1 if the list was empty 0 otherwise
  */
-int empty(midiList * l);
-
-
+int empty(midiList *l);
 
 /**
  * \fn first(midiList * l)
@@ -116,9 +110,7 @@ int empty(midiList * l);
  *
  * \return 1 if the current was the fist in the midiList 0 otherwise
  */
-int first(midiList * l);
-
-
+int first(midiList *l);
 
 /**
  * \fn int outOfList(list * l)
@@ -129,7 +121,7 @@ int first(midiList * l);
  *
  * \return 1 if the current was Out of the list  in the midiList 0 otherwise
  */
-int isOutOfList(midiList * l);
+int isOutOfList(midiList *l);
 /**
  * \fn void setOnFirst(list * l)
  * \brief Function to put the current element of a midiList to the first
@@ -138,7 +130,7 @@ int isOutOfList(midiList * l);
 
 
  */
-void setOnFirst(midiList * l);
+void setOnFirst(midiList *l);
 
 /**
  * \fn void next(list * l)
@@ -146,7 +138,7 @@ void setOnFirst(midiList * l);
  *
  \param l The midiList with the current to next
  */
-void next(midiList * l);
+void next(midiList *l);
 
 /**
  * \fn int deleteFirst(midiList * l)
@@ -157,7 +149,7 @@ void next(midiList * l);
  * \return 1 if the first element was deleted  in the midiList 0 otherwise
  */
 
-int deleteFirst(midiList * l);
+int deleteFirst(midiList *l);
 /**
  * \fn void freeNodeList(nodeList * n)
  * \brief Function to free an node of the list in our case a midiData
@@ -167,7 +159,7 @@ int deleteFirst(midiList * l);
 
  */
 
-void freeNodeList(midiData * n);
+void freeNodeList(midiData *n);
 /**
  * \fn void freeList(list * l)
  * \brief Function to free a midiList
@@ -175,11 +167,6 @@ void freeNodeList(midiData * n);
  \param l The midiList to delete
  */
 
-void freeList(midiList * l);
-
-
-
-
-
+void freeList(midiList *l);
 
 #endif

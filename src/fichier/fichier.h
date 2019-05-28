@@ -19,7 +19,10 @@
  */
 
 
-typedef enum {ARRET,RETOUR}TypeRetour;
+typedef enum
+{
+  ARRET, RETOUR
+} TypeRetour;
 
 /**
  * \fn FILE * openFile (char * nom, char * mode, TypeRetour t)
@@ -32,7 +35,7 @@ typedef enum {ARRET,RETOUR}TypeRetour;
  * \return the target File open
  */
 
-FILE * openFile (char * name, char * mode, TypeRetour t);
+FILE *openFile(char *name, char *mode, TypeRetour t);
 /**
  * \fn int closeFile(FILE * fichier);
  * \brief Function to close a file
@@ -42,7 +45,7 @@ FILE * openFile (char * name, char * mode, TypeRetour t);
  * \return 0 if everything went OK, -1 otherwise
  */
 
-int closeFile(FILE * file);
+int closeFile(FILE *file);
 /**
  * \fn unsigned char * BlockFileReader (FILE * fichier, u_int32_t  nombre)
  * \brief Function to read various number of bytes in a File
@@ -53,7 +56,7 @@ int closeFile(FILE * file);
  * \return allocated buffer with result of reading on a file
  */
 
-u_int8_t * BlockFileReader (FILE * file, u_int32_t  size);
+u_int8_t *BlockFileReader(FILE *file, u_int32_t size);
 /**
  * \fn int removeFile(FILE *f)
  * \brief Function to remove a file
@@ -73,12 +76,6 @@ int removeFile(FILE *file);
  *
  */
 
-void moveFile (FILE *file, int number);
-
-
-
-
-
-
+void moveFile(FILE *file, int number);
 
 #endif //AUDIO_SYNTH_FICHIER_H

@@ -1220,7 +1220,6 @@ int process_buttons(Gui *gui, Core *audio_core, MIDI_Peripheral_fd *midi_periphe
         path = tinyfd_openFileDialog("Load a MIDI file", "../", 1, MIDIFilterpatterns, NULL, 0);
         if (path)
         {
-            // TO BE FILLED BY VINCE's function when loading if (load_preset(path, audio_core->sys_param, ABSOLUTE_PATH_MODE))return -1;
             audio_core->midi_param->Midi_file_opened = ON;
             audio_core->midi_param->Midi_file_Path = path;
 
@@ -1240,11 +1239,8 @@ int process_buttons(Gui *gui, Core *audio_core, MIDI_Peripheral_fd *midi_periphe
         if (gui_update(gui))return -1;
         if (audio_core->midi_param->Midi_file_opened == ON)
         {
-            //TO BE FILLED BY VINCE'S function when playing a midi file
-
-
             audio_core->midi_param->Midi_playing_OnOff = ON;
-            audio_core->midi_param->Midi_paused_file=OFF;
+            audio_core->midi_param->Midi_paused_file = OFF;
         }
         else
         {
@@ -1263,7 +1259,7 @@ int process_buttons(Gui *gui, Core *audio_core, MIDI_Peripheral_fd *midi_periphe
             if (gui_set_switch_image(gui->buttons[6].sdl_button, gui->buttons[6].imgon))return -1;
 
             //switches the stop button back to off
-            if(gui_set_switch_image(gui->buttons[7].sdl_button, gui->buttons[7].imgoff))return -1;
+            if (gui_set_switch_image(gui->buttons[7].sdl_button, gui->buttons[7].imgoff))return -1;
 
         }
         else
@@ -1282,12 +1278,8 @@ int process_buttons(Gui *gui, Core *audio_core, MIDI_Peripheral_fd *midi_periphe
         if (gui_update(gui))return -1;
         if (audio_core->midi_param->Midi_playing_OnOff == ON)
         {
-            //TO BE FILLED BY VINCE'S function when pausing a midi file
-
-
             audio_core->midi_param->Midi_playing_OnOff = OFF;
             audio_core->midi_param->Midi_paused_file = ON;
-
         }
         else
         {
@@ -1324,9 +1316,6 @@ int process_buttons(Gui *gui, Core *audio_core, MIDI_Peripheral_fd *midi_periphe
         if (gui_update(gui))return -1;
         if (audio_core->midi_param->Midi_playing_OnOff == ON || audio_core->midi_param->Midi_file_opened == ON)
         {
-            //TO BE FILLED BY VINCE'S function when stopping a midi file
-
-
             audio_core->midi_param->Midi_playing_OnOff = OFF;
             audio_core->midi_param->Midi_file_opened = OFF;
             audio_core->midi_param->Midi_paused_file = OFF;
@@ -1359,7 +1348,6 @@ int process_buttons(Gui *gui, Core *audio_core, MIDI_Peripheral_fd *midi_periphe
         if (gui_set_switch_image(gui->buttons[8].sdl_button, gui->buttons[8].imgoff))return -1;
         if (gui_set_switch_image(gui->buttons[7].sdl_button, gui->buttons[7].imgoff))return -1;
         if (gui_set_switch_image(gui->buttons[6].sdl_button, gui->buttons[6].imgoff))return -1;
-
 
         param_changed = 1;
     }

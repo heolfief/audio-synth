@@ -32,7 +32,7 @@ int main(int argc, char *argv[])
     Gui *gui;
     MIDI_Peripheral_fd midi_peripheral = -1;
     Uint8 mouse_is_down = 0;
-    Uint32 lastTime = 0, currentTime;
+    Uint32 currentTime;
 
     // Default parameters. If buffer_len changed, core memory allocation needs to be redone
     int sample_rate = 48000;
@@ -108,30 +108,18 @@ int main(int argc, char *argv[])
     if (compute_filter_coeffs(audio_core->sys_param->filter_param, audio_core->sys_param->sample_rate, audio_core->effect_core->filter_state))return -1;
 
     SDL_PauseAudio(SDL_FALSE);              // Play audio (pause = off)
-int g=0;
+
     //Loops that keeps running until the user exits the app
     while (!gui->application_quit)
     {
-
-
-
         currentTime = SDL_GetTicks();       // Get time from SDL init in ms
 
-
-        controlMidi(currentTime,audio_core);
-
-        // TEMP : 1000ms delay
-        if (currentTime > lastTime )  // If time has passed
-        {
-            lastTime = currentTime;
-
-        }
+        controlMidi(currentTime, audio_core);
 
         //checks if the buffer has been updated and process the leds of the VUmeter
         if (audio_core->buffer_is_new)
         {
-
-            if(process_leds(gui, audio_core))exit(EXIT_FAILURE);
+            if (process_leds(gui, audio_core))exit(EXIT_FAILURE);
         }
 
         if (midi_peripheral != -1)
@@ -159,6 +147,11 @@ int g=0;
             {
                 case SDL_QUIT:
 
+                    for (int i = 0; i < POLYPHONY_MAX; i++)
+                    {
+                        note_off(audio_core->note_array[i]);
+                        audio_core->note_array[i]->master_onoff = OFF;
+                    }
                     if (prompt_quit())
                     {
                         printf("Quit asked. Closing...\n");
@@ -170,9 +163,13 @@ int g=0;
 
                     if (gui->event.key.keysym.sym == SDLK_ESCAPE)
                     {
+                        for (int i = 0; i < POLYPHONY_MAX; i++)
+                        {
+                            note_off(audio_core->note_array[i]);
+                            audio_core->note_array[i]->master_onoff = OFF;
+                        }
                         if (prompt_quit())
                         {
-
                             printf("Quit asked. Closing...\n");
                             gui->application_quit = SDL_TRUE;
 
@@ -189,7 +186,6 @@ int g=0;
                 case SDL_MOUSEBUTTONDOWN:
 
                     mouse_is_down = 1;
-                    //printf("Mouse clic on x=%d, y=%d\n", gui->event.button.x, gui->event.button.y);
                     break;
 
                 case SDL_MOUSEBUTTONUP:
@@ -200,12 +196,13 @@ int g=0;
         }
         SDL_Delay(0.1);
     }
+
     //switching off the recording session in case the user forgot to stop
-    if(audio_core->record_param->RecordOnOff){
+    if (audio_core->record_param->RecordOnOff)
+    {
         audio_core->record_param->RecordOnOff = OFF;
         close_wav_file(audio_core->record_param->sndFile);
     }
-
 
     exit_gui(gui);
 

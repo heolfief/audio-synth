@@ -9,7 +9,8 @@
 
 // The following list contains known names for midi_test peripherals in /dev/
 static const char *list_of_common_midi_dev[NUMBER_OF_KNOWN_MIDI_DEV] =
-    {"admmidi0", "admmidi1", "amidi", "amidi0", "amidi1", "dmmidi0", "dmmidi1", "dmmidi2", "midi_test", "midi1", "midi2"};
+    {"admmidi0", "admmidi1", "amidi", "amidi0", "amidi1", "dmmidi0", "dmmidi1", "dmmidi2", "midi_test", "midi1",
+     "midi2"};
 
 MIDI_Peripheral_fd open_midi_peripheral()
 {
@@ -46,7 +47,7 @@ MIDI_Peripheral_fd open_midi_peripheral()
     return -1;
 }
 
-int process_midi_input(MIDI_Peripheral_fd* mp, Core *ac)
+int process_midi_input(MIDI_Peripheral_fd *mp, Core *ac)
 {
     Uint8 midi_data[3]; // 0 is status, 1 is note id, 2 is note velocity
     Uint8 midi_status;
@@ -66,14 +67,14 @@ int process_midi_input(MIDI_Peripheral_fd* mp, Core *ac)
 
     fstat(*mp, &s);
 
-    if( s.st_nlink < 1 )
+    if (s.st_nlink < 1)
     {
         close_midi_peripheral(*mp);
         *mp = -2;
         return 0;
     }
 
-    read(*mp,&midi_data,3);
+    read(*mp, &midi_data, 3);
 
     midi_status = midi_data[0] >> 4u;
 
