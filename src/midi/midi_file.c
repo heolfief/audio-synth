@@ -337,7 +337,7 @@ dataRangeList *record_midi_file(char *name)
     return blue;
 }
 
-void controlMidi(double currenTime, Core *ac)
+void controlMidi(double currentTime, Core *ac)
 {
     static dataRangeList *l;
     static int g = 0;
@@ -352,7 +352,7 @@ void controlMidi(double currenTime, Core *ac)
     }
     if (ac->midi_param->Midi_playing_OnOff)
     {
-        playMidiFile(ac, currenTime, l, 31);
+        playMidiFile(ac, currentTime, l, 31);
         f = 0;
     }
     if (ac->midi_param->Midi_paused_file && f == 0)

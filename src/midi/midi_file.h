@@ -20,7 +20,6 @@
  *
  * This struct is define with MTHD, SPEC_ADDR,SMF,MTRK,NOIRE
  */
-
 typedef struct
 {
   __uint16_t MTHD[4]; /*!< 4 bytes for header flag*/
@@ -40,8 +39,8 @@ typedef struct
  *
  * \return error if file is not a midi file
  */
-
 void fillHeaderRead(Header *Header, FILE *file);
+
 /**
  * \fn __uint32_t  *readDataRange (FILE *f)
  * \brief Function to read Data range from target file and record it in a buffer.
@@ -51,9 +50,8 @@ void fillHeaderRead(Header *Header, FILE *file);
  *
  * \return buffer __uint8_t*  with the data range of a midi file
  */
-
-
 __uint8_t *readDataRange(__uint32_t sizeDataRange, FILE *file);
+
 /**
  * \fn void setAsBeginDataRange (FILE *f)
  * \brief Function to go at the begining of  midi data ranged and passed it to begin the reading
@@ -61,7 +59,6 @@ __uint8_t *readDataRange(__uint32_t sizeDataRange, FILE *file);
  * \param file Target midi File
  *
  */
-
 void setAsBeginDataRange(FILE *file);
 
 /**
@@ -72,8 +69,8 @@ void setAsBeginDataRange(FILE *file);
  *
  * \return length of data range
  */
-
 __uint32_t getSizeDataRange(FILE *f);
+
 /**
  * \fn sorDataRange(u_int32_t DataRangeSorted)
  * \brief Function to sort all the event of a data range
@@ -83,9 +80,7 @@ __uint32_t getSizeDataRange(FILE *f);
  * \param sizeDataRange size of the data Range
  * \param l The midiist to fill with the data range sorted
  *
-
  */
-
 void sortDataRange(__uint8_t *DataRange, Header *H, __uint32_t sizeDataRange, midiList *l);
 
 /**
@@ -98,7 +93,6 @@ void sortDataRange(__uint8_t *DataRange, Header *H, __uint32_t sizeDataRange, mi
  *
  * \return the resultat of the operation
  */
-
 double calculDelay(__uint8_t *DataDelay, int power, __uint16_t Noire);
 
 /**
@@ -113,9 +107,8 @@ double calculDelay(__uint8_t *DataDelay, int power, __uint16_t Noire);
  *
  * \return the incrementation in the arrey DataRange
  */
-
-
 int readEvent(__uint8_t *midiNote, __uint8_t *attack, int *midiEvent, __uint8_t *DataRange, int *i);
+
 /**
  * \fn record_midi_file(char * name)
  * \brief Function to record in dataRangeList all the midilist with the note of a midi File
@@ -124,7 +117,6 @@ int readEvent(__uint8_t *midiNote, __uint8_t *attack, int *midiEvent, __uint8_t 
  *
  * \return the dataRangelist filled with all data of midi file
  */
-
 dataRangeList *record_midi_file(char *name);
 
 /**
@@ -136,21 +128,16 @@ dataRangeList *record_midi_file(char *name);
  * \param l_the data range with all the data
  * \param size the number of data Range
  *
-
  */
-
-
 void playMidiFile(Core *audio_core, double currentTime, dataRangeList *l, int size);
 
 /**
- * \fn controlMidi (double currenTime,Core * ac )
+ * \fn controlMidi (double currentTime,Core * ac )
  * \brief Function to control the midi reading with the different flags from gui
  *
  * \param ac core the core of the application
- * \param currenTime he tima has passed from the moment that application started
+ * \param currentTime the time has passed from the moment that application started
  */
-
-
-void controlMidi(double currenTime, Core *ac);
+void controlMidi(double currentTime, Core *ac);
 
 #endif
