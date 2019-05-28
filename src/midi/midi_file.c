@@ -5,6 +5,7 @@
  *
  * Here are defined the function that works on midi
  */
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -18,20 +19,21 @@
 
 void fillHeaderRead(Header *H, FILE *f)
 {
-    u_int8_t *buffer = BlockFileReader(f, 14);//control that the file is a midi_test file, with the Header flag MTHD
+    u_int8_t *buffer = BlockFileReader(f, 14);  //control that the file is a midi_test file, with the Header flag MTHD
     for (int i = 0; i < 4; i++)
     {
         H->MTHD[i] = buffer[i];
-
     }
     if (H->MTHD[0] != 0x4d && H->MTHD[1] != 0x54 && H->MTHD[2] != 0x68
         && H->MTHD[3] != 0x64)
-    { // header number of a midi_test file
+    {
+        // header number of a midi_test file
         printf("unrecognized file \n");
     }
 
     for (int i = 4; i < 8; i++)
-    {   // fill header
+    {
+        // fill header
         H->SPEC_ADDR[i - 4] = buffer[i];
     }
     H->SMF = buffer[8] * 256 + buffer[9];
@@ -41,7 +43,6 @@ void fillHeaderRead(Header *H, FILE *f)
     H->NOIRE = buffer[12] * 256 + buffer[13];
 
     free(buffer);
-
 }
 
 void setAsBeginDataRange(FILE *f)
@@ -50,7 +51,8 @@ void setAsBeginDataRange(FILE *f)
     buffer = BlockFileReader(f, 1);
 
     while (buffer[0] == 0x4d || buffer[0] == 0x54 || buffer[0] == 0x72 || buffer[0] == 0x6b)
-    { // go to the begining of data range detect with the flags 0x4d 0x54 0x72 0x6b
+    {
+        // go to the beginning of data range detect with the flags 0x4d 0x54 0x72 0x6b
         free(buffer);
         buffer = BlockFileReader(f, 1);
 
@@ -98,34 +100,28 @@ void sortDataRange(__uint8_t *DataRange, Header *H, __uint32_t sizeDataRange, mi
 
             if (newNote)
             {
-
                 l->current = new_note_list(midiNote, attack, midiEvent, delay, l->current);
                 g++;
                 if (g == 1)
                 {
                     l->first = l->current;
                 }
-
             }
             power = 0;
             for (int v = 0; v < 4; v++)
             {
                 dataDelay[v] = 0;
             }
-
         }
-
         i += 1;
-
     }
+
     if (l->current == NULL && l->first == NULL)
     {
         l->current = new_note_list(0, 0, 0, 0, l->current);
         l->first = l->current;
     }
-
     g = 0;
-
 }
 
 double calculDelay(__uint8_t *DataDelay, int power, __uint16_t Noire)
@@ -136,11 +132,12 @@ double calculDelay(__uint8_t *DataDelay, int power, __uint16_t Noire)
     {
         if (power > 0 && i == 0)
         {
-            DataDelay[i] = DataDelay[i] & 0x7F;
+            DataDelay[i] = DataDelay[i] & 0x7Fu;
         }
 
         res += DataDelay[i] * pow(126, (double) (power - i));
     }
+
     if (power > 1)
     {
         res = res / Noire;
@@ -170,13 +167,15 @@ int readEvent(__uint8_t *midiNote, u_int8_t *attack, int *midiEvent, u_int8_t *D
 
     switch (DataRange[*i] & MSKHEX)
     {
-        case 0xF0:*i += DataRange[*i + 2] + 2;
+        case 0xF0:
+
+            *i += DataRange[*i + 2] + 2;
             newNote = 0;
             break;
+
         case 0x90 :
 
             *midiEvent = 1;
-
             *midiNote = DataRange[*i + 1];
             if (DataRange[*i + 2] > 127)
             {
@@ -193,7 +192,10 @@ int readEvent(__uint8_t *midiNote, u_int8_t *attack, int *midiEvent, u_int8_t *D
             g = 1;
             newNote = 1;
             break;
-        case 0x80 :*midiEvent = 0;
+
+        case 0x80 :
+
+            *midiEvent = 0;
             *midiNote = DataRange[*i + 1];
             if (DataRange[*i + 2] > 127)
             {
@@ -205,21 +207,37 @@ int readEvent(__uint8_t *midiNote, u_int8_t *attack, int *midiEvent, u_int8_t *D
             g = 0;
             newNote = 1;
             break;
-        case 0XE0:*i += 2;
+
+        case 0XE0:
+
+            *i += 2;
             newNote = 0;
             break;
-        case 0XB0 :*i += 2;
+
+        case 0XB0 :
+
+            *i += 2;
             newNote = 0;
             break;
-        case 0xA0 :*i += 2;
+
+        case 0xA0 :
+
+            *i += 2;
             newNote = 0;
             break;
-        case 0xC0 :*i += 1;
+
+        case 0xC0 :
+
+            *i += 1;
             newNote = 0;
             break;
-        case 0xD0 :*i += 1;
+
+        case 0xD0 :
+
+            *i += 1;
             newNote = 0;
             break;
+
         default :
             if (g)
             {
@@ -243,7 +261,6 @@ int readEvent(__uint8_t *midiNote, u_int8_t *attack, int *midiEvent, u_int8_t *D
 
             *i += 1;
             newNote = 1;
-            break;
     }
     return newNote;
 }
@@ -256,22 +273,17 @@ u_int32_t getSizeDataRange(FILE *f)
     size = buffer[0] * 16777216 + buffer[1] * 65536 + buffer[2] * 256 + buffer[3];
     free(buffer);
     return size;
-
 }
 
 void playMidiFile(Core *audio_core, double currentTime, dataRangeList *l)
 {
-
     static double lastTime = 0;
     static midiData *n;
 
     if (n == NULL)
     {
-
         l = updateDelayDataRange(l);
-
         n = getFirstNoteToPlay(l);
-
     }
 
     if (currentTime > lastTime + n->delay)  // If time has passed

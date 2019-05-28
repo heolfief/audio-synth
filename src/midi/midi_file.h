@@ -11,8 +11,7 @@
 #include "../core/audio_core.h"
 #ifndef MIDI_H
 #define MIDI_H
-#define MSKHEX 0xF0
-#define MSKBIN 0x80
+#define MSKHEX 0xF0u
 
 /**
  * \struct Header

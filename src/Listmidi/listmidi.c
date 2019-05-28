@@ -1,9 +1,9 @@
 /**
- * \file listmidi.h
+ * \file listmidi.c
  * \brief Midi list functions
  *
  *
- * Here are defined the function to control midiData and midi list and an event
+ * Here are implemented the functiosn to control midiData and midi list and an event
  */
 
 #include <stdio.h>
@@ -44,7 +44,7 @@ midiList *initList()
     if (l == NULL)
     {
         sys_print_error("initialisation midi_test list is NULL");
-
+        return NULL;
     }
     l->accrued_delay = 0;
     l->current = NULL;
@@ -56,7 +56,6 @@ midiList *initList()
 void freeList(midiList *l)
 {
     while (!empty(l)) deleteFirst(l);
-
 }
 
 void freeNodeList(midiData *n)
@@ -65,7 +64,6 @@ void freeNodeList(midiData *n)
     {
         free(n);
     }
-
 }
 
 void setOnFirst(midiList *l)
@@ -89,7 +87,6 @@ int deleteFirst(midiList *l)
     }
     setOnFirst(l);
     return 1;
-
 }
 
 void next(midiList *l)
@@ -116,21 +113,3 @@ int empty(midiList *l)
     }
     return (l->first == NULL);
 }
-
-/*
-void printList(midiList * l)//1
-{
-    midiData* n;
-    printf("{");
-    n =(midiData*) l->first;
-    while (n != NULL)
-    {
-        printf(" Midi event : %d  Delay : %f  Midi note : %2x attack : %2x \n ", n->midiEvent, n->delay, n->midiNote,n->attack);
-
-        n = (midiData*) n->next;
-    }
-    freeNodeList(n);
-    printf("}\n");
-}
-
-*/

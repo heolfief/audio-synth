@@ -1,4 +1,5 @@
 
+
 /**
  * \file listDataRange.h
  * \brief list dataRange function
@@ -6,11 +7,15 @@
  *
  * Here are defined the function that works data range list
  */
+
+
+
 #ifndef AUDIO_SYNTH_SRC_LISTMIDI_LISTDATARANGE_H_
 #define AUDIO_SYNTH_SRC_LISTMIDI_LISTDATARANGE_H_
 
 #include <stdio.h>
 #include "listmidi.h"
+
 /**
  * \struct dataRangeList
  *
@@ -21,13 +26,13 @@
 
 
 
-
 typedef struct dataRangeList
 {
   struct midiList *firstDataRange;        /*!< L'adresse du premier élément de la liste */
-  struct midiList *currentDataRange;        /*!< L'adresse de l'élément courant de la liste */
+  struct midiList *currentDataRange;      /*!< L'adresse de l'élément courant de la liste */
   struct midiList *lastDataRange;        /*!< L'adresse du dernier élément de la liste */
 } dataRangeList;
+
 
 /**
  * \fn updateDelayDataRange(dataRangeList *l)
@@ -38,7 +43,9 @@ typedef struct dataRangeList
  * \return data range list updated
  */
 
+
 dataRangeList *updateDelayDataRange(dataRangeList *l);
+
 /**
  * \fn midiList * newList(void * ptr, nodeList * next)
  * \brief Function to open a target File
@@ -85,6 +92,7 @@ int emptyDataRange(dataRangeList *l);
  * \return the target File open
  */
 int OutOfDataRangeList(dataRangeList *l);
+
 /**
  * \fn void setOnFirst(list * l)
  * \brief Function to open a target File
@@ -119,7 +127,6 @@ void nextDataRange(dataRangeList *l);
  *
  * \return the target File open
  */
-
 int deleteFirstDataRange(dataRangeList *l);
 
 /**
@@ -132,7 +139,6 @@ int deleteFirstDataRange(dataRangeList *l);
  *
  * \return the target File open
  */
-
 void freeDataRange(dataRangeList *l);
 
 /**
@@ -152,9 +158,11 @@ midiData *getFirstNoteToPlay(dataRangeList *l);
  *
  * \param l data range list to count
 
+<<<<<<< HEAD
  *
  * \return the number of of element stored
  */
+
 int getCount(dataRangeList *l);
 
-#endif //AUDIO_SYNTH_SRC_LISTMIDI_LISTDATARANGE_H_
+#endif
