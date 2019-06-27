@@ -1,5 +1,7 @@
 # audio-synth
 
+[Initially posted on school's GitLab. Therefore, contributors and Continuous Integration may not be shown properly]
+
 
 [![pipeline status](https://gitlab.insa-rennes.fr/hfief/audio-synth/badges/master/pipeline.svg)](https://gitlab.insa-rennes.fr/hfief/audio-synth/commits/master)    [![coverage report](https://gitlab.insa-rennes.fr/hfief/audio-synth/badges/master/coverage.svg)](https://gitlab.insa-rennes.fr/hfief/audio-synth/commits/master)
 
